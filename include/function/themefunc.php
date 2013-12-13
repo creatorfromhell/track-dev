@@ -10,6 +10,10 @@
 
 class ThemeFunc {
 
+    public static function exists($name) {
+
+    }
+
     //load theme
 
     //unload theme
