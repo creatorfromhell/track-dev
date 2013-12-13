@@ -1,0 +1,11 @@
+<theme>
+    <!-- Main Theme Information -->
+    <name>Default</name>
+    <author>creatorfromhell</author>
+    <version>1.0</version>
+    <copyright>Copyright (c) 2013 %author.</copyright>
+    <!-- CSS-related stuff -->
+    <directory>default</directory>
+    <css>default</css>
+    <js>Track</js>
+</theme>

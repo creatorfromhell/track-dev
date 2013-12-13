@@ -1,0 +1,77 @@
+table setup
+
+todo_users
+-id
+-username
+-password
+-group id
+-sign up date
+-last login
+-ip
+-email
+-is banned
+-is online
+-is activated
+-activation key
+
+todo_groups
+-id
+-name
+-perm
+-is default
+-is admin
+
+todo_versions
+-id
+-name
+-project
+-due date
+-release date
+
+todo_projects
+-id
+-name
+-main list
+-creator
+-creation date
+-overseer
+-public
+
+todo_lists
+-id
+-name
+-project
+-creator
+-creation date
+-guest view
+-guest edit
+-rank view
+-rank edit
+
+todo_labels
+-id
+-list id
+-name
+-color
+
+todo_name_id
+-id
+-title
+-description
+-author
+-assignee
+-date added
+-due date
+-finish date
+-version
+-label ids
+-is editable
+-status(none, in-progress, finished, closed)
+-progress
+
+todo_activity
+-id
+-user
+-project
+-list
+-description
