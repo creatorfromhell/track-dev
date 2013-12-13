@@ -4,12 +4,14 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 12/13/13 at 9:39 AM
+ * Last Modified: 12/13/13 at 10:55 AM
  * Last Modified by Daniel Vidmar.
  */
 
 class Theme {
 
+	//The SimpleXML Element of this theme.
+	public $xml;
     //The name of this theme
     public $name;
     //The author of this theme
@@ -33,7 +35,7 @@ class Theme {
     }
 
     public function load() {
-
+		$this->xml = new SimpleXMLElement('#', null, true);
     }
 
     public function reload() {
@@ -42,6 +44,6 @@ class Theme {
     }
 
     public function save() {
-
+		
     }
 }

@@ -4,7 +4,7 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 12/13/13 at 9:39 AM
+ * Last Modified: 12/13/13 at 10:55 AM
  * Last Modified by Daniel Vidmar.
  */
 
@@ -14,7 +14,14 @@ class ActivityFunc {
 
     //log activity
     public static function log($user, $project, $list, $description, $logged) {
-
+		$connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_activity";
+        $stmt = $c->prepare("INSERT INTO $t VALUES ('', ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $user, $project, $list, $description, $logged);
+        $stmt->execute();
+        $stmt->close();
+        $c->close();
     }
 
     //clean logs

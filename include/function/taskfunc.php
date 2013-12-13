@@ -4,7 +4,7 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 12/13/13 at 9:39 AM
+ * Last Modified: 12/13/13 at 10:55 AM
  * Last Modified by Daniel Vidmar.
  */
 
@@ -14,7 +14,14 @@ class TaskFunc {
 
     //add task
     public static function add($project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
-
+		$connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("INSERT INTO $t VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssssssss", $project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress);
+        $stmt->execute();
+        $stmt->close();
+        $c->close();
     }
 
     //delete task
