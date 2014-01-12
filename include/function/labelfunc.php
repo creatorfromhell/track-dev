@@ -17,8 +17,11 @@ class LabelFunc {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("INSERT INTO $t VALUES ('', ?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $project, $list, $name, $color);
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, project, list, name, color) VALUES ('', ?, ?, ?, ?)");
+        $stmt->bindParam(1, $project);
+        $stmt->bindParam(2, $list);
+        $stmt->bindParam(3, $name);
+        $stmt->bindParam(4, $color);
         $stmt->execute();
         $stmt->close();
         $c->close();

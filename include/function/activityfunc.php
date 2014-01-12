@@ -4,7 +4,7 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 12/13/13 at 10:55 AM
+ * Last Modified: 1/11/14 at 5:20 PM
  * Last Modified by Daniel Vidmar.
  */
 
@@ -13,12 +13,17 @@ require_once("../connect.php");
 class ActivityFunc {
 
     //log activity
-    public static function log($user, $project, $list, $description, $logged) {
+    public static function log($user, $project, $list, $description, $archived, $logged) {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("INSERT INTO $t VALUES ('', ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $user, $project, $list, $description, $logged);
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, user, project, list, description, archived, logged) VALUES ('', ?, ?, ?, ?, ?, ?)");
+        $stmt->bindParam(1, $user);
+        $stmt->bindParam(2, $project);
+        $stmt->bindParam(3, $list);
+        $stmt->bindParam(4, $description);
+        $stmt->bindParam(5, $archived);
+        $stmt->bindParam(6, $logged);
         $stmt->execute();
         $stmt->close();
         $c->close();
@@ -26,12 +31,12 @@ class ActivityFunc {
 
     //clean logs
     public static function clean() {
-
+        //TODO: Make function to clean old logs that are not archived
     }
 
     //backup logs
     public static function backup() {
-
+        //TODO: Make function to backup logs to some format(XML, CSV, etc) or maybe configurable format?
     }
 }
 ?>

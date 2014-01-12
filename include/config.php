@@ -4,7 +4,7 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 12/13/13 at 10:55 AM
+ * Last Modified: 1/11/14 at 1:35 PM
  * Last Modified by Daniel Vidmar.
  */
 
@@ -21,9 +21,9 @@ class Configuration {
     //Save the configuration in the destructor
     public function __destruct() {
         $save = "";
-        $save .= ";Track Configuration File\n";
+        $save .= ";Trackr Configuration File\n";
         foreach($this->config as $key => $value) {
-            $save .= (strtolower($key) == "track") ? ";Do not modify the below values.\n" : ";Modify the below values accordingly.\n";
+            $save .= (strtolower($key) == "trackr") ? ";Do not modify the below values.\n" : ";Modify the below values accordingly.\n";
             $save .= "[".$key."]\n";
             foreach($value as $k => $v) {
                 $save .= $k." = ".$v."\n";

@@ -13,12 +13,15 @@ require_once("../connect.php");
 class GroupFunc {
 
     //add group function
-    public static function add($name, $perm, $default, $admin) {
+    public static function add($name, $permission, $default, $admin) {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_groups";
-        $stmt = $c->prepare("INSERT INTO $t VALUES ('', ?, ?, ?, ?)");
-        $stmt->bind_param("siii", $name, $perm, $default, $admin);
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, permission, default, admin) VALUES ('', ?, ?, ?, ?)");
+        $stmt->bindParam(1, $name);
+        $stmt->bindParam(2, $permission);
+        $stmt->bindParam(3, $default);
+        $stmt->bindParam(4, $admin);
         $stmt->execute();
         $stmt->close();
         $c->close();

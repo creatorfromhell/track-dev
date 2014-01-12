@@ -13,12 +13,19 @@ require_once("../connect.php");
 class ListFunc {
 
     //add list
-    public static function add($name, $project, $creator, $created, $gview, $gedit, $rview, $redit) {
+    public static function add($name, $project, $creator, $created, $guestview, $guestedit, $rankview, $rankedit) {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_lists";
-        $stmt = $c->prepare("INSERT INTO $t VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssss", $name, $project, $creator, $created, $gview, $gedit, $rview, $redit);
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, project, creator, created, guestview, guestedit, rankview, rankedit) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bindParam(1, $name);
+        $stmt->bindParam(2, $project);
+        $stmt->bindParam(3, $creator);
+        $stmt->bindParam(4, $created);
+        $stmt->bindParam(5, $guestview);
+        $stmt->bindParam(6, $guestedit);
+        $stmt->bindParam(7, $rankview);
+        $stmt->bindParam(8, $rankedit);
         $stmt->execute();
         $stmt->close();
         $c->close();

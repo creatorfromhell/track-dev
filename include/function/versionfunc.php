@@ -17,8 +17,11 @@ class VersionFunc {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("INSERT INTO $t VALUES ('', ?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $name, $project, $due, $release);
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, project, due, release) VALUES ('', ?, ?, ?, ?)");
+        $stmt->bindParam(1, $name);
+        $stmt->bindParam(2, $project);
+        $stmt->bindParam(3, $due);
+        $stmt->bindParam(4, $release);
         $stmt->execute();
         $stmt->close();
         $c->close();

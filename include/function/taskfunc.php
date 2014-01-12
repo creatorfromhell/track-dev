@@ -14,14 +14,7 @@ class TaskFunc {
 
     //add task
     public static function add($project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
-		$connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("INSERT INTO $t VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssssssssss", $project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress);
-        $stmt->execute();
-        $stmt->close();
-        $c->close();
+		//TODO: Decide how to store tasks i.e. per list table or 1 table sorted by project & list
     }
 
     //delete task

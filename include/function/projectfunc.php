@@ -17,8 +17,14 @@ class ProjectFunc {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("INSERT INTO $t VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssss", $name, $default, $main, $creator, $created, $overseer, $public);
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, default, main, creator, created, overseer, public) VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bindParam(1, $name);
+        $stmt->bindParam(2, $default);
+        $stmt->bindParam(3, $main);
+        $stmt->bindParam(4, $creator);
+        $stmt->bindParam(5, $created);
+        $stmt->bindParam(6, $overseer);
+        $stmt->bindParam(7, $public);
         $stmt->execute();
         $stmt->close();
         $c->close();

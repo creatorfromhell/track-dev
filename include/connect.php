@@ -4,7 +4,7 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 12/13/13 at 10:55 AM
+ * Last Modified: 1/11/14 at 1:33 PM
  * Last Modified by Daniel Vidmar.
  */
 
@@ -29,7 +29,7 @@ class Connect {
         $pass = $this->configuration->config["database"]["db_password"];
         $db = $this->configuration->config["database"]["db_name"];
         $this->prefix = $this->configuration->config["database"]["db_prefix"];
-        $this->connection = new mysqli($host, $user, $pass, $db);
+        $this->connection = new PDO("mysql:host=".$host.";dbname=".$db."", $user, $pass);
     }
 
     //close the connection in the destructor
