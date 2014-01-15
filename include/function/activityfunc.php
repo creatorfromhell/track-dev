@@ -25,8 +25,6 @@ class ActivityFunc {
         $stmt->bindParam(5, $archived);
         $stmt->bindParam(6, $logged);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //clean logs

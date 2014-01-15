@@ -4,7 +4,7 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 1/15/14 at 1:05 PM
+ * Last Modified: 1/15/14 at 4:20 PM
  * Last Modified by Daniel Vidmar.
  */
 
@@ -23,8 +23,6 @@ class LabelFunc {
         $stmt->bindParam(3, $name);
         $stmt->bindParam(4, $color);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //delete label
@@ -35,8 +33,6 @@ class LabelFunc {
         $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //edit label
@@ -51,8 +47,6 @@ class LabelFunc {
         $stmt->bindParam(4, $color);
         $stmt->bindParam(5, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //change color
@@ -64,8 +58,6 @@ class LabelFunc {
         $stmt->bindParam(1, $color);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //rename label
@@ -77,8 +69,6 @@ class LabelFunc {
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 }
 ?>

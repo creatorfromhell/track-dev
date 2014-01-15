@@ -26,8 +26,6 @@ class ProjectFunc {
         $stmt->bindParam(6, $overseer);
         $stmt->bindParam(7, $public);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //delete project
@@ -38,8 +36,6 @@ class ProjectFunc {
         $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //edit project
@@ -57,8 +53,6 @@ class ProjectFunc {
         $stmt->bindParam(7, $public);
         $stmt->bindParam(8, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //change main list
@@ -70,8 +64,6 @@ class ProjectFunc {
         $stmt->bindParam(1, $main);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //change overseer
@@ -83,8 +75,6 @@ class ProjectFunc {
         $stmt->bindParam(1, $overseer);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //get default project
@@ -102,8 +92,6 @@ class ProjectFunc {
         $stmt = $c->prepare("UPDATE ".$t." SET default = 1 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //make project private
@@ -114,8 +102,6 @@ class ProjectFunc {
         $stmt = $c->prepare("UPDATE ".$t." SET public = 0 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //make project public
@@ -126,8 +112,6 @@ class ProjectFunc {
         $stmt = $c->prepare("UPDATE ".$t." SET public = 1 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //rename project
@@ -139,8 +123,6 @@ class ProjectFunc {
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 }
 ?>

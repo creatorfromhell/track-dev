@@ -28,8 +28,6 @@ class VersionFunc {
         $stmt->bindParam(4, $release);
         $stmt->bindParam(5, $type);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //delete version
@@ -40,8 +38,6 @@ class VersionFunc {
         $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //edit version
@@ -57,8 +53,6 @@ class VersionFunc {
         $stmt->bindParam(5, $type);
         $stmt->bindParam(6, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //change due date
@@ -70,8 +64,6 @@ class VersionFunc {
         $stmt->bindParam(1, $due);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //change project
@@ -83,8 +75,6 @@ class VersionFunc {
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //change release date
@@ -96,8 +86,6 @@ class VersionFunc {
         $stmt->bindParam(1, $release);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //change version type
@@ -109,8 +97,6 @@ class VersionFunc {
         $stmt->bindParam(1, $type);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //rename version
@@ -122,8 +108,6 @@ class VersionFunc {
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
 
@@ -140,8 +124,6 @@ class VersionFunc {
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $description);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //edit version type
@@ -154,8 +136,6 @@ class VersionFunc {
         $stmt->bindParam(2, $description);
         $stmt->bindParam(3, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //delete version type
@@ -166,8 +146,6 @@ class VersionFunc {
         $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 }
 ?>

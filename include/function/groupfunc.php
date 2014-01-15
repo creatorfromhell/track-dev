@@ -23,8 +23,6 @@ class GroupFunc {
         $stmt->bindParam(3, $default);
         $stmt->bindParam(4, $admin);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //edit group function
@@ -39,8 +37,6 @@ class GroupFunc {
         $stmt->bindParam(4, $admin);
         $stmt->bindParam(5, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //delete group function
@@ -51,8 +47,6 @@ class GroupFunc {
         $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //change group perm
@@ -64,8 +58,6 @@ class GroupFunc {
         $stmt->bindParam(1, $permission);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //get default
@@ -73,6 +65,7 @@ class GroupFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_groups";
+        //TODO: return default group name
     }
 
     //make admin
@@ -83,8 +76,6 @@ class GroupFunc {
         $stmt = $c->prepare("UPDATE ".$t." SET admin = 1 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //make default
@@ -103,8 +94,6 @@ class GroupFunc {
         $stmt = $c->prepare("UPDATE ".$t." SET default = 1 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //rename group
@@ -116,8 +105,6 @@ class GroupFunc {
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 }
 ?>

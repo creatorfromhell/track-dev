@@ -28,8 +28,6 @@ class ListFunc {
         $stmt->bindParam(8, $rankview);
         $stmt->bindParam(9, $rankedit);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //delete list
@@ -40,8 +38,6 @@ class ListFunc {
         $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //edit list
@@ -61,8 +57,6 @@ class ListFunc {
         $stmt->bindParam(9, $rankedit);
         $stmt->bindParam(10, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //change list project
@@ -74,8 +68,6 @@ class ListFunc {
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //make list private
@@ -86,8 +78,6 @@ class ListFunc {
         $stmt = $c->prepare("UPDATE ".$t." SET public = 0 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //make list public
@@ -98,8 +88,6 @@ class ListFunc {
         $stmt = $c->prepare("UPDATE ".$t." SET public = 1 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 
     //rename list
@@ -111,8 +99,6 @@ class ListFunc {
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $stmt->close();
-        $c->close();
     }
 }
 ?>

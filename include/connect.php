@@ -4,7 +4,7 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 1/11/14 at 1:33 PM
+ * Last Modified: 1/15/14 at 4:20 PM
  * Last Modified by Daniel Vidmar.
  */
 
@@ -34,7 +34,7 @@ class Connect {
 
     //close the connection in the destructor
     public function __destruct() {
-        $this->connection->close();
+        $this->connection = null;
     }
 }
 ?>
