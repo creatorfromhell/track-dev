@@ -4,7 +4,7 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 12/13/13 at 10:55 AM
+ * Last Modified: 1/15/14 at 1:05 PM
  * Last Modified by Daniel Vidmar.
  */
 
@@ -29,22 +29,56 @@ class LabelFunc {
 
     //delete label
     public static function delete($id) {
-
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_labels";
+        $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
+        $stmt->close();
+        $c->close();
     }
 
     //edit label
-    public static function edit($id, $name, $color) {
-
+    public static function edit($id, $project, $list, $name, $color) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_labels";
+        $stmt = $c->prepare("UPDATE ".$t." SET project = ?, list = ?, name = ?, color = ? WHERE id = ?");
+        $stmt->bindParam(1, $project);
+        $stmt->bindParam(2, $list);
+        $stmt->bindParam(3, $name);
+        $stmt->bindParam(4, $color);
+        $stmt->bindParam(5, $id);
+        $stmt->execute();
+        $stmt->close();
+        $c->close();
     }
 
     //change color
     public static function changeColor($id, $color) {
-
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_labels";
+        $stmt = $c->prepare("UPDATE ".$t." SET color = ? WHERE id = ?");
+        $stmt->bindParam(1, $color);
+        $stmt->bindParam(2, $id);
+        $stmt->execute();
+        $stmt->close();
+        $c->close();
     }
 
     //rename label
     public static function rename($id, $name) {
-
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_labels";
+        $stmt = $c->prepare("UPDATE ".$t." SET name = ? WHERE id = ?");
+        $stmt->bindParam(1, $name);
+        $stmt->bindParam(2, $id);
+        $stmt->execute();
+        $stmt->close();
+        $c->close();
     }
 }
 ?>

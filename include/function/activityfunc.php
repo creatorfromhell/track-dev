@@ -35,7 +35,7 @@ class ActivityFunc {
     }
 
     //backup logs
-    public static function backup() {
+    public static function backup($format) {
         //TODO: Make function to backup logs to some format(XML, CSV, etc) or maybe configurable format?
     }
 }

@@ -4,7 +4,7 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 12/13/13 at 10:55 AM
+ * Last Modified: 1/15/14 at 1:05 PM
  * Last Modified by Daniel Vidmar.
  */
 
@@ -28,42 +28,42 @@ class TaskFunc {
     }
 
     //change task assignee
-    public static function changeAssignee($id, $assignee) {
+    public static function changeAssignee($project, $list, $id, $assignee) {
 
     }
 
     //change task labels
-    public static function changeLabels($id, $labels) {
+    public static function changeLabels($project, $list, $id, $labels) {
 
     }
 
     //change task list
-    public static function changeList($id, $list) {
+    public static function changeList($project, $list, $id, $list) {
 
     }
 
     //change task progress
-    public static function changeProgress($id, $progress) {
+    public static function changeProgress($project, $list, $id, $progress) {
 
     }
 
     //change project
-    public static function changeProject($id, $project) {
+    public static function changeProject($project, $list, $id, $project) {
 
     }
 
     //change task status
-    public static function changeStatus($id, $status) {
+    public static function changeStatus($project, $list, $id, $status) {
 
     }
 
     //change task title
-    public static function changeTitle($id, $title) {
+    public static function changeTitle($project, $list, $id, $title) {
 
     }
 
     //change task version
-    public static function changeVersion($id, $version) {
+    public static function changeVersion($project, $list, $id, $version) {
 
     }
 }
