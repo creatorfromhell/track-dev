@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <!-- Example Theme for Track
 Things to note:
 Tags can be used in values.
@@ -18,5 +19,5 @@ upon loading the theme.
     <!-- Any JS files that this theme needs. You don't have to add .js.
     Seperate multiple JS file names with a comma. Leave empty if no
     JS Files are required.	-->
-    <js></js>
+    <js>example.js</js>
 </theme>

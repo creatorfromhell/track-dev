@@ -4,7 +4,7 @@
  * Date: 12/13/13
  * Time: 9:30 AM
  * Version: Alpha 1
- * Last Modified: 1/15/14 at 1:05 PM
+ * Last Modified: 1/15/14 at 4:20 PM
  * Last Modified by Daniel Vidmar.
  */
 
@@ -65,7 +65,10 @@ class GroupFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_groups";
-        //TODO: return default group name
+        $stmt = $c->prepare("SELECT name FROM ".$t." WHERE default = 1");
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['name'];
     }
 
     //make admin
