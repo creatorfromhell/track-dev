@@ -3,7 +3,7 @@
  * Created by Daniel Vidmar.
  * Date: 12/13/13
  * Time: 9:30 AM
- * Version: Alpha 1
+ * Version: Beta 1
  * Last Modified: 1/15/14 at 1:05 PM
  * Last Modified by Daniel Vidmar.
  */

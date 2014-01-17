@@ -3,7 +3,7 @@
  * Created by Daniel Vidmar.
  * Date: 12/13/13
  * Time: 9:30 AM
- * Version: Alpha 1
+ * Version: Beta 1
  * Last Modified: 1/11/14 at 1:35 PM
  * Last Modified by Daniel Vidmar.
  */
@@ -15,11 +15,11 @@ class Configuration {
 
     //Load the configuration in the constructor
     public function __construct() {
-        $this->config = parse_ini_file("../resources/config.ini", 1);
+        $this->config = parse_ini_file("resources/config.ini", 1);
     }
 
     //Save the configuration in the destructor
-    public function __destruct() {
+    public function save() {
         $save = "";
         $save .= ";Trackr Configuration File\n";
         foreach($this->config as $key => $value) {
@@ -30,7 +30,7 @@ class Configuration {
             }
             $save .= "\n";
         }
-        file_put_contents("../resources/config.ini", $save, LOCK_EX);
+        file_put_contents("resources/config.ini", $save, LOCK_EX);
     }
 }
 ?>

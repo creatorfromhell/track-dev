@@ -22,23 +22,26 @@ class ThemeManager {
 
     public function __construct() {
         $this->configuration = new Configuration();
-        $this->themesDirectory = rtrim($this->configuration->config["urls"]["base_url"], "/")."/".rtrim($this->configuration->config["urls"]["installation_path"], "/")."/resources/themes";
+        $this->themesDirectory = rtrim($this->configuration->config["urls"]["base_url"], "/").rtrim($this->configuration->config["urls"]["installation_path"], "/")."/resources/themes/";
 
         //load all themes
-        foreach(glob($this->themesDirectory."/*.xml") as $theme) {
-            $name = explode(".", $theme);
+        $this->loadAll();
+    }
+
+    public function loadAll() {
+        foreach(glob("resources/themes/*.xml") as $theme) {
+            $name = explode(".", trim($theme, "resources/themes/"))[0];
             $this->load($name);
         }
     }
 
     public function load($name) {
-        $file = new SimpleXMLElement($this->themesDirectory."/".$name.".xml", null, true);
-        array_push($this->themes, $file->name);
-        $this->themes[$file->name] = $file;
+        $file = @simplexml_load_file($this->themesDirectory.$name.".xml", null, true);
+        $this->themes[$name] = $file;
     }
 
     public function save($name) {
-        $this->themes[$name]->asXML($this->themesDirectory."/".$name.".xml");
+        $this->themes[$name]->asXML($this->themesDirectory.$name.".xml");
     }
 
     public function reload($name) {
