@@ -7,23 +7,11 @@
  * Last Modified: 1/15/14 at 5:06 PM
  * Last Modified by Daniel Vidmar.
  */
-
-//Include the configuration class.
-require_once("config.php");
 class ThemeManager {
 
     public $themes = array();
 
-    //Instance of the Configuration Class
-    private $configuration;
-
-    //path to the themes directory
-    private $themesDirectory;
-
     public function __construct() {
-        $this->configuration = new Configuration();
-        $this->themesDirectory = rtrim($this->configuration->config["urls"]["base_url"], "/").rtrim($this->configuration->config["urls"]["installation_path"], "/")."/resources/themes/";
-
         //load all themes
         $this->loadAll();
     }
@@ -36,12 +24,12 @@ class ThemeManager {
     }
 
     public function load($name) {
-        $file = @simplexml_load_file($this->themesDirectory.$name.".xml", null, true);
+        $file = @simplexml_load_file("resources/themes/".$name.".xml", null, true);
         $this->themes[$name] = $file;
     }
 
     public function save($name) {
-        $this->themes[$name]->asXML($this->themesDirectory.$name.".xml");
+        $this->themes[$name]->asXML("resources/themes/".$name.".xml");
     }
 
     public function reload($name) {
