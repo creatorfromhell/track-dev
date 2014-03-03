@@ -13,13 +13,13 @@ require_once("../connect.php");
 class LabelFunc {
 
     //add label
-    public static function add($project, $list, $name, $color) {
+    public static function add($project, $listname, $name, $color) {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, project, list, name, color) VALUES ('', ?, ?, ?, ?)");
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, project, listname, name, color) VALUES ('', ?, ?, ?, ?)");
         $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $list);
+        $stmt->bindParam(2, $listname);
         $stmt->bindParam(3, $name);
         $stmt->bindParam(4, $color);
         $stmt->execute();
@@ -36,13 +36,13 @@ class LabelFunc {
     }
 
     //edit label
-    public static function edit($id, $project, $list, $name, $color) {
+    public static function edit($id, $project, $listname, $name, $color) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("UPDATE ".$t." SET project = ?, list = ?, name = ?, color = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE ".$t." SET project = ?, listname = ?, name = ?, color = ? WHERE id = ?");
         $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $list);
+        $stmt->bindParam(2, $listname);
         $stmt->bindParam(3, $name);
         $stmt->bindParam(4, $color);
         $stmt->bindParam(5, $id);

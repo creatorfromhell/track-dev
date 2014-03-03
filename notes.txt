@@ -27,10 +27,17 @@ todo_versions
 -project
 -due date
 -release date
+-type
+
+todo_versions_types
+-id
+-name
+-description
 
 todo_projects
 -id
 -name
+-default
 -main list
 -creator
 -creation date

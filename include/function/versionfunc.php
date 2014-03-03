@@ -17,15 +17,15 @@ class VersionFunc {
      */
 
     //add version
-    public static function add($name, $project, $due, $release, $type) {
+    public static function add($name, $project, $due, $released, $type) {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, project, due, release, type) VALUES ('', ?, ?, ?, ?, ?)");
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, project, due, released, type) VALUES ('', ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $due);
-        $stmt->bindParam(4, $release);
+        $stmt->bindParam(4, $released);
         $stmt->bindParam(5, $type);
         $stmt->execute();
     }
@@ -41,15 +41,15 @@ class VersionFunc {
     }
 
     //edit version
-    public static function edit($id, $name, $project, $due, $release, $type) {
+    public static function edit($id, $name, $project, $due, $released, $type) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE ".$t." SET name = ?, project = ?, due = ?, release = ?, type = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE ".$t." SET name = ?, project = ?, due = ?, released = ?, type = ? WHERE id = ?");
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $due);
-        $stmt->bindParam(4, $release);
+        $stmt->bindParam(4, $released);
         $stmt->bindParam(5, $type);
         $stmt->bindParam(6, $id);
         $stmt->execute();

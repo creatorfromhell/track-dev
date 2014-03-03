@@ -10,5 +10,26 @@
 
 class Utils {
 
+    public static function getIP() {
+        $ip = "";
+        if (isset($_SERVER["REMOTE_ADDR"])) {
+            $ip = $_SERVER["REMOTE_ADDR"]." ";
+        } else if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ) {
+            $ip = $_SERVER["HTTP_X_FORWARDED_FOR"]." ";
+        } else if ( isset($_SERVER["HTTP_CLIENT_IP"]) ) {
+            $ip = $_SERVER["HTTP_CLIENT_IP"]." ";
+        }
+        return $ip;
+    }
+
+    public static function generateUUID() {
+        return sprintf( '%04x%04x%04x%04x%04x%04x%04x%04x',
+            mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0x0fff ) | 0x4000,
+            mt_rand( 0, 0x3fff ) | 0x8000,
+            mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
+        );
+    }
 }
 ?>

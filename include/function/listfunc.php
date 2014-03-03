@@ -13,20 +13,21 @@ require_once("../connect.php");
 class ListFunc {
 
     //add list
-    public static function add($name, $project, $public, $creator, $created, $guestview, $guestedit, $rankview, $rankedit) {
+    public static function add($name, $project, $public, $creator, $created, $overseer, $guestview, $guestedit, $viewpermission, $editpermission) {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_lists";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, project, public, creator, created, guestview, guestedit, rankview, rankedit) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, project, public, creator, created, overseer, guestview, guestedit, viewpermission, editpermission) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $public);
         $stmt->bindParam(4, $creator);
         $stmt->bindParam(5, $created);
-        $stmt->bindParam(6, $guestview);
-        $stmt->bindParam(7, $guestedit);
-        $stmt->bindParam(8, $rankview);
-        $stmt->bindParam(9, $rankedit);
+        $stmt->bindParam(6, $overseer);
+        $stmt->bindParam(7, $guestview);
+        $stmt->bindParam(8, $guestedit);
+        $stmt->bindParam(9, $viewpermission);
+        $stmt->bindParam(10, $editpermission);
         $stmt->execute();
     }
 
@@ -41,21 +42,22 @@ class ListFunc {
     }
 
     //edit list
-    public static function edit($id, $name, $project, $public, $creator, $created, $guestview, $guestedit, $rankview, $rankedit) {
+    public static function edit($id, $name, $project, $public, $creator, $created, $overseer, $guestview, $guestedit, $viewpermission, $editpermission) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_lists";
-        $stmt = $c->prepare("UPDATE ".$t." SET name = ?, project = ?, public = ?, creator = ?, created = ?, guestview = ?, guestedit = ?, rankview = ?, rankedit = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE ".$t." SET name = ?, project = ?, public = ?, creator = ?, created = ?, overseer = ?, guestview = ?, guestedit = ?, viewpermission = ?, editpermission = ? WHERE id = ?");
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $public);
         $stmt->bindParam(4, $creator);
         $stmt->bindParam(5, $created);
-        $stmt->bindParam(6, $guestview);
-        $stmt->bindParam(7, $guestedit);
-        $stmt->bindParam(8, $rankview);
-        $stmt->bindParam(9, $rankedit);
-        $stmt->bindParam(10, $id);
+        $stmt->bindParam(6, $overseer);
+        $stmt->bindParam(7, $guestview);
+        $stmt->bindParam(8, $guestedit);
+        $stmt->bindParam(9, $viewpermission);
+        $stmt->bindParam(10, $editpermission);
+        $stmt->bindParam(11, $id);
         $stmt->execute();
     }
 
@@ -99,6 +101,23 @@ class ListFunc {
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();
+    }
+
+    //exists
+    public static function exists($name, $project) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_lists";
+        $stmt = $c->prepare("SELECT id FROM ".$t." WHERE name = ? AND project = ?");
+        $stmt->bindParam(1, $name);
+        $stmt->bindParam(2, $project);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($result) {
+            return true;
+        }
+        return false;
     }
 }
 ?>

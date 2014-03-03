@@ -14,10 +14,11 @@ upon loading the theme.
     <!-- CSS-related stuff -->
     <directory>%name</directory><!-- The directory that contains all of the theme's CSS, JS, and images. -->
     <!-- Any CSS files that this theme needs. You don't have to add .css.
-    Seperate multiple CSS file names with a comma. -->
+    Seperate multiple CSS file names with a comma. Leave empty or do not include if no
+    JS Files are required.	-->
     <css>style</css>
     <!-- Any JS files that this theme needs. You don't have to add .js.
-    Seperate multiple JS file names with a comma. Leave empty if no
+    Seperate multiple JS file names with a comma. Leave empty or do not include if no
     JS Files are required.	-->
-    <js>example.js</js>
+    <js></js>
 </theme>

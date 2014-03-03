@@ -4,7 +4,7 @@
  * Date: 1/15/14
  * Time: 5:06 PM
  * Version: Beta 1
- * Last Modified: 1/15/14 at 5:06 PM
+ * Last Modified: 1/24/14 at 1:55 PM
  * Last Modified by Daniel Vidmar.
  */
 class ThemeManager {
@@ -35,5 +35,54 @@ class ThemeManager {
     public function reload($name) {
         $this->save($name);
         $this->load($name);
+    }
+
+    public function replaceShortcuts($name, $value) {
+        $theme = $this->themes[$name];
+
+        $s = str_ireplace("%author", (string)$theme->author, $value);
+        $s1 = str_ireplace("%date", Date('Y'), $s);
+        $s2 = str_ireplace("%name", (string)$theme->name, $s1);
+        $s3 = str_ireplace("%version", (string)$theme->version, $s2);
+
+        return $s3;
+    }
+
+    //Get functions
+    public function getIncludes($name) {
+        $theme = $this->themes[$name];
+        $includes = array();
+        if($this->containsJS($name)) {
+            $js = explode(",", ((string)$theme->js));
+
+            foreach($js as $file) {
+                $includes[] = "js/".rtrim($file, ".js").".js";
+            }
+        }
+
+        if($this->containsCSS($name)) {
+            $css = explode(",", ((string)$theme->css));
+
+            foreach($css as $file) {
+                $includes[] = "css/".rtrim($file, ".css").".css";
+            }
+        }
+        return $includes;
+    }
+
+    public function containsJS($name) {
+        $theme = $this->themes[$name];
+        if(is_null($theme->js) || ((string)$theme->js) === "") {
+            return false;
+        }
+        return true;
+    }
+
+    public function containsCSS($name) {
+        $theme = $this->themes[$name];
+        if(is_null($theme->css) || ((string)$theme->css) === "") {
+            return false;
+        }
+        return true;
     }
 }

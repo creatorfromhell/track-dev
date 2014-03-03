@@ -13,13 +13,13 @@ require_once("../connect.php");
 class ProjectFunc {
 
     //add project
-    public static function add($name, $default, $main, $creator, $created, $overseer, $public) {
+    public static function add($name, $preset, $main, $creator, $created, $overseer, $public) {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, default, main, creator, created, overseer, public) VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, preset, main, creator, created, overseer, public) VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $name);
-        $stmt->bindParam(2, $default);
+        $stmt->bindParam(2, $preset);
         $stmt->bindParam(3, $main);
         $stmt->bindParam(4, $creator);
         $stmt->bindParam(5, $created);
@@ -39,13 +39,13 @@ class ProjectFunc {
     }
 
     //edit project
-    public static function edit($id, $name, $default, $main, $creator, $created, $overseer, $public) {
+    public static function edit($id, $name, $preset, $main, $creator, $created, $overseer, $public) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("UPDATE ".$t." SET name = ?, default = ?, main = ?, creator = ?, created = ?, overseer = ?, public = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE ".$t." SET name = ?, preset = ?, main = ?, creator = ?, created = ?, overseer = ?, public = ? WHERE id = ?");
         $stmt->bindParam(1, $name);
-        $stmt->bindParam(2, $default);
+        $stmt->bindParam(2, $preset);
         $stmt->bindParam(3, $main);
         $stmt->bindParam(4, $creator);
         $stmt->bindParam(5, $created);
@@ -53,6 +53,18 @@ class ProjectFunc {
         $stmt->bindParam(7, $public);
         $stmt->bindParam(8, $id);
         $stmt->execute();
+    }
+
+    //get project id
+    public static function getID($name) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_projects";
+        $stmt = $c->prepare("SELECT id FROM ".$t." WHERE name = ?");
+        $stmt->bindParam(1, $name);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['id'];
     }
 
     //change main list
@@ -66,6 +78,18 @@ class ProjectFunc {
         $stmt->execute();
     }
 
+    //get main list
+    public static function getMain($name) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_projects";
+        $stmt = $c->prepare("SELECT main FROM ".$t." WHERE name = ?");
+        $stmt->bindParam(1, $name);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['main'];
+    }
+
     //change overseer
     public static function changeOverseer($id, $overseer) {
         $connect = new Connect();
@@ -77,19 +101,23 @@ class ProjectFunc {
         $stmt->execute();
     }
 
-    //get default project
-    public static function getDefault() {
+    //get preset project
+    public static function getPreset() {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
+        $stmt = $c->prepare("SELECT name FROM ".$t." WHERE preset = 1");
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['name'];
     }
 
-    //make default project
-    public static function makeDefault($id) {
+    //make preset project
+    public static function makePreset($id) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("UPDATE ".$t." SET default = 1 WHERE id = ?");
+        $stmt = $c->prepare("UPDATE ".$t." SET preset = 1 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
@@ -123,6 +151,45 @@ class ProjectFunc {
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();
+    }
+
+    //exists
+    public static function exists($name) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_projects";
+        $stmt = $c->prepare("SELECT id FROM ".$t." WHERE name = ?");
+        $stmt->bindParam(1, $name);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($result) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function projects() {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_projects";
+        $stmt = $c->prepare("SELECT name from ".$t);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public static function lists($name) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_lists";
+        $stmt = $c->prepare("SELECT name FROM ".$t." WHERE project = ?");
+        $stmt->bindParam(1, $name);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 }
 ?>
