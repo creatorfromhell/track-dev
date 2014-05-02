@@ -8,25 +8,15 @@
  * Last Modified by Daniel Vidmar.
  */
 require_once("../function/userfunc.php");
-if(!empty($_GET)) {
+if(!empty($_POST)) {
 
-    $type = $_GET['t'];
+    $type = $_POST['t'];
 
-    if($type == "register") {
+    if($type == "checkuser") {
         if(!UserFunc::exists($_POST['username'])) {
             echo "AVAILABLE";
         } else {
             echo "TAKEN";
-        }
-    } else if($type == "login") {
-        if(UserFunc::exists($_POST['username'])) {
-            if(UserFunc::validatePassword($_POST['username'], $_POST['password'])) {
-                echo "EH";
-            } else {
-                echo "WRONG";
-            }
-        } else {
-            echo "EMPTY";
         }
     }
 }

@@ -9,7 +9,7 @@
  */
 
 //Include the Connect Class
-require_once("../connect.php");
+require_once("include/connect.php");
 class VersionFunc {
 
     /*
@@ -17,12 +17,12 @@ class VersionFunc {
      */
 
     //add version
-    public static function add($name, $project, $due, $released, $type) {
+    public static function add($version, $project, $due, $released, $type) {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, project, due, released, type) VALUES ('', ?, ?, ?, ?, ?)");
-        $stmt->bindParam(1, $name);
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, version, project, due, released, type) VALUES ('', ?, ?, ?, ?, ?)");
+        $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $due);
         $stmt->bindParam(4, $released);
@@ -41,12 +41,12 @@ class VersionFunc {
     }
 
     //edit version
-    public static function edit($id, $name, $project, $due, $released, $type) {
+    public static function edit($id, $version, $project, $due, $released, $type) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE ".$t." SET name = ?, project = ?, due = ?, released = ?, type = ? WHERE id = ?");
-        $stmt->bindParam(1, $name);
+        $stmt = $c->prepare("UPDATE ".$t." SET version = ?, project = ?, due = ?, released = ?, type = ? WHERE id = ?");
+        $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $due);
         $stmt->bindParam(4, $released);
@@ -99,13 +99,13 @@ class VersionFunc {
         $stmt->execute();
     }
 
-    //rename version
-    public static function rename($id, $name) {
+    //reversion version
+    public static function rename($id, $version) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE ".$t." SET name = ? WHERE id = ?");
-        $stmt->bindParam(1, $name);
+        $stmt = $c->prepare("UPDATE ".$t." SET version = ? WHERE id = ?");
+        $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $id);
         $stmt->execute();
     }
@@ -116,23 +116,23 @@ class VersionFunc {
      */
 
     //add version type
-    public static function addType($name, $description) {
+    public static function addType($versiontype, $description) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions_types";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, description) VALUES ('', ?, ?)");
-        $stmt->bindParam(1, $name);
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, versiontype, description) VALUES ('', ?, ?)");
+        $stmt->bindParam(1, $versiontype);
         $stmt->bindParam(2, $description);
         $stmt->execute();
     }
 
     //edit version type
-    public static function editType($id, $name, $description) {
+    public static function editType($id, $versiontype, $description) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions_types";
-        $stmt = $c->prepare("UPDATE ".$t." SET name = ?, description = ? WHERE id = ?");
-        $stmt->bindParam(1, $name);
+        $stmt = $c->prepare("UPDATE ".$t." SET versiontype = ?, description = ? WHERE id = ?");
+        $stmt->bindParam(1, $versiontype);
         $stmt->bindParam(2, $description);
         $stmt->bindParam(3, $id);
         $stmt->execute();

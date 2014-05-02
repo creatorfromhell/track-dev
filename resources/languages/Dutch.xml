@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<language>
+    <!-- The name of this language -->
+    <name>Nederlands</name>
+    <!-- The abbreviation for this language -->
+    <short>nl</short>
+    <!-- The author of this language file. -->
+    <author>Jesbus</author>
+    <!-- The symbol for this language. Located in the theme's image folder. -->
+    <symbol>nl_nl.png</symbol>
+
+    <!-- Everything that can be translated to different languages is located below. -->
+    <!-- Words starting with % are shortcuts that are replaced by the script before processing. Please do not translate
+         any of the shortcuts. -->
+    <site>
+        <title>%project - Trackr</title>
+        <header>%list - %project</header>
+        <welcome>welkom %user</welcome>
+        <loginmessage>log in of registreer</loginmessage>
+        <login>inloggen</login>
+        <register>registreren</register>
+        <email>email</email>
+        <username>gebruikersnaam</username>
+        <password>wachtwoord</password>
+        <confirm>bevestig</confirm>
+        <pages>
+            <overview>
+                <navlink>Overzicht</navlink>
+                <header>Overzicht</header>
+                <calendar>
+                    <navlink>Calendar</navlink>
+                    <header>Calendar - %project</header>
+                </calendar>
+                <project>
+                    <navlink>Project</navlink>
+                    <header>Overview for %project</header>
+                </project>
+            </overview>
+            <admin>
+                <navlink>Admin</navlink>
+                <header>Administratie Paneel</header>
+            </admin>
+            <projects>
+                <navlink>Projecten</navlink>
+                <header>Project %project</header>
+            </projects>
+            <lists>
+                <navlink>Lijsten</navlink>
+                <header>Lijsten voor %project</header>
+            </lists>
+        </pages>
+        <tables>
+            <project>Project</project>
+            <list>Lijst</list>
+            <task>Taak</task>
+            <assignee>Toegewezene</assignee>
+            <created>Gemaakt</created>
+            <creator>Maker</creator>
+            <actions>Acties</actions>
+            <overseer>Opzichter</overseer>
+            <none>geen</none>
+            <notask>De todo lijst is leeg.</notask>
+            <nolist>Er zijn momenteel geen lijsten voor dit project.</nolist>
+            <noproject>Er zijn momenteel geen projecten.</noproject>
+        </tables>
+    </site>
+    <email>
+        <subject>Trackr Verificatie</subject>
+        <verification>Welkom %user,\r\rU, of iemand die uw email-adres gebruikt heeft, heeft registratie voor %url ingediend. U kunt de registratie voltooien door op de volgende link te klikken: %activation\r\rAls dit een fout is kunt u deze email negeren. \r\rGroeten, Website Administrator</verification>
+    </email>
+</language>

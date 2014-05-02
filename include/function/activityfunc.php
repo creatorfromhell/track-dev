@@ -9,7 +9,7 @@
  */
 
 //Include the Connect Class
-require_once("../connect.php");
+require_once("include/connect.php");
 class ActivityFunc {
 
     //log activity

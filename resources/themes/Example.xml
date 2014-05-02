@@ -10,15 +10,7 @@ upon loading the theme.
     <name>Example</name><!-- The name of the theme. -->
     <author>creatorfromhell</author><!-- The author's name. -->
     <version>1.0</version><!-- The current version of the theme. -->
-    <copyright>Copyright (c) 2013 %author.</copyright><!-- The copyright notice to display at the bottom of the page. -->
+    <copyright>Copyright (c) %year %author.</copyright><!-- The copyright notice to display at the bottom of the page. -->
     <!-- CSS-related stuff -->
     <directory>%name</directory><!-- The directory that contains all of the theme's CSS, JS, and images. -->
-    <!-- Any CSS files that this theme needs. You don't have to add .css.
-    Seperate multiple CSS file names with a comma. Leave empty or do not include if no
-    JS Files are required.	-->
-    <css>style</css>
-    <!-- Any JS files that this theme needs. You don't have to add .js.
-    Seperate multiple JS file names with a comma. Leave empty or do not include if no
-    JS Files are required.	-->
-    <js></js>
 </theme>

@@ -8,9 +8,11 @@
  * Last Modified by Daniel Vidmar.
  */
 
-require_once("groupfunc.php");
-require_once("../utils.php");
-require_once("../connect.php");
+require_once("include/function/groupfunc.php");
+require_once("include/function/listfunc.php");
+require_once("include/utils.php");
+require_once("include/connect.php");
+require_once("include/config.php");
 class UserFunc {
 
     //add
@@ -53,7 +55,7 @@ class UserFunc {
         $c = $connect->connection;
         $t = $connect->prefix."_users";
         $stmt = $c->prepare("DELETE FROM ".$t." WHERE username = ?");
-        $stmt->bind_param(1, $username);
+        $stmt->bindParam(1, $username);
         $stmt->execute();
     }
 
@@ -107,6 +109,41 @@ class UserFunc {
         return GroupFunc::isAdmin(UserFunc::getGroup($username));
     }
 
+    public static function getEmail($username) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_users";
+        $stmt = $c->prepare("SELECT email FROM ".$t." WHERE username = ?");
+        $stmt->bindParam(1, $username);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['email'];
+    }
+
+    //can edit
+    public static function canEdit($project, $list, $username) {
+        if(self::exists($username)) {
+            return self::hasPermission($username, ListFunc::editPermission($project, $list));
+        }
+        return (ListFunc::guestEdit($project, $list));
+    }
+
+    //can view
+    public static function canView($project, $list, $username) {
+        if(self::exists($username)) {
+            return self::hasPermission($username, ListFunc::viewPermission($project, $list));
+        }
+        return (ListFunc::guestView($project, $list));
+    }
+
+    //has permission
+    public static function hasPermission($username, $permission) {
+        $group = self::getGroup($username);
+        $groupPermission = GroupFunc::permission($group);
+
+        return ($groupPermission >= $permission);
+    }
+
     //get group
     public static function getGroup($username) {
         $connect = new Connect();
@@ -140,20 +177,31 @@ class UserFunc {
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if($result['password'] == self::hashPass($password)) {
+        if($result['password'] === self::hashPass($password)) {
             return true;
         }
         return false;
     }
 
     //send verification
-    public static function sendVerification($email, $activationKey) {
-        //TODO: Add verification email stuff.
+    public static function sendVerification($username) {
+        $config = new Configuration();
+
+        $email = self::getEmail($username);
+        $key = self::getActivationKey($username);
+
+        $subject = $config->config["email"]["subject"];
+        $message = "";
+
+        $adminEmail = $config->config["email"]["replyemail"];
+        $headers = 'From: '.$adminEmail."\r\n" . 'Reply-To: '.$adminEmail . "\r\n" . 'X-Mailer: PHP/' . phpversion();
+
+        mail($email, $subject, $message, $headers);
     }
 
     //change status
     public static function changeStatus($username) {
-        $status = (loggedIn($username)) ? "0" : "1";
+        $status = (self::loggedIn($username)) ? "0" : "1";
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
@@ -207,6 +255,27 @@ class UserFunc {
         $stmt->execute();
     }
 
+    public static function getActivationKey($username) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_users";
+        $stmt = $c->prepare("SELECT activationkey FROM ".$t." WHERE username = ?");
+        $stmt->bindParam(1, $username);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['activationkey'];
+    }
+
+    public static function setActivationKey($username, $key) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_users";
+        $stmt = $c->prepare("UPDATE ".$t." SET activationkey = ? WHERE username = ?");
+        $stmt->bindParam(1, $key);
+        $stmt->bindParam(2, $username);
+        $stmt->execute();
+    }
+
     //generate activation key
     public static function generateActivationKey() {
         return Utils::generateUUID();
@@ -230,6 +299,40 @@ class UserFunc {
         $stmt = $c->prepare("UPDATE ".$t." SET banned = 0 WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
+    }
+
+    public static function users() {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_users";
+        $stmt = $c->prepare("SELECT username from ".$t);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        $users = array();
+        for($i = 0; $i < count($result); $i++) {
+            $user = $result[$i];
+            $users[$i] = $user[0];
+        }
+
+        return $users;
+    }
+
+    public static function latestUsers() {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_users";
+        $stmt = $c->prepare("SELECT username from ".$t." ORDER BY registered DESC LIMIT 7");
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        $users = array();
+        for($i = 0; $i < count($result); $i++) {
+            $user = $result[$i];
+            $users[$i] = $user[0];
+        }
+
+        return $users;
     }
 }
 ?>

@@ -8,30 +8,41 @@
  * Last Modified by Daniel Vidmar.
  */
 include_once("common.php");
+
+$h1 = $formatter->replaceShortcuts(((string)$languageinstance->site->header));
+
+if($page == "index") { $h1 = $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->header)); }
+else if($page == "projects") { $h1 = $formatter->replaceShortcuts(((string)$languageinstance->site->pages->projects->header)); }
+else if($page == "lists") { $h1 = $formatter->replaceShortcuts(((string)$languageinstance->site->pages->lists->header)); }
+else if($page == "admin") { $h1 = $formatter->replaceShortcuts(((string)$languageinstance->site->pages->admin->header)); }
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
     <meta charset="utf-8">
-    <title>Project Name - Trackr</title>
+    <title><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->title)); ?></title>
     <!--[if le IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <script src="http://css3-mediaqueries-js.googlecode.com/files/css3-mediaqueries.js"></script>
     <![endif]-->
     <?php
         foreach($manager->getIncludes((string)$theme->name) as $include) {
-            $link = $installation_path."resources/themes/".((string)$theme->directory)."/".$include;
-            if(strstr($link, "css") !== false) { ?>
-                <link href="<?php echo $link; ?>" rel="stylesheet" type="text/css" />
-            <?php } else { ?>
-                <script src="<?php echo $link; ?>"></script>
-            <?php
-            }
+            echo $include;
         }
     ?>
 </head>
 <body>
     <header>
+        <div class="login">
+            <p>
+                <?php if(isset($_SESSION["username"])) {
+                    echo "Welcome, ".$username.". <a href='logout.php'>Logout</a>";
+                } else { ?>
+                    <a href="login.php">Login</a> or <a href="register.php">Register</a>
+                <?php } ?>
+            </p>
+        </div>
         <?php include("navigation.php"); ?>
-        <h1>Tracker for Project</h1>
+        <h1><?php echo $h1; ?></h1>
     </header>
+    <div id="msg" onclick="closeMessage(); return false;" class="<?php echo $msgType; ?>" style="<?php if(trim($msg) === '') { echo 'display: none;'; } ?>"><?php echo $msg; ?></div>

@@ -8,10 +8,23 @@
  * Last Modified by Daniel Vidmar.
  */
 include("include/header.php");
+$type = "charts";
+if(isset($_GET['t'])) {
+    $type = $_GET['t'];
+}
 ?>
 
     <div id="main">
-
+        <?php
+            if($type == "calendar") {
+                include("include/overviewcalendar.php");
+            } else if($type == "project") {
+                include("include/overviewproject.php");
+            } else {
+                include("include/overviewgeneral.php");
+            }
+        ?>
+        <div class="clear"></div>
     </div>
 
 <?php

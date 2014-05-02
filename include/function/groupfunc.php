@@ -9,16 +9,16 @@
  */
 
 //Include the Connect Class
-require_once("../connect.php");
+require_once("include/connect.php");
 class GroupFunc {
 
     //add group function
-    public static function add($name, $permission, $preset, $admin) {
+    public static function add($groupname, $permission, $preset, $admin) {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_groups";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, name, permission, preset, admin) VALUES ('', ?, ?, ?, ?)");
-        $stmt->bindParam(1, $name);
+        $stmt = $c->prepare("INSERT INTO ".$t." (id, groupname, permission, preset, admin) VALUES ('', ?, ?, ?, ?)");
+        $stmt->bindParam(1, $groupname);
         $stmt->bindParam(2, $permission);
         $stmt->bindParam(3, $preset);
         $stmt->bindParam(4, $admin);
@@ -26,12 +26,12 @@ class GroupFunc {
     }
 
     //edit group function
-    public static function edit($id, $name, $permission, $preset, $admin) {
+    public static function edit($id, $groupname, $permission, $preset, $admin) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_groups";
-        $stmt = $c->prepare("UPDATE ".$t." SET name = ?, permission = ?, preset = ?, admin = ? WHERE id = ?");
-        $stmt->bindParam(1, $name);
+        $stmt = $c->prepare("UPDATE ".$t." SET groupname = ?, permission = ?, preset = ?, admin = ? WHERE id = ?");
+        $stmt->bindParam(1, $groupname);
         $stmt->bindParam(2, $permission);
         $stmt->bindParam(3, $preset);
         $stmt->bindParam(4, $admin);
@@ -60,15 +60,27 @@ class GroupFunc {
         $stmt->execute();
     }
 
+    //get group perm
+    public static function permission($group) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_groups";
+        $stmt = $c->prepare("SELECT permission FROM ".$t." WHERE groupname = ?");
+        $stmt->bindParam(1, $group);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['permission'];
+    }
+
     //get preset
     public static function getPreset() {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_groups";
-        $stmt = $c->prepare("SELECT name FROM ".$t." WHERE preset = 1");
+        $stmt = $c->prepare("SELECT groupname FROM ".$t." WHERE preset = 1");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['name'];
+        return $result['groupname'];
     }
 
     //make admin
@@ -89,7 +101,7 @@ class GroupFunc {
 
         //Get the current preset group and remove its preset status
         $current = self::getPreset();
-        $stmt = $c->prepare("UPDATE ".$t." SET preset = 0 WHERE name = ?");
+        $stmt = $c->prepare("UPDATE ".$t." SET preset = 0 WHERE groupname = ?");
         $stmt->bindParam(1, $current);
         $stmt->execute();
 
@@ -99,13 +111,13 @@ class GroupFunc {
         $stmt->execute();
     }
 
-    //rename group
-    public static function rename($id, $name) {
+    //regroupname group
+    public static function rename($id, $groupname) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_groups";
-        $stmt = $c->prepare("UPDATE ".$t." SET name = ? WHERE id = ?");
-        $stmt->bindParam(1, $name);
+        $stmt = $c->prepare("UPDATE ".$t." SET groupname = ? WHERE id = ?");
+        $stmt->bindParam(1, $groupname);
         $stmt->bindParam(2, $id);
         $stmt->execute();
     }
@@ -115,7 +127,7 @@ class GroupFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_groups";
-        $stmt = $c->prepare("SELECT admin FROM ".$t." WHERE name = ?");
+        $stmt = $c->prepare("SELECT admin FROM ".$t." WHERE groupname = ?");
         $stmt->bindParam(1, $group);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

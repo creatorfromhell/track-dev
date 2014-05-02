@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<language>
+    <!-- The name of this language -->
+    <name>English</name>
+    <!-- The abbreviation for this language -->
+    <short>en</short>
+    <!-- The author of this language file. -->
+    <author>creatorfromhell</author>
+    <!-- The symbol for this language. Located in the theme's image folder. -->
+    <symbol>en_us.png</symbol>
+
+    <!-- Everything that can be translated to different languages is located below. -->
+    <!-- Words starting with % are shortcuts that are replaced by the script before processing. Please do not translate
+         any of the shortcuts. -->
+    <site>
+        <title>%project - Trackr</title>
+        <header>%list - %project</header>
+        <welcome>welcome %user</welcome>
+        <loginmessage>login or register</loginmessage>
+        <login>login</login>
+        <register>register</register>
+        <email>email</email>
+        <username>username</username>
+        <password>password</password>
+        <confirm>confirm</confirm>
+        <pages>
+            <overview>
+                <navlink>Overview</navlink>
+                <header>Overview</header>
+                <calendar>
+                    <navlink>Calendar</navlink>
+                    <header>Calendar - %project</header>
+                </calendar>
+                <project>
+                    <navlink>Project</navlink>
+                    <header>Overview for %project</header>
+                </project>
+            </overview>
+            <admin>
+                <navlink>Admin</navlink>
+                <header>Administration Panel</header>
+            </admin>
+            <projects>
+                <navlink>Projects</navlink>
+                <header>Project %project</header>
+            </projects>
+            <lists>
+                <navlink>Lists</navlink>
+                <header>Lists for %project</header>
+            </lists>
+        </pages>
+        <tables>
+            <project>Project</project>
+            <list>List</list>
+            <task>Task</task>
+            <assignee>Assignee</assignee>
+            <created>Created</created>
+            <creator>Creator</creator>
+            <actions>Actions</actions>
+            <overseer>Overseer</overseer>
+            <none>none</none>
+            <notask>There is nothing on the todo list.</notask>
+            <nolist>There are currently no lists for this project.</nolist>
+            <noproject>There are currently no projects.</noproject>
+        </tables>
+    </site>
+    <email>
+        <subject>Trackr Verification</subject>
+        <verification>Welcome %user,\r\rYou, or someone using your email address, has completed registration for %url. You may complete your registration by clicking the following link: %activation\r\rIf this is an error you may ignore this email. \r\rSincerely, Website Administrator</verification>
+    </email>
+</language>

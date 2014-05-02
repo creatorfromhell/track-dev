@@ -31,5 +31,12 @@ class Utils {
             mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
         );
     }
+
+    public static function strContains($string, $word) {
+        if (strpos($string, $word) !== false) {
+            return true;
+        }
+        return false;
+    }
 }
 ?>

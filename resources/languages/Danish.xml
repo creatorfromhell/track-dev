@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<language>
+    <!-- The name of this language -->
+    <name>Danish</name>
+    <!-- The abbreviation for this language -->
+    <short>dk</short>
+    <!-- The author of this language file. -->
+    <author>quaisaq</author>
+    <!-- The symbol for this language. Located in the theme's image folder. -->
+    <symbol>da_dk.png</symbol>
+
+    <!-- Everything that can be translated to different languages is located below -->
+    <!-- Words starting with % are shortcuts that are replaced by the script before processing. Please do not translate
+         any of the shortcuts. -->
+    <site>
+        <title>%project - Trackr</title>
+        <header>%list - %project</header>
+        <pages>
+            <overview>
+                <navlink>Oversigt</navlink>
+                <header>Oversigt - %project</header>
+                <calendar>
+                    <navlink>Kalender</navlink>
+                    <header>Kalender - %project</header>
+                </calendar>
+                <project>
+                    <navlink>Projekt</navlink>
+                    <header>Oversigt for %project</header>
+                </project>
+            </overview>
+            <admin>
+                <navlink>Admin</navlink>
+                <header>Administrations Panel</header>
+            </admin>
+            <projects>
+                <navlink>Projekter</navlink>
+                <header>Projekt %project</header>
+            </projects>
+            <lists>
+                <navlink>Lister</navlink>
+                <header>Lister for %project</header>
+            </lists>
+        </pages>
+        <tables>
+            <project>Projekt</project>
+            <list>Liste</list>
+            <task>Opgave</task>
+            <assignee>Erhverver</assignee>
+            <created>Skabt</created>
+            <creator>Skaber</creator>
+            <actions>Aktioner</actions>
+            <overseer>Overseer</overseer>
+            <none>ingen</none>
+            <notask>Der er intet på listen.</notask>
+            <nolist>Der er ingen lister for dette projekt.</nolist>
+            <noproject>Der er ingen projekter på nuværende tidspunkt.</noproject>
+        </tables>
+    </site>
+    <email>
+        <subject>Trackr Verification</subject>
+        <verification>Velkommen %user,\r\rDu, eller en anden som bruger din email addresse, har fuldf�rt registreringen for %url. Du kan fuldf�re din registrering ved at klikke p� f�lgende link: %activation\r\rHvis du mener dette er en fejl, kan du ignorere denne mail.\r\rMed venlig hilsen, Website Administrator</verification>
+    </email>
+</language>

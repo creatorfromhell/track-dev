@@ -10,6 +10,7 @@
 class ThemeManager {
 
     public $themes = array();
+    public static $shortcuts = array("%name", "%author", "%version", "%date", "%year", "%month", "%day");
 
     public function __construct() {
         //load all themes
@@ -39,50 +40,23 @@ class ThemeManager {
 
     public function replaceShortcuts($name, $value) {
         $theme = $this->themes[$name];
+        $replacements = array((string)$theme->name, (string)$theme->author, (string)$theme->version, date("Y-m-d"), date('Y'), date('F'), date('l'));
 
-        $s = str_ireplace("%author", (string)$theme->author, $value);
-        $s1 = str_ireplace("%date", Date('Y'), $s);
-        $s2 = str_ireplace("%name", (string)$theme->name, $s1);
-        $s3 = str_ireplace("%version", (string)$theme->version, $s2);
-
-        return $s3;
+        return str_replace(self::$shortcuts, $replacements, $value);
     }
 
     //Get functions
     public function getIncludes($name) {
         $theme = $this->themes[$name];
         $includes = array();
-        if($this->containsJS($name)) {
-            $js = explode(",", ((string)$theme->js));
 
-            foreach($js as $file) {
-                $includes[] = "js/".rtrim($file, ".js").".js";
-            }
+        foreach(glob("resources/themes/".(string)$theme->directory."/js/*.js") as $js) {
+            $includes[] = '<script src="'.$js.'" type="text/javascript"></script>';
         }
 
-        if($this->containsCSS($name)) {
-            $css = explode(",", ((string)$theme->css));
-
-            foreach($css as $file) {
-                $includes[] = "css/".rtrim($file, ".css").".css";
-            }
+        foreach(glob("resources/themes/".(string)$theme->directory."/css/*.css") as $css) {
+            $includes[] = '<link href="'.$css.'" rel="stylesheet" type="text/css" />';
         }
         return $includes;
-    }
-
-    public function containsJS($name) {
-        $theme = $this->themes[$name];
-        if(is_null($theme->js) || ((string)$theme->js) === "") {
-            return false;
-        }
-        return true;
-    }
-
-    public function containsCSS($name) {
-        $theme = $this->themes[$name];
-        if(is_null($theme->css) || ((string)$theme->css) === "") {
-            return false;
-        }
-        return true;
     }
 }

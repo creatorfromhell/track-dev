@@ -9,41 +9,38 @@
  */
 
 ?>
-<div class="login">
-    <p>
-        <?php if(isset($_SESSION["username"])) {
-            echo "Welcome, ".$username;
-        } else { ?>
-            <a href="#">Login</a> or <a href="#">Register</a>
-        <?php } ?>
-    </p>
-</div>
-<nav>
+<nav class="main">
     <ul>
-        <li class="active"><a href="#">Overview</a></li>
-        <li>
-            <a href="#">Dashboards</a>
+        <li <?php if($page == "index" || $page == "overviewgeneral" || $page == "overviewproject" || $page == "overviewcalendar") { echo 'class="active"'; } ?>><a href="index.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->navlink)); ?></a>
             <ul>
-                <li><a href="#">Project</a></li>
-                <?php if(isset($_SESSION["username"]) && UserFunc::isAdmin($username)) { ?>
-                    <li><a href="#">Admin</a></li>
-                <?php } ?>
+                <li><a href="?t=calendar">Calendar</a></li>
+                <li><a href="?t=general">General</a></li>
+                <li><a href="?t=project">Project</a></li>
             </ul>
         </li>
-        <li>
-            <a href="#">Projects</a>
+        <?php if(isset($_SESSION['username']) && UserFunc::isAdmin($username)) { ?>
+        <li <?php if($page == "admin") { echo 'class="active"'; } ?>>
+            <a href="admin.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->admin->navlink)); ?></a>
+        </li>
+        <?php } ?>
+        <li <?php if($page == "projects") { echo 'class="active"'; } ?>>
+            <a href="projects.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->projects->navlink)); ?></a>
             <ul>
-                <?php //TODO: Print available projects. ?>
-                <li><a href="#">Default</a></li>
-                <li><a href="#">Secondary</a></li>
+                <?php
+                foreach($projects as &$p) {
+                    echo "<li><a href='lists.php?p=".$p."'>".$p."</a></li>";
+                }
+                ?>
             </ul>
         </li>
-        <li>
-            <a href="#">Lists</a>
+        <li <?php if($page == "list" || $page == "lists") { echo 'class="active"'; } ?>>
+            <a href="lists.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->lists->navlink)); ?></a>
             <ul>
-                <?php //TODO: Print lists for  current project. ?>
-                <li><a href="#">Main</a></li>
-                <li><a href="#">Example</a></li>
+                <?php
+                foreach($lists as &$l) {
+                    echo "<li><a href='list.php?p=".$project."&l=".$l."'>".$l."</a></li>";
+                }
+                ?>
             </ul>
         </li>
 

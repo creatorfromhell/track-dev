@@ -7,23 +7,66 @@
  * Last Modified: 3/2/14 at 12:54 PM
  * Last Modified by Daniel Vidmar.
  */
-require_once("../function/userfunc.php");
-require_once("../function/groupfunc.php");
-require_once("../utils.php");
-if(!empty($_POST)) {
-    //$username, $password, $usergroup, $registered, $lastlogin, $ip, $email, $activationKey
-    $email = $_POST['email'];
-    $username = $_POST['username'];
-    $password = UserFunc::hashPass($_POST['password']);
-    $usergroup = GroupFunc::getPreset();
-    $registered = date("Y-m-d H:i:s");
-    $lastlogin = date("Y-m-d H:i:s");
-    $ip = Utils::getIP();
-    $activationkey = UserFunc::generateActivationKey();
+if(isset($_SESSION['username'])) {
+    header("Location: index.php");
+}
 
-    UserFunc::add($username, $password, $usergroup, $registered, $lastlogin, $ip, $email, $activationkey);
-} else {
-    header("Location: ../../register.php");
+if(isset($_POST['register'])) {
+    if(isset($_POST['username']) && trim($_POST['username']) != "") {
+        $username = $_POST['username'];
+        if(isset($_POST['password']) && trim($_POST['password']) != "") {
+            if(isset($_POST['c_password']) && trim($_POST['c_password']) != "") {
+                if(isset($_POST['email']) && trim($_POST['email']) != "") {
+                    $email = $_POST['email'];
+                    $password = UserFunc::hashPass($_POST['password']);
+                    $confirm_password = UserFunc::hashPass($_POST['c_password']);
+
+                    if(!UserFunc::exists($username)) {
+                        if($password === $confirm_password) {
+                            $userGroup = GroupFunc::getPreset();
+                            $registered = date("Y-m-d H:i:s");
+                            $lastLogin = date("Y-m-d H:i:s");
+                            $ip = Utils::getIP();
+                            $activationKey = UserFunc::generateActivationKey();
+
+                            UserFunc::add($username, $password, $userGroup, $registered, $lastLogin, $ip, $email, $activationKey);
+                            echo '<script type="text/javascript">';
+                            echo 'showMessage("success", "Thanks for registering! You may now login.");';
+                            echo '</script>';
+
+                            echo '<script>';
+                            echo 'window.location.assign("login.php");';
+                            echo '</script>';
+                        } else {
+                            echo '<script type="text/javascript">';
+                            echo 'showMessage("error", "Passwords do not match!");';
+                            echo '</script>';
+                        }
+                    } else {
+                        echo '<script type="text/javascript">';
+                        echo 'showMessage("error", "Username already in use!");';
+                        echo '</script>';
+                    }
+                } else {
+                    echo '<script type="text/javascript">';
+                    echo 'showMessage("error", "No email address entered!");';
+                    echo '</script>';
+                }
+            } else {
+                echo '<script type="text/javascript">';
+                echo 'showMessage("error", "You must confirm your password!");';
+                echo '</script>';
+            }
+        } else {
+            echo '<script type="text/javascript">';
+            echo 'showMessage("error", "No password entered!");';
+            echo '</script>';
+        }
+    } else {
+        echo '<script type="text/javascript">';
+        echo 'showMessage("error", "No username entered!");';
+        echo '</script>';
+    }
 }
 
 ?>
