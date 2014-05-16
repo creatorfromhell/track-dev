@@ -10,6 +10,8 @@
 
 class StringFormatter {
 
+    public $languageinstance;
+
     private static $shortcuts = array("%user", "%project", "%list", "%theme", "%none");
     private $replacements;
 
@@ -19,6 +21,7 @@ class StringFormatter {
     private $blacklist_replacements;
 
     public function __construct($user, $project, $list, $config, $language) {
+        $this->languageinstance = $language;
         $this->replacements = array($user, $project, $list, $config["main"]["theme"], ((string)$language->site->tables->none));
         $blacklist = $config["main"]["blacklist"];
         $this->dateFormat = $config["main"]["dateformat"];

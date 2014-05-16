@@ -7,6 +7,9 @@
  * Last Modified: 1/18/14 at 8:31 PM
  * Last Modified by Daniel Vidmar.
  */
+if(isset($_SESSION['username'])) {
+    header("Location: index.php");
+}
 include("include/header.php");
 include("include/handling/loginform.php");
 ?>

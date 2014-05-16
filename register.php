@@ -7,6 +7,9 @@
  * Last Modified: 3/2/14 at 12:51 PM
  * Last Modified by Daniel Vidmar.
  */
+if(isset($_SESSION['username'])) {
+    header("Location: index.php");
+}
 include("include/header.php");
 include("include/handling/registerform.php");
 ?>

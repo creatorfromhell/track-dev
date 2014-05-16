@@ -15,44 +15,47 @@ if(isset($_POST['add'])) {
     if(isset($_POST['title']) && trim($_POST['title']) != "") {
         if(isset($_POST['description']) && trim($_POST['description']) != "") {
             if(isset($_POST['author']) && trim($_POST['author']) != "") {
-                if(isset($_POST['assignee']) && trim($_POST['assignee']) != "") {
-                    if(isset($_POST['due']) && trim($_POST['due']) != "") {
-                        if(isset($_POST['editable']) && trim($_POST['editable']) != "") {
-                            if(isset($_POST['status']) && trim($_POST['status']) != "") {
-                                if(isset($_POST['progress']) && trim($_POST['progress']) != "") {
-                                    if(isset($_POST['version']) && trim($_POST['version']) != "") {
-                                        if(isset($_POST['labels']) && trim($_POST['labels']) != "") {
-                                            $created = date("Y-m-d H:i:s");
-                                            TaskFunc::add($project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, $_POST['due'], 0, $_POST['version'], $_POST['labels'], $_POST['editable'], $_POST['status'], $_POST['progress']);
-                                        } else {
-
-                                        }
-                                    } else {
-
-                                    }
-                                } else {
-
-                                }
+                if(isset($_POST['editable']) && trim($_POST['editable']) != "") {
+                    if(isset($_POST['status']) && trim($_POST['status']) != "") {
+                        if(ProjectFunc::exists($project)) {
+                            if(ListFunc::exists($project, $list)) {
+                                $created = date("Y-m-d H:i:s");
+                                $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;
+                                TaskFunc::add($project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, "0000-0-00", 0, "", "", $_POST['editable'], $_POST['status'], $progress);
                             } else {
-
+                                echo '<script type="text/javascript">';
+                                echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->task->invalidlist)).'");';
+                                echo '</script>';
                             }
                         } else {
-
+                            echo '<script type="text/javascript">';
+                            echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->list->invalidproject)).'");';
+                            echo '</script>';
                         }
                     } else {
-
+                        echo '<script type="text/javascript">';
+                        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->task->invalidstatus)).'");';
+                        echo '</script>';
                     }
                 } else {
-
+                    echo '<script type="text/javascript">';
+                    echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->task->noeditable)).'");';
+                    echo '</script>';
                 }
             } else {
-
+                echo '<script type="text/javascript">';
+                echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->noauthor)).'");';
+                echo '</script>';
             }
         } else {
-
+            echo '<script type="text/javascript">';
+            echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->task->nodescription)).'");';
+            echo '</script>';
         }
     } else {
-
+        echo '<script type="text/javascript">';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->task->notitle)).'");';
+        echo '</script>';
     }
 }
 

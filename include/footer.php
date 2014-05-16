@@ -11,6 +11,15 @@
 <footer>
     <p class="theme"><?php echo $manager->replaceShortcuts((string)$theme->name, (string)$theme->copyright); ?></p>
     <p class="copyright">Copyright &copy; 2013 - <?php echo date("Y");  ?> Adfero Community</p>
+    <label for="languageSelection">Language:</label>
+    <select name="languageSelection" class="languageSelection" onchange="changeLanguage(this.value)">
+        <?php
+            foreach($langmanager->languages as &$lang) {
+                $selected = ((string)$lang->short == $language) ? "Selected" : "";
+                echo '<option value="'.(string)$lang->short.'" '.$selected.'>'.(string)$lang->name.'</option>';
+            }
+        ?>
+    </select>
 </footer>
 </body>
 </html>

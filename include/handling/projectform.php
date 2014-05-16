@@ -24,22 +24,34 @@ if(isset($_POST['add'])) {
                             }
                             ProjectFunc::add($_POST['name'], $_POST['mainproject'], 0, $_POST['author'], $created, $_POST['overseer'], $_POST['public']);
                         } else {
-
+                            echo '<script type="text/javascript">';
+                            echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->taken)).'");';
+                            echo '</script>';
                         }
                     } else {
-
+                        echo '<script type="text/javascript">';
+                        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->nooverseer)).'");';
+                        echo '</script>';
                     }
                 } else {
-
+                    echo '<script type="text/javascript">';
+                    echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->nomain)).'");';
+                    echo '</script>';
                 }
             } else {
-
+                echo '<script type="text/javascript">';
+                echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->nopublic)).'");';
+                echo '</script>';
             }
         } else {
-
+            echo '<script type="text/javascript">';
+            echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->noauthor)).'");';
+            echo '</script>';
         }
     } else {
-
+        echo '<script type="text/javascript">';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->noname)).'");';
+        echo '</script>';
     }
 }
 

@@ -16,12 +16,12 @@ if(isset($_GET['t'])) {
 
     <div id="main">
         <?php
-            if($type == "calendar") {
-                include("include/overviewcalendar.php");
+            if($type == "calendar" || $type == "calendarview") {
+                include("include/overview/calendar.php");
             } else if($type == "project") {
-                include("include/overviewproject.php");
+                include("include/overview/project.php");
             } else {
-                include("include/overviewgeneral.php");
+                include("include/overview/general.php");
             }
         ?>
         <div class="clear"></div>

@@ -31,7 +31,7 @@ if(isset($_POST['register'])) {
 
                             UserFunc::add($username, $password, $userGroup, $registered, $lastLogin, $ip, $email, $activationKey);
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("success", "Thanks for registering! You may now login.");';
+                            echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->congrats)).'");';
                             echo '</script>';
 
                             echo '<script>';
@@ -39,32 +39,32 @@ if(isset($_POST['register'])) {
                             echo '</script>';
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "Passwords do not match!");';
+                            echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->invalidpasswords)).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "Username already in use!");';
+                        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->taken)).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "No email address entered!");';
+                    echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->noemail)).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "You must confirm your password!");';
+                echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->noconfirm)).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "No password entered!");';
+            echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->nopassword)).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "No username entered!");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->nousername)).'");';
         echo '</script>';
     }
 }

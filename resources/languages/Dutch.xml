@@ -6,8 +6,10 @@
     <short>nl</short>
     <!-- The author of this language file. -->
     <author>Jesbus</author>
+    <!-- The version of this language file. -->
+    <version>1.0</version>
     <!-- The symbol for this language. Located in the theme's image folder. -->
-    <symbol>nl_nl.png</symbol>
+    <symbol>nl.gif</symbol>
 
     <!-- Everything that can be translated to different languages is located below. -->
     <!-- Words starting with % are shortcuts that are replaced by the script before processing. Please do not translate
@@ -31,6 +33,10 @@
                     <navlink>Calendar</navlink>
                     <header>Calendar - %project</header>
                 </calendar>
+                <general>
+                    <navlink>General</navlink>
+                    <header>General - Overview</header>
+                </general>
                 <project>
                     <navlink>Project</navlink>
                     <header>Overview for %project</header>
@@ -50,19 +56,65 @@
             </lists>
         </pages>
         <tables>
-            <project>Project</project>
-            <list>Lijst</list>
-            <task>Taak</task>
+            <nmae>Name</nmae>
             <assignee>Toegewezene</assignee>
             <created>Gemaakt</created>
             <creator>Maker</creator>
+            <author>Author</author>
             <actions>Acties</actions>
             <overseer>Opzichter</overseer>
+            <permission>Permission</permission>
+            <short>Short</short>
+            <icon>Icon</icon>
+            <admin>Admin</admin>
+            <version>Version</version>
+            <email>Email</email>
+            <group>Group</group>
+            <registered>Registered</registered>
+            <yes>Yes</yes>
+            <no>No</no>
             <none>geen</none>
             <notask>De todo lijst is leeg.</notask>
             <nolist>Er zijn momenteel geen lijsten voor dit project.</nolist>
             <noproject>Er zijn momenteel geen projecten.</noproject>
         </tables>
+        <forms>
+            <login>
+                <invalidlogin>Invalid login credentials!</invalidlogin>
+                <nopassword>No password entered!</nopassword>
+                <nousername>No username entered!</nousername>
+                <noemail>No email address entered!</noemail>
+                <confirm>You must confirm your password!</confirm>
+                <invalidpasswords>Passwords do not match!</invalidpasswords>
+                <taken>Username already in use!</taken>
+            </login>
+            <project>
+                <noname>No name entered!</noname>
+                <taken>A project with that name already exists!</taken>
+                <noauthor>Invalid author entered!</noauthor>
+                <nooverseer>Invalid overseer entered!</nooverseer>
+                <nopublic>You must fill out the public field!</nopublic>
+                <nomain>You must fill out the main field!</nomain>
+            </project>
+            <list>
+                <created>The list %list has been created!</created>
+                <taken>A list with that name already exists!</taken>
+                <invalidproject>The project specified does not exist!</invalidproject>
+                <noproject>You must enter a project for this list!</noproject>
+                <nominimal>You must fill out the minimal field!</nominimal>
+                <noguestview>You must fill out the guest view field!</noguestview>
+                <noguestedit>You must fill out the guest edit field!</noguestedit>
+                <noviewperm>You must fill out the view permission field!</noviewperm>
+                <noeditperm>You must fill out the edit permission field!</noeditperm>
+            </list>
+            <task>
+                <invalidlist>The list specified does not exist!</invalidlist>
+                <invalidstatus>Invalid status entered!</invalidstatus>
+                <notitle>You must fill out the title field!</notitle>
+                <nodescription>You must fill out the description field!</nodescription>
+                <noeditable>You must fill out the editable field!</noeditable>
+            </task>
+        </forms>
     </site>
     <email>
         <subject>Trackr Verificatie</subject>

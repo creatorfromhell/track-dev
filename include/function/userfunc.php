@@ -20,7 +20,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, username, password, usergroup, registered, lastlogin, ip, email, banned, online, activated, activationkey) VALUES ('', ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, ?)");
+        $stmt = $c->prepare("INSERT INTO `".$t."` (id, username, password, usergroup, registered, lastlogin, ip, email, banned, online, activated, activationkey) VALUES ('', ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, ?)");
         $stmt->bindParam(1, $username);
         $stmt->bindParam(2, $password);
         $stmt->bindParam(3, $usergroup);
@@ -37,7 +37,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("UPDATE ".$t." SET password = ?, usergroup = ?, registered = ?, lastlogin = ? ip = ?, email = ?, banned = ?, online = ?, activated = ?, activationkey = ? WHERE username = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET password = ?, usergroup = ?, registered = ?, lastlogin = ? ip = ?, email = ?, banned = ?, online = ?, activated = ?, activationkey = ? WHERE username = ?");
         $stmt->bindParam(1, $password);
         $stmt->bindParam(2, $usergroup);
         $stmt->bindParam(3, $registered);
@@ -54,7 +54,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("DELETE FROM ".$t." WHERE username = ?");
+        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
     }
@@ -64,7 +64,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("UPDATE ".$t." SET username = ? WHERE username = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET username = ? WHERE username = ?");
         $stmt->bindParam(1, $new);
         $stmt->bindParam(2, $username);
         $stmt->execute();
@@ -75,7 +75,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("SELECT id FROM ".$t." WHERE username = ?");
+        $stmt = $c->prepare("SELECT id FROM `".$t."` WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -98,7 +98,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("UPDATE ".$t." SET lastlogin = ? WHERE username = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET lastlogin = ? WHERE username = ?");
         $stmt->bindParam(1, $lastlogin);
         $stmt->bindParam(2, $username);
         $stmt->execute();
@@ -106,14 +106,25 @@ class UserFunc {
 
     //isAdmin
     public static function isAdmin($username) {
-        return GroupFunc::isAdmin(UserFunc::getGroup($username));
+        $connect = new Connect();
+        $c = $connect->connection;
+        $userTable = $connect->prefix."_users";
+        $groupTable = $connect->prefix."_groups";
+        $stmt = $c->prepare("SELECT admin FROM ".$groupTable." WHERE groupname = (SELECT usergroup FROM ".$userTable." WHERE username = ?)");
+        $stmt->bindParam(1, $username);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($result['admin'] == '1') {
+            return true;
+        }
+        return false;
     }
 
     public static function getEmail($username) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("SELECT email FROM ".$t." WHERE username = ?");
+        $stmt = $c->prepare("SELECT email FROM `".$t."` WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -149,7 +160,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("SELECT usergroup FROM ".$t." WHERE username = ?");
+        $stmt = $c->prepare("SELECT usergroup FROM `".$t."` WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -161,7 +172,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("UPDATE ".$t." SET usergroup = ? WHERE username = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET usergroup = ? WHERE username = ?");
         $stmt->bindParam(1, $group);
         $stmt->bindParam(2, $username);
         $stmt->execute();
@@ -172,7 +183,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("SELECT password FROM ".$t." WHERE username = ?");
+        $stmt = $c->prepare("SELECT password FROM `".$t."` WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -205,7 +216,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("UPDATE ".$t." SET online = ? WHERE username = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET online = ? WHERE username = ?");
         $stmt->bindParam(1, $status);
         $stmt->bindParam(2, $username);
         $stmt->execute();
@@ -216,7 +227,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("SELECT online FROM ".$t." WHERE username = ?");
+        $stmt = $c->prepare("SELECT online FROM `".$t."` WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -233,7 +244,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("SELECT activated FROM ".$t." WHERE username = ?");
+        $stmt = $c->prepare("SELECT activated FROM `".$t."` WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -250,7 +261,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("UPDATE ".$t." SET activated = 0 WHERE username = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET activated = 0 WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
     }
@@ -259,7 +270,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("SELECT activationkey FROM ".$t." WHERE username = ?");
+        $stmt = $c->prepare("SELECT activationkey FROM `".$t."` WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -270,7 +281,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("UPDATE ".$t." SET activationkey = ? WHERE username = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET activationkey = ? WHERE username = ?");
         $stmt->bindParam(1, $key);
         $stmt->bindParam(2, $username);
         $stmt->execute();
@@ -286,7 +297,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("UPDATE ".$t." SET banned = 1 WHERE username = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET banned = 1 WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
     }
@@ -296,7 +307,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("UPDATE ".$t." SET banned = 0 WHERE username = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET banned = 0 WHERE username = ?");
         $stmt->bindParam(1, $username);
         $stmt->execute();
     }
@@ -322,7 +333,7 @@ class UserFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_users";
-        $stmt = $c->prepare("SELECT username from ".$t." ORDER BY registered DESC LIMIT 7");
+        $stmt = $c->prepare("SELECT username from `".$t."` ORDER BY registered DESC LIMIT 7");
         $stmt->execute();
         $result = $stmt->fetchAll();
 
@@ -333,6 +344,39 @@ class UserFunc {
         }
 
         return $users;
+    }
+
+    public static function printUsers($username, $formatter) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_users";
+        $stmt = $c->prepare("SELECT id, username, usergroup, email, registered FROM ".$t);
+        $stmt->execute();
+
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $id = $row['id'];
+            $name = $row['username'];
+            $group = $row['usergroup'];
+            $email = $row['email'];
+            $registered = $row['registered'];
+
+            echo "<tr>";
+            echo "<td class='name'>".$name."</td>";
+            echo "<td class='email'>".$email."</td>";
+            echo "<td class='group'>".$group."</td>";
+            echo "<td class='registered'>".$formatter->formatDate($registered)."</td>";
+            echo "<td class='actions'>";
+
+            if(self::isAdmin($username)) {
+                echo "<a title='Edit' class='actionEdit' onclick='editTask(); return false;'></a>";
+                echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure?\");' href='?t=users&action=delete&id=".$id."'></a>";
+            } else {
+                echo $formatter->replace("%none");
+            }
+
+            echo "</td>";
+            echo "</tr>";
+        }
     }
 }
 ?>

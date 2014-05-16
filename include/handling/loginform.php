@@ -7,9 +7,6 @@
  * Last Modified: 3/18/14 at 11:39 AM
  * Last Modified by Daniel Vidmar.
  */
-if(isset($_SESSION['username'])) {
-    header("Location: index.php");
-}
 
 if(isset($_POST['login'])) {
     if(isset($_POST['username']) && trim($_POST['username']) != "") {
@@ -28,17 +25,17 @@ if(isset($_POST['login'])) {
                 echo '</script>';
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "Invalid login credentials!");';
+                echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->invalidlogin)).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "No password entered!");';
+            echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->nopassword)).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "No username entered!");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->nousername)).'");';
         echo '</script>';
     }
 }

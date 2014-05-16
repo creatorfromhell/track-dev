@@ -10,7 +10,7 @@
 ?>
 <div id="tasks_chart" class="module">
     <h4>Tasks Chart</h4>
-    <div id="chart_key">
+    <div class="chart_key">
         <div class="entry"><label style="background-color:rgba(25,25,112,0.5);border:1px solid rgba(25,25,112,1);" class="entry_colour"></label>Created</div>
         <div class="entry"><label style="background-color:rgba(0,100,0,0.5);border:1px solid rgba(0,100,0,1);" class="entry_colour"></label>Finished</div>
     </div>
@@ -18,8 +18,8 @@
 </div>
 <div id="assigned_users" class="module">
     <h4>Top Assigned Users</h4>
-    <div id="chart_key">
-        <div class="entry"><label style="background-color:rgba(25,25,112,0.5);border:1px solid rgba(25,25,112,1);" class="entry_colour"></label>Created</div>
+    <div class="chart_key">
+        <div class="entry"><label style="background-color:rgba(25,25,112,0.5);border:1px solid rgba(25,25,112,1);" class="entry_colour"></label>Assigned</div>
         <div class="entry"><label style="background-color:rgba(0,100,0,0.5);border:1px solid rgba(0,100,0,1);" class="entry_colour"></label>Finished</div>
     </div>
     <canvas id="chart_assigned" class="module" onmouseover="showKey('assigned_users');" onmouseout="hideKey('assigned_users');" width="380" height="380"></canvas>
@@ -56,17 +56,17 @@
     }
 
     var chartAssignedData = {
-        labels : ["creatorfromhell","Bob","Jim","Jill","Mary"],
+        labels : [<?php echo ProjectFunc::getAssignedUsersChartData($project, true, false); ?>],
         datasets : [
             {
                 fillColor : "rgba(25,25,112,0.5)",
                 strokeColor : "rgba(25,25,112,1)",
-                data : [100,5,50,10,70]
+                data : [<?php echo ProjectFunc::getAssignedUsersChartData($project, false, false); ?>]
             },
             {
                 fillColor : "rgba(0,100,0,0.5)",
                 strokeColor : "rgba(0,100,0,1)",
-                data : [76,5,20,9,55]
+                data : [<?php echo ProjectFunc::getAssignedUsersChartData($project, false, true); ?>]
             }
         ]
     }

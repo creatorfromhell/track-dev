@@ -9,12 +9,28 @@
  */
 include("include/header.php");
 include("include/handling/listform.php");
+if(isset($_GET['action']) && isset($_GET['id'])) {
+    $action = $_GET['action'];
+    $id = $_GET['id'];
+    if(UserFunc::isAdmin($username) || ListFunc::getOverseer($id) == $username || ProjectFunc::getOverseer(ListFunc::getProject($id)) == $username) {
+        if($action == "delete") {
+            $name = ListFunc::getName($id);
+            ListFunc::remove($id);
+            echo '<script type="text/javascript">';
+            echo 'showMessage("success", "List '.$name.' has been deleted.");';
+            echo '</script>';
+        }
+    }
+}
 ?>
 
     <div id="main">
-        <!-- Add List -->
         <?php if(UserFunc::isAdmin($username) || ProjectFunc::getOverseer($project) == $username) { ?>
-        <form id="list_add" method="post">
+        <div id="add" onclick="showDiv('list_add'); return false;">
+
+        </div>
+        <!-- Add List -->
+        <form id="list_add" class="trackrForm" method="post">
             <h3>Add List</h3>
             <div id="holder">
                 <div id="page_1">
@@ -25,7 +41,8 @@ include("include/handling/listform.php");
                         <select name="project" id="project">
                             <?php
                                 foreach($projects as &$p) {
-                                    echo '<option value="'.$p.'">'.$p.'</option>';
+                                    $selected = ($p == $project) ? "selected" : "";
+                                    echo '<option value="'.$p.'" '.$selected.'>'.$p.'</option>';
                                 }
                             ?>
                         </select><br />
@@ -36,7 +53,7 @@ include("include/handling/listform.php");
                         </select><br />
                     </fieldset>
                     <fieldset id="links">
-                        <button id="submit_2" onclick="closeDiv(event, 'list_add'); return false;">Close</button>
+                        <button id="submit_2" onclick="hideDiv('list_add'); return false;">Close</button>
                         <button id="submit" onclick="switchPage(event, 'page_1', 'page_2'); return false;">Next</button>
                     </fieldset>
                 </div>
@@ -77,13 +94,13 @@ include("include/handling/listform.php");
                         </select><br />
                         <label for="guestedit">Guest Edit:</label>
                         <select name="guestedit" id="guestedit">
-                            <option value="0">No</option>
-                            <option value="1" selected>Yes</option>
+                            <option value="0" selected>No</option>
+                            <option value="1">Yes</option>
                         </select><br />
-                        <label for="viewpermission">View Permission:</label>
-                        <?php //TODO: add viewpermission field ?>
-                        <label for="editpermission">Edit Permission:</label>
-                        <?php //TODO: add editpermission field ?>
+                        <label for="viewpermission">View Permission:<label id="view_permission_value">0</label></label><br />
+                        <input type="range" id="viewpermission" name="viewpermission" value="0" min="0" max="999" oninput="showValue('view_permission_value', this.value);">
+                        <label for="editpermission">Edit Permission:<label id="edit_permission_value">0</label></label><br />
+                        <input type="range" id="editpermission" name="editpermission" value="0" min="0" max="999" oninput="showValue('edit_permission_value', this.value);">
                     </fieldset>
                     <fieldset id="links">
                         <button id="submit_2" onclick="switchPage(event, 'page_3', 'page_2'); return false;">Back</button>
@@ -98,14 +115,14 @@ include("include/handling/listform.php");
         <?php
         if(ProjectFunc::hasLists($project)) {
         ?>
-        <table id="lists">
+        <table id="lists" class="taskTable">
             <thead>
                 <tr>
-                    <th class="listName"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->list)); ?></th>
-                    <th class="listCreated"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->created)); ?></th>
-                    <th class="listCreator"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->creator)); ?></th>
-                    <th class="listOverseer"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->overseer)); ?></th>
-                    <th class="listAction"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)); ?></th>
+                    <th id="listName" class="large"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->name)); ?></th>
+                    <th id="listCreated" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->created)); ?></th>
+                    <th id="listCreator" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->creator)); ?></th>
+                    <th id="listOverseer" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->overseer)); ?></th>
+                    <th id="listAction" class="action"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)); ?></th>
                 </tr>
             </thead>
             <tbody>

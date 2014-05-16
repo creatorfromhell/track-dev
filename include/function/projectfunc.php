@@ -10,6 +10,7 @@
 
 //Include the Connect Class
 require_once("include/connect.php");
+require_once("include/function/listfunc.php");
 require_once("include/function/userfunc.php");
 class ProjectFunc {
 
@@ -18,7 +19,7 @@ class ProjectFunc {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, project, preset, main, creator, created, overseer, public) VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $c->prepare("INSERT INTO `".$t."` (id, project, preset, main, creator, created, overseer, public) VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $preset);
         $stmt->bindParam(3, $main);
@@ -29,12 +30,22 @@ class ProjectFunc {
         $stmt->execute();
     }
 
+    public static function remove($id) {
+        $project = self::getName($id);
+        $lists = self::lists($project);
+        foreach($lists as &$list) {
+            $listid = ListFunc::getID($project, $list);
+            ListFunc::remove($listid);
+        }
+        self::delete($id);
+    }
+
     //delete project
     public static function delete($id) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
+        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
@@ -44,7 +55,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("UPDATE ".$t." SET project = ?, preset = ?, main = ?, creator = ?, created = ?, overseer = ?, public = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET project = ?, preset = ?, main = ?, creator = ?, created = ?, overseer = ?, public = ? WHERE id = ?");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $preset);
         $stmt->bindParam(3, $main);
@@ -61,7 +72,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("SELECT id FROM ".$t." WHERE project = ?");
+        $stmt = $c->prepare("SELECT id FROM `".$t."` WHERE project = ?");
         $stmt->bindParam(1, $project);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -73,7 +84,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("UPDATE ".$t." SET main = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET main = ? WHERE id = ?");
         $stmt->bindParam(1, $main);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -84,7 +95,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("SELECT main FROM ".$t." WHERE id = ?");
+        $stmt = $c->prepare("SELECT main FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -97,7 +108,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_lists";
-        $stmt = $c->prepare("SELECT list FROM ".$t." WHERE id = ?");
+        $stmt = $c->prepare("SELECT list FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $listID);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -109,7 +120,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("SELECT overseer FROM ".$t." WHERE project = ?");
+        $stmt = $c->prepare("SELECT overseer FROM `".$t."` WHERE project = ?");
         $stmt->bindParam(1, $project);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -121,10 +132,21 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("UPDATE ".$t." SET overseer = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET overseer = ? WHERE id = ?");
         $stmt->bindParam(1, $overseer);
         $stmt->bindParam(2, $id);
         $stmt->execute();
+    }
+
+    public static function getName($id) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_projects";
+        $stmt = $c->prepare("SELECT project FROM `".$t."` WHERE id = ?");
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['project'];
     }
 
     //get preset project
@@ -132,7 +154,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("SELECT project FROM ".$t." WHERE preset = 1");
+        $stmt = $c->prepare("SELECT project FROM `".$t."` WHERE preset = 1");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['project'];
@@ -144,7 +166,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("UPDATE ".$t." SET preset = 1 WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET preset = 1 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
@@ -154,7 +176,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("UPDATE ".$t." SET preset = 0 WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET preset = 0 WHERE id = ?");
         $stmt->bindParam(1, $presetID);
         $stmt->execute();
     }
@@ -164,7 +186,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("UPDATE ".$t." SET public = 0 WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET public = 0 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
@@ -174,7 +196,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("UPDATE ".$t." SET public = 1 WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET public = 1 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
@@ -184,7 +206,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("UPDATE ".$t." SET project = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -195,7 +217,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("SELECT id FROM ".$t." WHERE project = ?");
+        $stmt = $c->prepare("SELECT id FROM `".$t."` WHERE project = ?");
         $stmt->bindParam(1, $project);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -242,7 +264,7 @@ class ProjectFunc {
 
             if($canEdit) {
                 echo "<a title='Edit' class='actionEdit' onclick='editTask(); return false;'></a>";
-                echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure?\");' href='?action=delete&id=".$id."'></a>";
+                echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete project ".$name."?\");' href='?action=delete&id=".$id."'></a>";
             } else {
                 echo $formatter->replace("%none");
             }
@@ -256,7 +278,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_lists";
-        $stmt = $c->prepare("SELECT id FROM ".$t." WHERE project = ?");
+        $stmt = $c->prepare("SELECT id FROM `".$t."` WHERE project = ?");
         $stmt->bindParam(1, $project);
         $stmt->execute();
         if($stmt->fetch(PDO::FETCH_NUM) > 0) {
@@ -269,7 +291,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_lists";
-        $stmt = $c->prepare("SELECT id, list, created, creator, overseer FROM ".$t." WHERE project = ?");
+        $stmt = $c->prepare("SELECT id, list, created, creator, overseer FROM `".$t."` WHERE project = ?");
         $stmt->bindParam(1, $project);
         $stmt->execute();
 
@@ -282,7 +304,7 @@ class ProjectFunc {
             $canEdit = UserFunc::canEdit($project, $name, $username);
 
             echo "<tr>";
-            echo "<td class='name'><a href='list.php?p=".$project."&l=".$name."'>".$formatter->replace($name)."</a></td>";
+            echo "<td class='name'><a href='list.php?p=".$project."&amp;l=".$name."'>".$formatter->replace($name)."</a></td>";
             echo "<td class='created'>".$formatter->replace($formatter->formatDate($created))."</td>";
             echo "<td class='creator'>".$formatter->replace($creator)."</td>";
             echo "<td class='overseer'>".$formatter->replace($overseer)."</td>";
@@ -290,7 +312,7 @@ class ProjectFunc {
 
             if($canEdit) {
                 echo "<a title='Edit' class='actionEdit' onclick='editTask(); return false;'></a>";
-                echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure?\");' href='?action=delete&id=".$id."'></a>";
+                echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete list ".$name."?\");' href='?p=".$project."&action=delete&id=".$id."'></a>";
             } else {
                 echo $formatter->replace("%none");
             }
@@ -321,7 +343,7 @@ class ProjectFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_lists";
-        $stmt = $c->prepare("SELECT list FROM ".$t." WHERE project = ?");
+        $stmt = $c->prepare("SELECT list FROM `".$t."` WHERE project = ?");
         $stmt->bindParam(1, $project);
         $stmt->execute();
         $result = $stmt->fetchAll();
@@ -407,6 +429,158 @@ class ProjectFunc {
         $stmt->execute();
         $result = $stmt->fetchColumn();
         return ($result) ? $result : 0;
+    }
+
+    public static function getAssignedUsersChartData($project, $users, $completed) {
+        $dataArray = self::getTopAssignedUsers($project);
+        $userArray = $dataArray[0];
+        $totalArray = $dataArray[1];
+        $completedArray = $dataArray[2];
+
+        if($users) {
+            $userString = "";
+            for($i = 0; $i < count($userArray); $i++) {
+                if( $i > 0) { $userString .= ","; }
+                $userString .= "'".$userArray[$i]."'";
+            }
+            return $userString;
+        } else {
+            if($completed) {
+                $completedString = "";
+                for($i = 0; $i < count($completedArray); $i++) {
+                    if( $i > 0) { $completedString .= ","; }
+                    $completedString .= $completedArray[$i];
+                }
+                return $completedString;
+            } else {
+                $totalString = "";
+                for($i = 0; $i < count($totalArray); $i++) {
+                    if( $i > 0) { $totalString .= ","; }
+                    $totalString .= $totalArray[$i];
+                }
+                return $totalString;
+            }
+        }
+    }
+
+    public static function getTopAssignedUsers($project) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $lists = self::lists($project);
+        $users = array();
+        $totals = array();
+        $completed = array();
+
+        $from = "";
+        for($i = 0; $i < count($lists); $i++) {
+            if($i > 0) { $from .= " UNION ALL "; }
+            $from .= "SELECT id, assignee FROM ".$connect->prefix."_".$project."_".$lists[$i];
+        }
+        $stmt = $c->prepare("SELECT assignee, Count(a.id) AS total FROM(".$from.") AS a GROUP BY assignee ORDER BY total DESC LIMIT 5");
+        $stmt->execute();
+        $id = 0;
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $users[$id] = $row['assignee'];
+            $totals[$id] = $row['total'];
+            $id++;
+        }
+
+        for($i = 0; $i < count($users); $i++) {
+            $from = "";
+            for($i2 = 0; $i2 < count($lists); $i2++) {
+                if($i2 > 0) { $from .= " UNION ALL "; }
+                $from .= "SELECT id FROM ".$connect->prefix."_".$project."_".$lists[$i2]." WHERE assignee = '".$users[$i]."' AND taskstatus = 1";
+            }
+            $stmt = $c->prepare("SELECT Count(a.id) FROM(".$from.") AS a");
+            $stmt->execute();
+            $result = $stmt->fetchColumn();
+            $completed[$i] = ($result) ? $result : 0;
+        }
+        return array($users, $totals, $completed);
+    }
+
+    public static function hasEvent($project, $year, $month, $day) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $lists = self::lists($project);
+
+        $stmt = $c->prepare("SELECT COUNT(*) FROM (SELECT id, project, EXTRACT(YEAR FROM created) AS year, EXTRACT(MONTH FROM created) AS month, EXTRACT(DAY FROM created) AS day FROM ".$connect->prefix."_lists) AS a WHERE project = ".$project." AND year = ".$year." AND month = ".$month." AND day = ".$day);
+        $stmt->execute();
+        if($stmt->fetchColumn()) {
+            return true;
+        }
+
+        $from = "";
+        for($i = 0; $i < count($lists); $i++) {
+            if($i > 0) { $from .= " UNION ALL "; }
+            $from .= "SELECT id, EXTRACT(YEAR FROM due) AS year, EXTRACT(MONTH FROM due) AS month, EXTRACT(DAY FROM due) AS day FROM ".$connect->prefix."_".$project."_".$lists[$i];
+        }
+        $stmt = $c->prepare("SELECT COUNT(*) FROM (".$from.") AS a WHERE year = ".$year." AND month = ".$month." AND day = ".$day);
+        $stmt->execute();
+        if($stmt->fetchColumn()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function getEvents($project, $year, $month, $day) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $lists = self::lists($project);
+        $toReturn = "";
+        if(self::hasEvent($project, $year, $month, $day)) {
+            $toReturn .= "<ul>";
+
+            $stmt = $c->prepare("SELECT name, author FROM (SELECT id, name, author, project, EXTRACT(YEAR FROM created) AS year, EXTRACT(MONTH FROM created) AS month, EXTRACT(DAY FROM created) AS day FROM ".$connect->prefix."_lists) AS a WHERE project = ".$project." AND year = ".$year." AND month = ".$month." AND day = ".$day);
+            $stmt->execute();
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $toReturn .= '<li>List: <a href="list.php?p='.$project.'&list='.$row['name'].'">'.$row['name'].'</a>, was created by '.$row['author'].'.</li>';
+            }
+
+            $from = "";
+            for($i = 0; $i < count($lists); $i++) {
+                if($i > 0) { $from .= " UNION ALL "; }
+                $from .= "SELECT id, title, author, EXTRACT(YEAR FROM due) AS year, EXTRACT(MONTH FROM due) AS month, EXTRACT(DAY FROM due) AS day FROM ".$connect->prefix."_".$project."_".$lists[$i];
+            }
+            $stmt = $c->prepare("SELECT id, title, author FROM (".$from.") AS a WHERE year = ".$year." AND month = ".$month." AND day = ".$day);
+            $stmt->execute();
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $toReturn .= '<li>Task: '.$row['title'].' was created by '.$row['author'].'.</li>';
+            }
+            $toReturn .= "</ul>";
+        } else {
+            $toReturn .= "<p>This calendar has no events.</p>";
+        }
+        return $toReturn;
+    }
+
+    public static function getCorrectDate($year, $month, $day) {
+        $newYear = $year;
+        $newMonth = $month;
+        $newDay = $day;
+        $newTime = mktime(0, 0, 0, $newMonth, $newDay, $newYear);
+
+        if($newDay < 1 || $newDay > date('t', $newTime)) {
+            if($newDay < 1) {
+                $newMonth--;
+                $newDay = date('t', mktime(0, 0, 0, $newMonth, 1, $newYear));
+            } else {
+                $newMonth++;
+                $newDay = 1;
+            }
+        }
+
+        if($newMonth < 1 || $newMonth > 12) {
+            if($newMonth < 1) {
+                $newMonth = 12;
+                $newYear--;
+            } else {
+                $newMonth = 1;
+                $newYear++;
+            }
+        }
+        $newTime = mktime(0, 0, 0, $newMonth, $newDay, $newYear);
+        return $newTime;
     }
 }
 ?>

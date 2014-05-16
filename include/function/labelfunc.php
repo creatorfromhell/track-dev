@@ -17,7 +17,7 @@ class LabelFunc {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, project, list, label, color) VALUES ('', ?, ?, ?, ?)");
+        $stmt = $c->prepare("INSERT INTO `".$t."` (id, project, list, label, color) VALUES ('', ?, ?, ?, ?)");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $list);
         $stmt->bindParam(3, $name);
@@ -30,7 +30,7 @@ class LabelFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
+        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
@@ -40,7 +40,7 @@ class LabelFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("UPDATE ".$t." SET project = ?, list = ?, label = ?, color = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET project = ?, list = ?, label = ?, color = ? WHERE id = ?");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $list);
         $stmt->bindParam(3, $name);
@@ -54,7 +54,7 @@ class LabelFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("UPDATE ".$t." SET color = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET color = ? WHERE id = ?");
         $stmt->bindParam(1, $color);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -65,7 +65,7 @@ class LabelFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("UPDATE ".$t." SET label = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET label = ? WHERE id = ?");
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();

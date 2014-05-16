@@ -21,7 +21,7 @@ class VersionFunc {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, version, project, due, released, type) VALUES ('', ?, ?, ?, ?, ?)");
+        $stmt = $c->prepare("INSERT INTO `".$t."` (id, version, project, due, released, type) VALUES ('', ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $due);
@@ -35,7 +35,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
+        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
@@ -45,7 +45,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE ".$t." SET version = ?, project = ?, due = ?, released = ?, type = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET version = ?, project = ?, due = ?, released = ?, type = ? WHERE id = ?");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $due);
@@ -60,7 +60,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE ".$t." SET due = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET due = ? WHERE id = ?");
         $stmt->bindParam(1, $due);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -71,7 +71,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE ".$t." SET project = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -82,7 +82,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE ".$t." SET release = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET release = ? WHERE id = ?");
         $stmt->bindParam(1, $release);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -93,7 +93,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE ".$t." SET type = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET type = ? WHERE id = ?");
         $stmt->bindParam(1, $type);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -104,7 +104,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE ".$t." SET version = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET version = ? WHERE id = ?");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -120,7 +120,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions_types";
-        $stmt = $c->prepare("INSERT INTO ".$t." (id, versiontype, description) VALUES ('', ?, ?)");
+        $stmt = $c->prepare("INSERT INTO `".$t."` (id, versiontype, description) VALUES ('', ?, ?)");
         $stmt->bindParam(1, $versiontype);
         $stmt->bindParam(2, $description);
         $stmt->execute();
@@ -131,7 +131,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions_types";
-        $stmt = $c->prepare("UPDATE ".$t." SET versiontype = ?, description = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET versiontype = ?, description = ? WHERE id = ?");
         $stmt->bindParam(1, $versiontype);
         $stmt->bindParam(2, $description);
         $stmt->bindParam(3, $id);
@@ -143,7 +143,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions_types";
-        $stmt = $c->prepare("DELETE FROM ".$t." WHERE id = ?");
+        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }

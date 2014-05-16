@@ -16,14 +16,45 @@ $canView = UserFunc::canView($project, $list, $username);
 if(isset($_GET['action']) && isset($_GET['id']) && $canEdit) {
     $action = $_GET['action'];
     $id = $_GET['id'];
+
+    if($action == "open") {
+        TaskFunc::changeStatus($project, $list, $id, 0);
+        echo '<script type="text/javascript">';
+        echo 'showMessage("success", "The status of task #'.$id.' has been changed to open.");';
+        echo '</script>';
+    } else if($action == "done") {
+        TaskFunc::changeStatus($project, $list, $id, 1);
+        TaskFunc::changeFinished($project, $list, $id, date("Y-m-d H:i:s"));
+        echo '<script type="text/javascript">';
+        echo 'showMessage("success", "The status of task #'.$id.' has been changed to done.");';
+        echo '</script>';
+    } else if($action == "inprogress") {
+        TaskFunc::changeStatus($project, $list, $id, 2);
+        echo '<script type="text/javascript">';
+        echo 'showMessage("success", "The status of task #'.$id.' has been changed to in progress.");';
+        echo '</script>';
+    } else if($action == "close") {
+        TaskFunc::changeStatus($project, $list, $id, 3);
+        echo '<script type="text/javascript">';
+        echo 'showMessage("success", "The status of task #'.$id.' has been changed to closed.");';
+        echo '</script>';
+    } else if($action == "delete") {
+        TaskFunc::delete($project, $list, $id);
+        echo '<script type="text/javascript">';
+        echo 'showMessage("success", "Task #'.$id.' has been deleted.");';
+        echo '</script>';
+    }
 }
 include("include/handling/taskform.php");
 ?>
 
     <div id="main">
-        <!-- Add Task Form -->
         <?php if($canEdit) { ?>
-        <form id="task_add" method="post">
+        <div id="add" onclick="showDiv('task_add'); return false;">
+
+        </div>
+        <!-- Add Task Form -->
+        <form id="task_add" class="trackrForm" method="post">
             <h3>Add Task</h3>
               <div id="holder">
                 <div id="page_1">
@@ -44,7 +75,7 @@ include("include/handling/taskform.php");
                         <?php //TODO: Add due date field ?>
                     </fieldset>
                     <fieldset id="links">
-                        <button id="submit_2" onclick="closeDiv(event, 'task_add'); return false;">Close</button>
+                        <button id="submit_2" onclick="hideDiv('task_add'); return false;">Close</button>
                         <button class="submit" onclick="switchPage(event, 'page_1', 'page_2'); return false;">Next</button>
                     </fieldset>
                 </div>
@@ -62,8 +93,8 @@ include("include/handling/taskform.php");
                             <option value="2">In Progress</option>
                             <option value="3">Closed</option>
                         </select><br />
-                        <label for="progress">Progress:</label><br />
-                        <input type="range" id="progress" name="progress" min="0" max="100">
+                        <label for="progress">Progress:<label id="progress_value">0</label></label><br />
+                        <input type="range" id="progress" name="progress" value="0" min="0" max="100" oninput="showValue('progress_value', this.value);">
                         <!--<label for="version">Version:</label>
                         <select name="version" id="version">
                             <?php //TODO: print out versions for this project. ?>
@@ -81,19 +112,19 @@ include("include/handling/taskform.php");
 
         <!-- Tasks -->
         <?php if(!ListFunc::isEmpty($project, $list) && $canView) { ?>
-        <table id="list">
+        <table id="list" class="taskTable">
             <thead>
                 <tr>
-                    <th class="taskID">#</th>
-                    <th class="taskTitle"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->task)); ?></th>
+                    <th id="taskID" class="small">#</th>
+                    <th id="taskTitle" class="large"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->name)); ?></th>
                     <?php
                         if(!$minimal) {
                     ?>
-                        <th class="taskAssignee"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->assignee)); ?></th>
-                        <th class="taskCreated"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->created)); ?></th>
-                        <th class="taskAuthor"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->creator)); ?></th>
+                        <th id="taskAssignee" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->assignee)); ?></th>
+                        <th id="taskCreated" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->created)); ?></th>
+                        <th id="taskAuthor" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->author)); ?></th>
                     <?php } ?>
-                    <th class="taskAction"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)); ?></th>
+                    <th id="taskAction" class="action"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)); ?></th>
                 </tr>
             </thead>
             <tbody>

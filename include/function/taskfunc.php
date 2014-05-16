@@ -17,6 +17,20 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("INSERT INTO `".$t."` (id, title, description, author, assignee, due, created, finished, versionname, labels, editable, taskstatus, progress) VALUES('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bindParam(1, $title);
+        $stmt->bindParam(2, $description);
+        $stmt->bindParam(3, $author);
+        $stmt->bindParam(4, $assignee);
+        $stmt->bindParam(5, $due);
+        $stmt->bindParam(6, $created);
+        $stmt->bindParam(7, $finish);
+        $stmt->bindParam(8, $version);
+        $stmt->bindParam(9, $labels);
+        $stmt->bindParam(10, $editable);
+        $stmt->bindParam(11, $status);
+        $stmt->bindParam(12, $progress);
+        $stmt->execute();
     }
 
     //delete task
@@ -24,6 +38,9 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
     }
 
     //check task table
@@ -38,6 +55,21 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("UPDATE `".$t."` SET title = ?, description = ?, author = ?, assignee = ?, due = ?, created = ?, finished = ?, versionname = ?, labels = ?, editable = ?, taskstatus = ?, progress = ? WHERE id = ?");
+        $stmt->bindParam(1, $title);
+        $stmt->bindParam(2, $description);
+        $stmt->bindParam(3, $author);
+        $stmt->bindParam(4, $assignee);
+        $stmt->bindParam(5, $due);
+        $stmt->bindParam(6, $created);
+        $stmt->bindParam(7, $finish);
+        $stmt->bindParam(8, $version);
+        $stmt->bindParam(9, $labels);
+        $stmt->bindParam(10, $editable);
+        $stmt->bindParam(11, $status);
+        $stmt->bindParam(12, $progress);
+        $stmt->bindParam(13, $id);
+        $stmt->execute();
     }
 
     //change task assignee
@@ -45,6 +77,10 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("UPDATE `".$t."` SET assignee = ? WHERE id = ?");
+        $stmt->bindParam(1, $assignee);
+        $stmt->bindParam(2, $id);
+        $stmt->execute();
     }
 
     //change task labels
@@ -52,6 +88,10 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("UPDATE `".$t."` SET labels = ? WHERE id = ?");
+        $stmt->bindParam(1, $labels);
+        $stmt->bindParam(2, $id);
+        $stmt->execute();
     }
 
     //change task list
@@ -59,6 +99,7 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        //use INTO SELECT
     }
 
     //change task progress
@@ -66,6 +107,10 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("UPDATE `".$t."` SET progress = ? WHERE id = ?");
+        $stmt->bindParam(1, $progress);
+        $stmt->bindParam(2, $id);
+        $stmt->execute();
     }
 
     //change project
@@ -73,6 +118,17 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        //use INTO SELECT
+    }
+
+    public static function changeFinished($project, $list, $id, $finished) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("UPDATE `".$t."` SET finished = ? WHERE id = ?");
+        $stmt->bindParam(1, $finished);
+        $stmt->bindParam(2, $id);
+        $stmt->execute();
     }
 
     //change task status
@@ -80,6 +136,10 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("UPDATE `".$t."` SET taskstatus = ? WHERE id = ?");
+        $stmt->bindParam(1, $status);
+        $stmt->bindParam(2, $id);
+        $stmt->execute();
     }
 
     //change task title
@@ -87,6 +147,10 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("UPDATE `".$t."` SET title = ? WHERE id = ?");
+        $stmt->bindParam(1, $title);
+        $stmt->bindParam(2, $id);
+        $stmt->execute();
     }
 
     //change task version
@@ -94,6 +158,10 @@ class TaskFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("UPDATE `".$t."` SET versionname = ? WHERE id = ?");
+        $stmt->bindParam(1, $version);
+        $stmt->bindParam(2, $id);
+        $stmt->execute();
     }
 }
 ?>

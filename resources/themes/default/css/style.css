@@ -165,7 +165,7 @@ h1 {
 	position: absolute;
 	width: 100%;
 	top: 48px;
-	padding: 30px 0 10px 0;
+	padding: 25px 0 15px 0;
 	text-align: left;
 	text-shadow: 0 1px 1px white;
 	margin-bottom: 30px;
@@ -222,6 +222,17 @@ a:hover {
 	color: #777777;
 	font-size: 1.4em;
 	text-align: center;
+}
+
+#add {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+    background: url("../img/add.png") 5px 5px no-repeat;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
 }
 
 .side {
@@ -322,7 +333,7 @@ a:hover {
     box-shadow: none;
 }
 
-#chart_key {
+.chart_key {
     position: relative;
     top: 0;
     right: 5px;
@@ -347,7 +358,7 @@ a:hover {
 }
 
 .entry:last-child {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .entry .entry_colour {
@@ -372,9 +383,132 @@ a:hover {
 }
 
 /*
+ * Calendar Styles
+ */
+#calendarHolder {
+    width: 64%;
+    margin: 0 auto;
+}
+
+#calendarHolder h3 {
+    text-align: center;
+    font-size: 1.4em;
+    background: #EDEBEB;
+    text-shadow: 0 1px 1px white;
+    padding: 5px 0;
+    border-top: 1px solid #666;
+    border-left: 1px solid #666;
+    border-right: 1px solid #666;
+}
+
+#calendar {
+    border-spacing: 0;
+}
+
+#calendar thead th {
+    width: 125px;
+    height: 30px;
+    border-top: 1px solid #666;
+    border-bottom: 1px solid #666;
+    border-left: 1px solid #666;
+}
+
+#calendar tbody th {
+    height: 125px;
+    border-bottom: 1px solid #666;
+    border-left: 1px solid #666;
+    text-align: end;
+    vertical-align: top;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+}
+
+#calendar tbody th:hover {
+    background: rgba(0, 143, 213, 0.4);
+    cursor: pointer;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+}
+
+#calendar tbody th .date {
+    right: 5px;
+    top: 5px;
+    position: relative;
+}
+
+#calendar thead th:last-child {
+    border-right: 1px solid #666;
+}
+
+#calendar tbody th:last-child {
+    border-right: 1px solid #666;
+}
+
+#calendar tbody .last {
+    color: rgba(102, 102, 102, 0.4);
+    background: whitesmoke;
+}
+
+#calendar tbody .old {
+    color: rgba(102, 102, 102, 0.4);
+}
+
+#calendar tbody .today {
+    color: #ff9900;
+}
+
+#calendar tbody .marked {
+    background: url("../img/note.png") no-repeat center;
+}
+
+#calendar tbody .marked:hover {
+    background: rgba(0, 143, 213, 0.4) url("../img/note.png") no-repeat center;
+}
+
+#viewdate {
+    background: white;
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid #666;
+}
+
+#viewdate h3 {
+    text-align: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #666;
+    background: #EDEBEB;  text-shadow: 0 1px 1px white;
+}
+
+#viewdate h5 {
+    text-align: center;
+    padding: 5px 0;
+    border-top: 1px solid #666;
+    background: #EDEBEB;
+    text-shadow: 0 1px 1px white;
+}
+
+#viewdate ul {
+    margin-left: 25px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#viewdate p {
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px 0;
+}
+
+/*
  * Form Styles
  */
-#task_add, #list_add, #project_add {
+#project_add, #list_add, #task_add {
+    position: absolute;
     display: none;
 }
 
@@ -488,23 +622,19 @@ form #links {
 }
 
 #inputs #username {
-    background: #E7E7E7 url("../img/user.png") no-repeat;
-    background-position: 3px 8px;
+    background: #E7E7E7 url("../img/user.png") no-repeat 3px 8px;
 }
 
 #inputs #email {
-    background: #E7E7E7 url("../img/email.png") no-repeat;
-    background-position: 3px 8px;
+    background: #E7E7E7 url("../img/email.png") no-repeat 3px 8px;
 }
 
 #inputs #f_name, #inputs #l_name {
-    background: #E7E7E7 url("../img/info.png") no-repeat;
-    background-position: 3px 8px;
+    background: #E7E7E7 url("../img/info.png") no-repeat 3px 8px;
 }
 
 #inputs #password, #inputs #c_password {
-    background: #E7E7E7 url("../img/key.png") no-repeat;
-    background-position: 3px 8px;
+    background: #E7E7E7 url("../img/key.png") no-repeat 3px 8px;
 }
 
 form #submit, form #submit_2, form .submit {
@@ -552,48 +682,48 @@ form #links #other {
 /*
  * List Styles
  */
-#list, #lists, #projects {
+.taskTable {
 	border: none;
     border-spacing: 0;
 	padding: 100px 0;
 	margin: 0 auto;
 }
 
-#list tbody tr, #lists tbody tr, #projects tbody tr {
+.taskTable tbody tr {
     background: whitesmoke;
 }
 
-#list tbody tr:hover, #lists tbody tr:hover, #projects tbody tr:hover {
+.taskTable tbody tr:hover {
 	background: #CCC8C8;
 }
 
-#list th, #lists th, #projects th {
+.taskTable th {
 	min-width: 50px;
     text-align: center;
 }
 
-#list .taskID {
+.taskTable .small {
     width: 20px;
 }
 
-#list .taskTitle, #lists .listName, #projects .projectName {
-    width: 350px;
-}
-
-#list .taskAssignee, #list .taskCreated, #list .taskAuthor, #lists .listCreated, #lists .listCreator, #lists .listOverseer, #projects .projectCreated, #projects .projectCreator, #projects .projectOverseer {
+.taskTable .medium {
     width: 150px;
 }
 
-#list .taskAction, #lists .listAction, #projects .projectAction {
+.taskTable .action {
     width: 200px;
 }
 
-#list tr td, #lists tr td, #projects tr td {
+.taskTable .large {
+    width: 350px;
+}
+
+.taskTable tr td {
 	padding: 5px;
 	text-align: center;
 }
 
-#list tr td a, #lists tr td a, #projects tr td a {
+.taskTable tr td a {
     cursor: pointer;
     padding-left: 16px;
     margin-left: 5px;
@@ -602,25 +732,25 @@ form #links #other {
 /*
  * Status Styles
  */
-#list tbody .done {
+.taskTable tbody .done {
 	background: #98D4A1;
 	text-decoration: line-through;
 }
 
-#list tbody .d2 {
+.taskTable tbody .d2 {
 	background: #98D4A1;
 }
 
-#list tbody .inprogress {
+.taskTable tbody .inprogress {
 	background: #F7D23E;
 }
 
-#list tbody .closed {
+.taskTable tbody .closed {
 	background: #E89B8B;
 	text-decoration: line-through;
 }
 
-#list tbody .r2 {
+.taskTable tbody .r2 {
 	background: #E89B8B;
 }
 
@@ -700,11 +830,15 @@ form #links #other {
  */
 footer {
     background-color: #EDEBEB;
-    height: 80px;
+    height: auto;
     text-align: center;
     font-size: 80%;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
-footer p:first-child {
-    padding-top: 30px;
+#languageselection option {
+    padding-left: 50px;
+    height: 30px;
+    background-size: 50%;
 }

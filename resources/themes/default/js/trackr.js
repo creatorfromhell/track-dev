@@ -6,6 +6,40 @@
  * Last Modified: 3/3/14 at 10:54 AM
  * Last Modified by Daniel Vidmar.
  */
+window.onload = function() {
+    positionForms();
+}
+
+function showValue(div, value) {
+    var element = document.getElementById(div);
+    element.innerHTML = value;
+}
+
+function positionForms() {
+    var project = document.getElementById("project_add");
+    if(project != null) {
+        var main = document.getElementById("main");
+        var left = (main.style.width / 2) - 214;
+        project.style.left = left;
+        return;
+    }
+
+    var list = document.getElementById("list_add");
+    if(list != null) {
+        var main = document.getElementById("main");
+        var left = (main.style.width / 2) - 214;
+        list.style.left = left;
+        return;
+    }
+
+    var task = document.getElementById("task_add");
+    if(task != null) {
+        var main = document.getElementById("main");
+        var left = (main.style.width / 2) - 214;
+        task.style.left = left;
+        return;
+    }
+}
 
 function showMessage(type, text) {
     var message = document.getElementById("msg");
@@ -44,20 +78,31 @@ function hideKey(name) {
     key.style.opacity = '0';
 }
 
-function checkUsername() {
-    var form = document.getElementById("register");
+function changeLanguage(language) {
+    var ajaxString = "?lang=" + language;
 
-    var username = form.getElementById("username").value;
-
-    var ajaxString = "include/ajax/userajax.php?t=checkuser&username=" + username;
-
-    ajax("POST", ajaxString, function callback(result) {
-        if(result == "AVAILABLE") {
-            //username is available
-        } else {
-            //username is not available
-        }
+    ajax("GET", ajaxString, function callback(result) {
+        location.reload();
     });
+}
+
+function showDiv(div) {
+    var element = document.getElementById(div);
+    element.style.opacity = '0';
+    element.style.display = 'block';
+    setTimeout(
+        function add() {
+            element.style.opacity = '1';
+        }, 200);
+}
+
+function hideDiv(div) {
+    var element = document.getElementById(div);
+    element.style.opacity = '0';
+    setTimeout(
+        function add() {
+            element.style.display = 'none';
+        }, 200);
 }
 
 function switchPage(event, pageID, nextPage) {
@@ -76,7 +121,7 @@ function slideOut(id) {
     setTimeout(
         function add() {
             element.style.display = 'none';
-        }, 900);
+        }, 200);
 }
 
 function slideIn(id) {
@@ -86,16 +131,12 @@ function slideIn(id) {
         function add() {
             element.style.display = 'block';
             element.style.opacity = '1';
-        }, 950);
+        }, 200);
 
     setTimeout(
         function add() {
             element.style.top = '0px';
-        }, 1000);
-}
-
-function validEmail(email){
-    //TODO: check if email is vaild
+        }, 215);
 }
 
 //AJAX function

@@ -9,12 +9,28 @@
  */
 include("include/header.php");
 include("include/handling/projectform.php");
+if(isset($_GET['action']) && isset($_GET['id'])) {
+    $action = $_GET['action'];
+    $id = $_GET['id'];
+    if(UserFunc::isAdmin($username) || ProjectFunc::getOverseer(ProjectFunc::getName($id)) == $username) {
+        if($action == "delete") {
+            $name = ProjectFunc::getName($id);
+            ProjectFunc::remove($id);
+            echo '<script type="text/javascript">';
+            echo 'showMessage("success", "Project '.$name.' has been deleted.");';
+            echo '</script>';
+        }
+    }
+}
 ?>
 
     <div id="main">
-        <!-- Add Project -->
         <?php if(UserFunc::isAdmin($username)) { ?>
-        <form id="project_add" method="post">
+        <div id="add" onclick="showDiv('project_add'); return false;">
+
+        </div>
+        <!-- Add Project -->
+        <form id="project_add" class="trackrForm" method="post">
             <h3>Add Project</h3>
             <div id="holder">
                 <div id="page_1">
@@ -28,7 +44,7 @@ include("include/handling/projectform.php");
                         </select><br />
                     </fieldset>
                     <fieldset id="links">
-                        <button id="submit_2" onclick="closeDiv(event, 'list_add'); return false;">Close</button>
+                        <button id="submit_2" onclick="hideDiv('project_add'); return false;">Close</button>
                         <button id="submit" onclick="switchPage(event, 'page_1', 'page_2'); return false;">Next</button>
                     </fieldset>
                 </div>
@@ -60,14 +76,14 @@ include("include/handling/projectform.php");
         <?php } ?>
 
         <!-- Projects -->
-        <table id="projects">
+        <table id="projects" class="taskTable">
             <thead>
             <tr>
-                <th class="projectName"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->project)); ?></th>
-                <th class="projectCreated"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->created)); ?></th>
-                <th class="projectCreator"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->creator)); ?></th>
-                <th class="projectOverseer"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->overseer)); ?></th>
-                <th class="projectAction"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)); ?></th>
+                <th id="projectName" class="large"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->name)); ?></th>
+                <th id="projectCreated" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->created)); ?></th>
+                <th id="projectCreator" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->creator)); ?></th>
+                <th id="projectOverseer" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->overseer)); ?></th>
+                <th id="projectAction" class="action"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)); ?></th>
             </tr>
             </thead>
             <tbody>

@@ -15,8 +15,10 @@ require_once("thememanager.php");
 require_once("stringformatter.php");
 require_once("languagemanager.php");
 require_once("config.php");
+require_once("function/groupfunc.php");
 require_once("function/projectfunc.php");
 require_once("function/listfunc.php");
+require_once("function/taskfunc.php");
 require_once("function/userfunc.php");
 
 //Instances of Classes
@@ -34,7 +36,7 @@ $username = isset($_SESSION["username"]) ? $_SESSION["username"] : "guest(".Util
 $language = $configuration->config["main"]["language"];
 $project = ProjectFunc::getPreset();
 $projects = ProjectFunc::projects();
-$list = ProjectFunc::getMain($project);
+$list = ProjectFunc::getMain(ProjectFunc::getID($project));
 
 if(isset($_GET['lang']) && $langmanager->exists($_GET['lang'])) {
     $language = $_GET['lang'];

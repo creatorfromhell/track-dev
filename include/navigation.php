@@ -13,14 +13,21 @@
     <ul>
         <li <?php if($page == "index" || $page == "overviewgeneral" || $page == "overviewproject" || $page == "overviewcalendar") { echo 'class="active"'; } ?>><a href="index.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->navlink)); ?></a>
             <ul>
-                <li><a href="?t=calendar">Calendar</a></li>
-                <li><a href="?t=general">General</a></li>
-                <li><a href="?t=project">Project</a></li>
+                <li><a href="index.php?t=calendar"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->calendar->navlink)); ?></a></li>
+                <li><a href="index.php?t=general"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->general->navlink)); ?></a></li>
+                <li><a href="index.php?t=project"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->project->navlink)); ?></a></li>
             </ul>
         </li>
-        <?php if(isset($_SESSION['username']) && UserFunc::isAdmin($username)) { ?>
+        <?php if(UserFunc::isAdmin($username)) { ?>
         <li <?php if($page == "admin") { echo 'class="active"'; } ?>>
             <a href="admin.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->admin->navlink)); ?></a>
+            <ul>
+                <li><a href="admin.php?t=groups">Groups</a></li>
+                <li><a href="admin.php?t=options">Options</a></li>
+                <li><a href="admin.php?t=themes">Themes</a></li>
+                <li><a href="admin.php?t=languages">Languages</a></li>
+                <li><a href="admin.php?t=users">Users</a></li>
+            </ul>
         </li>
         <?php } ?>
         <li <?php if($page == "projects") { echo 'class="active"'; } ?>>
@@ -38,7 +45,7 @@
             <ul>
                 <?php
                 foreach($lists as &$l) {
-                    echo "<li><a href='list.php?p=".$project."&l=".$l."'>".$l."</a></li>";
+                    echo "<li><a href='list.php?p=".$project."&amp;l=".$l."'>".$l."</a></li>";
                 }
                 ?>
             </ul>
