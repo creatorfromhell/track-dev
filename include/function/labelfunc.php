@@ -13,15 +13,16 @@ require_once("include/connect.php");
 class LabelFunc {
 
     //add label
-    public static function add($project, $list, $name, $color) {
+    public static function add($project, $list, $name, $textcolor, $backgroundcolor) {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("INSERT INTO `".$t."` (id, project, list, label, color) VALUES ('', ?, ?, ?, ?)");
+        $stmt = $c->prepare("INSERT INTO `".$t."` (id, project, list, labelname, textcolor, backgroundcolor) VALUES ('', ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $list);
         $stmt->bindParam(3, $name);
-        $stmt->bindParam(4, $color);
+        $stmt->bindParam(4, $textcolor);
+        $stmt->bindParam(5, $backgroundcolor);
         $stmt->execute();
     }
 
@@ -36,27 +37,29 @@ class LabelFunc {
     }
 
     //edit label
-    public static function edit($id, $project, $list, $name, $color) {
+    public static function edit($id, $project, $list, $name, $textcolor, $backgroundcolor) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("UPDATE `".$t."` SET project = ?, list = ?, label = ?, color = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET project = ?, list = ?, labelname = ?, textcolor = ?, backgroundcolor = ? WHERE id = ?");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $list);
         $stmt->bindParam(3, $name);
-        $stmt->bindParam(4, $color);
-        $stmt->bindParam(5, $id);
+        $stmt->bindParam(4, $textcolor);
+        $stmt->bindParam(5, $backgroundcolor);
+        $stmt->bindParam(6, $id);
         $stmt->execute();
     }
 
     //change color
-    public static function changeColor($id, $color) {
+    public static function changeColor($id, $textcolor, $backgroundcolor) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("UPDATE `".$t."` SET color = ? WHERE id = ?");
-        $stmt->bindParam(1, $color);
-        $stmt->bindParam(2, $id);
+        $stmt = $c->prepare("UPDATE `".$t."` SET textcolor = ?, backgroundcolor = ? WHERE id = ?");
+        $stmt->bindParam(1, $textcolor);
+        $stmt->bindParam(2, $backgroundcolor);
+        $stmt->bindParam(3, $id);
         $stmt->execute();
     }
 
@@ -69,6 +72,10 @@ class LabelFunc {
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();
+    }
+
+    public static function printEditForm($id) {
+        //TODO: print edit form
     }
 }
 ?>

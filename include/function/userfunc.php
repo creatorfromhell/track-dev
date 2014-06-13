@@ -110,7 +110,7 @@ class UserFunc {
         $c = $connect->connection;
         $userTable = $connect->prefix."_users";
         $groupTable = $connect->prefix."_groups";
-        $stmt = $c->prepare("SELECT admin FROM ".$groupTable." WHERE groupname = (SELECT usergroup FROM ".$userTable." WHERE username = ?)");
+        $stmt = $c->prepare("SELECT admin FROM ".$groupTable." WHERE id = (SELECT usergroup FROM ".$userTable." WHERE username = ?)");
         $stmt->bindParam(1, $username);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -118,6 +118,18 @@ class UserFunc {
             return true;
         }
         return false;
+    }
+
+    public static function getPermission($username) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $userTable = $connect->prefix."_users";
+        $groupTable = $connect->prefix."_groups";
+        $stmt = $c->prepare("SELECT permission FROM ".$groupTable." WHERE id = (SELECT usergroup FROM ".$userTable." WHERE username = ?)");
+        $stmt->bindParam(1, $username);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['permission'];
     }
 
     public static function getEmail($username) {
@@ -149,10 +161,7 @@ class UserFunc {
 
     //has permission
     public static function hasPermission($username, $permission) {
-        $group = self::getGroup($username);
-        $groupPermission = GroupFunc::permission($group);
-
-        return ($groupPermission >= $permission);
+        return (self::getPermission($username) >= $permission);
     }
 
     //get group
@@ -292,6 +301,22 @@ class UserFunc {
         return Utils::generateUUID();
     }
 
+    public static function printUserNav($username) {
+        $out = '';
+        $out .= '<nav class="userNav">';
+        $out .= '<ul>';
+        $out .= '<li><a href="#">'.$username.'</a>';
+        $out .= '<ul>';
+        if(self::isAdmin($username)) {
+            $out .= '<li><a href="admin.php">Admin</a></li>';
+        }
+        $out .= '<li><a href="logout.php">Logout</a></li>';
+        $out .= '</ul>';
+        $out .= '</ul>';
+        $out .= '</nav>';
+        return $out;
+    }
+
     //ban
     public static function ban($username) {
         $connect = new Connect();
@@ -363,7 +388,7 @@ class UserFunc {
             echo "<tr>";
             echo "<td class='name'>".$name."</td>";
             echo "<td class='email'>".$email."</td>";
-            echo "<td class='group'>".$group."</td>";
+            echo "<td class='group'>".GroupFunc::getName($group)."</td>";
             echo "<td class='registered'>".$formatter->formatDate($registered)."</td>";
             echo "<td class='actions'>";
 
@@ -377,6 +402,10 @@ class UserFunc {
             echo "</td>";
             echo "</tr>";
         }
+    }
+
+    public static function printEditForm($id) {
+        //TODO: print edit form
     }
 }
 ?>

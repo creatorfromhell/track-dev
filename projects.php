@@ -9,22 +9,26 @@
  */
 include("include/header.php");
 include("include/handling/projectform.php");
-if(isset($_GET['action']) && isset($_GET['id'])) {
-    $action = $_GET['action'];
-    $id = $_GET['id'];
-    if(UserFunc::isAdmin($username) || ProjectFunc::getOverseer(ProjectFunc::getName($id)) == $username) {
-        if($action == "delete") {
-            $name = ProjectFunc::getName($id);
-            ProjectFunc::remove($id);
-            echo '<script type="text/javascript">';
-            echo 'showMessage("success", "Project '.$name.' has been deleted.");';
-            echo '</script>';
-        }
-    }
-}
 ?>
 
     <div id="main">
+        <?php
+        if(isset($_GET['action']) && isset($_GET['id'])) {
+            $action = $_GET['action'];
+            $id = $_GET['id'];
+            if(UserFunc::isAdmin($username) || ProjectFunc::getOverseer(ProjectFunc::getName($id)) == $username) {
+                if($action == "delete") {
+                    $name = ProjectFunc::getName($id);
+                    ProjectFunc::remove($id);
+                    echo '<script type="text/javascript">';
+                    echo 'showMessage("success", "Project '.$name.' has been deleted.");';
+                    echo '</script>';
+                } else if($action == "edit") {
+                    echo ProjectFunc::printEditForm($id);
+                }
+            }
+        }
+        ?>
         <?php if(UserFunc::isAdmin($username)) { ?>
         <div id="add" onclick="showDiv('project_add'); return false;">
 
@@ -91,7 +95,7 @@ if(isset($_GET['action']) && isset($_GET['id'])) {
             if(ProjectFunc::hasProjects()) {
                 ProjectFunc::printProjects($username, $formatter);
             } else {
-                echo "<p>".$formatter->replaceShortcuts(((string)$languageinstance->site->tables->noproject))."</p>";
+                echo "<p class='largeText'>".$formatter->replaceShortcuts(((string)$languageinstance->site->tables->noproject))."</p>";
             } ?>
             </tbody>
         </table>

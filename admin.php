@@ -19,6 +19,15 @@ if(isset($_GET['t'])) {
 }
 ?>
 <div id="main">
+    <nav class="sideNav">
+        <ul>
+            <li <?php if($type == "groups") { echo 'class="active"'; } ?>><a href="admin.php?t=groups">Groups</a></li>
+            <li <?php if($type == "options") { echo 'class="active"'; } ?>><a href="admin.php?t=options">Options</a></li>
+            <li <?php if($type == "themes") { echo 'class="active"'; } ?>><a href="admin.php?t=themes">Themes</a></li>
+            <li <?php if($type == "languages") { echo 'class="active"'; } ?>><a href="admin.php?t=languages">Languages</a></li>
+            <li <?php if($type == "users") { echo 'class="active"'; } ?>><a href="admin.php?t=users">Users</a></li>
+        </ul>
+    </nav>
     <?php
         if($type == "groups") {
             include("include/admin/groups.php");

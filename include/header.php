@@ -36,7 +36,8 @@ else if($page == "admin") { $h1 = $formatter->replaceShortcuts(((string)$languag
         <div class="login">
             <p>
                 <?php if(isset($_SESSION["username"])) {
-                    echo "Welcome, ".$username.". <a href='logout.php'>Logout</a>";
+                    $userNav = UserFunc::printUserNav($username);
+                    echo "<p>Welcome, </p>".$userNav."<p>.</p>";
                 } else { ?>
                     <a href="login.php">Login</a> or <a href="register.php">Register</a>
                 <?php } ?>

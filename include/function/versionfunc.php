@@ -110,6 +110,10 @@ class VersionFunc {
         $stmt->execute();
     }
 
+    public static function printEditForm($id) {
+        //TODO: print edit form
+    }
+
 
     /*
      * Version Type Functions
@@ -146,6 +150,10 @@ class VersionFunc {
         $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
+    }
+
+    public static function printTypeEditForm($id) {
+        //TODO: print edit form
     }
 }
 ?>

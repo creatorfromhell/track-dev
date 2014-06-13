@@ -9,22 +9,26 @@
  */
 include("include/header.php");
 include("include/handling/listform.php");
-if(isset($_GET['action']) && isset($_GET['id'])) {
-    $action = $_GET['action'];
-    $id = $_GET['id'];
-    if(UserFunc::isAdmin($username) || ListFunc::getOverseer($id) == $username || ProjectFunc::getOverseer(ListFunc::getProject($id)) == $username) {
-        if($action == "delete") {
-            $name = ListFunc::getName($id);
-            ListFunc::remove($id);
-            echo '<script type="text/javascript">';
-            echo 'showMessage("success", "List '.$name.' has been deleted.");';
-            echo '</script>';
-        }
-    }
-}
 ?>
 
     <div id="main">
+        <?php
+        if(isset($_GET['action']) && isset($_GET['id'])) {
+            $action = $_GET['action'];
+            $id = $_GET['id'];
+            if(UserFunc::isAdmin($username) || ListFunc::getOverseer($id) == $username || ProjectFunc::getOverseer(ListFunc::getProject($id)) == $username) {
+                if($action == "delete") {
+                    $name = ListFunc::getName($id);
+                    ListFunc::remove($id);
+                    echo '<script type="text/javascript">';
+                    echo 'showMessage("success", "List '.$name.' has been deleted.");';
+                    echo '</script>';
+                } else if($action == "edit") {
+                    echo ListFunc::printEditForm($id, $username);
+                }
+            }
+        }
+        ?>
         <?php if(UserFunc::isAdmin($username) || ProjectFunc::getOverseer($project) == $username) { ?>
         <div id="add" onclick="showDiv('list_add'); return false;">
 
@@ -98,9 +102,9 @@ if(isset($_GET['action']) && isset($_GET['id'])) {
                             <option value="1">Yes</option>
                         </select><br />
                         <label for="viewpermission">View Permission:<label id="view_permission_value">0</label></label><br />
-                        <input type="range" id="viewpermission" name="viewpermission" value="0" min="0" max="999" oninput="showValue('view_permission_value', this.value);">
+                        <input type="range" id="viewpermission" name="viewpermission" value="0" min="0" max="<?php echo UserFunc::getPermission($username); ?>" oninput="showValue('view_permission_value', this.value);">
                         <label for="editpermission">Edit Permission:<label id="edit_permission_value">0</label></label><br />
-                        <input type="range" id="editpermission" name="editpermission" value="0" min="0" max="999" oninput="showValue('edit_permission_value', this.value);">
+                        <input type="range" id="editpermission" name="editpermission" value="0" min="0" max="<?php echo UserFunc::getPermission($username); ?>" oninput="showValue('edit_permission_value', this.value);">
                     </fieldset>
                     <fieldset id="links">
                         <button id="submit_2" onclick="switchPage(event, 'page_3', 'page_2'); return false;">Back</button>

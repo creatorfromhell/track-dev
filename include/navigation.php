@@ -18,18 +18,6 @@
                 <li><a href="index.php?t=project"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->project->navlink)); ?></a></li>
             </ul>
         </li>
-        <?php if(UserFunc::isAdmin($username)) { ?>
-        <li <?php if($page == "admin") { echo 'class="active"'; } ?>>
-            <a href="admin.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->admin->navlink)); ?></a>
-            <ul>
-                <li><a href="admin.php?t=groups">Groups</a></li>
-                <li><a href="admin.php?t=options">Options</a></li>
-                <li><a href="admin.php?t=themes">Themes</a></li>
-                <li><a href="admin.php?t=languages">Languages</a></li>
-                <li><a href="admin.php?t=users">Users</a></li>
-            </ul>
-        </li>
-        <?php } ?>
         <li <?php if($page == "projects") { echo 'class="active"'; } ?>>
             <a href="projects.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->projects->navlink)); ?></a>
             <ul>

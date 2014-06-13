@@ -10,6 +10,7 @@
 
 //Include the Connect Class
 require_once("include/connect.php");
+require_once("include/function/projectfunc.php");
 class ListFunc {
 
     //add list
@@ -75,23 +76,21 @@ class ListFunc {
     }
 
     //edit list
-    public static function edit($id, $list, $project, $public, $creator, $created, $overseer, $minimal, $guestview, $guestedit, $viewpermission, $editpermission) {
+    public static function edit($id, $list, $project, $public, $overseer, $minimal, $guestview, $guestedit, $viewpermission, $editpermission) {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_lists";
-        $stmt = $c->prepare("UPDATE `".$t."` SET list = ?, project = ?, public = ?, creator = ?, created = ?, overseer = ?, minimalview = ?, guestview = ?, guestedit = ?, viewpermission = ?, editpermission = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET list = ?, project = ?, public = ?, overseer = ?, minimalview = ?, guestview = ?, guestedit = ?, viewpermission = ?, editpermission = ? WHERE id = ?");
         $stmt->bindParam(1, $list);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $public);
-        $stmt->bindParam(4, $creator);
-        $stmt->bindParam(5, $created);
-        $stmt->bindParam(6, $overseer);
-        $stmt->bindParam(7, $minimal);
-        $stmt->bindParam(8, $guestview);
-        $stmt->bindParam(9, $guestedit);
-        $stmt->bindParam(10, $viewpermission);
-        $stmt->bindParam(11, $editpermission);
-        $stmt->bindParam(12, $id);
+        $stmt->bindParam(4, $overseer);
+        $stmt->bindParam(5, $minimal);
+        $stmt->bindParam(6, $guestview);
+        $stmt->bindParam(7, $guestedit);
+        $stmt->bindParam(8, $viewpermission);
+        $stmt->bindParam(9, $editpermission);
+        $stmt->bindParam(10, $id);
         $stmt->execute();
     }
 
@@ -204,7 +203,8 @@ class ListFunc {
             else { echo "<tr>"; }
 
             echo "<td class='id'>".$id."</td>";
-            echo "<td class='title'><a href='#'>".$formatter->replace($title)."</a></td>";
+            $link = "task.php?p=".$project."&l=".$list."&id=".$id;
+            echo "<td class='title'><a href='".$link."'>".$formatter->replace($title)."</a></td>";
             if(!$minimal) {
                 //assignee
                 echo "<td class='assignee'>".$formatter->replace($assignee)."</td>";
@@ -267,6 +267,7 @@ class ListFunc {
     }
 
     public static function getDetails($id) {
+        $return = array();
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_lists";
@@ -274,8 +275,14 @@ class ListFunc {
         $stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $return['name'] = $result['list'];
+        $return['project'] = $result['project'];
+        $return['public'] = $result['public'];
+        $return['creator'] = $result['creator'];
+        $return['created'] = $result['created'];
+        $return['overseer'] = $result['overseer'];
 
-        return $result['project'];
+        return $return;
     }
 
     public static function minimal($list, $project) {
@@ -325,9 +332,9 @@ class ListFunc {
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $t = $connect->prefix."_".$details['project']."_".$details['list'];
-        $t2 = $connect->prefix."_".$project."_".$details['list'];
-        $stmt = $c->prepare("RENAME TABLE `".$t."` TO ".$t2);
+        $t = $connect->prefix."_".$details['project']."_".$details['name'];
+        $t2 = $connect->prefix."_".$project."_".$details['name'];
+        $stmt = $c->prepare("RENAME TABLE `".$t."` TO `".$t2."`");
         $stmt->execute();
     }
 
@@ -372,9 +379,9 @@ class ListFunc {
         $stmt->bindParam(1, $list);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-        $t = $connect->prefix."_".$details['project']."_".$details['list'];
+        $t = $connect->prefix."_".$details['project']."_".$details['name'];
         $t2 = $connect->prefix."_".$details['project']."_".$list;
-        $stmt = $c->prepare("RENAME TABLE `".$t."` TO ".$t2);
+        $stmt = $c->prepare("RENAME TABLE `".$t."` TO `".$t2."`");
         $stmt->execute();
     }
 
@@ -393,6 +400,119 @@ class ListFunc {
             return true;
         }
         return false;
+    }
+
+    public static function printEditForm($id, $username) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_lists";
+        $stmt = $c->prepare("SELECT list, project, public, overseer, minimalview, guestview, guestedit, viewpermission, editpermission FROM `".$t."` WHERE id = ?");
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $main = ProjectFunc::getMainList($result['project']);
+
+        $out = '';
+        $out .= '<form id="list_edit" class="trackrForm" method="post">';
+        $out .= '<h3>Edit List</h3>';
+        $out .= '<div id="holder">';
+        $out .= '<div id="page_1">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<input id="id" name="id" type="hidden" value="'.$id.'">';
+        $out .= '<input id="name" name="name" type="text" placeholder="Name" value="'.$result['list'].'">';
+        $out .= '<label for="project">Project:</label>';
+        $out .= '<select name="project" id="project">';
+        $projects = ProjectFunc::projects();
+        foreach($projects as &$p) {
+            $selected = ($p == $result['project']) ? "selected" : "";
+            $out .= '<option value="'.$p.'" '.$selected.'>'.$p.'</option>';
+        }
+        $out .= '</select><br />';
+        $out .= '<label for="public">Public:</label>';
+        $out .= '<select name="public" id="public">';
+        $out .= '<option value="0" ';
+        $out .= ($result["public"] == 0) ? "selected" : "";
+        $out .= '>No</option>';
+        $out .= '<option value="1" ';
+        $out .= ($result["public"] == 1) ? "selected" : "";
+        $out .= '>Yes</option>';
+        $out .= '</select><br />';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<button id="submit_2" onclick="hideDiv(\'list_edit\'); return false;">Close</button>';
+        $out .= '<button id="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+        $out .= '<div id="page_2">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<label for="minimal">Minimal View:</label>';
+        $out .= '<select name="minimal" id="minimal">';
+        $out .= '<option value="0" ';
+        $out .= ($result["minimalview"] == 0) ? "selected" : "";
+        $out .= '>No</option>';
+        $out .= '<option value="1" ';
+        $out .= ($result["minimalview"] == 1) ? "selected" : "";
+        $out .= '>Yes</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="mainlist">Main:</label>';
+        $out .= '<select name="mainlist" id="mainlist">';
+        $out .= '<option value="0" ';
+        $out .= (!$main) ? "selected" : "";
+        $out .= '>No</option>';
+        $out .= '<option value="1" ';
+        $out .= ($main) ? "selected" : "";
+        $out .= '>Yes</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="overseer">Overseer:</label>';
+        $out .= '<select name="overseer" id="overseer">';
+        $selected = ($result['overseer'] == 'none') ? 'selected' : '';
+        $out .= '<option value="none" '.$selected.'>None</option>';
+        $users = UserFunc::users();
+        foreach($users as &$user) {
+            $selected = ($result['overseer'] == $user) ? 'selected' : '';
+            $out .= '<option value="'.$user.'" '.$selected.'>'.$user.'</option>';
+        }
+        $out .= '</select>';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<button id="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
+        $out .= '<button id="submit" onclick="switchPage(event, \'page_2\', \'page_3\'); return false;">Next</button>';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+        $out .= '<div id="page_3">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<label for="guestview">Guest View:</label>';
+        $out .= '<select name="guestview" id="guestview">';
+        $out .= '<option value="0" ';
+        $out .= ($result["guestview"] == 0) ? "selected" : "";
+        $out .= '>No</option>';
+        $out .= '<option value="1" ';
+        $out .= ($result["guestview"] == 1) ? "selected" : "";
+        $out .= '>Yes</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="guestedit">Guest Edit:</label>';
+        $out .= '<select name="guestedit" id="guestedit">';
+        $out .= '<option value="0" ';
+        $out .= ($result["guestedit"] == 0) ? "selected" : "";
+        $out .= '>No</option>';
+        $out .= '<option value="1" ';
+        $out .= ($result["guestedit"] == 1) ? "selected" : "";
+        $out .= '>Yes</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="viewpermission">View Permission:<label id="view_permission_value">'.$result['viewpermission'].'</label></label><br />';
+        $out .= '<input type="range" id="viewpermission" name="viewpermission" value="'.$result['viewpermission'].'" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'view_permission_value\', this.value);">';
+        $out .= '<label for="editpermission">Edit Permission:<label id="edit_permission_value">'.$result['editpermission'].'</label></label><br />';
+        $out .= '<input type="range" id="editpermission" name="editpermission" value="'.$result['editpermission'].'" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'edit_permission_value\', this.value);">';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<button id="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
+        $out .= '<input type="submit" id="submit" name="edit" value="Submit">';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+        $out .= '</div>';
+        $out .= '</form>';
+
+        return $out;
     }
 }
 ?>

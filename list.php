@@ -13,42 +13,46 @@ $configs = ListFunc::configurations($project, $list);
 $minimal = ListFunc::minimal($list, $project);
 $canEdit = UserFunc::canEdit($project, $list, $username);
 $canView = UserFunc::canView($project, $list, $username);
-if(isset($_GET['action']) && isset($_GET['id']) && $canEdit) {
-    $action = $_GET['action'];
-    $id = $_GET['id'];
-
-    if($action == "open") {
-        TaskFunc::changeStatus($project, $list, $id, 0);
-        echo '<script type="text/javascript">';
-        echo 'showMessage("success", "The status of task #'.$id.' has been changed to open.");';
-        echo '</script>';
-    } else if($action == "done") {
-        TaskFunc::changeStatus($project, $list, $id, 1);
-        TaskFunc::changeFinished($project, $list, $id, date("Y-m-d H:i:s"));
-        echo '<script type="text/javascript">';
-        echo 'showMessage("success", "The status of task #'.$id.' has been changed to done.");';
-        echo '</script>';
-    } else if($action == "inprogress") {
-        TaskFunc::changeStatus($project, $list, $id, 2);
-        echo '<script type="text/javascript">';
-        echo 'showMessage("success", "The status of task #'.$id.' has been changed to in progress.");';
-        echo '</script>';
-    } else if($action == "close") {
-        TaskFunc::changeStatus($project, $list, $id, 3);
-        echo '<script type="text/javascript">';
-        echo 'showMessage("success", "The status of task #'.$id.' has been changed to closed.");';
-        echo '</script>';
-    } else if($action == "delete") {
-        TaskFunc::delete($project, $list, $id);
-        echo '<script type="text/javascript">';
-        echo 'showMessage("success", "Task #'.$id.' has been deleted.");';
-        echo '</script>';
-    }
-}
 include("include/handling/taskform.php");
 ?>
 
     <div id="main">
+        <?php
+        if(isset($_GET['action']) && isset($_GET['id']) && $canEdit) {
+            $action = $_GET['action'];
+            $id = $_GET['id'];
+
+            if($action == "open") {
+                TaskFunc::changeStatus($project, $list, $id, 0);
+                echo '<script type="text/javascript">';
+                echo 'showMessage("success", "The status of task #'.$id.' has been changed to open.");';
+                echo '</script>';
+            } else if($action == "done") {
+                TaskFunc::changeStatus($project, $list, $id, 1);
+                TaskFunc::changeFinished($project, $list, $id, date("Y-m-d H:i:s"));
+                echo '<script type="text/javascript">';
+                echo 'showMessage("success", "The status of task #'.$id.' has been changed to done.");';
+                echo '</script>';
+            } else if($action == "inprogress") {
+                TaskFunc::changeStatus($project, $list, $id, 2);
+                echo '<script type="text/javascript">';
+                echo 'showMessage("success", "The status of task #'.$id.' has been changed to in progress.");';
+                echo '</script>';
+            } else if($action == "close") {
+                TaskFunc::changeStatus($project, $list, $id, 3);
+                echo '<script type="text/javascript">';
+                echo 'showMessage("success", "The status of task #'.$id.' has been changed to closed.");';
+                echo '</script>';
+            } else if($action == "delete") {
+                TaskFunc::delete($project, $list, $id);
+                echo '<script type="text/javascript">';
+                echo 'showMessage("success", "Task #'.$id.' has been deleted.");';
+                echo '</script>';
+            } else if($action == "edit") {
+                //TaskFunc::printEditForm($_GET['id'], $project, $list);
+            }
+        }
+        ?>
         <?php if($canEdit) { ?>
         <div id="add" onclick="showDiv('task_add'); return false;">
 

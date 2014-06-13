@@ -72,6 +72,29 @@ class TaskFunc {
         $stmt->execute();
     }
 
+    public static function getDetails($project, $list, $id) {
+        $return = array();
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_".$project."_".$list;
+        $stmt = $c->prepare("SELECT title, description, author, assignee, due, created, finished, versionname, labels, editable, taskstatus, progress FROM `".$t."` WHERE id = ?");
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $return['title'] = $result['title'];
+        $return['description'] = $result['description'];
+        $return['author'] = $result['author'];
+        $return['assignee'] = $result['assignee'];
+        $return['due'] = $result['due'];
+        $return['created'] = $result['created'];
+        $return['finished'] = $result['finished'];
+        $return['version'] = $result['versionname'];
+        $return['labels'] = $result['labels'];
+        $return['status'] = $result['taskstatus'];
+        $return['progress'] = $result['progress'];
+        return $return;
+    }
+
     //change task assignee
     public static function changeAssignee($project, $list, $id, $assignee) {
         $connect = new Connect();
@@ -162,6 +185,11 @@ class TaskFunc {
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $id);
         $stmt->execute();
+    }
+
+
+    public static function printEditForm($project, $list, $id) {
+        //TODO: print edit form
     }
 }
 ?>

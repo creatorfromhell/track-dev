@@ -7,6 +7,15 @@
  * Last Modified: 5/13/14 at 6:20 PM
  * Last Modified by Daniel Vidmar.
  */
+if(isset($_GET['action']) && UserFunc::isAdmin($username) && isset($_GET['id'])) {
+    $action = $_GET['action'];
+    $id = $_GET['id'];
+    if($action == "edit") {
+
+    } else if($action == "delete") {
+
+    }
+}
 ?>
 <table id="users" class="taskTable">
     <thead>

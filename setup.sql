@@ -74,8 +74,9 @@ CREATE TABLE IF NOT EXISTS `todo_labels` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `project` varchar(40) NOT NULL,
   `list` varchar(40) NOT NULL,
-  `label` varchar(40) NOT NULL,
-  `color` varchar(40) NOT NULL,
+  `labelname` varchar(40) NOT NULL,
+  `textcolor` varchar(40) NOT NULL,
+  `backgroundcolor` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=latin1;
 

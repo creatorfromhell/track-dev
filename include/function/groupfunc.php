@@ -72,15 +72,42 @@ class GroupFunc {
         return $result['permission'];
     }
 
+    //exists
+    public static function exists($group) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_groups";
+        $stmt = $c->prepare("SELECT id FROM `".$t."` WHERE groupname = ?");
+        $stmt->bindParam(1, $group);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($result) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function getName($id) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_groups";
+        $stmt = $c->prepare("SELECT groupname FROM `".$t."` WHERE id = ?");
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['groupname'];
+    }
+
     //get preset
     public static function getPreset() {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_groups";
-        $stmt = $c->prepare("SELECT groupname FROM `".$t."` WHERE preset = 1");
+        $stmt = $c->prepare("SELECT id FROM `".$t."` WHERE preset = 1");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['groupname'];
+        return $result['id'];
     }
 
     //make admin
@@ -101,7 +128,7 @@ class GroupFunc {
 
         //Get the current preset group and remove its preset status
         $current = self::getPreset();
-        $stmt = $c->prepare("UPDATE `".$t."` SET preset = 0 WHERE groupname = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET preset = 0 WHERE id = ?");
         $stmt->bindParam(1, $current);
         $stmt->execute();
 
@@ -143,7 +170,7 @@ class GroupFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_groups";
-        $stmt = $c->prepare("SELECT id, groupname, permission, admin FROM ".$t);
+        $stmt = $c->prepare("SELECT id, groupname, permission, admin FROM `".$t."` ORDER BY permission ASC");
         $stmt->bindParam(1, $project);
         $stmt->execute();
 
@@ -164,7 +191,7 @@ class GroupFunc {
             //check if the user is an admin just for extra measure even though they
             //shouldn't be able to access this page if they aren't
             if(UserFunc::isAdmin($username)) {
-                echo "<a title='Edit' class='actionEdit' onclick='editTask(); return false;'></a>";
+                echo "<a title='Edit' class='actionEdit'  href='?t=groups&action=edit&id=".$id."'></a>";
                 echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure?\");' href='?t=groups&action=delete&id=".$id."'></a>";
             } else {
                 echo $formatter->replace("%none");
@@ -173,6 +200,55 @@ class GroupFunc {
             echo "</td>";
             echo "</tr>";
         }
+    }
+
+    public static function printEditForm($id) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_groups";
+        $stmt = $c->prepare("SELECT groupname, permission, preset, admin FROM `".$t."` WHERE id = ?");
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $out = '';
+        $out .= '<form id="group_edit" class="trackrForm" method="post">';
+        $out .= '<h3>Edit Group</h3>';
+        $out .= '<div id="holder">';
+        $out .= '<div id="page_1">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<input id="id" name="id" type="hidden" value="'.$id.'">';
+        $out .= '<input id="name" name="name" type="text" placeholder="Name" value="'.$result['groupname'].'">';
+        $out .= '<label for="permission">Permission:<label id="permission_value">'.$result['permission'].'</label></label><br />';
+        $out .= '<input type="range" id="permission" name="permission" value="'.$result['permission'].'" min="0" max="999" oninput="showValue(\'permission_value\', this.value);">';
+        $out .= '<label for="preset">Preset:</label>';
+        $out .= '<select name="preset" id="preset">';
+        $out .= '<option value="0" ';
+        $out .= ($result["preset"] == 0) ? "selected" : "";
+        $out .= '>No</option>';
+        $out .= '<option value="1" ';
+        $out .= ($result["preset"] == 1) ? "selected" : "";
+        $out .= '>Yes</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="admin">Administrator:</label>';
+        $out .= '<select name="admin" id="admin">';
+        $out .= '<option value="0" ';
+        $out .= ($result["admin"] == 0) ? "selected" : "";
+        $out .= '>No</option>';
+        $out .= '<option value="1" ';
+        $out .= ($result["admin"] == 1) ? "selected" : "";
+        $out .= '>Yes</option>';
+        $out .= '</select><br />';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<button id="submit_2" onclick="hideDiv(\'group_edit\'); return false;">Close</button>';
+        $out .= '<input type="submit" id="submit" name="edit" value="Submit">';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+        $out .= '</div>';
+        $out .= '</form>';
+
+        return $out;
     }
 }
 ?>

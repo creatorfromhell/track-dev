@@ -93,8 +93,15 @@
                 <taken>Username already in use!</taken>
                 <congrats>Thanks for registering! You may now login.</congrats>
             </login>
+            <group>
+                <nopermission>You must fill out the permission field!</nopermission>
+                <noadmin>You must fill out the administrator field!</noadmin>
+                <nopreset>You must fill out the preset field!</nopreset>
+            </group>
             <project>
+                <noid>Invalid id submitted!</noid>
                 <noname>No name entered!</noname>
+                <nomainlist>You must fill out the main list field!</nomainlist>
                 <taken>A project with that name already exists!</taken>
                 <noauthor>Invalid author entered!</noauthor>
                 <nooverseer>Invalid overseer entered!</nooverseer>
