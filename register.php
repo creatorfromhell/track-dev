@@ -16,7 +16,7 @@ include("include/handling/registerform.php");
 
     <div id="main">
         <?php if($configuration->config["main"]["registration"]) { ?>
-        <form id="register_form" method="post">
+        <form id="register_form" method="post" style="margin:30px auto;">
             <h3>Register</h3>
             <div id="holder">
                 <div id="page_1">
@@ -26,7 +26,7 @@ include("include/handling/registerform.php");
                     </fieldset>
                     <fieldset id="links">
                         <label id="other">Have an account? <a href="login.php">Login</a></label>
-                        <button id="submit" onclick="switchPage(event, 'page_1', 'page_2'); return false;">Next</button>
+                        <button class="submit" onclick="switchPage(event, 'page_1', 'page_2'); return false;">Next</button>
                     </fieldset>
                 </div>
                 <div id="page_2">
@@ -35,14 +35,14 @@ include("include/handling/registerform.php");
                         <input id="c_password" name="c_password" type="password" placeholder="Confirm Password">
                     </fieldset>
                     <fieldset id="links">
-                        <button id="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
-                        <input type="submit" id="submit" name="register" value="Register">
+                        <button class="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
+                        <input type="submit" class="submit" name="register" value="Register">
                     </fieldset>
                 </div>
             </div>
         </form>
         <?php } else { ?>
-        <p>I'm sorry, but registration has been disabled.</p>
+        <p class="announce">I'm sorry, but registration has been disabled.</p>
         <?php } ?>
     </div>
 

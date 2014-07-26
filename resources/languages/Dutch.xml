@@ -33,10 +33,6 @@
                     <navlink>Calendar</navlink>
                     <header>Calendar - %project</header>
                 </calendar>
-                <general>
-                    <navlink>General</navlink>
-                    <header>General - Overview</header>
-                </general>
                 <project>
                     <navlink>Project</navlink>
                     <header>Overview for %project</header>
@@ -45,6 +41,12 @@
             <admin>
                 <navlink>Admin</navlink>
                 <header>Administratie Paneel</header>
+                <dashboard>Dashboard</dashboard>
+                <activity>Activity</activity>
+                <groups>Groups</groups>
+                <options>Options</options>
+                <themes>Themes</themes>
+                <users>Users</users>
             </admin>
             <projects>
                 <navlink>Projecten</navlink>
@@ -57,6 +59,9 @@
         </pages>
         <tables>
             <nmae>Name</nmae>
+            <archived>Archived</archived>
+            <activity>Activity</activity>
+            <logged>Logged</logged>
             <assignee>Toegewezene</assignee>
             <created>Gemaakt</created>
             <creator>Maker</creator>
@@ -114,6 +119,11 @@
                 <nodescription>You must fill out the description field!</nodescription>
                 <noeditable>You must fill out the editable field!</noeditable>
             </task>
+            <label>
+                <nolabel>You must fill out the label field!</nolabel>
+                <notextcolor>You must choose a text color!</notextcolor>
+                <nobackgroundcolor>You must choose a background color!</nobackgroundcolor>
+            </label>
         </forms>
     </site>
     <email>

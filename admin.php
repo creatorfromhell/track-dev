@@ -13,32 +13,38 @@ if(!UserFunc::isAdmin($_SESSION['username'])) {
     header("Location: index.php");
 }
 include("include/header.php");
-$type = "users";
+$type = "dashboard";
 if(isset($_GET['t'])) {
     $type = $_GET['t'];
 }
 ?>
-<div id="main">
+<div id="main" style="min-height:330px;">
     <nav class="sideNav">
         <ul>
+            <li <?php if($type == "dashboard") { echo 'class="active"'; } ?>><a href="admin.php?t=dashboard">Dashboard</a></li>
+            <li <?php if($type == "activity") { echo 'class="active"'; } ?>><a href="admin.php?t=activity">Activity</a></li>
             <li <?php if($type == "groups") { echo 'class="active"'; } ?>><a href="admin.php?t=groups">Groups</a></li>
             <li <?php if($type == "options") { echo 'class="active"'; } ?>><a href="admin.php?t=options">Options</a></li>
-            <li <?php if($type == "themes") { echo 'class="active"'; } ?>><a href="admin.php?t=themes">Themes</a></li>
-            <li <?php if($type == "languages") { echo 'class="active"'; } ?>><a href="admin.php?t=languages">Languages</a></li>
+            <li <?php if($type == "permissions") { echo 'class="active"'; } ?>><a href="admin.php?t=dashboard">Permissions</a></li>
+            <li <?php if($type == "addons") { echo 'class="active"'; } ?>><a href="admin.php?t=addons">Addons</a></li>
             <li <?php if($type == "users") { echo 'class="active"'; } ?>><a href="admin.php?t=users">Users</a></li>
         </ul>
     </nav>
     <?php
         if($type == "groups") {
             include("include/admin/groups.php");
-        } else if($type == "themes") {
-            include("include/admin/themes.php");
+        } else if($type == "permissions") {
+            include("include/admin/permissions.php");
         } else if($type == "options") {
             include("include/admin/options.php");
-        } else if($type == "languages") {
-            include("include/admin/languages.php");
-        } else {
+        } else if($type == "addons") {
+            include("include/admin/addons.php");
+        } else if($type == "users") {
             include("include/admin/users.php");
+        } else if($type == "activity") {
+            include("include/admin/activity.php");
+        } else {
+            include("include/admin/dashboard.php");
         }
     ?>
 </div>

@@ -10,12 +10,17 @@
 if(isset($_SESSION['username'])) {
     header("Location: index.php");
 }
+
+$location = "index.php?t=project";
+if(isset($_GET['return'])) {
+    $location = $_GET['return'];
+}
 include("include/header.php");
 include("include/handling/loginform.php");
 ?>
 
     <div id="main">
-        <form id="log_in" method="post">
+        <form id="log_in" method="post" style="margin:30px auto;">
             <h3>Login</h3>
             <div id="holder">
                 <div id="page_1">
@@ -24,7 +29,7 @@ include("include/handling/loginform.php");
                         <input id="password" name="password" type="password" placeholder="Password">
                     </fieldset>
                     <fieldset id="links">
-                        <input type="submit" id="submit" name="login" value="Login">
+                        <input type="submit" class="submit" name="login" value="Login">
                         <label id="other">Need an account? <a href="register.php">Register</a></label>
                     </fieldset>
                 </div>

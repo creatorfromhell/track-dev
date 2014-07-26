@@ -25,10 +25,6 @@
                     <navlink>Kalender</navlink>
                     <header>Kalender - %project</header>
                 </calendar>
-                <general>
-                    <navlink>General</navlink>
-                    <header>General - Overview</header>
-                </general>
                 <project>
                     <navlink>Projekt</navlink>
                     <header>Oversigt for %project</header>
@@ -37,6 +33,8 @@
             <admin>
                 <navlink>Admin</navlink>
                 <header>Administrations Panel</header>
+                <dashboard>Dashboard</dashboard>
+                <activity>Activity</activity>
                 <groups>Groups</groups>
                 <options>Options</options>
                 <themes>Themes</themes>
@@ -52,12 +50,15 @@
             </lists>
         </pages>
         <tables>
-            <name>Name</name>
+            <name>navn</name>
+            <archived>Archived</archived>
+            <activity>Activity</activity>
+            <logged>Logged</logged>
             <assignee>Erhverver</assignee>
             <created>Skabt</created>
             <creator>Skaber</creator>
             <author>Author</author>
-            <actions>Aktioner</actions>
+            <actions>Handlinger</actions>
             <overseer>Overseer</overseer>
             <permission>Permission</permission>
             <short>Short</short>
@@ -110,6 +111,11 @@
                 <nodescription>You must fill out the description field!</nodescription>
                 <noeditable>You must fill out the editable field!</noeditable>
             </task>
+            <label>
+                <nolabel>You must fill out the label field!</nolabel>
+                <notextcolor>You must choose a text color!</notextcolor>
+                <nobackgroundcolor>You must choose a background color!</nobackgroundcolor>
+            </label>
         </forms>
     </site>
     <email>

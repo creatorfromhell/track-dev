@@ -605,43 +605,79 @@ class ProjectFunc {
         return $newTime;
     }
 
-    public static function printEditForm($id) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_projects";
-        $stmt = $c->prepare("SELECT project, main, overseer, public FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    public static function printAddForm($username) {
         $out = '';
-        $out .= '<form id="project_edit" class="trackrForm" method="post">';
+        $out .= '<h3>Add Project</h3>';
+        $out .= '<div id="holder">';
+        $out .= '<div id="page_1">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<input id="name" name="name" type="text" placeholder="Name">';
+        $out .= '<input id="author" name="author" type="hidden" value="'.$username.'">';
+        $out .= '<label for="public">Public:</label>';
+        $out .= '<select name="public" id="public">';
+        $out .= '<option value="0">No</option>';
+        $out .= '<option value="1" selected>Yes</option>';
+        $out .= '</select><br />';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+        $out .= '<div id="page_2">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<label for="mainproject">Main:</label>';
+        $out .= '<select name="mainproject" id="mainproject">';
+        $out .= '<option value="0" selected>No</option>';
+        $out .= '<option value="1">Yes</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="overseer">Overseer:</label>';
+        $out .= '<select name="overseer" id="overseer">';
+        $out .= '<option value="none" selected>None</option>';
+        $users = UserFunc::users();
+        foreach($users as &$user) {
+            $out .= '<option value="'.$user.'">'.$user.'</option>';
+        }
+        $out .= '</select>';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
+        $out .= '<input type="submit" class="submit" name="add" value="Add">';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+        $out .= '</div>';
+
+        return $out;
+    }
+
+    public static function printEditForm($id) {
+        $details = self::getDetails($id);
+        $out = '';
         $out .= '<h3>Edit Project</h3>';
         $out .= '<div id="holder">';
         $out .= '<div id="page_1">';
         $out .= '<fieldset id="inputs">';
         $out .= '<input id="id" name="id" type="hidden" value="'.$id.'">';
-        $out .= '<input id="name" name="name" type="text" placeholder="Name" value="'.$result['project'].'">';
+        $out .= '<input id="name" name="name" type="text" placeholder="Name" value="'.$details['name'].'">';
         $out .= '<label for="public">Public:</label>';
         $out .= '<select name="public" id="public">';
         $out .= '<option value="0" ';
-        $out .= ($result["public"] == 0) ? "selected" : "";
+        $out .= ($details["public"] == 0) ? "selected" : "";
         $out .= '>No</option>';
         $out .= '<option value="1" ';
-        $out .= ($result["public"] == 1) ? "selected" : "";
+        $out .= ($details["public"] == 1) ? "selected" : "";
         $out .= '>Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="mainlist">Main List:</label>';
         $out .= '<select name="mainlist" id="mainlist">';
-        $lists = self::lists($result['project']);
+        $lists = self::lists($details['name']);
         foreach($lists as &$list) {
-            $listID = ListFunc::getID($result['project'], $list);
-            $selected = ($listID == $result['main']) ? "selected" : "";
+            $listID = ListFunc::getID($details['name'], $list);
+            $selected = ($listID == $details['main']) ? "selected" : "";
             $out .= '<option value="'.$listID.'" '.$selected.'>'.$list.'</option>';
         }
         $out .= '</select><br />';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
-        $out .= '<button id="submit_2" onclick="hideDiv(\'project_edit\'); return false;">Close</button>';
         $out .= '<button id="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
         $out .= '</fieldset>';
         $out .= '</div>';
@@ -650,19 +686,19 @@ class ProjectFunc {
         $out .= '<label for="mainproject">Main:</label>';
         $out .= '<select name="mainproject" id="mainproject">';
         $out .= '<option value="0" ';
-        $out .= ($result["main"] == 0) ? "selected" : "";
+        $out .= ($details["main"] == 0) ? "selected" : "";
         $out .= '>No</option>';
         $out .= '<option value="1" ';
-        $out .= ($result["main"] == 1) ? "selected" : "";
+        $out .= ($details["main"] == 1) ? "selected" : "";
         $out .= '>Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
-        $selected = ($result['overseer'] == 'none') ? 'selected' : '';
+        $selected = ($details['overseer'] == 'none') ? 'selected' : '';
         $out .= '<option value="none" '.$selected.'>None</option>';
         $users = UserFunc::users();
         foreach($users as &$user) {
-            $selected = ($result['overseer'] == $user) ? 'selected' : '';
+            $selected = ($details['overseer'] == $user) ? 'selected' : '';
             $out .= '<option value="'.$user.'" '.$selected.'>'.$user.'</option>';
         }
         $out .= '</select>';
@@ -673,7 +709,6 @@ class ProjectFunc {
         $out .= '</fieldset>';
         $out .= '</div>';
         $out .= '</div>';
-        $out .= '</form>';
 
         return $out;
     }

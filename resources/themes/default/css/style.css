@@ -47,6 +47,16 @@ body {
     margin-right: 10px;
 }
 
+.word-wrap {
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
 /*
  * Login Styles
  */
@@ -251,6 +261,7 @@ body {
 
 .sideNav {
     float: left;
+    background: white;
     display: inline-block;
     width: 200px;
     overflow: hidden;
@@ -361,6 +372,12 @@ a:hover {
     border-bottom: 1px solid #C9C9C9;
 }
 
+.announce {
+    font-size: 1.3em;
+    text-align: center;
+    margin: 30px 0;
+}
+
 .content {
     margin: 30px auto;
     height: auto;
@@ -410,8 +427,8 @@ a:hover {
 
 .content .progress-bar {
     height: 15px;
-    animation: animateBar 4s infinite;
-    -webkit-animation: animateBar 4s infinite;
+    animation: animateBar .5s linear infinite;
+    -webkit-animation: animateBar .5s linear infinite;
     background: gold url("../img/stripe.png");
 }
 
@@ -450,17 +467,62 @@ a:hover {
     margin: 5px;
 }
 
-#enhancement {
-    background: gold;
+.labels-left {
+    width: 49%;
+    float: left;
+    margin: 15px auto;
+    min-height: 125px;
+    max-height: 125px;
+    overflow-y: scroll;
 }
 
-#feature {
-    background: lightblue;
+.labels-right {
+    width: 50%;
+    float: left;
+    margin: 15px auto;
+}
+
+.labels-field {
+    height: auto;
+}
+
+.list-label {
+    height: 40px;
+    width: 300px;
+    text-align: center;
+    margin: 15px auto 0 auto;
+    display: block;
+}
+
+.list-label label {
+    display: inline-block;
+    padding-top: 10px;
+}
+
+.small-label {
+    width: 75%;
+}
+
+.trackr-small-form {
+    width: 85%;
+    margin: 0 auto;
+}
+
+.trackr-small-form label {
+    font-size: 1.1em;
+    margin-right: 10px;
+}
+
+.trackr-small-button {
+    padding: 2px 5px;
+    background: white;
+    border: 1px solid #666666;
+    color: #666666;
 }
 
 .below-content {
     width: 60%;
-    margin: 50px auto 20px auto;
+    margin: 0 auto 30px auto;
     height: auto;
 }
 
@@ -777,7 +839,7 @@ form
     min-height: 180px;
     width: 428px;
     height: auto;
-    margin: 30px auto;
+    margin: 30px auto 0 auto;
     z-index: 0;
     padding: 0 0 10px 0;
     transition: all 0.5s;
@@ -840,7 +902,7 @@ form #inputs {
     margin: 20px auto;
 }
 
-form #inputs input, form #inputs textarea {
+form #inputs input:not([type="color"]), form #inputs textarea {
     background: #E7E7E7;
     color: #848484;
     font-size: 1.1em;
@@ -853,8 +915,19 @@ form #inputs input, form #inputs textarea {
     margin-bottom: 15px;
 }
 
+form #inputs input[type="color"] {
+    max-width: 20px;
+    padding: 0 2px;
+    border: 1px solid #A3A3A3;
+    background: #E7E7E7;
+    cursor: pointer;
+}
+
 form #inputs textarea {
     min-height: 110px;
+    max-height: 110px;
+    overflow-y: scroll;
+    resize: none;
     padding: 5px;
     min-width: 374px;
     max-width: 374px;
@@ -893,7 +966,7 @@ form #links {
     background: #E7E7E7 url("../img/key.png") no-repeat 3px 8px;
 }
 
-form #submit, form #submit_2, form .submit {
+form .submit, form .submit_2, form .submit {
     background: #EDEBEB;
     color: #666;
     text-shadow: 0 1px 1px white;
@@ -912,7 +985,7 @@ form #submit, form #submit_2, form .submit {
     -o-transition: all 0.5s;
 }
 
-form #submit:hover, form #submit_2:hover, form .submit:hover {
+form #submit:hover, form .submit_2:hover, form .submit:hover {
     background: #666;
     color: white;
     text-shadow: none;
@@ -922,7 +995,7 @@ form #submit:hover, form #submit_2:hover, form .submit:hover {
     -o-transition: all 0.5s;
 }
 
-form #submit_2 {
+form .submit_2 {
     float: left;
 }
 
@@ -1018,6 +1091,30 @@ form #links #other {
 /*
  * Action Styles
  */
+
+.label-actions {
+    width: 18px;
+    height: 38px;
+    display: inline-block;
+    float: right;
+    padding-top: 4px;
+    padding-left: 1px;
+}
+
+
+.label-actions a {
+    padding-left: 16px;
+    cursor: pointer;
+}
+
+.label-edit-action {
+    background: url("../img/label_edit.png") no-repeat;
+}
+
+.label-delete-action {
+    background: url("../img/label_delete.png") no-repeat;
+}
+
 .actionOpen {
     background: url("../img/open.png") no-repeat;
 }
@@ -1119,11 +1216,11 @@ footer {
 @keyframes animateBar
 {
     0% {background-position: 0;}
-    100% {background-position: 100%;}
+    100% {background-position: 40px;}
 }
 
 @-webkit-keyframes animateBar
 {
     0% {background-position: 0;}
-    100% {background-position: 100%;}
+    100% {background-position: 40px;}
 }

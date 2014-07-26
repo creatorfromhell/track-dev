@@ -13,6 +13,8 @@ include("include/handling/projectform.php");
 
     <div id="main">
         <?php
+        $id = 0;
+        $editing = false;
         if(isset($_GET['action']) && isset($_GET['id'])) {
             $action = $_GET['action'];
             $id = $_GET['id'];
@@ -20,62 +22,27 @@ include("include/handling/projectform.php");
                 if($action == "delete") {
                     $name = ProjectFunc::getName($id);
                     ProjectFunc::remove($id);
+                    $params = "id:".$id;
+                    ActivityFunc::log($username, $name, "none", "project:delete", $params, 0, date("Y-m-d H:i:s"));
                     echo '<script type="text/javascript">';
                     echo 'showMessage("success", "Project '.$name.' has been deleted.");';
                     echo '</script>';
                 } else if($action == "edit") {
-                    echo ProjectFunc::printEditForm($id);
+                    $editing = true;
                 }
             }
         }
         ?>
         <?php if(UserFunc::isAdmin($username)) { ?>
-        <div id="add" onclick="showDiv('project_add'); return false;">
-
-        </div>
-        <!-- Add Project -->
-        <form id="project_add" class="trackrForm" method="post">
-            <h3>Add Project</h3>
-            <div id="holder">
-                <div id="page_1">
-                    <fieldset id="inputs">
-                        <input id="name" name="name" type="text" placeholder="Name">
-                        <input id="author" name="author" type="hidden" value="<?php echo $username; ?>">
-                        <label for="public">Public:</label>
-                        <select name="public" id="public">
-                            <option value="0">No</option>
-                            <option value="1" selected>Yes</option>
-                        </select><br />
-                    </fieldset>
-                    <fieldset id="links">
-                        <button id="submit_2" onclick="hideDiv('project_add'); return false;">Close</button>
-                        <button id="submit" onclick="switchPage(event, 'page_1', 'page_2'); return false;">Next</button>
-                    </fieldset>
-                </div>
-                <div id="page_2">
-                    <fieldset id="inputs">
-                        <label for="mainproject">Main:</label>
-                        <select name="mainproject" id="mainproject">
-                            <option value="0" selected>No</option>
-                            <option value="1">Yes</option>
-                        </select><br />
-                        <label for="overseer">Overseer:</label>
-                        <select name="overseer" id="overseer">
-                            <option value="none" selected>None</option>
-                            <?php
-                                $users = UserFunc::users();
-                                foreach($users as &$user) {
-                                    echo '<option value="'.$user.'">'.$user.'</option>';
-                                }
-                            ?>
-                        </select>
-                    </fieldset>
-                    <fieldset id="links">
-                        <button id="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
-                        <input type="submit" id="submit" name="add" value="Add">
-                    </fieldset>
-                </div>
-            </div>
+        <!-- Project Form -->
+        <form id="project_form" class="trackrForm" method="post" action="projects.php?p=<?php echo $project; ?>&l=<?php echo $list; ?>">
+            <?php
+            if(!$editing) {
+                echo ProjectFunc::printAddForm($username);
+            } else {
+                echo ProjectFunc::printEditForm($id);
+            }
+            ?>
         </form>
         <?php } ?>
 
@@ -95,7 +62,7 @@ include("include/handling/projectform.php");
             if(ProjectFunc::hasProjects()) {
                 ProjectFunc::printProjects($username, $formatter);
             } else {
-                echo "<p class='largeText'>".$formatter->replaceShortcuts(((string)$languageinstance->site->tables->noproject))."</p>";
+                echo "<p  class=\"announce\">".$formatter->replaceShortcuts(((string)$languageinstance->site->tables->noproject))."</p>";
             } ?>
             </tbody>
         </table>

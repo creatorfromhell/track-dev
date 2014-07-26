@@ -21,7 +21,7 @@ class VersionFunc {
 		$connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("INSERT INTO `".$t."` (id, version, project, due, released, type) VALUES ('', ?, ?, ?, ?, ?)");
+        $stmt = $c->prepare("INSERT INTO `".$t."` (id, versionname, project, due, released, versiontype) VALUES ('', ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $due);
@@ -45,7 +45,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE `".$t."` SET version = ?, project = ?, due = ?, released = ?, type = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET versionname = ?, project = ?, due = ?, released = ?, versiontype = ? WHERE id = ?");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $due);
@@ -93,7 +93,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE `".$t."` SET type = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET versiontype = ? WHERE id = ?");
         $stmt->bindParam(1, $type);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -104,7 +104,7 @@ class VersionFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE `".$t."` SET version = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET versionname = ? WHERE id = ?");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $id);
         $stmt->execute();

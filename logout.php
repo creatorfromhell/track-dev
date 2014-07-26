@@ -9,7 +9,7 @@
  */
 include("include/header.php");
 UserFunc::updateLoginDate($username);
-
+ActivityFunc::log($username, "none", "none", "user:logout", "", 0, date("Y-m-d H:i:s"));
 if(!UserFunc::loggedIn($username)) {
     UserFunc::changeStatus($username);
 }
@@ -18,7 +18,7 @@ unset($_SESSION["username"]);
 ?>
 
     <div id="main">
-        <p>You have been logged out successfully!</p>
+        <p class="announce">You have been logged out successfully!</p>
         <script>
             window.location.assign("login.php");
         </script>

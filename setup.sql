@@ -75,8 +75,8 @@ CREATE TABLE IF NOT EXISTS `todo_labels` (
   `project` varchar(40) NOT NULL,
   `list` varchar(40) NOT NULL,
   `labelname` varchar(40) NOT NULL,
-  `textcolor` varchar(40) NOT NULL,
-  `backgroundcolor` varchar(40) NOT NULL,
+  `textcolor` varchar(30) NOT NULL,
+  `backgroundcolor` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=latin1;
 
@@ -88,7 +88,10 @@ CREATE TABLE IF NOT EXISTS `todo_activity` (
   `username` varchar(40) NOT NULL,
   `project` varchar(40) NOT NULL,
   `list` varchar(40) NOT NULL,
-  `description` text NOT NULL,
+  `activitytype` text NOT NULL,
+  `parameters` text NOT NULL,
+  `archived` tinyint(1) NOT NULL DEFAULT '0',
+  `logged` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=latin1;
 

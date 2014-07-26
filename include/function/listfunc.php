@@ -246,7 +246,7 @@ class ListFunc {
         if($status != "2") { echo $inprogress; }
         if($status != "3") { echo $close; }
 
-        echo "<a title='Edit' class='actionEdit' onclick='editTask(); return false;'></a>";
+        echo "<a title='Edit' class='actionEdit' href='?".$basic."&action=edit&id=".$id."'></a>";
         echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete task #".$id."?\");' href='?".$basic."&action=delete&amp;id=".$id."'></a>";
         //echo "<a title='Move Up' class='actionUp' href='?".$basic."&action=up&amp;id=".$id."'></a>";
         //echo "<a title='Move Down' class='actionDown' href='?".$basic."&action=down&amp;id=".$id."'></a>";
@@ -402,6 +402,85 @@ class ListFunc {
         return false;
     }
 
+    public static function printAddForm($project, $projects, $username) {
+        $out = '';
+        $out .= '<h3>Add List</h3>';
+        $out .= '<div id="holder">';
+        $out .= '<div id="page_1">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<input id="name" name="name" type="text" placeholder="Name">';
+        $out .= '<input id="author" name="author" type="hidden" value="'.$username.'">';
+        $out .= '<label for="project">Project:</label>';
+        $out .= '<select name="project" id="project">';
+        foreach($projects as &$p) {
+            $selected = ($p == $project) ? "selected" : "";
+            $out .= '<option value="'.$p.'" '.$selected.'>'.$p.'</option>';
+        }
+        $out .= '</select><br />';
+        $out .= '<label for="public">Public:</label>';
+        $out .= '<select name="public" id="public">';
+        $out .= '<option value="0">No</option>';
+        $out .= '<option value="1" selected>Yes</option>';
+        $out .= '</select><br />';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+        $out .= '<div id="page_2">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<label for="minimal">Minimal View:</label>';
+        $out .= '<select name="minimal" id="minimal">';
+        $out .= '<option value="0" selected>No</option>';
+        $out .= '<option value="1">Yes</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="mainlist">Main:</label>';
+        $out .= '<select name="mainlist" id="mainlist">';
+        $out .= '<option value="0" selected>No</option>';
+        $out .= '<option value="1">Yes</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="overseer">Overseer:</label>';
+        $out .= '<select name="overseer" id="overseer">';
+        $out .= '<option value="none" selected>None</option>';
+        $users = UserFunc::users();
+        foreach($users as &$user) {
+            $out .= '<option value="'.$user.'">'.$user.'</option>';
+        }
+        $out .= '</select>';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
+        $out .= '<button class="submit" onclick="switchPage(event, \'page_2\', \'page_3\'); return false;">Next</button>';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+        $out .= '<div id="page_3">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<label for="guestview">Guest View:</label>';
+        $out .= '<select name="guestview" id="guestview">';
+        $out .= '<option value="0">No</option>';
+        $out .= '<option value="1" selected>Yes</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="guestedit">Guest Edit:</label>';
+        $out .= '<select name="guestedit" id="guestedit">';
+        $out .= '<option value="0" selected>No</option>';
+        $out .= '<option value="1">Yes</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="viewpermission">View Permission:<label id="view_permission_value">0</label></label><br />';
+        $out .= '<input type="range" id="viewpermission" name="viewpermission" value="0" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'view_permission_value\', this.value);">';
+        $out .= '<label for="editpermission">Edit Permission:<label id="edit_permission_value">0</label></label><br />';
+        $out .= '<input type="range" id="editpermission" name="editpermission" value="0" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'edit_permission_value\', this.value);">';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
+        $out .= '<input type="submit" class="submit" name="add" value="Add">';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+        $out .= '</div>';
+        $out .= '</form>';
+
+        return $out;
+    }
+
     public static function printEditForm($id, $username) {
         $connect = new Connect();
         $c = $connect->connection;
@@ -413,7 +492,6 @@ class ListFunc {
         $main = ProjectFunc::getMainList($result['project']);
 
         $out = '';
-        $out .= '<form id="list_edit" class="trackrForm" method="post">';
         $out .= '<h3>Edit List</h3>';
         $out .= '<div id="holder">';
         $out .= '<div id="page_1">';
@@ -439,7 +517,6 @@ class ListFunc {
         $out .= '</select><br />';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
-        $out .= '<button id="submit_2" onclick="hideDiv(\'list_edit\'); return false;">Close</button>';
         $out .= '<button id="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
         $out .= '</fieldset>';
         $out .= '</div>';
@@ -510,7 +587,6 @@ class ListFunc {
         $out .= '</fieldset>';
         $out .= '</div>';
         $out .= '</div>';
-        $out .= '</form>';
 
         return $out;
     }

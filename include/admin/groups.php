@@ -39,8 +39,8 @@ if(isset($_GET['action']) && UserFunc::isAdmin($username) && isset($_GET['id']))
                 </select><br />
             </fieldset>
             <fieldset id="links">
-                <button id="submit_2" onclick="hideDiv('group_add'); return false;">Close</button>
-                <input type="submit" id="submit" name="add" value="Submit">
+                <button class="submit_2" onclick="hideDiv('group_add'); return false;">Close</button>
+                <input type="submit" class="submit" name="add" value="Submit">
             </fieldset>
         </div>
     </div>

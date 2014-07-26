@@ -13,23 +13,27 @@ $year = date('Y');
 $month = date('n');
 
 if(isset($_GET['month'])) {
-    $m = $_GET['month'];
-    if($m == 13) { $m = 1; $year++; }
-    if($m == 0) { $m = 12; $year--; }
-    $month = $m;
+    if($_GET['month'] >= 0 && $_GET['month'] <= 13) {
+        $m = $_GET['month'];
+        if($m == 13) { $m = 1; $year++; }
+        if($m == 0) { $m = 12; $year--; }
+        $month = $m;
+    }
 }
 
 if(isset($_GET['year'])) {
-    $year = $_GET['year'];
+    if($_GET['year'] > 0) {
+        $year = $_GET['year'];
+    }
 }
 
 $date = mktime(0, 0, 0, $month, 1, $year);
 $firstWeekDay = date('w', $date);
 $lastWeekDay = date('w', mktime(0, 0, 0, date('n', $date), date('t', $date), $year));
-$backYear = "?t=calendar&year=".($year - 1)."&month=".$month;
-$backMonth = "?t=calendar&year=".$year."&month=".($month - 1);
-$forwardYear = "?t=calendar&year=".($year + 1)."&month=".$month;
-$forwardMonth = "?t=calendar&year=".$year."&month=".($month + 1);
+$backYear = "?p=".$project."&t=calendar&year=".($year - 1)."&month=".$month;
+$backMonth = "?p=".$project."&t=calendar&year=".$year."&month=".($month - 1);
+$forwardYear = "?p=".$project."&t=calendar&year=".($year + 1)."&month=".$month;
+$forwardMonth = "?p=".$project."&t=calendar&year=".$year."&month=".($month + 1);
 ?>
 <script type="text/javascript">
     function showDate(day) {
@@ -87,7 +91,7 @@ $forwardMonth = "?t=calendar&year=".$year."&month=".($month + 1);
     $back = "#";
     if(isset($_GET['back'])) {
         $split = explode(',', $_GET['back']);
-        $back = '<a href="?t=calendar&year='.$split[0].'&month='.$split[1].'" style="float:left;padding-left:10px;">Back</a>';
+        $back = '<a href="?p='.$project.'&t=calendar&year='.$split[0].'&month='.$split[1].'" style="float:left;padding-left:10px;">Back</a>';
     }
 ?>
     <div id="viewdate">
@@ -99,12 +103,12 @@ $forwardMonth = "?t=calendar&year=".$year."&month=".($month + 1);
             $month = date('n', $viewDate);
             $day = date('j', $viewDate);
 
-            $backYear = "?t=calendarview&year=".($year - 1)."&month=".$month."&day=".$day;
-            $backMonth = "?t=calendarview&year=".$year."&month=".($month - 1)."&day=".$day;
-            $backDay = "?t=calendarview&year=".$year."&month=".$month."&day=".($day - 1);
-            $forwardYear = "?t=calendarview&year=".($year + 1)."&month=".$month."&day=".$day;
-            $forwardMonth = "?t=calendarview&year=".$year."&month=".($month + 1)."&day=".$day;
-            $forwardDay = "?t=calendarview&year=".$year."&month=".$month."&day=".($day + 1);
+            $backYear = "?p=".$project."&t=calendarview&year=".($year - 1)."&month=".$month."&day=".$day;
+            $backMonth = "?p=".$project."&t=calendarview&year=".$year."&month=".($month - 1)."&day=".$day;
+            $backDay = "?p=".$project."&t=calendarview&year=".$year."&month=".$month."&day=".($day - 1);
+            $forwardYear = "?p=".$project."&t=calendarview&year=".($year + 1)."&month=".$month."&day=".$day;
+            $forwardMonth = "?p=".$project."&t=calendarview&year=".$year."&month=".($month + 1)."&day=".$day;
+            $forwardDay = "?p=".$project."&t=calendarview&year=".$year."&month=".$month."&day=".($day + 1);
         ?>
         <h3><?php echo $back; ?><?php echo date('l M jS Y', $viewDate); ?></h3>
         <?php echo ProjectFunc::getEvents($project, $year, $month, $day); ?>

@@ -30,8 +30,10 @@ if(isset($_POST['register'])) {
                             $activationKey = UserFunc::generateActivationKey();
 
                             UserFunc::add($username, $password, $userGroup, $registered, $lastLogin, $ip, $email, $activationKey);
+                            $params = "email:".$_POST['email'];
+                            ActivityFunc::log($username, "none", "none", "user:register", $params, 0, date("Y-m-d H:i:s"));
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->congrats)).'");';
+                            echo 'showMessage("success", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->congrats)).'");';
                             echo '</script>';
 
                             echo '<script>';

@@ -68,14 +68,88 @@ class LabelFunc {
         $connect = new Connect();
         $c = $connect->connection;
         $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("UPDATE `".$t."` SET label = ? WHERE id = ?");
+        $stmt = $c->prepare("UPDATE `".$t."` SET labelname = ? WHERE id = ?");
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();
     }
 
+    public static function details($id) {
+        $details = array();
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_labels";
+        $stmt = $c->prepare("SELECT project, list, labelname, textcolor, backgroundcolor FROM `".$t."` WHERE id = ?");
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $details['project'] = $result['project'];
+        $details['list'] = $result['list'];
+        $details['label'] = $result['labelname'];
+        $details['text'] = $result['textcolor'];
+        $details['background'] = $result['backgroundcolor'];
+        return $details;
+    }
+
+    public static function labels($project, $list) {
+        $connect = new Connect();
+        $c = $connect->connection;
+        $t = $connect->prefix."_labels";
+        $stmt = $c->prepare("SELECT id, labelname, textcolor, backgroundcolor FROM `".$t."` WHERE project = ? AND list = ?");
+        $stmt->bindParam(1, $project);
+        $stmt->bindParam(2, $list);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        $labels = array();
+        for($i = 0; $i < count($result); $i++) {
+            $label = $result[$i];
+            //$labels[$i] = $label[0];
+            $labels[$i] = array();
+            $labels[$i]['id'] = $label[0];
+            $labels[$i]['label'] = $label[1];
+            $labels[$i]['text'] = $label[2];
+            $labels[$i]['background'] = $label[3];
+        }
+
+        return $labels;
+    }
+
+    public static function printAddForm($project, $list) {
+        $out = '';
+        $out .= '<div id="page_1">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<input name="project" type="hidden" value="'.$project.'">';
+        $out .= '<input name="list" type="hidden" value="'.$list.'">';
+        $out .= '<input name="labelname" type="text" placeholder="Label Name">';
+        $out .= '<label for="textcolor">Text Color: </label><input type="color" name="textcolor"><br />';
+        $out .= '<label for="backgroundcolor">Background Color: </label><input type="color" name="backgroundcolor"><br />';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<input type="submit" class="submit" name="add_label" value="Add">';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+
+        return $out;
+    }
+
     public static function printEditForm($id) {
-        //TODO: print edit form
+        $details = self::details($id);
+        $out = '';
+        $out .= '<div id="page_1">';
+        $out .= '<fieldset id="inputs">';
+        $out .= '<input name="id" type="hidden" value="'.$id.'">';
+        $out .= '<input name="project" type="hidden" value="'.$details['project'].'">';
+        $out .= '<input name="list" type="hidden" value="'.$details['list'].'">';
+        $out .= '<input name="labelname" type="text" value="'.$details['label'].'" placeholder="Label Name">';
+        $out .= '<label for="textcolor">Text Color: </label><input type="color" name="textcolor" value="'.$details['text'].'"><br />';
+        $out .= '<label for="backgroundcolor">Background Color: </label><input type="color" name="backgroundcolor" value="'.$details['background'].'"><br />';
+        $out .= '</fieldset>';
+        $out .= '<fieldset id="links">';
+        $out .= '<input type="submit" id="submit" name="edit_label" value="Edit">';
+        $out .= '</fieldset>';
+        $out .= '</div>';
+        return $out;
     }
 }
 ?>

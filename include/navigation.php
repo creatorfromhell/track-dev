@@ -13,9 +13,8 @@
     <ul>
         <li <?php if($page == "index" || $page == "overviewgeneral" || $page == "overviewproject" || $page == "overviewcalendar") { echo 'class="active"'; } ?>><a href="index.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->navlink)); ?></a>
             <ul>
-                <li><a href="index.php?t=calendar"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->calendar->navlink)); ?></a></li>
-                <li><a href="index.php?t=general"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->general->navlink)); ?></a></li>
-                <li><a href="index.php?t=project"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->project->navlink)); ?></a></li>
+                <li><a href="index.php?t=calendar&p=<?php echo $project; ?>"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->calendar->navlink)); ?></a></li>
+                <li><a href="index.php?t=project&p=<?php echo $project; ?>"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->project->navlink)); ?></a></li>
             </ul>
         </li>
         <li <?php if($page == "projects") { echo 'class="active"'; } ?>>
@@ -29,7 +28,7 @@
             </ul>
         </li>
         <li <?php if($page == "list" || $page == "lists") { echo 'class="active"'; } ?>>
-            <a href="lists.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->lists->navlink)); ?></a>
+            <a href="lists.php?p="<?php echo $project; ?>><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->lists->navlink)); ?></a>
             <ul>
                 <?php
                 foreach($lists as &$l) {

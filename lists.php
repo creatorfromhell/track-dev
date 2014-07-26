@@ -13,6 +13,8 @@ include("include/handling/listform.php");
 
     <div id="main">
         <?php
+        $id = 0;
+        $editing = false;
         if(isset($_GET['action']) && isset($_GET['id'])) {
             $action = $_GET['action'];
             $id = $_GET['id'];
@@ -20,99 +22,27 @@ include("include/handling/listform.php");
                 if($action == "delete") {
                     $name = ListFunc::getName($id);
                     ListFunc::remove($id);
+                    $params = "id:".$id;
+                    ActivityFunc::log($username, $project, $name, "list:delete", $params, 0, date("Y-m-d H:i:s"));
                     echo '<script type="text/javascript">';
                     echo 'showMessage("success", "List '.$name.' has been deleted.");';
                     echo '</script>';
                 } else if($action == "edit") {
-                    echo ListFunc::printEditForm($id, $username);
+                    $editing = true;
                 }
             }
         }
         ?>
         <?php if(UserFunc::isAdmin($username) || ProjectFunc::getOverseer($project) == $username) { ?>
-        <div id="add" onclick="showDiv('list_add'); return false;">
-
-        </div>
-        <!-- Add List -->
-        <form id="list_add" class="trackrForm" method="post">
-            <h3>Add List</h3>
-            <div id="holder">
-                <div id="page_1">
-                    <fieldset id="inputs">
-                        <input id="name" name="name" type="text" placeholder="Name">
-                        <input id="author" name="author" type="hidden" value="<?php echo $username; ?>">
-                        <label for="project">Project:</label>
-                        <select name="project" id="project">
-                            <?php
-                                foreach($projects as &$p) {
-                                    $selected = ($p == $project) ? "selected" : "";
-                                    echo '<option value="'.$p.'" '.$selected.'>'.$p.'</option>';
-                                }
-                            ?>
-                        </select><br />
-                        <label for="public">Public:</label>
-                        <select name="public" id="public">
-                            <option value="0">No</option>
-                            <option value="1" selected>Yes</option>
-                        </select><br />
-                    </fieldset>
-                    <fieldset id="links">
-                        <button id="submit_2" onclick="hideDiv('list_add'); return false;">Close</button>
-                        <button id="submit" onclick="switchPage(event, 'page_1', 'page_2'); return false;">Next</button>
-                    </fieldset>
-                </div>
-                <div id="page_2">
-                    <fieldset id="inputs">
-                        <label for="minimal">Minimal View:</label>
-                        <select name="minimal" id="minimal">
-                            <option value="0" selected>No</option>
-                            <option value="1">Yes</option>
-                        </select><br />
-                        <label for="mainlist">Main:</label>
-                        <select name="mainlist" id="mainlist">
-                            <option value="0" selected>No</option>
-                            <option value="1">Yes</option>
-                        </select><br />
-                        <label for="overseer">Overseer:</label>
-                        <select name="overseer" id="overseer">
-                            <option value="none" selected>None</option>
-                            <?php
-                                $users = UserFunc::users();
-                                foreach($users as &$user) {
-                                    echo '<option value="'.$user.'">'.$user.'</option>';
-                                }
-                            ?>
-                        </select>
-                    </fieldset>
-                    <fieldset id="links">
-                        <button id="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
-                        <button id="submit" onclick="switchPage(event, 'page_2', 'page_3'); return false;">Next</button>
-                    </fieldset>
-                </div>
-                <div id="page_3">
-                    <fieldset id="inputs">
-                        <label for="guestview">Guest View:</label>
-                        <select name="guestview" id="guestview">
-                            <option value="0">No</option>
-                            <option value="1" selected>Yes</option>
-                        </select><br />
-                        <label for="guestedit">Guest Edit:</label>
-                        <select name="guestedit" id="guestedit">
-                            <option value="0" selected>No</option>
-                            <option value="1">Yes</option>
-                        </select><br />
-                        <label for="viewpermission">View Permission:<label id="view_permission_value">0</label></label><br />
-                        <input type="range" id="viewpermission" name="viewpermission" value="0" min="0" max="<?php echo UserFunc::getPermission($username); ?>" oninput="showValue('view_permission_value', this.value);">
-                        <label for="editpermission">Edit Permission:<label id="edit_permission_value">0</label></label><br />
-                        <input type="range" id="editpermission" name="editpermission" value="0" min="0" max="<?php echo UserFunc::getPermission($username); ?>" oninput="showValue('edit_permission_value', this.value);">
-                    </fieldset>
-                    <fieldset id="links">
-                        <button id="submit_2" onclick="switchPage(event, 'page_3', 'page_2'); return false;">Back</button>
-                        <input type="submit" id="submit" name="add" value="Add">
-                    </fieldset>
-                </div>
-            </div>
-        </form>
+            <!-- List Form -->
+            <form id="list_form" class="trackrForm" method="post" action="lists.php?p=<?php echo $project; ?>&l=<?php echo $list; ?>">
+                <?php
+                if(!$editing) {
+                    echo ListFunc::printAddForm($project, $projects, $username);
+                } else {
+                    echo ListFunc::printEditForm($id, $username);
+                }
+                ?>
         <?php } ?>
 
         <!-- Lists -->
@@ -137,7 +67,7 @@ include("include/handling/listform.php");
         </table>
         <?php
         } else {
-            echo "<p>".$formatter->replaceShortcuts(((string)$languageinstance->site->tables->nolist))."</p>";
+            echo "<p class=\"announce\">".$formatter->replaceShortcuts(((string)$languageinstance->site->tables->nolist))."</p>";
         }
         ?>
     </div>

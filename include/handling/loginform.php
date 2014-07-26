@@ -7,7 +7,6 @@
  * Last Modified: 3/18/14 at 11:39 AM
  * Last Modified by Daniel Vidmar.
  */
-
 if(isset($_POST['login'])) {
     if(isset($_POST['username']) && trim($_POST['username']) != "") {
         $username = $_POST['username'];
@@ -19,9 +18,9 @@ if(isset($_POST['login'])) {
                     UserFunc::changeStatus($username);
                 }
                 $_SESSION['username'] = $username;
-
+                ActivityFunc::log($username, "none", "none", "user:login", "", 0, date("Y-m-d H:i:s"));
                 echo '<script>';
-                echo 'window.location.assign("projects.php");';
+                echo 'window.location.assign("'.$location.'");';
                 echo '</script>';
             } else {
                 echo '<script type="text/javascript">';

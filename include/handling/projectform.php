@@ -23,6 +23,8 @@ if(isset($_POST['add'])) {
                                 ProjectFunc::removePreset();
                             }
                             ProjectFunc::add($_POST['name'], $_POST['mainproject'], 0, $_POST['author'], $created, $_POST['overseer'], $_POST['public']);
+                            $params = "public:".$_POST['public'].",overseer:".$_POST['overseer'];
+                            ActivityFunc::log($username, $_POST['name'], "none", "project:add", $params, 0, $created);
                         } else {
                             echo '<script type="text/javascript">';
                             echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->taken)).'");';
@@ -72,6 +74,8 @@ if(isset($_POST['edit'])) {
                                     ProjectFunc::rename($_POST['id'], $details['name'], $_POST['name']);
                                 }
                                 ProjectFunc::edit($_POST['id'], $_POST['name'], $_POST['mainproject'], $_POST['mainlist'], $_POST['overseer'], $_POST['public']);
+                                $params = "id:".$_POST['id'].",public:".$_POST['public'].",overseer:".$_POST['overseer'];
+                                ActivityFunc::log($username, $_POST['name'], "none", "project:edit", $params, 0, date("Y-m-d H:i:s"));
                             } else {
                                 echo '<script type="text/javascript">';
                                 echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->taken)).'");';

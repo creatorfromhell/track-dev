@@ -8,7 +8,10 @@
  * Last Modified by Daniel Vidmar.
  */
 ?>
-<table id="themes" class="taskTable">
+<div class="below-content" style="margin-top:30px;">
+    <h3>Languages</h3>
+</div>
+<table id="languages" class="taskTable" style="padding-top:0px";>
     <thead>
         <tr>
             <th id="languageShort" class="small"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->short)); ?></th>
@@ -34,3 +37,32 @@
     ?>
     </tbody>
 </table>
+<div class="below-content">
+    <h3>Themes</h3>
+</div>
+<table id="themes" class="taskTable"style="padding-top:0px";>
+    <thead>
+    <tr>
+        <th id="themeName" class="large"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->name)); ?></th>
+        <th id="themeAuthor" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->author)); ?></th>
+        <th id="themeVersion" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->version)); ?></th>
+        <th id="themeAction" class="action"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)); ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    foreach($manager->themes as &$t) {
+        $name = (string)$t->name;
+        echo "<tr>";
+        echo "<td class='name'>".$name."</td>";
+        echo "<td class='author'>".(string)$t->author."</td>";
+        echo "<td class='version'>".(string)$t->version."</td>";
+        echo "<td class='actions'>".$formatter->replaceShortcuts('%none')."</td>";
+        echo "</tr>";
+    }
+    ?>
+    </tbody>
+</table>
+<div class="below-content">
+    <h3>Plugins</h3>
+</div>

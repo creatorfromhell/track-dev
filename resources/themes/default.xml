@@ -5,6 +5,6 @@
     <author>creatorfromhell</author>
     <version>Beta 1</version>
     <copyright>%name Theme is copyright (c) 2013 - %year %author.</copyright>
-    <!-- CSS-related stuff -->
+    <!-- CSS/JS related information -->
     <directory>default</directory>
 </theme>

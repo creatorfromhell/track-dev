@@ -15,9 +15,11 @@ require_once("thememanager.php");
 require_once("stringformatter.php");
 require_once("languagemanager.php");
 require_once("config.php");
+require_once("function/activityfunc.php");
 require_once("function/groupfunc.php");
-require_once("function/projectfunc.php");
+require_once("function/labelfunc.php");
 require_once("function/listfunc.php");
+require_once("function/projectfunc.php");
 require_once("function/taskfunc.php");
 require_once("function/userfunc.php");
 
@@ -30,7 +32,7 @@ $langmanager = new LanguageManager();
 $theme = $manager->themes[$configuration->config["main"]["theme"]];
 $installation_path = rtrim($configuration->config["urls"]["base_url"], "/").rtrim($configuration->config["urls"]["installation_path"], "/")."/";
 $path = $_SERVER["PHP_SELF"];
-$page = basename($path);
+$pageFull = basename($path);
 $page = basename($path, ".php");
 $username = isset($_SESSION["username"]) ? $_SESSION["username"] : "guest(".Utils::getIP().")";
 $language = $configuration->config["main"]["language"];
@@ -71,6 +73,7 @@ if(isset($_GET['l']) && ListFunc::exists($project, $_GET['l'])) {
     $list = $_COOKIE['l'];
 }
 $languageinstance = $langmanager->languages[$language];
+$return = $pageFull.'?p='.$project.'&l='.$list;
 $lists = ProjectFunc::lists($project);
 $formatter = new StringFormatter($username, $project, $list, $configuration->config, $languageinstance);
 $rawMsg = "";

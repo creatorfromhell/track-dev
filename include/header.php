@@ -39,7 +39,7 @@ else if($page == "admin") { $h1 = $formatter->replaceShortcuts(((string)$languag
                     $userNav = UserFunc::printUserNav($username);
                     echo "<p>Welcome, </p>".$userNav."<p>.</p>";
                 } else { ?>
-                    <a href="login.php">Login</a> or <a href="register.php">Register</a>
+                    <a href="login.php?return=<?php echo $return; ?>">Login</a> or <a href="register.php">Register</a>
                 <?php } ?>
             </p>
         </div>

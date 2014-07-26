@@ -6,39 +6,55 @@
  * Last Modified: 3/3/14 at 10:54 AM
  * Last Modified by Daniel Vidmar.
  */
-window.onload = function() {
-    positionForms();
+
+function removeLabel(div, id) {
+    var labelField = document.getElementsByName(div)[0];
+    var labelString = labelField.value;
+    var labels = labelString.split(',');
+    var newString = "";
+    for(i = 0; i < labels.length; i++) {
+        if(labels[i] != id) { newString += labels[i]; }
+        if(i < (labels.length - 1) && i != 0) { newString += ","; }
+    }
+    labelField.value = newString;
+}
+
+function addLabel(div, id) {
+    var labelField = document.getElementsByName(div)[0];
+    var labelString = labelField.value;
+    if(labelString != null && labelString != "") { labelString += ","; }
+    labelString += id;
+    labelField.value = labelString;
+}
+
+function onDragOver(event) {
+    event.preventDefault();
+}
+
+function onDrag(event) {
+    event.dataTransfer.setData("label", event.target.id);
+}
+
+function onDrop(event) {
+    event.preventDefault();
+    var label = event.dataTransfer.getData("label");
+    event.target.appendChild(document.getElementById(label));
+    var labelID = label.split('-')[1];
+    var targetID = event.target.id;
+    if(targetID == "labels-chosen") {
+        addLabel("labels", labelID);
+    } else if(targetID == "labels-chosen-edit") {
+        addLabel("labels-edit", labelID);
+    } else if(targetID == "labels-available") {
+        removeLabel("labels", labelID);
+    } else if(targetID == "labels-available-edit") {
+        removeLabel("labels-edit", labelID);
+    }
 }
 
 function showValue(div, value) {
     var element = document.getElementById(div);
     element.innerHTML = value;
-}
-
-function positionForms() {
-    var project = document.getElementById("project_add");
-    if(project != null) {
-        var main = document.getElementById("main");
-        var left = (main.style.width / 2) - 214;
-        project.style.left = left;
-        return;
-    }
-
-    var list = document.getElementById("list_add");
-    if(list != null) {
-        var main = document.getElementById("main");
-        var left = (main.style.width / 2) - 214;
-        list.style.left = left;
-        return;
-    }
-
-    var task = document.getElementById("task_add");
-    if(task != null) {
-        var main = document.getElementById("main");
-        var left = (main.style.width / 2) - 214;
-        task.style.left = left;
-        return;
-    }
 }
 
 function showMessage(type, text) {

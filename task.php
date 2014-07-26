@@ -54,9 +54,18 @@ if($status == "3") { $statusName = "Closed"; $statusClass = "error"; }
                 </div>
             </div>
             <div class="clear"></div>
-            <pre class="task-description"><label class="task-description-title">Description: </label><br /><?php echo $taskDetails['description']; ?></pre>
+            <pre class="task-description word-wrap"><label class="task-description-title">Description: </label><br /><?php echo $taskDetails['description']; ?></pre>
             <?php if($taskDetails['labels'] != "") { ?>
-            <div class="labels"><!--<label id="enhancement" class="task-label">Enhancement</label><label id="feature" class="task-label">Feature</label>--></div>
+            <div class="labels">
+                <?php
+                $labelString = $taskDetails['labels'];
+                $labels = explode(",", $labelString);
+                foreach($labels as &$l) {
+                    $ldetails = LabelFunc::details($l);
+                    echo '<label class="task-label" style="background:'.$ldetails['background'].';color:'.$ldetails['text'].';border:1px solid '.$ldetails['text'].';">'.$ldetails['label'].'</label>';
+                }
+                ?>
+            </div>
             <div class="clear"></div>
             <?php } ?>
         </div>

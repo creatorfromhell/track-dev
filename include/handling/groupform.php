@@ -14,6 +14,8 @@ if(isset($_POST['add'])) {
                 if(isset($_POST['admin']) && trim($_POST['admin']) != "") {
                     if(!GroupFunc::exists($_POST['name'])) {
                         GroupFunc::add($_POST['name'], $_POST['permission'], $_POST['preset'], $_POST['admin']);
+                        $params = "name:".$_POST['name'].",permission:".$_POST['permission'].",admin:".$_POST['admin'];
+                        ActivityFunc::log($username, "none", "none", "group:add", $params, 0, date("Y-m-d H:i:s"));
                     } else {
                         echo '<script type="text/javascript">';
                         echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->group->taken)).'");';
