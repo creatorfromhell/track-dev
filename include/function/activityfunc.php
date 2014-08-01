@@ -89,11 +89,13 @@ class ActivityFunc {
         $replacements = array($result['username'], $result['project'], $result['list'], $result['logged']);
         $description = self::parseType($id, $language);
 
-        $parameters = explode(',', $result['parameters']);
+        if(trim($result['parameters']) != '') {
+            $parameters = explode(',', $result['parameters']);
 
-        foreach($parameters as &$param) {
-            $pars = explode(':', $param);
-            $description = str_ireplace("%".$pars[0], $pars[1], $description);
+            foreach($parameters as &$param) {
+                $pars = explode(':', $param);
+                $description = str_ireplace("%".$pars[0], $pars[1], $description);
+            }
         }
 
         $activity = str_ireplace($replace, $replacements, $description);

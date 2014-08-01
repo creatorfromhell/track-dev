@@ -466,9 +466,9 @@ class ListFunc {
         $out .= '<option value="1">Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="viewpermission">View Permission:<label id="view_permission_value">0</label></label><br />';
-        $out .= '<input type="range" id="viewpermission" name="viewpermission" value="0" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'view_permission_value\', this.value);">';
+        $out .= '<input type="range" id="viewpermission" name="viewpermission" value="0" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'view_permission_value\', this.value);"><br />';
         $out .= '<label for="editpermission">Edit Permission:<label id="edit_permission_value">0</label></label><br />';
-        $out .= '<input type="range" id="editpermission" name="editpermission" value="0" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'edit_permission_value\', this.value);">';
+        $out .= '<input type="range" id="editpermission" name="editpermission" value="0" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'edit_permission_value\', this.value);"><br />';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
         $out .= '<button class="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
@@ -577,9 +577,9 @@ class ListFunc {
         $out .= '>Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="viewpermission">View Permission:<label id="view_permission_value">'.$result['viewpermission'].'</label></label><br />';
-        $out .= '<input type="range" id="viewpermission" name="viewpermission" value="'.$result['viewpermission'].'" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'view_permission_value\', this.value);">';
+        $out .= '<input type="range" id="viewpermission" name="viewpermission" value="'.$result['viewpermission'].'" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'view_permission_value\', this.value);"><br />';
         $out .= '<label for="editpermission">Edit Permission:<label id="edit_permission_value">'.$result['editpermission'].'</label></label><br />';
-        $out .= '<input type="range" id="editpermission" name="editpermission" value="'.$result['editpermission'].'" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'edit_permission_value\', this.value);">';
+        $out .= '<input type="range" id="editpermission" name="editpermission" value="'.$result['editpermission'].'" min="0" max="'.UserFunc::getPermission($username).'" oninput="showValue(\'edit_permission_value\', this.value);"><br />';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
         $out .= '<button id="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';

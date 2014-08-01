@@ -7,6 +7,15 @@
  * Last Modified by Daniel Vidmar.
  */
 
+function linkColorField(div, field) {
+    document.getElementById("jspalette").style.display = 'block';
+    document.getElementById("jspalette-choose").onclick = function() {
+        document.getElementById(div).style.background = document.getElementById("picked-color").value;
+        document.getElementsByName(field)[0].value = document.getElementById("picked-color").value;
+        document.getElementById("jspalette").style.display = 'none';
+    }
+}
+
 function removeLabel(div, id) {
     var labelField = document.getElementsByName(div)[0];
     var labelString = labelField.value;

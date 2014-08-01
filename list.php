@@ -128,7 +128,7 @@ include("include/handling/labelform.php");
                 }
             ?>
             </div>
-            <div class="labels-right">
+            <div class="labels-right" style="max-height:270px;min-height:204px;">
                 <?php if($canEdit) { ?>
                     <!-- Label Form -->
                     <form id="label_form" class="trackr-small-form" method="post" action="list.php?p=<?php echo $project; ?>&l=<?php echo $list; ?>">
@@ -142,6 +142,7 @@ include("include/handling/labelform.php");
                         ?>
                         </div>
                     </form>
+                    <div id="jspalette"></div>
                 <?php } ?>
             </div>
             <div class="clear"></div>
