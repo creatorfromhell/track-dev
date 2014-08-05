@@ -46,6 +46,8 @@ include("include/handling/projectform.php");
         </form>
         <?php } ?>
 
+        <?php
+        if(ProjectFunc::hasProjects()) { ?>
         <!-- Projects -->
         <table id="projects" class="taskTable">
             <thead>
@@ -58,14 +60,12 @@ include("include/handling/projectform.php");
             </tr>
             </thead>
             <tbody>
-            <?php
-            if(ProjectFunc::hasProjects()) {
-                ProjectFunc::printProjects($username, $formatter);
-            } else {
-                echo "<p  class=\"announce\">".$formatter->replaceShortcuts(((string)$languageinstance->site->tables->noproject))."</p>";
-            } ?>
+                <?php ProjectFunc::printProjects($username, $formatter); ?>
             </tbody>
         </table>
+        <?php } else {
+            echo "<p  class=\"announce\">".$formatter->replaceShortcuts(((string)$languageinstance->site->tables->noproject))."</p>";
+        } ?>
     </div>
 
 <?php
