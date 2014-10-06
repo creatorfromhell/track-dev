@@ -53,7 +53,7 @@
                 data : [<?php echo ProjectFunc::getTasksChartData($project, false, true); ?>]
             }
         ]
-    }
+    };
 
     var chartAssignedData = {
         labels : [<?php echo ProjectFunc::getAssignedUsersChartData($project, true, false); ?>],
@@ -69,7 +69,7 @@
                 data : [<?php echo ProjectFunc::getAssignedUsersChartData($project, false, true); ?>]
             }
         ]
-    }
+    };
 
     //Chart Options
 

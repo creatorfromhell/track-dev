@@ -7,17 +7,13 @@
  * Last Modified: 1/15/14 at 1:05 PM
  * Last Modified by Daniel Vidmar.
  */
-
-//Include the Connect Class
-require_once("include/connect.php");
 class TaskFunc {
 
     //add task
     public static function add($project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("INSERT INTO `".$t."` (id, title, description, author, assignee, due, created, finished, versionname, labels, editable, taskstatus, progress) VALUES('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, title, description, author, assignee, due, created, finished, version_name, labels, editable, task_status, progress) VALUES('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $title);
         $stmt->bindParam(2, $description);
         $stmt->bindParam(3, $author);
@@ -35,27 +31,24 @@ class TaskFunc {
 
     //delete task
     public static function delete($project, $list, $id) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
 
     //check task table
     public static function checkTable($project, $list) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
     }
 
     //edit task
     public static function edit($id, $project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("UPDATE `".$t."` SET title = ?, description = ?, author = ?, assignee = ?, due = ?, created = ?, finished = ?, versionname = ?, labels = ?, editable = ?, taskstatus = ?, progress = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET title = ?, description = ?, author = ?, assignee = ?, due = ?, created = ?, finished = ?, version_name = ?, labels = ?, editable = ?, task_status = ?, progress = ? WHERE id = ?");
         $stmt->bindParam(1, $title);
         $stmt->bindParam(2, $description);
         $stmt->bindParam(3, $author);
@@ -74,10 +67,9 @@ class TaskFunc {
 
     public static function getDetails($project, $list, $id) {
         $return = array();
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("SELECT title, description, author, assignee, due, created, finished, versionname, labels, editable, taskstatus, progress FROM `".$t."` WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("SELECT title, description, author, assignee, due, created, finished, version_name, labels, editable, task_status, progress FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -88,20 +80,19 @@ class TaskFunc {
         $return['due'] = $result['due'];
         $return['created'] = $result['created'];
         $return['finished'] = $result['finished'];
-        $return['version'] = $result['versionname'];
+        $return['version'] = $result['version_name'];
         $return['labels'] = $result['labels'];
         $return['editable'] = $result['editable'];
-        $return['status'] = $result['taskstatus'];
+        $return['status'] = $result['task_status'];
         $return['progress'] = $result['progress'];
         return $return;
     }
 
     //change task assignee
     public static function changeAssignee($project, $list, $id, $assignee) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("UPDATE `".$t."` SET assignee = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET assignee = ? WHERE id = ?");
         $stmt->bindParam(1, $assignee);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -109,10 +100,9 @@ class TaskFunc {
 
     //change task labels
     public static function changeLabels($project, $list, $id, $labels) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("UPDATE `".$t."` SET labels = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET labels = ? WHERE id = ?");
         $stmt->bindParam(1, $labels);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -120,18 +110,16 @@ class TaskFunc {
 
     //change task list
     public static function changeList($project, $list, $id, $newList) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
         //use INTO SELECT
     }
 
     //change task progress
     public static function changeProgress($project, $list, $id, $progress) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("UPDATE `".$t."` SET progress = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET progress = ? WHERE id = ?");
         $stmt->bindParam(1, $progress);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -139,17 +127,15 @@ class TaskFunc {
 
     //change project
     public static function changeProject($project, $list, $id, $newProject) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
         //use INTO SELECT
     }
 
     public static function changeFinished($project, $list, $id, $finished) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("UPDATE `".$t."` SET finished = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET finished = ? WHERE id = ?");
         $stmt->bindParam(1, $finished);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -157,10 +143,9 @@ class TaskFunc {
 
     //change task status
     public static function changeStatus($project, $list, $id, $status) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("UPDATE `".$t."` SET taskstatus = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET task_status = ? WHERE id = ?");
         $stmt->bindParam(1, $status);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -168,10 +153,9 @@ class TaskFunc {
 
     //change task title
     public static function changeTitle($project, $list, $id, $title) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("UPDATE `".$t."` SET title = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET title = ? WHERE id = ?");
         $stmt->bindParam(1, $title);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -179,20 +163,18 @@ class TaskFunc {
 
     //change task version
     public static function changeVersion($project, $list, $id, $version) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("UPDATE `".$t."` SET versionname = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ? WHERE id = ?");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $id);
         $stmt->execute();
     }
 
     public static function hasLabel($project, $list, $id, $label) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_".$project."_".$list;
-        $stmt = $c->prepare("SELECT labels FROM `".$t."` WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_".$project."_".$list;
+        $stmt = $pdo->prepare("SELECT labels FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -220,8 +202,7 @@ class TaskFunc {
         $out .= '<label for="assignee">Assignee:</label>';
         $out .= '<select name="assignee" id="assignee">';
         $out .= '<option value="none" selected>None</option>';
-        $users = UserFunc::users();
-        foreach($users as &$user) {
+        foreach(users() as &$user) {
             $out .= '<option value="'.$user.'">'.$user.'</option>';
         }
         $out .= '</select>';
@@ -257,7 +238,7 @@ class TaskFunc {
         $out .= '<fieldset id="inputs">';
         $out .= '<div class="labels-field">';
         $out .= '<div style="width:100%;height:auto;text-align:center;"><b><label class="center">Labels</label></b></div>';
-        $out .= '<div style="width:100%;height:auto;margin 5px 0;">';
+        $out .= '<div style="width:100%;height:auto;margin:5px 0;">';
         $out .= '<label class="fmleft">Available</label>';
         $out .= '<label class="fmright">Chosen</label>';
         $out .= '<div class="clear"></div>';
@@ -301,8 +282,7 @@ class TaskFunc {
         $out .= '<select name="assignee" id="assignee">';
         $selected = ($details['assignee'] == 'none') ? 'selected' : '';
         $out .= '<option value="none" '.$selected.'>None</option>';
-        $users = UserFunc::users();
-        foreach($users as &$user) {
+        foreach(users() as &$user) {
             $selected = ($details['assignee'] == $user) ? 'selected' : '';
             $out .= '<option value="'.$user.'" '.$selected.'>'.$user.'</option>';
         }
@@ -351,7 +331,7 @@ class TaskFunc {
         $out .= '<fieldset id="inputs">';
         $out .= '<div class="labels-field">';
         $out .= '<div style="width:100%;height:auto;text-align:center;"><b><label class="center">Labels</label></b></div>';
-        $out .= '<div style="width:100%;height:auto;margin 5px 0;">';
+        $out .= '<div style="width:100%;height:auto;margin:5px 0;">';
         $out .= '<label class="fmleft">Available</label>';
         $out .= '<label class="fmright">Chosen</label>';
         $out .= '<div class="clear"></div>';

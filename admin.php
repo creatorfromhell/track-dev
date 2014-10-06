@@ -8,14 +8,19 @@
  * Last Modified by Daniel Vidmar.
  */
 session_start();
-require_once("include/function/userfunc.php");
-if(!UserFunc::isAdmin($_SESSION['username'])) {
-    header("Location: index.php");
-}
+include_once("include/utils.php");
+$currentUser = $_SESSION['userplusprofile'];
+if(pageLockedAdmin($currentUser)) { header('LOCATION: index.php'); }
 include("include/header.php");
 $type = "dashboard";
 if(isset($_GET['t'])) {
     $type = $_GET['t'];
+}
+$pn = 1;
+if(isset($_GET['pn'])) {
+    if($_GET['pn'] > 0) {
+        $pn = $_GET['pn'];
+    }
 }
 ?>
 <div id="main" style="min-height:330px;">
@@ -32,19 +37,19 @@ if(isset($_GET['t'])) {
     </nav>
     <?php
         if($type == "groups") {
-            include("include/admin/groups.php");
+            include("include/pages/admin/groups.php");
         } else if($type == "permissions") {
-            include("include/admin/permissions.php");
+            include("include/pages/admin/permissions.php");
         } else if($type == "options") {
-            include("include/admin/options.php");
+            include("include/pages/admin/options.php");
         } else if($type == "addons") {
-            include("include/admin/addons.php");
+            include("include/pages/admin/addons.php");
         } else if($type == "users") {
-            include("include/admin/users.php");
+            include("include/pages/admin/users.php");
         } else if($type == "activity") {
-            include("include/admin/activity.php");
+            include("include/pages/admin/activity.php");
         } else {
-            include("include/admin/dashboard.php");
+            include("include/pages/admin/dashboard.php");
         }
     ?>
 </div>

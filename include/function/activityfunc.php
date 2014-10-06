@@ -7,18 +7,13 @@
  * Last Modified: 1/11/14 at 5:20 PM
  * Last Modified by Daniel Vidmar.
  */
-
-//Include the Connect Class
-require_once("include/connect.php");
-require_once("include/function/userfunc.php");
 class ActivityFunc {
 
     //log activity
     public static function log($username, $project, $list, $activitytype, $parameters, $archived, $logged) {
-		$connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("INSERT INTO `".$t."` (id, username, project, list, activitytype, parameters, archived, logged) VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
+		global $prefix, $pdo;
+        $t = $prefix."_activity";
+        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, username, project, list, activity_type, parameters, archived, logged) VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $username);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $list);
@@ -29,47 +24,15 @@ class ActivityFunc {
         $stmt->execute();
     }
 
-    public static function printActivities($username, $formatter) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("SELECT id, archived, logged FROM `".$t."`");
-        $stmt->execute();
-
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $id = $row['id'];
-            $description = self::getReadableActivity($id, $formatter->languageinstance);
-            $archived = ($row['archived'] == 1) ? (string)$formatter->languageinstance->site->tables->yes : (string)$formatter->languageinstance->site->tables->no;
-            $logged = $row['logged'];
-
-            echo "<tr>";
-            echo "<td class='description'>".$description."</td>";
-            echo "<td class='archived'>".$archived."</td>";
-            echo "<td class='logged'>".$logged."</td>";
-            echo "<td class='actions'>";
-
-            if(UserFunc::isAdmin($username)) {
-                echo "<a title='Edit' class='actionEdit'></a>";
-                echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure?\");' href='?t=activity&action=delete&id=".$id."'></a>";
-            } else {
-                echo $formatter->replace("%none");
-            }
-
-            echo "</td>";
-            echo "</tr>";
-        }
-    }
-
     public static function parseType($id, $language) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("SELECT activitytype FROM `".$t."` WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_activity";
+        $stmt = $pdo->prepare("SELECT activity_type FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         //Example Type: user:login
-        $type = explode(":", $result['activitytype']);
+        $type = explode(":", $result['activity_type']);
 
         $value = $language->xpath("site/activities/".$type[0]."/".$type[1])[0];
         return (string)($value);
@@ -77,10 +40,9 @@ class ActivityFunc {
 
     //get readable activity
     public static function getReadableActivity($id, $language) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("SELECT username, project, list, parameters, archived, logged FROM `".$t."` WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_activity";
+        $stmt = $pdo->prepare("SELECT username, project, list, parameters, archived, logged FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -104,39 +66,35 @@ class ActivityFunc {
 
     //archive log
     public static function archive($id) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("UPDATE `".$t."` SET archived = 1 WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_activity";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET archived = 1 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
 
     //unarchive log
     public static function unarchive($id) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("UPDATE `".$t."` SET archived = 0 WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_activity";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET archived = 0 WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
 
     public static function delete($id) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_activity";
+        $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
 
     //clean logs
     public static function clean() {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE logged < DATE_SUB(CURDATE(), INTERVAL 5 DAY)");
+        global $prefix, $pdo;
+        $t = $prefix."_activity";
+        $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE logged < DATE_SUB(CURDATE(), INTERVAL 5 DAY)");
         $stmt->execute();
     }
 
@@ -155,10 +113,9 @@ class ActivityFunc {
      * Create a XML backup
      */
     private static function backupXML() {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("SELECT id, user, project, list, activitytype, parameters, archived, logged FROM ".$t);
+        global $prefix, $pdo;
+        $t = $prefix."_activity";
+        $stmt = $pdo->prepare("SELECT id, user, project, list, activity_type, parameters, archived, logged FROM ".$t);
         $stmt->execute();
 
         $fileName = "activity-backup-".date("Y-m-d").".xml";
@@ -172,7 +129,7 @@ class ActivityFunc {
             fwrite($file, "<archived>".$result['archived']."</archived>\n");
             fwrite($file, "<project>".$result['project']."</project>\n");
             fwrite($file, "<list>".$result['list']."</list>\n");
-            fwrite($file, "<type>".$result['activitytype']."</type>\n");
+            fwrite($file, "<type>".$result['activity_type']."</type>\n");
             fwrite($file, "<parameters>".$result['parameters']."</parameters>\n");
             fwrite($file, "</activity>\n");
         }
@@ -185,17 +142,16 @@ class ActivityFunc {
      * Create a CSV backup
      */
     private static function backupCSV() {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("SELECT * FROM ".$t);
+        global $prefix, $pdo;
+        $t = $prefix."_activity";
+        $stmt = $pdo->prepare("SELECT * FROM ".$t);
         $stmt->execute();
 
         $fileName = "activity-backup-".date("Y-m-d").".csv";
         $file = fopen($fileName, "w");
         fwrite($file, "id,user,date,archived,project,list,type,parameters");
         while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            fwrite($file, "\n".$result['id'].",".$result['user'].",".$result['logged'].",".$result['archived'].",".$result['project'].",".$result['list'].",".$result['activitytype'].",".$result['parameters']);
+            fwrite($file, "\n".$result['id'].",".$result['user'].",".$result['logged'].",".$result['archived'].",".$result['project'].",".$result['list'].",".$result['activity_type'].",".$result['parameters']);
         }
         fclose($file);
     }
@@ -204,10 +160,9 @@ class ActivityFunc {
      * Create a plain text backup
      */
     private static function backupPT() {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_activity";
-        $stmt = $c->prepare("SELECT * FROM ".$t);
+        global $prefix, $pdo;
+        $t = $prefix."_activity";
+        $stmt = $pdo->prepare("SELECT * FROM ".$t);
         $stmt->execute();
 
         $fileName = "activity-backup-".date("Y-m-d").".txt";
@@ -222,7 +177,7 @@ class ActivityFunc {
             fwrite($file, "\nArchived: ".$result['archived']);
             fwrite($file, "\nProject: ".$result['project']);
             fwrite($file, "\nList: ".$result['list']);
-            fwrite($file, "\nType: ".$result['activitytype']);
+            fwrite($file, "\nType: ".$result['activity_type']);
             fwrite($file, "\nParameters: ".$result['parameters']);
         }
         fclose($file);

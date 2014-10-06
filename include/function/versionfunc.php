@@ -7,9 +7,6 @@
  * Last Modified: 1/15/14 at 1:05 PM
  * Last Modified by Daniel Vidmar.
  */
-
-//Include the Connect Class
-require_once("include/connect.php");
 class VersionFunc {
 
     /*
@@ -18,10 +15,9 @@ class VersionFunc {
 
     //add version
     public static function add($version, $project, $due, $released, $type) {
-		$connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("INSERT INTO `".$t."` (id, versionname, project, due, released, versiontype) VALUES ('', ?, ?, ?, ?, ?)");
+		global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, version_name, project, due, released, version_type) VALUES ('', ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $due);
@@ -32,20 +28,18 @@ class VersionFunc {
 
     //delete version
     public static function delete($id) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
 
     //edit version
     public static function edit($id, $version, $project, $due, $released, $type) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE `".$t."` SET versionname = ?, project = ?, due = ?, released = ?, versiontype = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ?, project = ?, due = ?, released = ?, version_type = ? WHERE id = ?");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $project);
         $stmt->bindParam(3, $due);
@@ -57,10 +51,9 @@ class VersionFunc {
 
     //change due date
     public static function changeDue($id, $due) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE `".$t."` SET due = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET due = ? WHERE id = ?");
         $stmt->bindParam(1, $due);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -68,10 +61,9 @@ class VersionFunc {
 
     //change project
     public static function changeProject($id, $project) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -79,10 +71,9 @@ class VersionFunc {
 
     //change release date
     public static function changeRelease($id, $release) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE `".$t."` SET release = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET release = ? WHERE id = ?");
         $stmt->bindParam(1, $release);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -90,10 +81,9 @@ class VersionFunc {
 
     //change version type
     public static function changeType($id, $type) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE `".$t."` SET versiontype = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_type = ? WHERE id = ?");
         $stmt->bindParam(1, $type);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -101,10 +91,9 @@ class VersionFunc {
 
     //reversion version
     public static function rename($id, $version) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions";
-        $stmt = $c->prepare("UPDATE `".$t."` SET versionname = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ? WHERE id = ?");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -121,10 +110,9 @@ class VersionFunc {
 
     //add version type
     public static function addType($versiontype, $description) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions_types";
-        $stmt = $c->prepare("INSERT INTO `".$t."` (id, versiontype, description) VALUES ('', ?, ?)");
+        global $prefix, $pdo;
+        $t = $prefix."_versions_types";
+        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, version_type, description) VALUES ('', ?, ?)");
         $stmt->bindParam(1, $versiontype);
         $stmt->bindParam(2, $description);
         $stmt->execute();
@@ -132,10 +120,9 @@ class VersionFunc {
 
     //edit version type
     public static function editType($id, $versiontype, $description) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions_types";
-        $stmt = $c->prepare("UPDATE `".$t."` SET versiontype = ?, description = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_versions_types";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_type = ?, description = ? WHERE id = ?");
         $stmt->bindParam(1, $versiontype);
         $stmt->bindParam(2, $description);
         $stmt->bindParam(3, $id);
@@ -144,10 +131,9 @@ class VersionFunc {
 
     //delete version type
     public static function deleteType($id) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_versions_types";
-        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_versions_types";
+        $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }

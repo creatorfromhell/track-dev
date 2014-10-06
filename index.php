@@ -18,9 +18,9 @@ $return .= "&t=".$type;
     <div id="main">
         <?php
             if($type == "calendar" || $type == "calendarview") {
-                include("include/overview/calendar.php");
+                include("include/pages/overview/calendar.php");
             } else {
-                include("include/overview/project.php");
+                include("include/pages/overview/project.php");
             }
         ?>
         <div class="clear"></div>

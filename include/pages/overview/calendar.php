@@ -37,8 +37,7 @@ $forwardMonth = "?p=".$project."&t=calendar&year=".$year."&month=".($month + 1);
 ?>
 <script type="text/javascript">
     function showDate(day) {
-       var location = "?back=<?php echo $year.','.$month; ?>&t=calendarview&year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=" + day;
-        window.location = location;
+        window.location = "?back=<?php echo $year.','.$month; ?>&t=calendarview&year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=" + day;
     }
 </script>
 <?php if($_GET['t'] == "calendar") { ?>

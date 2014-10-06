@@ -7,40 +7,39 @@
  * Last Modified: 3/2/14 at 12:51 PM
  * Last Modified by Daniel Vidmar.
  */
-if(isset($_SESSION['username'])) {
+if(isset($_SESSION['usersplusprofile'])) {
     header("Location: index.php");
 }
 include("include/header.php");
-include("include/handling/registerform.php");
+include("include/handling/register.php");
 ?>
 
     <div id="main">
         <?php if($configuration->config["main"]["registration"]) { ?>
-        <form id="register_form" method="post" style="margin:30px auto;">
-            <h3>Register</h3>
-            <div id="holder">
-                <div id="page_1">
-                    <fieldset id="inputs">
-                        <input id="username" name="username" type="text" placeholder="Username">
-                        <input id="email" name="email" type="text" placeholder="Email">
-                    </fieldset>
-                    <fieldset id="links">
-                        <label id="other">Have an account? <a href="login.php">Login</a></label>
-                        <button class="submit" onclick="switchPage(event, 'page_1', 'page_2'); return false;">Next</button>
-                    </fieldset>
+            <form method="post" action="register.php">
+                <h3>Register</h3>
+                <div id="holder">
+                    <div id="page_1" class="form-page">
+                        <fieldset id="inputs">
+                            <input id="username" name="username" type="text" placeholder="Username">
+                            <input id="email" name="email" type="text" placeholder="Email">
+                            <input id="password" name="password" type="password" placeholder="Password">
+                            <input id="c_password" name="c_password" type="password" placeholder="Confirm Password">
+                            <?php
+                            $captcha = new Captcha();
+                            $captcha->printImage();
+                            $_SESSION['userspluscaptcha'] = $captcha->code;
+                            ?>
+                            <br />
+                            <input id="captcha" name="captcha" type="text" placeholder="Enter characters above">
+                        </fieldset>
+                        <fieldset id="links">
+                            <input type="submit" class="submit" name="register" value="Register">
+                            <label id="other">Have an account? <a href="login.php">Login</a></label>
+                        </fieldset>
+                    </div>
                 </div>
-                <div id="page_2">
-                    <fieldset id="inputs">
-                        <input id="password" name="password" type="password" placeholder="Password">
-                        <input id="c_password" name="c_password" type="password" placeholder="Confirm Password">
-                    </fieldset>
-                    <fieldset id="links">
-                        <button class="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
-                        <input type="submit" class="submit" name="register" value="Register">
-                    </fieldset>
-                </div>
-            </div>
-        </form>
+            </form>
         <?php } else { ?>
         <p class="announce">I'm sorry, but registration has been disabled.</p>
         <?php } ?>

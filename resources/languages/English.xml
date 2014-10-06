@@ -84,22 +84,26 @@
             <noproject>There are currently no projects.</noproject>
         </tables>
         <forms>
+            <invalidcaptcha>Invalid captcha entered!</invalidcaptcha>
+            <invalidid>You must enter a valid id!</invalidid>
             <login>
+                <noactivation>You must activate your account before logging in!</noactivation>
                 <invalidlogin>Invalid login credentials!</invalidlogin>
                 <nopassword>No password entered!</nopassword>
                 <nousername>No username entered!</nousername>
                 <noemail>No email address entered!</noemail>
                 <noconfirm>You must confirm your password!</noconfirm>
                 <invalidpasswords>Passwords do not match!</invalidpasswords>
-                <taken>Username already in use!</taken>
+                <taken>The specified username or email address is already in use!</taken>
+                <activation>An account activation link has been sent to the specified email address.</activation>
             </login>
             <group>
                 <nopermission>You must fill out the permission field!</nopermission>
                 <noadmin>You must fill out the administrator field!</noadmin>
                 <nopreset>You must fill out the preset field!</nopreset>
+                <taken>A group with that name already exists!</taken>
             </group>
             <project>
-                <noid>Invalid id submitted!</noid>
                 <noname>No name entered!</noname>
                 <nomainlist>You must fill out the main list field!</nomainlist>
                 <taken>A project with that name already exists!</taken>
@@ -122,7 +126,7 @@
                 <invalidlist>The list specified does not exist!</invalidlist>
                 <invalidstatus>Invalid status entered!</invalidstatus>
                 <notitle>You must fill out the title field!</notitle>
-                <nodescription>You must fill out the description field!</nodescription>
+                <nodescription>You must enter a valid description</nodescription>
                 <noeditable>You must fill out the editable field!</noeditable>
             </task>
             <label>
@@ -130,6 +134,12 @@
                 <notextcolor>You must choose a text color!</notextcolor>
                 <nobackgroundcolor>You must choose a background color!</nobackgroundcolor>
             </label>
+            <permission>
+                <nonode>You must enter a valid permission node!</nonode>
+            </permission>
+            <user>
+                <nogroup>You must enter a valid group!</nogroup>
+            </user>
         </forms>
         <actions>
             <!-- TODO: make actions language-based -->

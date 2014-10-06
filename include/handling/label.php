@@ -15,7 +15,7 @@ if(isset($_POST['add_label'])) {
                     if(isset($_POST['backgroundcolor']) && trim($_POST['backgroundcolor']) != "") {
                         LabelFunc::add($_POST['project'], $_POST['list'], $_POST['labelname'], $_POST['textcolor'], $_POST['backgroundcolor']);
                         $params = "name:".$_POST['name'].",textcolor:".$_POST['textcolor'].",backgroundcolor:".$_POST['backgroundcolor'];
-                        ActivityFunc::log($username, $_POST['project'], $_POST['list'], "label:add", $params, 0, date("Y-m-d H:i:s"));
+                        ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['list'], "label:add", $params, 0, date("Y-m-d H:i:s"));
                     } else {
                         echo '<script type="text/javascript">';
                         echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->label->nobackgroundcolor)).'");';
@@ -52,7 +52,7 @@ if(isset($_POST['edit_label'])) {
                         if(isset($_POST['backgroundcolor']) && trim($_POST['backgroundcolor']) != "") {
                             LabelFunc::edit($_POST['id'], $_POST['project'], $_POST['list'], $_POST['labelname'], $_POST['textcolor'], $_POST['backgroundcolor']);
                             $params = "id:".$_POST['id'].",name:".$_POST['name'].",textcolor:".$_POST['textcolor'].",backgroundcolor:".$_POST['backgroundcolor'];
-                            ActivityFunc::log($username, $_POST['project'], $_POST['list'], "label:edit", $params, 0, date("Y-m-d H:i:s"));
+                            ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['list'], "label:edit", $params, 0, date("Y-m-d H:i:s"));
                         } else {
                             echo '<script type="text/javascript">';
                             echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->label->nobackgroundcolor)).'");';
@@ -80,7 +80,7 @@ if(isset($_POST['edit_label'])) {
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->noid)).'");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->invalidid)).'");';
         echo '</script>';
     }
 }

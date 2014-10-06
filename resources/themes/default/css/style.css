@@ -958,23 +958,7 @@ form #links {
     margin: 20px auto;
 }
 
-#inputs #username {
-    background: #E7E7E7 url("../img/user.png") no-repeat 3px 8px;
-}
-
-#inputs #email {
-    background: #E7E7E7 url("../img/email.png") no-repeat 3px 8px;
-}
-
-#inputs #f_name, #inputs #l_name {
-    background: #E7E7E7 url("../img/info.png") no-repeat 3px 8px;
-}
-
-#inputs #password, #inputs #c_password {
-    background: #E7E7E7 url("../img/key.png") no-repeat 3px 8px;
-}
-
-#labelcolor-text, #labelcolor-background {
+#color-text, #color-background {
     height: 10px;
     width: 10px;
     border: 2px solid #A9A9A9;
@@ -983,7 +967,7 @@ form #links {
     cursor: pointer;
 }
 
-form .submit, form .submit_2, form .submit {
+form .submit, form .submit_2 {
     background: #EDEBEB;
     color: #666;
     text-shadow: 0 1px 1px white;
@@ -1002,7 +986,7 @@ form .submit, form .submit_2, form .submit {
     -o-transition: all 0.5s;
 }
 
-form #submit:hover, form .submit_2:hover, form .submit:hover {
+form .submit:hover, form .submit_2:hover {
     background: #666;
     color: white;
     text-shadow: none;

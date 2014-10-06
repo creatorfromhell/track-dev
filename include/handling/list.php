@@ -31,7 +31,7 @@ if(isset($_POST['add'])) {
                                                         if($_POST['mainlist'] != 0) {
                                                             ProjectFunc::changeMain(ProjectFunc::getID($_POST['project']), ListFunc::getID($_POST['project'], $_POST['name']));
                                                             $params = "public:".$_POST['public'].",overseer:".$_POST['overseer'];
-                                                            ActivityFunc::log($username, $_POST['project'], $_POST['name'], "list:add", $params, 0, $created);
+                                                            ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['name'], "list:add", $params, 0, $created);
                                                         }
                                                         echo '<script type="text/javascript">';
                                                         echo 'showMessage("success", "'.$formatter->replaceShortcuts(str_ireplace("%list", $_POST['name'], (string)$languageinstance->site->forms->list->created)).'");';
@@ -133,7 +133,7 @@ if(isset($_POST['edit'])) {
                                                         }
                                                         ListFunc::edit($id, $_POST['name'], $_POST['project'], $_POST['public'], $_POST['overseer'], $_POST['minimal'], $_POST['guestview'], $_POST['guestedit'], $_POST['viewpermission'], $_POST['editpermission']);
                                                         $params = "id:".$id.",public:".$_POST['public'].",overseer:".$_POST['overseer'];
-                                                        ActivityFunc::log($username, $_POST['project'], $_POST['name'], "list:edit", $params, 0, $created);
+                                                        ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['name'], "list:edit", $params, 0, $created);
                                                         echo '<script type="text/javascript">';
                                                         echo 'showMessage("success", "'.$formatter->replaceShortcuts(str_ireplace("%list", $_POST['name'], (string)$languageinstance->site->forms->list->created)).'");';
                                                         echo '</script>';
@@ -199,7 +199,7 @@ if(isset($_POST['edit'])) {
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->noid)).'");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->invalidid)).'");';
         echo '</script>';
     }
 }

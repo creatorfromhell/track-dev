@@ -8,22 +8,19 @@
  * Last Modified by Daniel Vidmar.
  */
 include("include/header.php");
-UserFunc::updateLoginDate($username);
-ActivityFunc::log($username, "none", "none", "user:logout", "", 0, date("Y-m-d H:i:s"));
-if(!UserFunc::loggedIn($username)) {
-    UserFunc::changeStatus($username);
-}
-
-unset($_SESSION["username"]);
+ActivityFunc::log($currentUser->name, "none", "none", "user:logout", "", 0, date("Y-m-d H:i:s"));
+$date = date("Y-m-d H:i:s");
+$currentUser->loggedIn = $date;
+$currentUser->online = 0;
+$currentUser->save();
+destroySession("usersplusprofile");
 ?>
-
-    <div id="main">
-        <p class="announce">You have been logged out successfully!</p>
-        <script>
-            window.location.assign("login.php");
-        </script>
-    </div>
-
+<main>
+    <p class="announce">You have been logged out successfully.</p>
+    <script>
+        window.location.assign("login.php");
+    </script>
+</main>
 <?php
 include("include/footer.php");
 ?>

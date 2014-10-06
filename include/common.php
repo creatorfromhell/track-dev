@@ -16,17 +16,26 @@ require_once("stringformatter.php");
 require_once("languagemanager.php");
 require_once("config.php");
 require_once("function/activityfunc.php");
-require_once("function/groupfunc.php");
 require_once("function/labelfunc.php");
 require_once("function/listfunc.php");
 require_once("function/projectfunc.php");
 require_once("function/taskfunc.php");
-require_once("function/userfunc.php");
+require_once("class/group.php");
+require_once("class/user.php");
+require_once("class/pagination.php");
+require_once("class/captcha.php");
 
 //Instances of Classes
 $configuration = new Configuration();
 $manager = new ThemeManager();
 $langmanager = new LanguageManager();
+
+//Any includes that require other classes to be initiated go here
+require_once('DB.php');
+
+//Global variables
+$prefix = $configuration->config["database"]["db_prefix"];
+global $prefix;
 
 //Main Variables
 $theme = $manager->themes[$configuration->config["main"]["theme"]];
@@ -34,11 +43,17 @@ $installation_path = rtrim($configuration->config["urls"]["base_url"], "/").rtri
 $path = $_SERVER["PHP_SELF"];
 $pageFull = basename($path);
 $page = basename($path, ".php");
-$username = isset($_SESSION["username"]) ? $_SESSION["username"] : "guest(".Utils::getIP().")";
+$currentUser = null;
 $language = $configuration->config["main"]["language"];
 $project = ProjectFunc::getPreset();
 $projects = ProjectFunc::projects();
 $list = ProjectFunc::getMain(ProjectFunc::getID($project));
+
+if(isset($_SESSION['usersplusprofile'])) {
+    if(is_a($_SESSION['usersplusprofile'], 'User')) {
+        $currentUser = $_SESSION['usersplusprofile'];
+    }
+}
 
 if(isset($_GET['lang']) && $langmanager->exists($_GET['lang'])) {
     $language = $_GET['lang'];
@@ -75,13 +90,13 @@ if(isset($_GET['l']) && ListFunc::exists($project, $_GET['l'])) {
 $languageinstance = $langmanager->languages[$language];
 $return = $pageFull.'?p='.$project.'&l='.$list;
 $lists = ProjectFunc::lists($project);
-$formatter = new StringFormatter($username, $project, $list, $configuration->config, $languageinstance);
+$formatter = new StringFormatter(getName(), $project, $list, $configuration->config, $languageinstance);
 $rawMsg = "";
 $msg = "";
 $msgType = "general";
 
 if(trim($rawMsg) !== "") {
-    if(Utils::strContains($rawMsg, ":")) {
+    if(strContains($rawMsg, ":")) {
         $array = explode(":", $rawMsg);
         $msg = $array[1];
         $type = $array[0];

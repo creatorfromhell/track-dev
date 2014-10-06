@@ -35,9 +35,8 @@ else if($page == "admin") { $h1 = $formatter->replaceShortcuts(((string)$languag
     <header>
         <div class="login">
             <p>
-                <?php if(isset($_SESSION["username"])) {
-                    $userNav = UserFunc::printUserNav($username);
-                    echo "<p>Welcome, </p>".$userNav."<p>.</p>";
+                <?php if($currentUser !== null) {
+                    echo "<p>Welcome, </p>".userNav()."<p>.</p>";
                 } else { ?>
                     <a href="login.php?return=<?php echo $return; ?>">Login</a> or <a href="register.php">Register</a>
                 <?php } ?>

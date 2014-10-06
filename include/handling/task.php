@@ -28,7 +28,7 @@ if(isset($_POST['add'])) {
                                 }
                                 TaskFunc::add($project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, "0000-0-00", "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
                                 $params = "title:".$_POST['title'].",description:".$_POST['description'].",status:".$status;
-                                ActivityFunc::log($username, $project, $list, "task:add", $params, 0, $created);
+                                ActivityFunc::log($currentUser->name, $project, $list, "task:add", $params, 0, $created);
                             } else {
                                 echo '<script type="text/javascript">';
                                 echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->task->invalidlist)).'");';
@@ -84,7 +84,7 @@ if(isset($_POST['edit'])) {
                                     }
                                     TaskFunc::edit($_POST['id'], $project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, "0000-0-00", "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
                                     $params = "id:".$_POST['id'].",title:".$_POST['title'].",description:".$_POST['description'].",status:".$status;
-                                    ActivityFunc::log($username, $project, $list, "task:edit", "", 0, date("Y-m-d H:i:s"));
+                                    ActivityFunc::log($currentUser->name, $project, $list, "task:edit", "", 0, date("Y-m-d H:i:s"));
                                 } else {
                                     echo '<script type="text/javascript">';
                                     echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->task->invalidlist)).'");';
@@ -122,7 +122,7 @@ if(isset($_POST['edit'])) {
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->project->noid)).'");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->invalidid)).'");';
         echo '</script>';
     }
 }

@@ -7,17 +7,13 @@
  * Last Modified: 1/15/14 at 4:20 PM
  * Last Modified by Daniel Vidmar.
  */
-
-//Include the Connect Class
-require_once("include/connect.php");
 class LabelFunc {
 
     //add label
     public static function add($project, $list, $name, $textcolor, $backgroundcolor) {
-		$connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("INSERT INTO `".$t."` (id, project, list, labelname, textcolor, backgroundcolor) VALUES ('', ?, ?, ?, ?, ?)");
+		global $prefix, $pdo;
+        $t = $prefix."_labels";
+        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, project, list, label_name, text_color, background_color) VALUES ('', ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $list);
         $stmt->bindParam(3, $name);
@@ -28,20 +24,18 @@ class LabelFunc {
 
     //delete label
     public static function delete($id) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("DELETE FROM `".$t."` WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_labels";
+        $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
 
     //edit label
     public static function edit($id, $project, $list, $name, $textcolor, $backgroundcolor) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("UPDATE `".$t."` SET project = ?, list = ?, labelname = ?, textcolor = ?, backgroundcolor = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_labels";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ?, list = ?, label_name = ?, text_color = ?, background_color = ? WHERE id = ?");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $list);
         $stmt->bindParam(3, $name);
@@ -53,10 +47,9 @@ class LabelFunc {
 
     //change color
     public static function changeColor($id, $textcolor, $backgroundcolor) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("UPDATE `".$t."` SET textcolor = ?, backgroundcolor = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_labels";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET text_color = ?, background_color = ? WHERE id = ?");
         $stmt->bindParam(1, $textcolor);
         $stmt->bindParam(2, $backgroundcolor);
         $stmt->bindParam(3, $id);
@@ -65,10 +58,9 @@ class LabelFunc {
 
     //rename label
     public static function rename($id, $name) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("UPDATE `".$t."` SET labelname = ? WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_labels";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET label_name = ? WHERE id = ?");
         $stmt->bindParam(1, $name);
         $stmt->bindParam(2, $id);
         $stmt->execute();
@@ -76,26 +68,24 @@ class LabelFunc {
 
     public static function details($id) {
         $details = array();
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("SELECT project, list, labelname, textcolor, backgroundcolor FROM `".$t."` WHERE id = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_labels";
+        $stmt = $pdo->prepare("SELECT project, list, label_name, text_color, background_color FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $details['project'] = $result['project'];
         $details['list'] = $result['list'];
-        $details['label'] = $result['labelname'];
-        $details['text'] = $result['textcolor'];
-        $details['background'] = $result['backgroundcolor'];
+        $details['label'] = $result['label_name'];
+        $details['text'] = $result['text_color'];
+        $details['background'] = $result['background_color'];
         return $details;
     }
 
     public static function labels($project, $list) {
-        $connect = new Connect();
-        $c = $connect->connection;
-        $t = $connect->prefix."_labels";
-        $stmt = $c->prepare("SELECT id, labelname, textcolor, backgroundcolor FROM `".$t."` WHERE project = ? AND list = ?");
+        global $prefix, $pdo;
+        $t = $prefix."_labels";
+        $stmt = $pdo->prepare("SELECT id, label_name, text_color, background_color FROM `".$t."` WHERE project = ? AND list = ?");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $list);
         $stmt->execute();
