@@ -7,6 +7,12 @@
  * Last Modified: 3/26/14 at 8:22 PM
  * Last Modified by Daniel Vidmar.
  */
+session_start();
+include_once("include/utils.php");
+require_once("include/class/user.php");
+$currentUser = User::load($_SESSION['usersplusprofile']);
+if($currentUser === null) { header('LOCATION: index.php'); }
+
 include("include/header.php");
 ActivityFunc::log($currentUser->name, "none", "none", "user:logout", "", 0, date("Y-m-d H:i:s"));
 $date = date("Y-m-d H:i:s");

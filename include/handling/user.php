@@ -7,7 +7,7 @@
  * Last Modified: 8/23/14 at 12:12 PM
  * Last Modified by Daniel Vidmar.
  */
-if(isset($_POST['add_user'])) {
+if(isset($_POST['add-user'])) {
     if(isset($_POST['username']) && trim($_POST['username']) != '') {
         if(isset($_POST['email']) && trim($_POST['email']) != '' && validEmail($_POST['email'])) {
             if(isset($_POST['password']) && trim($_POST['password']) != '') {
@@ -60,7 +60,7 @@ if(isset($_POST['add_user'])) {
     }
 }
 
-if(isset($_POST['edit_user'])) {
+if(isset($_POST['edit-user'])) {
     if(isset($_POST['id']) && trim($_POST['id']) != '' && User::validID(cleanInput($_POST['id']))) {
         $user = User::load($_POST['id'], false, true);
         if(isset($_POST['username']) && trim($_POST['username']) != '') {

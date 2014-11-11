@@ -7,33 +7,44 @@
  * Last Modified by Daniel Vidmar.
  */
 
-function linkColorField(div, field) {
-    document.getElementById("jspalette").style.display = 'block';
+function linkColorField(event, div, field) {
+	var picker = document.getElementById("jspalette");
+	var scrollLeft = (window.pageXOffset !== undefined) ? window.pageXOffset : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
+	var scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+	var mouseX = event.clientX + scrollLeft;
+	var mouseY = event.clientY + scrollTop;
+	
+	picker.style.left = mouseX + 'px';
+	picker.style.top = mouseY + 'px';
+    picker.style.display = 'block';
     document.getElementById("jspalette-choose").onclick = function() {
         document.getElementById(div).style.background = document.getElementById("picked-color").value;
         document.getElementsByName(field)[0].value = document.getElementById("picked-color").value;
         document.getElementById("jspalette").style.display = 'none';
     }
+    document.getElementById("jspalette-close").onclick = function() {
+        document.getElementById("jspalette").style.display = 'none';
+	}
 }
 
-function removeLabel(div, id) {
-    var labelField = document.getElementsByName(div)[0];
-    var labelString = labelField.value;
-    var labels = labelString.split(',');
+function removeData(div, id) {
+    var dataField = document.getElementsByName(div)[0];
+    var dataString = dataField.value;
+    var data = dataString.split(',');
     var newString = "";
-    for(i = 0; i < labels.length; i++) {
-        if(labels[i] != id) { newString += labels[i]; }
-        if(i < (labels.length - 1) && i != 0) { newString += ","; }
+    for(i = 0; i < data.length; i++) {
+        if(data[i] != id) { newString += data[i]; }
+        if(i < (data.length - 1) && i != 0) { newString += ","; }
     }
-    labelField.value = newString;
+    dataField.value = newString;
 }
 
-function addLabel(div, id) {
-    var labelField = document.getElementsByName(div)[0];
-    var labelString = labelField.value;
-    if(labelString != null && labelString != "") { labelString += ","; }
-    labelString += id;
-    labelField.value = labelString;
+function addData(div, id) {
+    var dataField = document.getElementsByName(div)[0];
+    var dataString = dataField.value;
+    if(dataString != null && dataString != "") { dataString += ","; }
+    dataString += id;
+    dataField.value = dataString;
 }
 
 function onDragOver(event) {
@@ -41,23 +52,19 @@ function onDragOver(event) {
 }
 
 function onDrag(event) {
-    event.dataTransfer.setData("label", event.target.id);
+    event.dataTransfer.setData("dragdata", event.target.id);
 }
 
-function onDrop(event) {
+function onDrop(event, field, remove) {
     event.preventDefault();
-    var label = event.dataTransfer.getData("label");
-    event.target.appendChild(document.getElementById(label));
-    var labelID = label.split('-')[1];
+    var div = event.dataTransfer.getData("dragdata");
+    event.target.appendChild(document.getElementById(div));
+    var dataID = div.split('-')[1];
     var targetID = event.target.id;
-    if(targetID == "labels-chosen") {
-        addLabel("labels", labelID);
-    } else if(targetID == "labels-chosen-edit") {
-        addLabel("labels-edit", labelID);
-    } else if(targetID == "labels-available") {
-        removeLabel("labels", labelID);
-    } else if(targetID == "labels-available-edit") {
-        removeLabel("labels-edit", labelID);
+    if(remove == "remove") {
+        removeData(field, dataID);
+    } else {
+        addData(field, dataID);
     }
 }
 
@@ -111,8 +118,8 @@ function changeLanguage(language) {
     });
 }
 
-function showDiv(div) {
-    var element = document.getElementById(div);
+function showDiv(div, useID) {
+    var element = (typeof useID !== 'undefined' && !useID) ? div : document.getElementById(div);
     element.style.opacity = '0';
     element.style.display = 'block';
     setTimeout(
@@ -121,8 +128,8 @@ function showDiv(div) {
         }, 200);
 }
 
-function hideDiv(div) {
-    var element = document.getElementById(div);
+function hideDiv(div, useID) {
+    var element = (typeof useID !== 'undefined' && !useID) ? div : document.getElementById(div);
     element.style.opacity = '0';
     setTimeout(
         function add() {
@@ -162,6 +169,14 @@ function slideIn(id) {
         function add() {
             element.style.top = '0px';
         }, 215);
+}
+
+function switchable(current, element) {
+	var current = document.querySelector("." + current);
+	var element = document.querySelector("." + element);
+	
+	hideDiv(current, false);
+	showDiv(element, false);
 }
 
 //AJAX function

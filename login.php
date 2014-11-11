@@ -7,9 +7,9 @@
  * Last Modified: 1/18/14 at 8:31 PM
  * Last Modified by Daniel Vidmar.
  */
-if(isset($_SESSION['usersplusprofile'])) {
-    header("Location: index.php");
-}
+session_start();
+include_once("include/utils.php");
+if(isset($_SESSION['usersplusprofile'])) { header("Location: index.php"); }
 
 $location = "index.php?t=project";
 if(isset($_GET['return'])) {

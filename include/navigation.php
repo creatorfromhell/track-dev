@@ -8,35 +8,70 @@
  * Last Modified by Daniel Vidmar.
  */
 
+$tabs = array(
+	"overview" => array(
+		"alias" => array("index"),
+		"location" => "index.php",
+		"translate" => "lang:",
+		"sub" => array(
+			"project" => array(
+				"location" => "index.php?t=project&amp;p=".$project,
+				"translate" => "lang:"
+			),
+			
+			"calendar" => array(
+				"location" => "index.php?t=calendar&amp;p=".$project,
+				"translate" => "lang:"
+			)
+		)
+	),
+	"projects" => array(
+		"location" => "projects.php",
+		"translate" => "lang:",
+	),
+	"lists" => array(
+		"alias" => array("list"),
+		"location" => "lists.php",
+		"translate" => "lang:",
+	)
+);
+
+foreach($projects as &$p) {
+	$projectInfo = array(
+		"location" => "lists.php?p=".$p,
+		"translate" => "lang:"
+	);
+
+	$tabs['projects']['sub'][$p] = $projectInfo;
+}
+
+foreach($lists as &$l) {
+	$listInfo = array(
+		"location" => "list.php?p=".$project."&amp;l=".$l,
+		"translate" => "lang:"
+	);
+
+	$tabs['lists']['sub'][$l] = $listInfo;
+}
+
 ?>
 <nav class="main">
     <ul>
-        <li <?php if($page == "index" || $page == "overviewgeneral" || $page == "overviewproject" || $page == "overviewcalendar") { echo 'class="active"'; } ?>><a href="index.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->navlink)); ?></a>
-            <ul>
-                <li><a href="index.php?t=calendar&p=<?php echo $project; ?>"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->calendar->navlink)); ?></a></li>
-                <li><a href="index.php?t=project&p=<?php echo $project; ?>"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->project->navlink)); ?></a></li>
-            </ul>
-        </li>
-        <li <?php if($page == "projects") { echo 'class="active"'; } ?>>
-            <a href="projects.php"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->projects->navlink)); ?></a>
-            <ul>
-                <?php
-                foreach($projects as &$p) {
-                    echo "<li><a href='lists.php?p=".$p."'>".$p."</a></li>";
-                }
-                ?>
-            </ul>
-        </li>
-        <li <?php if($page == "list" || $page == "lists") { echo 'class="active"'; } ?>>
-            <a href="lists.php?p="<?php echo $project; ?>><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->pages->lists->navlink)); ?></a>
-            <ul>
-                <?php
-                foreach($lists as &$l) {
-                    echo "<li><a href='list.php?p=".$project."&amp;l=".$l."'>".$l."</a></li>";
-                }
-                ?>
-            </ul>
-        </li>
-
-    </ul>
+	<?php
+		$keys = array_keys($tabs);
+		foreach($keys as &$tab) {
+			$class = ($page == $tab || array_key_exists("sub", $tabs[$tab]) && array_key_exists($page, $tabs[$tab]['sub']) || array_key_exists("alias", $tabs[$tab]) && in_array($page, $tabs[$tab]['alias'])) ? ' class="active"' : '';
+			echo '<li'.$class.'><a href="'.$tabs[$tab]['location'].'">'.ucfirst($tab).'</a>';
+			if(array_key_exists("sub", $tabs[$tab]) && !empty($tabs[$tab]['sub'])) {
+				$subkeys = array_keys($tabs[$tab]['sub']);			
+				echo "<ul>";
+				foreach($subkeys as &$subtab) {
+					echo '<li><a href="'.$tabs[$tab]['sub'][$subtab]['location'].'">'.ucfirst($subtab).'</a></li>';
+				}
+				echo "</ul>";
+			}
+			echo '</li>';
+		}
+	?>
+	</ul>
 </nav>

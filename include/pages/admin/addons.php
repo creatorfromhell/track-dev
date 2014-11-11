@@ -11,7 +11,7 @@
 <div class="below-content" style="margin-top:30px;">
     <h3>Languages</h3>
 </div>
-<table id="languages" class="taskTable" style="padding-top:0px";>
+<table id="languages" class="taskTable" style="padding-top:0";>
     <thead>
         <tr>
             <th id="languageShort" class="small"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->short)); ?></th>
@@ -40,7 +40,7 @@
 <div class="below-content">
     <h3>Themes</h3>
 </div>
-<table id="themes" class="taskTable"style="padding-top:0px";>
+<table id="themes" class="taskTable"style="padding-top:0";>
     <thead>
     <tr>
         <th id="themeName" class="large"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->name)); ?></th>
@@ -63,6 +63,6 @@
     ?>
     </tbody>
 </table>
-<div class="below-content">
+<!--<div class="below-content">
     <h3>Plugins</h3>
-</div>
+</div>-->

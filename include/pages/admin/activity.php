@@ -7,17 +7,29 @@
  * Last Modified: 7/17/14 at 12:30 PM
  * Last Modified by Daniel Vidmar.
  */
-if(isset($_GET['action']) && isAdmin() && isset($_GET['id'])) {
+if(isAdmin() && isset($_GET['action']) && isset($_GET['id'])) {
     $action = $_GET['action'];
-    $id = $_GET['id'];
+    $editID = $_GET['id'];
     if($action == "archive") {
-
+		ActivityFunc::archive($editID);
+        echo '<script type="text/javascript">';
+        echo 'showMessage("success", "Activity #'.$editID.' has been archived.");';
+        echo '</script>';
+    } else if($action == "unarchive") {
+		ActivityFunc::unarchive($editID);
+        echo '<script type="text/javascript">';
+        echo 'showMessage("success", "Activity #'.$editID.' has been unarchived.");';
+        echo '</script>';
     } else if($action == "delete") {
-
+		ActivityFunc::delete($editID);
+        echo '<script type="text/javascript">';
+        echo 'showMessage("success", "Activity #'.$editID.' has been deleted.");';
+        echo '</script>';
     }
 }
+ActivityFunc::clean();
 global $prefix;
-$pagination = new Pagination($prefix."_activity", "id, archived, logged", $pn, 10);
+$pagination = new Pagination($prefix."_activity", "id, archived, logged", $pn, 10, "?t=".$type."&", "ORDER BY logged DESC");
 echo $pagination->pageString;
 ?>
 <table id="activities" class="taskTable">
@@ -44,8 +56,9 @@ echo $pagination->pageString;
         echo "<td class='logged'>".$logged."</td>";
         echo "<td class='actions'>";
         if(isAdmin()) {
-            echo "<a title='Edit' class='actionEdit'></a>";
-            echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure?\");' href='?t=activity&amp;action=delete&amp;id=".$id."'></a>";
+            echo "<a title='Archive' class='actionArchive' href='?t=activity&amp;action=archive&amp;id=".$id."&amp;pn=".$pn."'></a>";
+            echo "<a title='UnArchive' class='actionUnArchive' href='?t=activity&amp;action=unarchive&amp;id=".$id."&amp;pn=".$pn."'></a>";
+            echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure?\");' href='?t=activity&amp;action=delete&amp;id=".$id."&amp;pn=".$pn."'></a>";
         } else {
             echo $formatter->replace("%none");
         }

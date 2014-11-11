@@ -38,18 +38,44 @@ function strContains($string, $word) {
     return false;
 }
 
+function uploadFile($file, $name, $maxSize = 1000000) {
+	$type = pathinfo(basename($file['name']), PATHINFO_EXTENSION);
+	$move = $name.".".$type;
+	$bannedTypes = array("php", "js", "cs");
+	
+	if(in_array($type, $bannedTypes)) {
+		echo '<script type="text/javascript">';
+		echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->upload->blacklist)).'");';
+		echo '</script>';
+		return;
+	}
+	
+	if($file['size'] > $maxSize) {
+		echo '<script type="text/javascript">';
+		echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->upload->overmax)).'");';
+		echo '</script>';
+		return;
+	}
+	
+	if(move_uploaded_file($file['tmp_name'], $move)) {
+		return;
+	}
+	echo '<script type="text/javascript">';
+	echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->upload->failed)).'");';
+	echo '</script>';
+	return;
+}
+
 /*
  * User Functions
  */
 function isAdmin() {
-    $user = $_SESSION['usersplusprofile'];
-    if($user !== null && is_a($user, 'User') && $user->isAdmin()) { return true; }
+    if(isset($_SESSION['usersplusprofile']) && User::exists($_SESSION['usersplusprofile']) && User::load($_SESSION['usersplusprofile'])->isAdmin()) { return true; }
     return false;
 }
 
 function getName() {
-    $user = $_SESSION['usersplusprofile'];
-    if($user !== null && is_a($user, 'User')) { return $user->name; }
+    if(isset($_SESSION['usersplusprofile']) && User::exists($_SESSION['usersplusprofile'])) { return $_SESSION['usersplusprofile']; }
     return "Guest(".User::getIP().")";
 }
 
@@ -96,38 +122,42 @@ function userNav() {
 }
 
 function canViewList($id) {
-    $user = $_SESSION['usersplusprofile'];
     $viewPermission = ListFunc::viewPermission($id);
     if(ListFunc::guestView($id)) { return true; }
-    if($user === null || !is_a($user, 'User')) { return false; }
+    if(!isset($_SESSION['usersplusprofile']) || !User::exist($_SESSION['usersplusprofile'])) { return false; }
     if(isAdmin()) { return true; }
     if(ProjectFunc::getOverseer(ListFunc::getProject($id)) == getName() || ListFunc::getOverseer($id) == getName()) { return true; }
+	$user = User::load($_SESSION['usersplusprofile']);
     if($viewPermission != "none" && nodeValidID($viewPermission) && $user->hasPermission($viewPermission)) { return true; }
     return false;
 }
 
 function canEditList($id) {
-    $user = $_SESSION['usersplusprofile'];
     $editPermission = ListFunc::editPermission($id);
     if(ListFunc::guestEdit($id)) { return true; }
-    if($user === null || !is_a($user, 'User')) { return false; }
+    if(!isset($_SESSION['usersplusprofile']) || !User::exists($_SESSION['usersplusprofile'])) { return false; }
     if(isAdmin()) { return true; }
     if(ProjectFunc::getOverseer(ListFunc::getProject($id)) == getName() || ListFunc::getOverseer($id) == getName()) { return true; }
-    if($editPermission != "none" && nodeValidID($editPermission) && $user->hasPermission($editPermission)) { return true; }
+    $user = User::load($_SESSION['usersplusprofile']);
+	if($editPermission != "none" && nodeValidID($editPermission) && $user->hasPermission($editPermission)) { return true; }
     return false;
 }
 
 function canEditTask($listID, $taskID) {
-    $user = $_SESSION['usersplusprofile'];
     $editPermission = ListFunc::editPermission($listID);
     if(ListFunc::guestEdit($listID)) { return true; }
-    if($user === null || !is_a($user, 'User')) { return false; }
+    if(!isset($_SESSION['usersplusprofile']) || !User::exists($_SESSION['usersplusprofile'])) { return false; }
     if(isAdmin()) { return true; }
     if(ProjectFunc::getOverseer(ListFunc::getProject($listID)) == getName() || ListFunc::getOverseer($listID) == getName()) { return true; }
     $details = TaskFunc::getDetails(ListFunc::getProject($listID), ListFunc::getName($listID), $taskID);
     if($details['author'] == getName()) { return true; }
+	$user = User::load($_SESSION['usersplusprofile']);
     if($editPermission != "none" && nodeValidID($editPermission) && $user->hasPermission($editPermission) && $details['editable'] == '1') { return true; }
     return false;
+}
+
+function loggedIn() {
+    return (checkSession("usersplusprofile"));
 }
 
 /*

@@ -11,7 +11,7 @@
  * Fields
  * name, author, public, mainproject, overseer
  */
-if(isset($_POST['add'])) {
+if(isset($_POST['add-project'])) {
     if(isset($_POST['name']) && trim($_POST['name']) != "") {
         if(isset($_POST['author']) && trim($_POST['author']) != "") {
             if(isset($_POST['public']) && trim($_POST['public']) != "") {
@@ -57,7 +57,7 @@ if(isset($_POST['add'])) {
     }
 }
 
-if(isset($_POST['edit'])) {
+if(isset($_POST['edit-project'])) {
     if(isset($_POST['id']) && trim($_POST['id']) != "") {
         if(isset($_POST['name']) && trim($_POST['name']) != "") {
             if(isset($_POST['public']) && trim($_POST['public']) != "") {

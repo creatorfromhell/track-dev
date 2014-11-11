@@ -11,7 +11,7 @@
  * Fields
  * name, author, project, public, minimal, mainlist, overseer, guestview, guestedit, viewpermission, editpermission
  */
-if(isset($_POST['add'])) {
+if(isset($_POST['add-list'])) {
     if(isset($_POST['name']) && trim($_POST['name']) != "") {
         if(isset($_POST['author']) && trim($_POST['author']) != "") {
             if(isset($_POST['project']) && trim($_POST['project']) != "") {
@@ -103,7 +103,7 @@ if(isset($_POST['add'])) {
     }
 }
 
-if(isset($_POST['edit'])) {
+if(isset($_POST['edit-list'])) {
     if(isset($_POST['id']) && trim($_POST['id']) != "") {
         if(isset($_POST['name']) && trim($_POST['name']) != "") {
             if(isset($_POST['project']) && trim($_POST['project']) != "") {

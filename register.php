@@ -7,9 +7,11 @@
  * Last Modified: 3/2/14 at 12:51 PM
  * Last Modified by Daniel Vidmar.
  */
-if(isset($_SESSION['usersplusprofile'])) {
-    header("Location: index.php");
-}
+session_start();
+include_once("include/utils.php");
+$currentUser = $_SESSION['usersplusprofile'];
+if($currentUser !== null) { header('LOCATION: index.php'); }
+
 include("include/header.php");
 include("include/handling/register.php");
 ?>

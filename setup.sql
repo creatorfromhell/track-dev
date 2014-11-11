@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `todo_projects` (
   `creator` varchar(40) CHARACTER SET utf8 NOT NULL,
   `created` date NOT NULL DEFAULT '0000-00-00',
   `overseer` varchar(40) CHARACTER SET utf8 NOT NULL,
+  `project_permissions` text NOT NULL DEFAULT 'view:none,edit:none',
   `public` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=latin1;
@@ -35,8 +36,9 @@ CREATE TABLE IF NOT EXISTS `todo_lists` (
 --
 CREATE TABLE IF NOT EXISTS `todo_versions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `version` varchar(40) NOT NULL,
+  `version_name` varchar(40) NOT NULL,
   `project` varchar(40) NOT NULL,
+  `version_status` tinyint(3) NOT NULL DEFAULT '0',
   `due` date NOT NULL DEFAULT '0000-00-00',
   `released` date NOT NULL DEFAULT '0000-00-00',
   `version_type` varchar(40) NOT NULL,
@@ -46,10 +48,11 @@ CREATE TABLE IF NOT EXISTS `todo_versions` (
 --
 -- Version Types Table
 --
-CREATE TABLE IF NOT EXISTS `todo_versions_types` (
+CREATE TABLE IF NOT EXISTS `todo_version_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `version_type` varchar(40) NOT NULL,
   `description` text NOT NULL,
+  `version_stability` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=latin1;
 
@@ -75,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `todo_activity` (
   `project` varchar(40) NOT NULL,
   `list` varchar(40) NOT NULL,
   `activity_type` text NOT NULL,
-  `parameters` text NOT NULL,
+  `activity_parameters` text NOT NULL,
   `archived` tinyint(1) NOT NULL DEFAULT '0',
   `logged` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`id`)

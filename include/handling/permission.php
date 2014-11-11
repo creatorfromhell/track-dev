@@ -7,7 +7,7 @@
  * Last Modified: 8/23/14 at 12:11 PM
  * Last Modified by Daniel Vidmar.
  */
-if(isset($_POST['add_permission'])) {
+if(isset($_POST['add-permission'])) {
     if(isset($_POST['node']) && trim($_POST['node']) != '') {
         if(isset($_POST['description']) && trim($_POST['description']) != '') {
             if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && checkCaptcha(cleanInput($_POST['captcha']))) {
@@ -26,7 +26,7 @@ if(isset($_POST['add_permission'])) {
     }
 }
 
-if(isset($_POST['edit_permission'])) {
+if(isset($_POST['edit-permission'])) {
     if(isset($_POST['id']) && trim($_POST['id']) != '' && nodeValidID(cleanInput($_POST['id']))) {
         if(isset($_POST['node']) && trim($_POST['node']) != '') {
             if(isset($_POST['description']) && trim($_POST['description']) != '') {

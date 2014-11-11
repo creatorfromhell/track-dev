@@ -14,15 +14,16 @@ class VersionFunc {
      */
 
     //add version
-    public static function add($version, $project, $due, $released, $type) {
+    public static function add($version, $project, $status, $due, $released, $type) {
 		global $prefix, $pdo;
         $t = $prefix."_versions";
-        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, version_name, project, due, released, version_type) VALUES ('', ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, version_name, project, version_status, due, released, version_type) VALUES ('', ?, ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $project);
-        $stmt->bindParam(3, $due);
-        $stmt->bindParam(4, $released);
-        $stmt->bindParam(5, $type);
+        $stmt->bindParam(3, $status);
+        $stmt->bindParam(4, $due);
+        $stmt->bindParam(5, $released);
+        $stmt->bindParam(6, $type);
         $stmt->execute();
     }
 
@@ -36,16 +37,17 @@ class VersionFunc {
     }
 
     //edit version
-    public static function edit($id, $version, $project, $due, $released, $type) {
+    public static function edit($id, $version, $project, $status, $due, $released, $type) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ?, project = ?, due = ?, released = ?, version_type = ? WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ?, project = ?, version_status = ?, due = ?, released = ?, version_type = ? WHERE id = ?");
         $stmt->bindParam(1, $version);
         $stmt->bindParam(2, $project);
-        $stmt->bindParam(3, $due);
-        $stmt->bindParam(4, $released);
-        $stmt->bindParam(5, $type);
-        $stmt->bindParam(6, $id);
+        $stmt->bindParam(3, $status);
+        $stmt->bindParam(4, $due);
+        $stmt->bindParam(5, $released);
+        $stmt->bindParam(6, $type);
+        $stmt->bindParam(7, $id);
         $stmt->execute();
     }
 
@@ -88,6 +90,17 @@ class VersionFunc {
         $stmt->bindParam(2, $id);
         $stmt->execute();
     }
+	
+	public static function getProject($id) {
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("SELECT project FROM `".$t."` WHERE id = ?");
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		
+		return $result['project'];
+	}
 
     //reversion version
     public static function rename($id, $version) {
@@ -98,9 +111,159 @@ class VersionFunc {
         $stmt->bindParam(2, $id);
         $stmt->execute();
     }
+	
+	public static function hasVersions($project) {
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ?");
+		$stmt->bindParam(1, $project);
+        $stmt->execute();
+        if($stmt->fetch(PDO::FETCH_NUM) > 0) {
+            return true;
+        }
+        return false;
+	}
+	
+	public static function versions($project) {
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("SELECT version_name FROM `".$t."` WHERE project = ?");
+		$stmt->bindParam(1, $project);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+		$versions = array();
+		for($i = 0; $i < count($result); $i++) {
+			$versions[$i] = $result[$i][0];
+		}
+		return $versions;
+	}
+	
+	public static function getDetails($id) {
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("SELECT version_name, project, version_status, due, released, version_type FROM `".$t."` WHERE id = ?");
+		$stmt->bindParam(1, $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $return['name'] = $result['version_name'];
+        $return['project'] = $result['project'];
+        $return['status'] = $result['version_status'];
+        $return['due'] = $result['due'];
+        $return['released'] = $result['released'];
+        $return['type'] = $result['version_type'];
+        return $return;
+	}
+	
+	public static function exists($name) {
+        global $prefix, $pdo;
+        $t = $prefix."_versions";
+        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE version_name = ?");
+        $stmt->bindParam(1, $name);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($result) {
+            return true;
+        }
+        return false;
+	}
+	
+	public static function printAddForm($project) {
+		$out = '';
+		$out .= '<h3>Add Version</h3>';
+		$out .= '<div id="holder">';
+		$out .= '<div id="page_1">';
+		$out .= '<fieldset id="inputs">';
+		$out .= '<input name="project" type="hidden" value="'.$project.'">';
+		$out .= '<input id="version-name" name="version-name" type="text" placeholder="Name">';
+		$out .= '<label for="status">Status:</label>';
+		$out .= '<select name="status" id="status">';
+		$out .= '<option value="0" selected>None</option>';
+		$out .= '<option value="1">Upcoming</option>';
+		$out .= '<option value="2">Released</option>';
+		$out .= '</select><br />';
+		$out .= '<label for="version-type">Version Type:</label>';
+		$out .= '<select name="version-type" id="version-type">';
+		$out .= '<option value="0" selected>None</option>';
+		$types = self::types();
+		foreach($types as &$type) {
+			$out .= '<option value="'.$type.'">'.$type.'</option>';
+		}
+		$out .= '</select><br />';
+		$out .= '</fieldset>';
+		$out .= '<fieldset id="links">';
+		$out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
+		$out .= '</fieldset>';
+		$out .= '</div>';
+		$out .= '<div id="page_2">';
+		$out .= '<fieldset id="inputs">';
+		$out .= '<label for="due-date">Due Date:</label>';
+		$out .= '<input id="due-date" name="due-date" type="text" placeholder="YYYY-MM-DD" readonly>';
+		$out .= '<input type="hidden" name="MAX_FILE_SIZE" value="30000" />';
+		$out .= 'Download: <input name="version_download" type="file" /><br />';
+		$captcha = new Captcha();
+        $out .= $captcha->returnImage();
+        $_SESSION['userspluscaptcha'] = $captcha->code;
+		$out .= '<br /><input id="captcha" name="captcha" type="text" placeholder="Enter characters above">';
+		$out .= '</fieldset>';
+		$out .= '<fieldset id="links">';
+		$out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
+		$out .= '<input type="submit" class="submit" name="add-version" value="Add">';
+		$out .= '</fieldset>';
+		$out .= '</div>';
+		$out .= '</div>';
+		return $out;
+	}
 
     public static function printEditForm($id) {
-        //TODO: print edit form
+		$out = '';
+		$details = self::getDetails($id);
+		$out .= '<h3>Edit Version</h3>';
+		$out .= '<div id="holder">';
+		$out .= '<div id="page_1">';
+		$out .= '<fieldset id="inputs">';
+        $out .= '<input name="id" type="hidden" value="'.$id.'">';
+		$out .= '<input name="project" type="hidden" value="'.$details['project'].'">';
+		$out .= '<input id="version-name" name="version-name" type="text" placeholder="Name" value="'.$details['name'].'">';
+		$out .= '<label for="status">Status:</label>';
+		$out .= '<select name="status" id="status">';
+		$out .= '<option value="0"'.(($details['status'] == '0') ? ' selected' : '').'>None</option>';
+		$out .= '<option value="1"'.(($details['status'] == '1') ? ' selected' : '').'>Upcoming</option>';
+		$out .= '<option value="2"'.(($details['status'] == '2') ? ' selected' : '').'>Released</option>';
+		$out .= '</select><br />';
+		$out .= '<label for="version-type">Version Type:</label>';
+		$out .= '<select name="version-type" id="version-type">';
+		$out .= '<option value="none"'.(($details['type'] == 'none') ? ' selected' : '').'>None</option>';
+		$types = self::types();
+		foreach($types as &$type) {
+			$out .= '<option value="'.$type.'"'.(($details['type'] == $type) ? ' selected' : '').'>'.$type.'</option>';
+		}
+		$out .= '</select><br />';
+		$out .= '</fieldset>';
+		$out .= '<fieldset id="links">';
+		$out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
+		$out .= '</fieldset>';
+		$out .= '</div>';
+		$out .= '<div id="page_2">';
+		$out .= '<fieldset id="inputs">';
+		$out .= '<label for="due-date">Due Date:</label>';
+		$out .= '<input id="due-date" name="due-date" type="text" placeholder="YYYY-MM-DD" value="'.$details['due'].'" readonly>';
+		$out .= 'Current Download: Name.zip 25kb<br />';
+		$out .= '<input type="hidden" name="MAX_FILE_SIZE" value="3000000" />';
+		$out .= 'Download: <input name="version_download" type="file" /><br />';
+		$captcha = new Captcha();
+        $out .= $captcha->returnImage();
+        $_SESSION['userspluscaptcha'] = $captcha->code;
+		$out .= '<br /><input id="captcha" name="captcha" type="text" placeholder="Enter characters above">';
+		$out .= '</fieldset>';
+		$out .= '<fieldset id="links">';
+		$out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
+		$out .= '<input type="submit" class="submit" name="edit-version" value="Edit">';
+		$out .= '</fieldset>';
+		$out .= '</div>';
+		$out .= '</div>';
+		return $out;
     }
 
 
@@ -109,37 +272,171 @@ class VersionFunc {
      */
 
     //add version type
-    public static function addType($versiontype, $description) {
+    public static function addType($type, $description, $stable) {
         global $prefix, $pdo;
-        $t = $prefix."_versions_types";
-        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, version_type, description) VALUES ('', ?, ?)");
-        $stmt->bindParam(1, $versiontype);
+        $t = $prefix."_version_types";
+        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, version_type, description, version_stability) VALUES ('', ?, ?, ?)");
+        $stmt->bindParam(1, $type);
         $stmt->bindParam(2, $description);
+        $stmt->bindParam(3, $stable);
         $stmt->execute();
     }
 
     //edit version type
-    public static function editType($id, $versiontype, $description) {
+    public static function editType($id, $type, $description, $stable) {
         global $prefix, $pdo;
-        $t = $prefix."_versions_types";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_type = ?, description = ? WHERE id = ?");
-        $stmt->bindParam(1, $versiontype);
+        $t = $prefix."_version_types";
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_type = ?, description = ?, version_stability = ? WHERE id = ?");
+        $stmt->bindParam(1, $type);
         $stmt->bindParam(2, $description);
-        $stmt->bindParam(3, $id);
+        $stmt->bindParam(3, $stable);
+        $stmt->bindParam(4, $id);
         $stmt->execute();
     }
 
     //delete version type
     public static function deleteType($id) {
         global $prefix, $pdo;
-        $t = $prefix."_versions_types";
+        $t = $prefix."_version_types";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
     }
+	
+	public static function stable($type) {
+        global $prefix, $pdo;
+        $t = $prefix."_version_types";
+		$stmt = $pdo->prepare("SELECT version_stability FROM `".$t."` WHERE version_type = ?");
+		$stmt->bindParam(1, $type);
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		if($result['version_stability'] == '1') {
+			return true;
+		}
+		return false;
+	}
+	
+	public static function hasTypes() {
+        global $prefix, $pdo;
+        $t = $prefix."_version_types";
+        $stmt = $pdo->prepare("SELECT id FROM `".$t."`");
+        $stmt->execute();
+        if($stmt->fetch(PDO::FETCH_NUM) > 0) {
+            return true;
+        }
+        return false;
+	}
+	
+	public static function types() {
+        global $prefix, $pdo;
+        $t = $prefix."_version_types";
+        $stmt = $pdo->prepare("SELECT version_type FROM `".$t."`");
+		$stmt->bindParam(1, $project);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+		$types = array();
+		for($i = 0; $i < count($result); $i++) {
+			$types[$i] = $result[$i][0];
+		}
+		return $types;
+	}
+	
+	public static function getTypeDetails($id) {
+        global $prefix, $pdo;
+        $t = $prefix."_version_types";
+        $stmt = $pdo->prepare("SELECT version_type, description, version_stability FROM `".$t."` WHERE id = ?");
+		$stmt->bindParam(1, $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $return['name'] = $result['version_type'];
+        $return['description'] = $result['description'];
+        $return['stability'] = $result['version_stability'];
+        return $return;
+	}
+	
+	public static function typeExists($name) {
+        global $prefix, $pdo;
+        $t = $prefix."_version_types";
+        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE version_type = ?");
+        $stmt->bindParam(1, $name);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($result) {
+            return true;
+        }
+        return false;
+	}
+	
+	public static function printTypeAddForm() {
+		$out = '';
+		$out .= '<h3>Add Version Type</h3>';
+		$out .= '<div id="holder">';
+		$out .= '<div id="page_1">';
+		$out .= '<fieldset id="inputs">';
+		$out .= '<input id="type-name" name="type-name" type="text" placeholder="Name">';
+		$out .= '<textarea id="type-description" name="type-description" ROWS="3" COLS="40"></textarea>';
+		$out .= '</fieldset>';
+		$out .= '<fieldset id="links">';
+		$out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
+		$out .= '</fieldset>';
+		$out .= '</div>';
+		$out .= '<div id="page_2">';
+		$out .= '<fieldset id="inputs">';
+		$out .= '<label for="type-stable">Stable:</label>';
+		$out .= '<select name="type-stable" id="type-stable">';
+		$out .= '<option value="0" selected>No</option>';
+		$out .= '<option value="1">Yes</option>';
+		$out .= '</select><br />';
+		$captcha = new Captcha();
+        $out .= $captcha->returnImage();
+        $_SESSION['userspluscaptcha'] = $captcha->code;
+		$out .= '<br /><input id="captcha" name="captcha" type="text" placeholder="Enter characters above">';
+		$out .= '</fieldset>';
+		$out .= '<fieldset id="links">';
+		$out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
+		$out .= '<input type="submit" class="submit" name="add-version-type" value="Add">';
+		$out .= '</fieldset>';
+		$out .= '</div>';
+		$out .= '</div>';
+		return $out;
+	}
 
     public static function printTypeEditForm($id) {
-        //TODO: print edit form
+		$out = '';
+		$details = self::getTypeDetails($id);
+		$out .= '<h3>Edit Version Type</h3>';
+		$out .= '<div id="holder">';
+		$out .= '<div id="page_1">';
+		$out .= '<fieldset id="inputs">';
+        $out .= '<input name="id" type="hidden" value="'.$id.'">';
+		$out .= '<input id="type-name" name="type-name" type="text" placeholder="Name" value="'.$details['name'].'">';
+		$out .= '<textarea id="type-description" name="type-description" ROWS="3" COLS="40">'.$details['description'].'</textarea>';
+		$out .= '</fieldset>';
+		$out .= '<fieldset id="links">';
+		$out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
+		$out .= '</fieldset>';
+		$out .= '</div>';
+		$out .= '<div id="page_2">';
+		$out .= '<fieldset id="inputs">';
+        $out .= '<label for="type-stable">Stable:</label>';
+		$out .= '<select name="type-stable" id="type-stable">';
+		$out .= '<option value="0"'.(($details['stability'] == "0") ? " selected" : "").'>No</option>';
+		$out .= '<option value="1"'.(($details['stability'] == "1") ? " selected" : "").'>Yes</option>';
+		$out .= '</select><br />';
+		$captcha = new Captcha();
+        $out .= $captcha->returnImage();
+        $_SESSION['userspluscaptcha'] = $captcha->code;
+		$out .= '<br /><input id="captcha" name="captcha" type="text" placeholder="Enter characters above">';
+		$out .= '</fieldset>';
+		$out .= '<fieldset id="links">';
+		$out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
+		$out .= '<input type="submit" class="submit" name="edit-version-type" value="Edit">';
+		$out .= '</fieldset>';
+		$out .= '</div>';
+		$out .= '</div>';
+		return $out;
     }
 }
 ?>

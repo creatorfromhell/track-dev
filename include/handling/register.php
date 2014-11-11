@@ -30,8 +30,8 @@ if(isset($_POST['register'])) {
                                 $params = "name:".cleanInput($_POST['username']).",email:".$_POST['email'];
                                 ActivityFunc::log(User::getIP(), "none", "none", "user:register", $params, 0, date("Y-m-d H:i:s"));
                                 destroySession("userspluscaptcha");
-                                global $emailActivation;
-                                if($emailActivation) {
+                                global $configurationValues;
+                                if($configurationValues["main"]["email_activation"]) {
                                     $user->sendActivation();
                                     echo '<script type="text/javascript">';
                                     echo 'showMessage("success", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->login->activation)).'");';

@@ -13,15 +13,17 @@ class ProjectFunc {
     //add project
     public static function add($project, $preset, $main, $creator, $created, $overseer, $public) {
 		global $prefix, $pdo;
+		$permissions = 'view:none,edit:none';
         $t = $prefix."_projects";
-        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, project, preset, main, creator, created, overseer, public) VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, project, preset, main, creator, created, overseer, project_permissions, public) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $project);
         $stmt->bindParam(2, $preset);
         $stmt->bindParam(3, $main);
         $stmt->bindParam(4, $creator);
         $stmt->bindParam(5, $created);
         $stmt->bindParam(6, $overseer);
-        $stmt->bindParam(7, $public);
+        $stmt->bindParam(7, $permissions);
+        $stmt->bindParam(8, $public);
         $stmt->execute();
     }
 
@@ -184,7 +186,7 @@ class ProjectFunc {
         $return = array();
         global $prefix, $pdo;
         $t = $prefix."_projects";
-        $stmt = $pdo->prepare("SELECT project, preset, main, creator, created, overseer, public FROM `".$t."` WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT project, preset, main, creator, created, overseer, project_permissions, public FROM `".$t."` WHERE id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -194,6 +196,7 @@ class ProjectFunc {
         $return['creator'] = $result['creator'];
         $return['created'] = $result['created'];
         $return['overseer'] = $result['overseer'];
+		$return['permissions'] = $result['project_permissions'];
         $return['public'] = $result['public'];
 
         return $return;
@@ -339,7 +342,7 @@ class ProjectFunc {
         if($completed) {
             for($i = 0; $i < count($lists); $i++) {
                 if($i > 0) { $from .= " UNION ALL "; }
-                $from .= "SELECT title, EXTRACT(YEAR FROM finished) AS year, EXTRACT(MONTH FROM finished) AS month FROM `".$prefix."_".$project."_".$lists[$i]."` WHERE taskstatus = 1";
+                $from .= "SELECT title, EXTRACT(YEAR FROM finished) AS year, EXTRACT(MONTH FROM finished) AS month FROM `".$prefix."_".$project."_".$lists[$i]."` WHERE task_status = 1";
             }
             $stmt = $pdo->prepare("SELECT COUNT(*) FROM (".$from.") AS a WHERE year = ".date("Y")." AND month = ".$month);
             $stmt->execute();
@@ -413,7 +416,7 @@ class ProjectFunc {
             $from = "";
             for($i2 = 0; $i2 < count($lists); $i2++) {
                 if($i2 > 0) { $from .= " UNION ALL "; }
-                $from .= "SELECT id FROM `".$prefix."_".$project."_".$lists[$i2]."` WHERE assignee = '".$users[$i]."' AND taskstatus = 1";
+                $from .= "SELECT id FROM `".$prefix."_".$project."_".$lists[$i2]."` WHERE assignee = '".$users[$i]."' AND task_status = 1";
             }
             $stmt = $pdo->prepare("SELECT Count(a.id) FROM(".$from.") AS a");
             $stmt->execute();
@@ -533,14 +536,15 @@ class ProjectFunc {
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
         $out .= '<option value="none" selected>None</option>';
-        foreach(users() as &$user) {
+		$users = users();
+        foreach($users as &$user) {
             $out .= '<option value="'.$user.'">'.$user.'</option>';
         }
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
         $out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
-        $out .= '<input type="submit" class="submit" name="add" value="Add">';
+        $out .= '<input type="submit" class="submit" name="add-project" value="Add">';
         $out .= '</fieldset>';
         $out .= '</div>';
         $out .= '</div>';
@@ -559,20 +563,15 @@ class ProjectFunc {
         $out .= '<input id="name" name="name" type="text" placeholder="Name" value="'.$details['name'].'">';
         $out .= '<label for="public">Public:</label>';
         $out .= '<select name="public" id="public">';
-        $out .= '<option value="0" ';
-        $out .= ($details["public"] == 0) ? "selected" : "";
-        $out .= '>No</option>';
-        $out .= '<option value="1" ';
-        $out .= ($details["public"] == 1) ? "selected" : "";
-        $out .= '>Yes</option>';
+        $out .= '<option value="0"'.(($details['public'] == 0) ? ' selected' : '').'>No</option>';
+        $out .= '<option value="1"'.(($details['public'] == 1) ? ' selected' : '').'>Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="mainlist">Main List:</label>';
         $out .= '<select name="mainlist" id="mainlist">';
         $lists = self::lists($details['name']);
         foreach($lists as &$list) {
             $listID = ListFunc::getID($details['name'], $list);
-            $selected = ($listID == $details['main']) ? "selected" : "";
-            $out .= '<option value="'.$listID.'" '.$selected.'>'.$list.'</option>';
+            $out .= '<option value="'.$listID.'"'.(($listID == $details['main']) ? ' selected' : '').'>'.$list.'</option>';
         }
         $out .= '</select><br />';
         $out .= '</fieldset>';
@@ -584,26 +583,21 @@ class ProjectFunc {
         $out .= '<fieldset id="inputs">';
         $out .= '<label for="mainproject">Main:</label>';
         $out .= '<select name="mainproject" id="mainproject">';
-        $out .= '<option value="0" ';
-        $out .= ($details["main"] == 0) ? "selected" : "";
-        $out .= '>No</option>';
-        $out .= '<option value="1" ';
-        $out .= ($details["main"] == 1) ? "selected" : "";
-        $out .= '>Yes</option>';
+        $out .= '<option value="0"'.(($details['main'] == 0) ? ' selected' : '').'>No</option>';
+        $out .= '<option value="1"'.(($details['main'] == 1) ? ' selected' : '').'>Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
-        $selected = ($details['overseer'] == 'none') ? 'selected' : '';
-        $out .= '<option value="none" '.$selected.'>None</option>';
-        foreach(users() as &$user) {
-            $selected = ($details['overseer'] == $user) ? 'selected' : '';
-            $out .= '<option value="'.$user.'" '.$selected.'>'.$user.'</option>';
+        $out .= '<option value="none"'.(($details['overseer'] == 'none') ? ' selected' : '').'>None</option>';
+		$users = users();
+        foreach($users as &$user) {
+            $out .= '<option value="'.$user.'"'.(($details['overseer'] == $user) ? ' selected' : '').'>'.$user.'</option>';
         }
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
         $out .= '<button id="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
-        $out .= '<input type="submit" id="submit" name="edit" value="Submit">';
+        $out .= '<input type="submit" id="submit" name="edit-project" value="Submit">';
         $out .= '</fieldset>';
         $out .= '</div>';
         $out .= '</div>';

@@ -7,7 +7,7 @@
     <!-- The author of this language file. -->
     <author>creatorfromhell</author>
     <!-- The version of this language file. -->
-    <version>1.0</version>
+    <version>Beta 2</version>
     <!-- The symbol for this language. Located in the theme's image folder. -->
     <symbol>us.gif</symbol>
 
@@ -27,35 +27,44 @@
         <confirm>confirm</confirm>
         <pages>
             <overview>
-                <navlink>Overview</navlink>
+                <navlink>overview</navlink>
                 <header>Overview</header>
                 <calendar>
-                    <navlink>Calendar</navlink>
+                    <navlink>calendar</navlink>
                     <header>Calendar - %project</header>
                 </calendar>
                 <project>
-                    <navlink>Project</navlink>
+                    <navlink>project</navlink>
                     <header>Overview for %project</header>
                 </project>
             </overview>
             <admin>
-                <navlink>Admin</navlink>
-                <header>Administration Panel</header>
-                <dashboard>Dashboard</dashboard>
-                <activity>Activity</activity>
-                <groups>Groups</groups>
-                <options>Options</options>
-                <themes>Themes</themes>
-                <users>Users</users>
+                <navlink>admin</navlink>
+                <header>administration Panel</header>
+                <dashboard>dashboard</dashboard>
+                <activity>activity</activity>
+                <groups>groups</groups>
+                <options>options</options>
+                <themes>themes</themes>
+                <users>users</users>
             </admin>
             <projects>
-                <navlink>Projects</navlink>
+                <navlink>projects</navlink>
                 <header>Project %project</header>
+				<versiontype>versions</versiontype>
+				<versiontypeheader>Version Types</versiontypeheader>
             </projects>
             <lists>
-                <navlink>Lists</navlink>
+                <navlink>lists</navlink>
                 <header>Lists for %project</header>
+				<version>versions</version>
+				<versionsheader>Versions for %project</versionsheader>
+				<download>downloads</download>
+				<downloadsheader>Downloads for %project</downloadsheader>
             </lists>
+			<tasks>
+				<labelsheader>Labels for %list - %project</labelsheader>
+			</tasks>
         </pages>
         <tables>
             <name>name</name>
@@ -75,13 +84,21 @@
             <version>version</version>
             <email>email</email>
             <group>group</group>
+			<type>type</type>
+			<stable>stable</stable>
+			<size>size</size>
+			<downloads>downloads</downloads>
             <registered>registered</registered>
             <yes>yes</yes>
             <no>no</no>
             <none>none</none>
-            <notask>There is nothing on the todo list.</notask>
-            <nolist>There are currently no lists for this project.</nolist>
-            <noproject>There are currently no projects.</noproject>
+            <notasks>There are currently no tasks for %list.</notasks>
+            <nolists>There are currently no lists for %project.</nolists>
+            <noprojects>There are currently no projects.</noprojects>
+			<noversions>There are currently no versions for %project.</noversions>
+			<nodownloads>There are currently no downloads for %project.</nodownloads>
+			<notypes>There are currently no version types.</notypes>
+			<nolabels>There are currently no labels for %list.</nolabels>
         </tables>
         <forms>
             <invalidcaptcha>Invalid captcha entered!</invalidcaptcha>
@@ -140,6 +157,9 @@
             <user>
                 <nogroup>You must enter a valid group!</nogroup>
             </user>
+			<version>
+				<nostable>Invalid stability entered!</nostable>
+			</version>
         </forms>
         <actions>
             <!-- TODO: make actions language-based -->

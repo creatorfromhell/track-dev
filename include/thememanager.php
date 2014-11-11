@@ -51,11 +51,11 @@ class ThemeManager {
         $includes = array();
 
         foreach(glob("resources/themes/".(string)$theme->directory."/js/*.js") as $js) {
-            $includes[] = '<script src="'.$js.'" type="text/javascript"></script>';
+            $includes[] = '<script src="'.$js.'?'.time().'" type="text/javascript"></script>';
         }
 
         foreach(glob("resources/themes/".(string)$theme->directory."/css/*.css") as $css) {
-            $includes[] = '<link href="'.$css.'" rel="stylesheet" type="text/css" />';
+            $includes[] = '<link href="'.$css.'?'.time().'" rel="stylesheet" type="text/css" />';
         }
         return $includes;
     }

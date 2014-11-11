@@ -1,5 +1,11 @@
 table setup
 
+todo_downloads
+- id
+- name
+- type
+- size
+
 todo_users
 -id
 -username
@@ -28,6 +34,7 @@ todo_versions
 -due date
 -release date
 -type
+-download
 
 todo_versions_types
 -id

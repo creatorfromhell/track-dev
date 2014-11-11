@@ -7,7 +7,7 @@
  * Last Modified: 6/27/14 at 8:25 AM
  * Last Modified by Daniel Vidmar.
  */
-if(isset($_POST['add_label'])) {
+if(isset($_POST['add-label'])) {
     if(isset($_POST['project']) && trim($_POST['project']) != "") {
         if(isset($_POST['list']) && trim($_POST['list']) != "") {
             if(isset($_POST['labelname']) && trim($_POST['labelname']) != "") {
@@ -43,7 +43,7 @@ if(isset($_POST['add_label'])) {
     }
 }
 
-if(isset($_POST['edit_label'])) {
+if(isset($_POST['edit-label'])) {
     if(isset($_POST['id']) && trim($_POST['id']) != "") {
         if(isset($_POST['project']) && trim($_POST['project']) != "") {
             if(isset($_POST['list']) && trim($_POST['list']) != "") {

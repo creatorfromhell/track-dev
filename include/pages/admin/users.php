@@ -19,6 +19,11 @@ if(isset($_GET['action'])) {
     if($action == "edit" && isset($_GET['id']) && User::exists(User::getName(cleanInput($_GET['id'])))) {
         $editing = true;
     } else if($action == "delete" && isset($_GET['id']) && User::exists(User::getName(cleanInput($_GET['id'])))) {
+        $params = "id:".$id.",status:".$action;
+        ActivityFunc::log(getName(), $project, $list, "user:delete", $params, 0, date("Y-m-d H:i:s"));
+        echo '<script type="text/javascript">';
+        echo 'showMessage("success", "User '.User::getName(cleanInput($_GET['id'])).' has been delete.");';
+        echo '</script>';
         User::delete(cleanInput($_GET['id']));
     }
 }
@@ -31,10 +36,10 @@ if($subPage == "user" && isset($_GET['name']) && User::exists($_GET['name'])) {
 <?php
 } else {
     global $prefix;
-    $pagination = new Pagination($prefix."_users", "id, user_name, user_email, user_group, user_registered", $pn);
+    $pagination = new Pagination($prefix."_users", "id, user_name, user_email, user_group, user_registered", $pn, 10, "?t=".$type."&amp;");
 ?>
 
-<form method="post" action="admin.php?page=users">
+<form method="post" action="admin.php?t=users">
     <h3><?php echo ($editing) ? "Edit User" : "Add User"; ?></h3>
     <div id="form-holder">
         <?php
@@ -109,7 +114,7 @@ if($subPage == "user" && isset($_GET['name']) && User::exists($_GET['name'])) {
                     <input id="captcha" name="captcha" type="text" placeholder="Enter characters above">
                 </fieldset>
                 <fieldset id="links">
-                    <button class="submit-2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
+                    <button class="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
                     <input type="submit" class="submit" name="edit_user" value="Edit">
                 </fieldset>
             </div>
@@ -174,7 +179,7 @@ if($subPage == "user" && isset($_GET['name']) && User::exists($_GET['name'])) {
                 <input id="captcha" name="captcha" type="text" placeholder="Enter characters above">
             </fieldset>
             <fieldset id="links">
-                <button class="submit-2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
+                <button class="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
                 <input type="submit" class="submit" name="add_user" value="Add">
             </fieldset>
         </div>
@@ -207,8 +212,8 @@ if($subPage == "user" && isset($_GET['name']) && User::exists($_GET['name'])) {
             echo "<td>".$g."</td>";
             echo "<td>".$u['user_registered']."</td>";
             echo "<td class='actions'>";
-            echo "<a title='Edit' class='actionEdit' href='?page=users&action=edit&id=".$u['id']."'></a>";
-            echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete user ".$u['user_name']."?\");' href='?page=users&action=delete&id=".$u['id']."'></a>";
+            echo "<a title='Edit' class='actionEdit' href='?t=users&amp;action=edit&amp;id=".$u['id']."&amp;pn=".$pn."'></a>";
+            echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete user ".$u['user_name']."?\");' href='?t=users&amp;action=delete&amp;id=".$u['id']."&amp;pn=".$pn."'></a>";
             echo "</td>";
             echo "</tr>";
         }

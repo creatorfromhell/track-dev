@@ -47,4 +47,11 @@ class Captcha {
         $bytes = ob_get_clean();
         echo "<img id='captcha_image' src='data:image/jpeg;base64," . base64_encode($bytes) . "' />";
     }
+	
+	public function returnImage() {
+        ob_start();
+        imagejpeg($this->image, NULL, 100);
+        $bytes = ob_get_clean();
+        return "<img id='captcha_image' src='data:image/jpeg;base64," . base64_encode($bytes) . "' />";
+	}
 }

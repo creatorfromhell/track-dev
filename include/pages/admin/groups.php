@@ -13,13 +13,19 @@ $subPage = "all";
 if(isset($_GET['sub'])) {
     $subPage = $_GET['sub'];
 }
-if(isset($_GET['action'])) {
+if(isset($_GET['action']) && isset($_GET['id']) && Group::exists(Group::getName(cleanInput($_GET['id'])))) {
+	$editID = cleanInput($_GET['id']);
     $action = cleanInput($_GET['action']);
 
-    if($action == "edit" && isset($_GET['id']) && Group::exists(Group::getName(cleanInput($_GET['id'])))) {
+    if($action == "edit") {
         $editing = true;
-    } else if($action == "delete" && isset($_GET['id']) && Group::exists(Group::getName(cleanInput($_GET['id'])))) {
-        Group::delete(cleanInput($_GET['id']));
+    } else if($action == "delete") {
+        $params = "id:".$editID.",status:".$action;
+        ActivityFunc::log(getName(), $project, $list, "group:delete", $params, 0, date("Y-m-d H:i:s"));
+        echo '<script type="text/javascript">';
+        echo 'showMessage("success", "Group '.Group::getName($editID).' has been delete.");';
+        echo '</script>';
+        Group::delete($editID);
     }
 }
 if($subPage == "group" && isset($_GET['name']) && Group::exists($_GET['name'])) {
@@ -30,9 +36,9 @@ if($subPage == "group" && isset($_GET['name']) && Group::exists($_GET['name'])) 
 <?php
 } else {
     global $prefix;
-    $pagination = new Pagination($prefix."_groups", "id, group_name, group_admin", $pn, 10, "?page=groups&");
+    $pagination = new Pagination($prefix."_groups", "id, group_name, group_admin", $pn, 10, "?t=".$type."&amp;");
 ?>
-<form class="trackrForm" method="post" action="admin.php?page=groups">
+<form class="trackrForm" method="post" action="admin.php?t=groups">
     <h3><?php echo ($editing) ? "Edit Group" : "Add Group"; ?></h3>
     <div id="form-holder">
         <?php
@@ -101,7 +107,7 @@ if($subPage == "group" && isset($_GET['name']) && Group::exists($_GET['name'])) 
                     <input id="captcha" name="captcha" type="text" placeholder="Enter characters above">
                 </fieldset>
                 <fieldset id="links">
-                    <button class="submit-2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
+                    <button class="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
                     <input type="submit" class="submit" name="edit_group" value="Edit">
                 </fieldset>
             </div>
@@ -160,7 +166,7 @@ if($subPage == "group" && isset($_GET['name']) && Group::exists($_GET['name'])) 
                     <input id="captcha" name="captcha" type="text" placeholder="Enter characters above">
                 </fieldset>
                 <fieldset id="links">
-                    <button class="submit-2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
+                    <button class="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
                     <input type="submit" class="submit" name="add_group" value="Add">
                 </fieldset>
             </div>
@@ -189,8 +195,8 @@ if($subPage == "group" && isset($_GET['name']) && Group::exists($_GET['name'])) 
             echo "<td>".$g['group_name']."</td>";
             echo "<td>".$a."</td>";
             echo "<td class='actions'>";
-            echo "<a title='Edit' class='actionEdit' href='?page=groups&action=edit&id=".$g['id']."'></a>";
-            echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete group ".$g['group_name']."?\");' href='?page=groups&action=delete&id=".$g['id']."'></a>";
+            echo "<a title='Edit' class='actionEdit' href='?t=groups&amp;action=edit&amp;id=".$g['id']."&amp;pn=".$pn."'></a>";
+            echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete group ".$g['group_name']."?\");' href='?t=groups&amp;action=delete&amp;id=".$g['id']."&amp;pn=".$pn."'></a>";
             echo "</td>";
             echo "</tr>";
         }

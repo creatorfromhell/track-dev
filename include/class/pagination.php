@@ -10,7 +10,7 @@
 
 class Pagination {
 
-    public $return = "?";
+    public $returnValue = "?";
     public $extraQuery = "";
     public $startingValue = 0;
     public $items = 10;
@@ -25,15 +25,19 @@ class Pagination {
         $this->columnString = $c;
         $this->page = $p;
         $this->items = $i;
-        $this->return = $r;
+        $this->returnValue = $r;
         $this->extraQuery = $extra;
         $this->prepareValues();
+		if($this->page > $this->totalPages) {
+			$this->page = $this->totalPages;
+			$this->prepareValues();
+		}
         $this->buildPageString();
     }
 
     public function paginate() {
         global $pdo;
-        $stmt = $pdo->prepare("SELECT ".$this->columnString." FROM `".$this->table."` LIMIT ".$this->startingValue.", ".$this->items." ".$this->extraQuery);
+        $stmt = $pdo->prepare("SELECT ".$this->columnString." FROM `".$this->table."` ".$this->extraQuery." LIMIT ".$this->startingValue.", ".$this->items);
         $stmt->execute();
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -50,7 +54,7 @@ class Pagination {
 
     public function paginateReturn() {
         global $pdo;
-        $stmt = $pdo->prepare("SELECT ".$this->columnString." FROM `".$this->table."` LIMIT ".$this->startingValue.", ".$this->items);
+        $stmt = $pdo->prepare("SELECT ".$this->columnString." FROM `".$this->table."` ".$this->extraQuery." LIMIT ".$this->startingValue.", ".$this->items);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -71,12 +75,12 @@ class Pagination {
     public function buildPageString() {
         $this->pageString = "";
         $this->pageString .= "<div id='pages'>";
-        $this->pageString .= "<strong><a href='".$this->return."pn=1'>First</a></strong>";
+        $this->pageString .= "<strong><a href='".$this->returnValue."pn=1'>First</a></strong>";
         for($i = 1; $i <= $this->totalPages; $i++) {
             $active = ($i == $this->page) ? "class='active'" : "";
-            $this->pageString .= "<a ".$active." href='".$this->return."pn=".$i."'>".$i."</a>";
+            $this->pageString .= "<a ".$active." href='".$this->returnValue."pn=".$i."'>".$i."</a>";
         }
-        $this->pageString .= "<strong><a href='".$this->return."pn=".$this->totalPages."'>Last</a></strong>";
+        $this->pageString .= "<strong><a href='".$this->returnValue."pn=".$this->totalPages."'>Last</a></strong>";
         $this->pageString .= "</div>";
     }
 }

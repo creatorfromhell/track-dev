@@ -11,7 +11,7 @@
  * Fields
  * title, description, author, assignee, due, editable, status, progress, version, labels
  */
-if(isset($_POST['add'])) {
+if(isset($_POST['add-task'])) {
     if(isset($_POST['title']) && trim($_POST['title']) != "") {
         if(isset($_POST['description']) && trim($_POST['description']) != "") {
             if(isset($_POST['author']) && trim($_POST['author']) != "") {
@@ -20,13 +20,14 @@ if(isset($_POST['add'])) {
                         if(ProjectFunc::exists($project)) {
                             if(ListFunc::exists($project, $list)) {
                                 $created = date("Y-m-d H:i:s");
+								$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? cleanInput($_POST['due-date']) : "0000-00-00";
                                 $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;
                                 $labels = (isset($_POST['labels']) && $_POST['labels'] != "") ? $_POST['labels'] : "";
                                 $status = $_POST['status'];
                                 if($progress > 0) {
                                     ($progress >= 100) ? $status = 1 : $status = 2;
                                 }
-                                TaskFunc::add($project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, "0000-0-00", "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
+                                TaskFunc::add($project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, $due, "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
                                 $params = "title:".$_POST['title'].",description:".$_POST['description'].",status:".$status;
                                 ActivityFunc::log($currentUser->name, $project, $list, "task:add", $params, 0, $created);
                             } else {
@@ -66,7 +67,7 @@ if(isset($_POST['add'])) {
     }
 }
 
-if(isset($_POST['edit'])) {
+if(isset($_POST['edit-task'])) {
     if(isset($_POST['id']) && trim($_POST['id']) != "") {
         if(isset($_POST['title']) && trim($_POST['title']) != "") {
             if(isset($_POST['description']) && trim($_POST['description']) != "") {
@@ -76,13 +77,14 @@ if(isset($_POST['edit'])) {
                             if(ProjectFunc::exists($project)) {
                                 if(ListFunc::exists($project, $list)) {
                                     $created = date("Y-m-d H:i:s");
+									$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? cleanInput($_POST['due-date']) : "0000-0-00";
                                     $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;
                                     $labels = (isset($_POST['labels-edit']) && $_POST['labels-edit'] != "") ? $_POST['labels-edit'] : "";
                                     $status = $_POST['status'];
                                     if($progress > 0) {
                                         ($progress >= 100) ? $status = 1 : $status = 2;
                                     }
-                                    TaskFunc::edit($_POST['id'], $project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, "0000-0-00", "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
+                                    TaskFunc::edit($_POST['id'], $project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, $due, "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
                                     $params = "id:".$_POST['id'].",title:".$_POST['title'].",description:".$_POST['description'].",status:".$status;
                                     ActivityFunc::log($currentUser->name, $project, $list, "task:edit", "", 0, date("Y-m-d H:i:s"));
                                 } else {

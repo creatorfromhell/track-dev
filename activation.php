@@ -14,7 +14,7 @@ if(isset($_GET['page'])) {
     $page = $_GET['page'];
 }
 ?>
-<main>
+<div id="main">
 <?php
 if($page == "resend") {
     include_once("include/pages/activate/resend.php");
@@ -22,7 +22,7 @@ if($page == "resend") {
     include_once("include/pages/activate/activate.php");
 }
 ?>
-</main>
+</div>
 <?php
 include_once("include/footer.php");
 ?>

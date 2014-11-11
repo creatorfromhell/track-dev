@@ -35,14 +35,20 @@ else if($page == "admin") { $h1 = $formatter->replaceShortcuts(((string)$languag
     <header>
         <div class="login">
             <p>
-                <?php if($currentUser !== null) {
+                <?php
+				if(loggedIn()) {
                     echo "<p>Welcome, </p>".userNav()."<p>.</p>";
-                } else { ?>
+                } else {
+				?>
                     <a href="login.php?return=<?php echo $return; ?>">Login</a> or <a href="register.php">Register</a>
-                <?php } ?>
+                <?php
+				}
+				?>
             </p>
         </div>
         <?php include("navigation.php"); ?>
-        <h1><?php echo $h1; ?></h1>
+		<div class="h1-holder">
+			<h1><?php echo $h1; ?></h1>
+		</div>
     </header>
     <div id="msg" onclick="closeMessage(); return false;" class="<?php echo $msgType; ?>" style="<?php if(trim($msg) === '') { echo 'display: none;'; } ?>"><?php echo $msg; ?></div>

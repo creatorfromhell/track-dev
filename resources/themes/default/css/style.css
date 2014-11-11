@@ -17,6 +17,10 @@ body {
     margin: 0 auto;
 }
 
+.text-center {
+	text-align: center;
+}
+
 .clear {
     clear: both;
 }
@@ -316,16 +320,20 @@ body {
 /*
  * Header Styles
  */
-h1 {
+.h1-holder {
 	position: absolute;
 	width: 100%;
+	height: 71px;
 	top: 48px;
-	padding: 25px 0 15px 0;
-	text-align: left;
+	text-align: center;
 	text-shadow: 0 1px 1px white;
 	margin-bottom: 30px;
 	background-color: #EDEBEB;
-	font-size: 26px;
+}
+
+h1 {
+	display: inline-block;
+	padding-top: 25px;
 }
 
 h1, h2 {
@@ -467,60 +475,60 @@ a:hover {
     margin: 5px;
 }
 
-.labels-left {
+.pick-field {
+    height: auto;
+}
+
+.pick-field .title {
+    width: 100%;
+    height: auto;
+    text-align: center;
+}
+
+.pick-field .column-titles {
+    width: 100%;
+    height: auto;
+    margin: 5px 0;
+}
+
+.pick-field .column-titles .left {
+    float: left;
+    margin-left: 10px;
+}
+
+.pick-field .column-titles .right {
+    float: right;
+    margin-right: 10px;
+}
+
+.column-left {
+    width: 49%;
+    float: left;
+	margin: 15px 1% 15px 0;
+    min-height: 125px;
+    max-height: 125px;
+    overflow: scroll;
+}
+
+.column-right {
     width: 49%;
     float: left;
     margin: 15px auto;
     min-height: 125px;
     max-height: 125px;
-    overflow-y: scroll;
+    overflow: scroll;
 }
 
-.labels-right {
-    width: 50%;
-    float: left;
-    margin: 15px auto;
-}
-
-.labels-field {
-    height: auto;
-}
-
-.list-label {
-    height: 40px;
-    width: 300px;
-    text-align: center;
-    margin: 15px auto 0 auto;
-    display: block;
-}
-
-.list-label label {
-    display: inline-block;
-    padding-top: 10px;
-}
-
-.small-label {
-    width: 75%;
+.draggable-node {
+    width: 90%;
     margin: 5px auto;
     height: 30px;
-    padding-top: 5px;
-}
-
-.trackr-small-form {
-    width: 85%;
-    margin: 0 auto;
-}
-
-.trackr-small-form label {
-    font-size: 1.1em;
-    margin-right: 10px;
-}
-
-.trackr-small-button {
-    padding: 2px 5px;
-    background: white;
-    border: 1px solid #666666;
-    color: #666666;
+    padding: 5px 5px 0 5px;
+    text-align: center;
+    display: inline-block;
+    background: #CE504E;
+    color: white;
+    border: 1px solid #872825;
 }
 
 .below-content {
@@ -905,7 +913,7 @@ form #inputs {
     margin: 20px auto;
 }
 
-form #inputs input:not([type="color"]), form #inputs textarea {
+form #inputs input:not([type="color"]):not([type="file"]), form #inputs textarea {
     background: #E7E7E7;
     color: #848484;
     font-size: 1.1em;
@@ -916,6 +924,10 @@ form #inputs input:not([type="color"]), form #inputs textarea {
     width: 90%;
     height: 30px;
     margin-bottom: 15px;
+}
+
+form #inputs input[type="file"] {
+	margin-bottom: 15px;
 }
 
 form #inputs input[type="range"] {
@@ -958,7 +970,7 @@ form #links {
     margin: 20px auto;
 }
 
-#color-text, #color-background {
+#labelcolor-text, #labelcolor-background {
     height: 10px;
     width: 10px;
     border: 2px solid #A9A9A9;
@@ -1015,7 +1027,7 @@ form #links #other {
 .taskTable {
 	border: none;
     border-spacing: 0;
-	padding: 100px 0;
+	padding-bottom: 100px;
 	margin: 0 auto;
 }
 
@@ -1092,30 +1104,6 @@ form #links #other {
 /*
  * Action Styles
  */
-
-.label-actions {
-    width: 18px;
-    height: 38px;
-    display: inline-block;
-    float: right;
-    padding-top: 4px;
-    padding-left: 1px;
-}
-
-
-.label-actions a {
-    padding-left: 16px;
-    cursor: pointer;
-}
-
-.label-edit-action {
-    background: url("../img/label_edit.png") no-repeat;
-}
-
-.label-delete-action {
-    background: url("../img/label_delete.png") no-repeat;
-}
-
 .actionOpen {
     background: url("../img/open.png") no-repeat;
 }
@@ -1134,6 +1122,14 @@ form #links #other {
 
 .actionEdit {
     background: url("../img/edit.png") no-repeat;
+}
+
+.actionArchive {
+    background: url("../img/archive.png") no-repeat;
+}
+
+.actionUnArchive {
+    background: url("../img/unarchive.png") no-repeat;
 }
 
 .actionDelete {
@@ -1191,6 +1187,46 @@ form #links #other {
     background: lightblue;
     color: midnightblue;
     border: 1px solid midnightblue;
+}
+
+#pages {
+    text-align: center;
+	margin-top: 100px;
+	margin-bottom: 30px;
+	color: #008FD5;
+}
+
+#pages a {
+    margin: 0 5px;
+	color: #008FD5;
+}
+
+#pages .active {
+    text-decoration: underlined;
+}
+
+.admin-content {
+	width: calc(100% - 201px);
+	margin-left: 201px;
+}
+
+.switch {
+	font-size: 20px;
+	display: inline-block;
+	position: absolute;
+	top: 33px;
+}
+
+.switch-right {
+	right: 10px;
+}
+
+.switch-left {
+	left: 10px;
+}
+
+.switch a {
+    color: #666666;
 }
 
 /*

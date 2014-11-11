@@ -152,7 +152,7 @@ class ListFunc {
     public static function isEmpty($id) {
         global $prefix, $pdo;
         $t = $prefix."_".self::getProject($id)."_".self::getName($id);
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` ORDER BY task_status, id");
+        $stmt = $pdo->prepare("SELECT id FROM `".$t."`");
         $stmt->execute();
         if($stmt->fetch(PDO::FETCH_NUM) > 0) {
             return false;
@@ -338,7 +338,8 @@ class ListFunc {
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
         $out .= '<option value="none" selected>None</option>';
-        foreach(users() as &$user) {
+		$users = users();
+        foreach($users as &$user) {
             $out .= '<option value="'.$user.'">'.$user.'</option>';
         }
         $out .= '</select>';
@@ -363,21 +364,23 @@ class ListFunc {
         $out .= '<label for="viewpermission">View Permission:</label>';
         $out .= '<select name="viewpermission" id="viewpermission">';
         $out .= '<option value="none" selected>None</option>';
-        foreach(nodes() as &$node) {
+		$nodes = nodes();
+        foreach($nodes as &$node) {
             $out .= '<option value="'.nodeID($node).'">'.$node.'</option>';
         }
         $out .= '</select><br />';
         $out .= '<label for="editpermission">Edit Permission:</label>';
         $out .= '<select name="editpermission" id="editpermission">';
         $out .= '<option value="none" selected>None</option>';
-        foreach(nodes() as &$node) {
+		$nodes = nodes();
+        foreach($nodes as &$node) {
             $out .= '<option value="'.nodeID($node).'">'.$node.'</option>';
         }
         $out .= '</select><br />';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
         $out .= '<button class="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
-        $out .= '<input type="submit" class="submit" name="add" value="Add">';
+        $out .= '<input type="submit" class="submit" name="add-list" value="Add">';
         $out .= '</fieldset>';
         $out .= '</div>';
         $out .= '</div>';
@@ -393,7 +396,7 @@ class ListFunc {
         $stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $main = ProjectFunc::getMainList($result['project']);
+        $main = ProjectFunc::getMain($result['project']);
 
         $out = '';
         $out .= '<h3>Edit List</h3>';
@@ -406,18 +409,13 @@ class ListFunc {
         $out .= '<select name="project" id="project">';
         $projects = ProjectFunc::projects();
         foreach($projects as &$p) {
-            $selected = ($p == $result['project']) ? "selected" : "";
-            $out .= '<option value="'.$p.'" '.$selected.'>'.$p.'</option>';
+            $out .= '<option value="'.$p.'"'.(($p == $result['project']) ? ' selected' : '').'>'.$p.'</option>';
         }
         $out .= '</select><br />';
         $out .= '<label for="public">Public:</label>';
         $out .= '<select name="public" id="public">';
-        $out .= '<option value="0" ';
-        $out .= ($result["public"] == 0) ? "selected" : "";
-        $out .= '>No</option>';
-        $out .= '<option value="1" ';
-        $out .= ($result["public"] == 1) ? "selected" : "";
-        $out .= '>Yes</option>';
+        $out .= '<option value="0"'.(($result['public'] == 0) ? ' selected' : '').'>No</option>';
+        $out .= '<option value="1"'.(($result['public'] == 1) ? ' selected' : '').'>Yes</option>';
         $out .= '</select><br />';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
@@ -428,75 +426,60 @@ class ListFunc {
         $out .= '<fieldset id="inputs">';
         $out .= '<label for="minimal">Minimal View:</label>';
         $out .= '<select name="minimal" id="minimal">';
-        $out .= '<option value="0" ';
-        $out .= ($result["minimalview"] == 0) ? "selected" : "";
-        $out .= '>No</option>';
-        $out .= '<option value="1" ';
-        $out .= ($result["minimalview"] == 1) ? "selected" : "";
-        $out .= '>Yes</option>';
+        $out .= '<option value="0"'.(($result['minimal_view'] == 0) ? ' selected' : '').'>No</option>';
+        $out .= '<option value="1"'.(($result['minimal_view'] == 1) ? ' selected' : '').'>Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="mainlist">Main:</label>';
         $out .= '<select name="mainlist" id="mainlist">';
-        $out .= '<option value="0" ';
-        $out .= (!$main) ? "selected" : "";
-        $out .= '>No</option>';
-        $out .= '<option value="1" ';
-        $out .= ($main) ? "selected" : "";
-        $out .= '>Yes</option>';
+        $out .= '<option value="0"'.(($main != $id) ?' selected' : '').'>No</option>';
+        $out .= '<option value="1"'.(($main == $id) ? ' selected' : '').'>Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
-        $selected = ($result['overseer'] == 'none') ? 'selected' : '';
-        $out .= '<option value="none" '.$selected.'>None</option>';
-        foreach(users() as &$user) {
-            $selected = ($result['overseer'] == $user) ? 'selected' : '';
-            $out .= '<option value="'.$user.'" '.$selected.'>'.$user.'</option>';
+        $out .= '<option value="none"'.(($result['overseer'] == 'none') ? ' selected' : '').'>None</option>';
+		$users = users();
+        foreach($users as &$user) {
+            $out .= '<option value="'.$user.'"'.(($result['overseer'] == $user) ? ' selected' : '').'>'.$user.'</option>';
         }
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
-        $out .= '<button id="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
-        $out .= '<button id="submit" onclick="switchPage(event, \'page_2\', \'page_3\'); return false;">Next</button>';
+        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
+        $out .= '<button class="submit" onclick="switchPage(event, \'page_2\', \'page_3\'); return false;">Next</button>';
         $out .= '</fieldset>';
         $out .= '</div>';
         $out .= '<div id="page_3">';
         $out .= '<fieldset id="inputs">';
         $out .= '<label for="guestview">Guest View:</label>';
         $out .= '<select name="guestview" id="guestview">';
-        $out .= '<option value="0" ';
-        $out .= (!self::guestView($id)) ? "selected" : "";
-        $out .= '>No</option>';
-        $out .= '<option value="1" ';
-        $out .= (self::guestView($id)) ? "selected" : "";
-        $out .= '>Yes</option>';
+        $out .= '<option value="0"'.((!self::guestView($id)) ? ' selected' : '').'>No</option>';
+        $out .= '<option value="1"'.((self::guestView($id)) ? ' selected' : '').'>Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="guestedit">Guest Edit:</label>';
         $out .= '<select name="guestedit" id="guestedit">';
-        $out .= '<option value="0" ';
-        $out .= (!self::guestEdit($id)) ? "selected" : "";
-        $out .= '>No</option>';
-        $out .= '<option value="1" ';
-        $out .= (self::guestEdit($id)) ? "selected" : "";
-        $out .= '>Yes</option>';
+        $out .= '<option value="0"'.((!self::guestEdit($id)) ? ' selected' : '').'>No</option>';
+        $out .= '<option value="1"'.((self::guestEdit($id)) ? ' selected' : '').'>Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="viewpermission">View Permission:</label>';
         $out .= '<select name="viewpermission" id="viewpermission">';
-        $out .= '<option value="none" '.(self::viewPermission($id) == "none") ? 'selected' : ''.'>None</option>';
-        foreach(nodes() as &$node) {
-            $out .= '<option value="'.nodeID($node).'" '.(self::viewPermission($id) == $node) ? 'selected' : ''.'>'.$node.'</option>';
+        $out .= '<option value="none"'.((self::viewPermission($id) == 'none') ? ' selected' : '').'>None</option>';
+		$nodes = nodes();
+        foreach($nodes as &$node) {
+            $out .= '<option value="'.nodeID($node).'"'.((self::viewPermission($id) == $node) ? ' selected' : '').'>'.$node.'</option>';
         }
         $out .= '</select><br />';
         $out .= '<label for="editpermission">Edit Permission:</label>';
         $out .= '<select name="editpermission" id="editpermission">';
-        $out .= '<option value="none" '.(self::editPermission($id) == "none") ? 'selected' : ''.'>None</option>';
-        foreach(nodes() as &$node) {
-            $out .= '<option value="'.nodeID($node).'" '.(self::editPermission($id) == $node) ? 'selected' : ''.'>'.$node.'</option>';
+        $out .= '<option value="none"'.((self::editPermission($id) == "none") ? ' selected' : '').'>None</option>';
+		$nodes = nodes();
+        foreach($nodes as &$node) {
+            $out .= '<option value="'.nodeID($node).'"'.((self::editPermission($id) == $node) ? ' selected' : '').'>'.$node.'</option>';
         }
         $out .= '</select><br />';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
-        $out .= '<button id="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
-        $out .= '<input type="submit" id="submit" name="edit" value="Submit">';
+        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
+        $out .= '<input type="submit" class="submit" name="edit-list" value="Submit">';
         $out .= '</fieldset>';
         $out .= '</div>';
         $out .= '</div>';

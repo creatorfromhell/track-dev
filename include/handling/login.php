@@ -15,13 +15,14 @@ if(isset($_POST['login'])) {
                 $email = (!validEmail($name)) ? false : true;
                 if(User::exists($name, $email) && checkHash(User::getHashedPassword($name, $email), cleanInput($_POST['password']))) {
                     $user = User::load($name, $email);
-                    if($emailActivation && $user->activated == 1 || !$emailActivation) {
+					global $configurationValues;
+                    if($configurationValues["main"]["email_activation"] && $user->activated == 1 || !$configurationValues["main"]["email_activation"]) {
                         $user->loggedIn = date("Y-m-d H:i:s");
                         $user->online = 1;
                         $user->save();
                         ActivityFunc::log(cleanInput($_POST['username']), "none", "none", "user:login", "", 0, date("Y-m-d H:i:s"));
 
-                        $_SESSION['usersplusprofile'] = $user;
+                        $_SESSION['usersplusprofile'] = $user->name;
                         destroySession("userspluscaptcha");
                         ?>
                         <script>

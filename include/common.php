@@ -10,20 +10,21 @@
 session_start();
 
 //Required classes & includes
+require_once("config.php");
 require_once("utils.php");
 require_once("thememanager.php");
 require_once("stringformatter.php");
 require_once("languagemanager.php");
-require_once("config.php");
-require_once("function/activityfunc.php");
-require_once("function/labelfunc.php");
-require_once("function/listfunc.php");
-require_once("function/projectfunc.php");
-require_once("function/taskfunc.php");
 require_once("class/group.php");
-require_once("class/user.php");
 require_once("class/pagination.php");
 require_once("class/captcha.php");
+require_once("class/user.php");
+require_once("function/projectfunc.php");
+require_once("function/listfunc.php");
+require_once("function/taskfunc.php");
+require_once("function/labelfunc.php");
+require_once("function/versionfunc.php");
+require_once("function/activityfunc.php");
 
 //Instances of Classes
 $configuration = new Configuration();
@@ -35,23 +36,27 @@ require_once('DB.php');
 
 //Global variables
 $prefix = $configuration->config["database"]["db_prefix"];
-global $prefix;
+$trackrVersion = $configuration->config["trackr"]["version"];
+$configurationValues = $configuration->config;
+unset($configurationValues["database"]);
+unset($configurationValues["trackr"]);
+global $prefix, $configurationValues;
 
 //Main Variables
-$theme = $manager->themes[$configuration->config["main"]["theme"]];
-$installation_path = rtrim($configuration->config["urls"]["base_url"], "/").rtrim($configuration->config["urls"]["installation_path"], "/")."/";
+$theme = $manager->themes[$configurationValues["main"]["theme"]];
+$installation_path = rtrim($configurationValues["urls"]["base_url"], "/").rtrim($configurationValues["urls"]["installation_path"], "/")."/";
 $path = $_SERVER["PHP_SELF"];
 $pageFull = basename($path);
 $page = basename($path, ".php");
 $currentUser = null;
-$language = $configuration->config["main"]["language"];
+$language = $configurationValues["main"]["language"];
 $project = ProjectFunc::getPreset();
 $projects = ProjectFunc::projects();
 $list = ProjectFunc::getMain(ProjectFunc::getID($project));
 
 if(isset($_SESSION['usersplusprofile'])) {
-    if(is_a($_SESSION['usersplusprofile'], 'User')) {
-        $currentUser = $_SESSION['usersplusprofile'];
+    if(User::exists($_SESSION['usersplusprofile'])) {
+        $currentUser = User::load($_SESSION['usersplusprofile']);
     }
 }
 
@@ -70,10 +75,10 @@ if(isset($_GET['p']) && ProjectFunc::exists($_GET['p'])) {
     $_SESSION['p'] = $project;
     setcookie('p', $project, time() + (3600 * 24 * 30));
     $list = ProjectFunc::getMain($project);
-} else if(isset($_SESSION['p']) && ProjectFunc::exists($_GET['p'])) {
+} else if(isset($_SESSION['p']) && ProjectFunc::exists($_SESSION['p'])) {
     $project = $_SESSION['p'];
     $list = ProjectFunc::getMain($project);
-} else if(isset($_COOKIE['p']) && ProjectFunc::exists($_GET['p'])) {
+} else if(isset($_COOKIE['p']) && ProjectFunc::exists($_COOKIE['p'])) {
     $project = $_COOKIE['p'];
     $list = ProjectFunc::getMain($project);
 }

@@ -81,6 +81,19 @@ class LabelFunc {
         $details['background'] = $result['background_color'];
         return $details;
     }
+	
+	public static function hasLabels($project, $list) {
+        global $prefix, $pdo;
+        $t = $prefix."_labels";
+        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ? AND list = ?");
+		$stmt->bindParam(1, $project);
+		$stmt->bindParam(2, $list);
+        $stmt->execute();
+        if($stmt->fetch(PDO::FETCH_NUM) > 0) {
+            return true;
+        }
+        return false;
+	}
 
     public static function labels($project, $list) {
         global $prefix, $pdo;
@@ -112,11 +125,11 @@ class LabelFunc {
         $out .= '<input name="project" type="hidden" value="'.$project.'">';
         $out .= '<input name="list" type="hidden" value="'.$list.'">';
         $out .= '<input name="labelname" type="text" placeholder="Label Name">';
-        $out .= '<label for="textcolor">Text Color: </label><label id="labelcolor-text" onclick="linkColorField(\'labelcolor-text\', \'textcolor\'); return false;"></label><input type="hidden" name="textcolor" value="#000000"><br />';
-        $out .= '<label for="backgroundcolor">Background Color: </label><label id="labelcolor-background" onclick="linkColorField(\'labelcolor-background\', \'backgroundcolor\'); return false;"></label><input type="hidden" name="backgroundcolor" value="#000000"><br />';
+        $out .= '<label for="textcolor">Text Color: </label><label id="labelcolor-text" onclick="linkColorField(event, \'labelcolor-text\', \'textcolor\'); return false;"></label><input type="hidden" name="textcolor" value="#000000"><br />';
+        $out .= '<label for="backgroundcolor">Background Color: </label><label id="labelcolor-background" onclick="linkColorField(event, \'labelcolor-background\', \'backgroundcolor\'); return false;"></label><input type="hidden" name="backgroundcolor" value="#000000"><br />';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
-        $out .= '<input type="submit" class="submit" name="add_label" value="Add">';
+        $out .= '<input type="submit" class="submit" name="add-label" value="Add">';
         $out .= '</fieldset>';
         $out .= '</div>';
 
@@ -132,11 +145,11 @@ class LabelFunc {
         $out .= '<input name="project" type="hidden" value="'.$details['project'].'">';
         $out .= '<input name="list" type="hidden" value="'.$details['list'].'">';
         $out .= '<input name="labelname" type="text" value="'.$details['label'].'" placeholder="Label Name">';
-        $out .= '<label for="textcolor">Text Color: </label><label id="labelcolor-text" style="background:'.$details['text'].';" onclick="linkColorField(\'labelcolor-text\', \'textcolor\'); return false;"></label><input type="hidden" name="textcolor" value="'.$details['text'].'"><br />';
-        $out .= '<label for="backgroundcolor">Background Color: </label><label id="labelcolor-background" style="background:'.$details['background'].';"onclick="linkColorField(\'labelcolor-background\', \'backgroundcolor\'); return false;"></label><input type="hidden" name="backgroundcolor" value="'.$details['background'].'"><br />';
+        $out .= '<label for="textcolor">Text Color: </label><label id="labelcolor-text" style="background:'.$details['text'].';" onclick="linkColorField(event, \'labelcolor-text\', \'textcolor\'); return false;"></label><input type="hidden" name="textcolor" value="'.$details['text'].'"><br />';
+        $out .= '<label for="backgroundcolor">Background Color: </label><label id="labelcolor-background" style="background:'.$details['background'].';"onclick="linkColorField(event, \'labelcolor-background\', \'backgroundcolor\'); return false;"></label><input type="hidden" name="backgroundcolor" value="'.$details['background'].'"><br />';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
-        $out .= '<input type="submit" id="submit" name="edit_label" value="Edit">';
+        $out .= '<input type="submit" class="submit" name="edit-label" value="Edit">';
         $out .= '</fieldset>';
         $out .= '</div>';
         return $out;

@@ -7,11 +7,8 @@
  * Last Modified: 5/9/14 at 10:48 AM
  * Last Modified by Daniel Vidmar.
  */
-session_start();
-include_once("include/utils.php");
-$currentUser = $_SESSION['userplusprofile'];
-if(pageLockedAdmin($currentUser)) { header('LOCATION: index.php'); }
 include("include/header.php");
+if(pageLockedAdmin($currentUser)) { header('LOCATION: index.php'); }
 $type = "dashboard";
 if(isset($_GET['t'])) {
     $type = $_GET['t'];
@@ -22,36 +19,67 @@ if(isset($_GET['pn'])) {
         $pn = $_GET['pn'];
     }
 }
+
+$adminTabs = array(
+	"dashboard" => array(
+		"include" => "include/pages/admin/dashboard.php",
+		"location" => "admin.php?t=dashboard",
+		"translate" => "lang:"
+	),
+	"activity" => array(
+		"include" => "include/pages/admin/activity.php",
+		"location" => "admin.php?t=activity",
+		"translate" => "lang:"
+	),
+	"groups" => array(
+		"include" => "include/pages/admin/groups.php",
+		"location" => "admin.php?t=groups",
+		"translate" => "lang:"
+	),
+	"options" => array(
+		"include" => "include/pages/admin/options.php",
+		"location" => "admin.php?t=options",
+		"translate" => "lang:"
+	),
+	"permissions" => array(
+		"include" => "include/pages/admin/permissions.php",
+		"location" => "admin.php?t=permissions",
+		"translate" => "lang:"
+	),
+	"addons" => array(
+		"include" => "include/pages/admin/addons.php",
+		"location" => "admin.php?t=addons",
+		"translate" => "lang:"
+	),
+	"users" => array(
+		"include" => "include/pages/admin/users.php",
+		"location" => "admin.php?t=users",
+		"translate" => "lang:"
+	)
+);
+
 ?>
 <div id="main" style="min-height:330px;">
     <nav class="sideNav">
         <ul>
-            <li <?php if($type == "dashboard") { echo 'class="active"'; } ?>><a href="admin.php?t=dashboard">Dashboard</a></li>
-            <li <?php if($type == "activity") { echo 'class="active"'; } ?>><a href="admin.php?t=activity">Activity</a></li>
-            <li <?php if($type == "groups") { echo 'class="active"'; } ?>><a href="admin.php?t=groups">Groups</a></li>
-            <li <?php if($type == "options") { echo 'class="active"'; } ?>><a href="admin.php?t=options">Options</a></li>
-            <li <?php if($type == "permissions") { echo 'class="active"'; } ?>><a href="admin.php?t=dashboard">Permissions</a></li>
-            <li <?php if($type == "addons") { echo 'class="active"'; } ?>><a href="admin.php?t=addons">Addons</a></li>
-            <li <?php if($type == "users") { echo 'class="active"'; } ?>><a href="admin.php?t=users">Users</a></li>
+			<?php
+				$keys = array_keys($adminTabs);
+				foreach($keys as &$tab) {
+					$class = ($type == $tab) ? ' class="active"' : '';
+					echo '<li'.$class.'><a href="'.$adminTabs[$tab]['location'].'">'.ucfirst($tab).'</a></li>';
+				}
+			?>
         </ul>
     </nav>
+    <div class="admin-content">
     <?php
-        if($type == "groups") {
-            include("include/pages/admin/groups.php");
-        } else if($type == "permissions") {
-            include("include/pages/admin/permissions.php");
-        } else if($type == "options") {
-            include("include/pages/admin/options.php");
-        } else if($type == "addons") {
-            include("include/pages/admin/addons.php");
-        } else if($type == "users") {
-            include("include/pages/admin/users.php");
-        } else if($type == "activity") {
-            include("include/pages/admin/activity.php");
-        } else {
-            include("include/pages/admin/dashboard.php");
-        }
+		if(array_key_exists($type, $adminTabs)) {
+			include($adminTabs[$type]['include']);
+		} else {
+			echo '<p class="announce">The page you are looking for could not be found.</p>';
+		}
     ?>
+    </div>
 </div>
 
 <?php

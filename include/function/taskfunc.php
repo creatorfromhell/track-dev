@@ -202,11 +202,13 @@ class TaskFunc {
         $out .= '<label for="assignee">Assignee:</label>';
         $out .= '<select name="assignee" id="assignee">';
         $out .= '<option value="none" selected>None</option>';
-        foreach(users() as &$user) {
+		$users = users();
+        foreach($users as &$user) {
             $out .= '<option value="'.$user.'">'.$user.'</option>';
         }
-        $out .= '</select>';
-        //TODO: Add due date field
+        $out .= '</select><br />';
+        $out .= '<label for="due-date">Due Date:</label>';
+        $out .= '<input id="due-date" name="due-date" type="text" placeholder="0000-00-00" readonly>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
         $out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
@@ -226,6 +228,14 @@ class TaskFunc {
         $out .= '<option value="2">In Progress</option>';
         $out .= '<option value="3">Closed</option>';
         $out .= '</select><br />';
+        $out .= '<label for="version">Version:</label>';
+        $out .= '<select name="version" id="version">';
+        $out .= '<option value="none" selected>None</option>';
+		$versions = VersionFunc::versions($project);
+		foreach($versions as &$version) {
+			$out .= '<option value="'.$version.'">'.$version.'</option>';
+		}
+        $out .= '</select><br />';
         $out .= '<label for="progress">Progress:<label id="progress_value">0</label></label><br />';
         $out .= '<input type="range" id="progress" name="progress" value="0" min="0" max="100" oninput="showValue(\'progress_value\', this.value);">';
         $out .= '</fieldset>';
@@ -236,29 +246,27 @@ class TaskFunc {
         $out .= '</div>';
         $out .= '<div id="page_3">';
         $out .= '<fieldset id="inputs">';
-        $out .= '<div class="labels-field">';
-        $out .= '<div style="width:100%;height:auto;text-align:center;"><b><label class="center">Labels</label></b></div>';
-        $out .= '<div style="width:100%;height:auto;margin:5px 0;">';
+        $out .= '<div class="pick-field">';
+        $out .= '<div class="title">Labels</div>';
+        $out .= '<div class="column-titles">';
         $out .= '<label class="fmleft">Available</label>';
         $out .= '<label class="fmright">Chosen</label>';
         $out .= '<div class="clear"></div>';
         $out .= '</div>';
-        $out .= '<div id="labels-available" class="labels-left" ondrop="onDrop(event)" ondragover="onDragOver(event)" style="margin:0;">';
+        $out .= '<div id="labels-available" class="column-left" ondrop="onDrop(event, \'labels\', \'remove\')" ondragover="onDragOver(event)" style="margin:0;">';
         $labels = LabelFunc::labels($project, $list);
         foreach($labels as &$label) {
-            $out .= '<div id="label-'.$label['id'].'" class="list-label small-label" style="background:'.$label['background'].';color:'.$label['text'].';border:1px solid '.$label['text'].';" draggable="true" ondragstart="onDrag(event)">'.$label['label'].'</div>';
+            $out .= '<div id="label-'.$label['id'].'" class="draggable-node" style="background:'.$label['background'].';color:'.$label['text'].';border:1px solid '.$label['text'].';" draggable="true" ondragstart="onDrag(event)">'.$label['label'].'</div>';
         }
         $out .= '</div>';
-        $out .= '<div id="labels-chosen" class="labels-right" ondrop="onDrop(event)" ondragover="onDragOver(event)" style="margin:0;height:125px;max-height:125px;overflow-y:scroll;">';
+        $out .= '<div id="labels-chosen" class="column-right" ondrop="onDrop(event, \'labels\', \'add\')" ondragover="onDragOver(event)" style="margin:0;height:125px;max-height:125px;overflow-y:scroll;">';
         $out .= '</div>';
         $out .= '<input id="labels-input" name="labels" type="hidden" value="">';
-        $out .= '<div class="clear"></div>';
         $out .= '</div>';
-        //TODO: print out versions for this project.
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
         $out .= '<button class="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
-        $out .= '<input type="submit" class="submit" name="add" value="Add">';
+        $out .= '<input type="submit" class="submit" name="add-task" value="Add">';
         $out .= '</fieldset>';
         $out .= '</div>';
         $out .= '</div>';
@@ -280,14 +288,14 @@ class TaskFunc {
         $out .= '<input id="author" name="author" type="hidden" value="'.$details['author'].'">';
         $out .= '<label for="assignee">Assignee:</label>';
         $out .= '<select name="assignee" id="assignee">';
-        $selected = ($details['assignee'] == 'none') ? 'selected' : '';
-        $out .= '<option value="none" '.$selected.'>None</option>';
-        foreach(users() as &$user) {
-            $selected = ($details['assignee'] == $user) ? 'selected' : '';
-            $out .= '<option value="'.$user.'" '.$selected.'>'.$user.'</option>';
+        $out .= '<option value="none"'.(($details['assignee'] == 'none') ? ' selected' : '').'>None</option>';
+		$users = users();
+        foreach($users as &$user) {
+            $out .= '<option value="'.$user.'"'.(($details['assignee'] == $user) ? ' selected' : '').'>'.$user.'</option>';
         }
-        $out .= '</select>';
-        //TODO: Add due date field
+        $out .= '</select><br />';
+        $out .= '<label for="due-date">Due Date:</label>';
+        $out .= '<input id="due-date" name="due-date" type="text" value="'.$details['due'].'" readonly>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
         $out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
@@ -297,27 +305,23 @@ class TaskFunc {
         $out .= '<fieldset id="inputs">';
         $out .= '<label for="editable">Editable:</label>';
         $out .= '<select name="editable" id="editable">';
-        $out .= '<option value="0" ';
-        $out .= ($details['editable'] == 0) ? "selected" : "";
-        $out .= '>No</option>';
-        $out .= '<option value="1" ';
-        $out .= ($details['editable'] == 1) ? "selected" : "";
-        $out .= '>Yes</option>';
+        $out .= '<option value="0"'.(($details['editable'] == 0) ? " selected" : "").'>No</option>';
+        $out .= '<option value="1"'.(($details['editable'] == 1) ? " selected" : "").'>Yes</option>';
         $out .= '</select><br />';
         $out .= '<label for="status">Status:</label>';
         $out .= '<select name="status" id="status">';
-        $out .= '<option value="0" ';
-        $out .= ($details['status'] == 0) ? "selected" : "";
-        $out .= '>None</option>';
-        $out .= '<option value="1" ';
-        $out .= ($details['status'] == 1) ? "selected" : "";
-        $out .= '>Done</option>';
-        $out .= '<option value="2" ';
-        $out .= ($details['status'] == 2) ? "selected" : "";
-        $out .= '>In Progress</option>';
-        $out .= '<option value="3" ';
-        $out .= ($details['status'] == 3) ? "selected" : "";
-        $out .= '>Closed</option>';
+        $out .= '<option value="0"'.(($details['status'] == 0) ? " selected" : "").'>None</option>';
+        $out .= '<option value="1"'.(($details['status'] == 1) ? " selected" : "").'>Done</option>';
+        $out .= '<option value="2"'.(($details['status'] == 2) ? " selected" : "").'>In Progress</option>';
+        $out .= '<option value="3"'.(($details['status'] == 3) ? " selected" : "").'>Closed</option>';
+        $out .= '</select><br />';
+        $out .= '<label for="version">Version:</label>';
+        $out .= '<select name="version" id="version">';
+        $out .= '<option value="none"'.(($details['version'] == "none") ? " selected" : "").'>None</option>';
+		$versions = VersionFunc::versions($project);
+		foreach($versions as &$version) {
+			$out .= '<option value="'.$version.'"'.(($version == $details['version']) ? ' selected' : '').'>'.$version.'</option>';
+		}
         $out .= '</select><br />';
         $out .= '<label for="progress">Progress:<label id="progress_value">'.$details['progress'].'</label></label><br />';
         $out .= '<input type="range" id="progress" name="progress" value="'.$details['progress'].'" min="0" max="100" oninput="showValue(\'progress_value\', this.value);">';
@@ -329,19 +333,19 @@ class TaskFunc {
         $out .= '</div>';
         $out .= '<div id="page_3">';
         $out .= '<fieldset id="inputs">';
-        $out .= '<div class="labels-field">';
-        $out .= '<div style="width:100%;height:auto;text-align:center;"><b><label class="center">Labels</label></b></div>';
-        $out .= '<div style="width:100%;height:auto;margin:5px 0;">';
+        $out .= '<div class="pick-field">';
+        $out .= '<div class="title">Labels</div>';
+        $out .= '<div class="column-titles">';
         $out .= '<label class="fmleft">Available</label>';
         $out .= '<label class="fmright">Chosen</label>';
         $out .= '<div class="clear"></div>';
         $out .= '</div>';
-        $out .= '<div id="labels-available-edit" class="labels-left" ondrop="onDrop(event)" ondragover="onDragOver(event)" style="margin:0;">';
+        $out .= '<div id="labels-available-edit" class="column-left" ondrop="onDrop(event, \'labels-edit\', \'remove\')" ondragover="onDragOver(event)" style="margin:0;">';
         $containedLabels = array();
         $labelsValue = "";
         $labels = LabelFunc::labels($project, $list);
         foreach($labels as &$label) {
-            $labelString = '<div id="label-'.$label['id'].'" class="list-label small-label" style="background:'.$label['background'].';color:'.$label['text'].';border:1px solid '.$label['text'].';" draggable="true" ondragstart="onDrag(event)">'.$label['label'].'</div>';
+            $labelString = '<div id="label-'.$label['id'].'" class="draggable-node" style="background:'.$label['background'].';color:'.$label['text'].';border:1px solid '.$label['text'].';" draggable="true" ondragstart="onDrag(event)">'.$label['label'].'</div>';
             if(!self::hasLabel($project, $list, $id, $label['id'])) {
                 $out .= $labelString;
             } else {
@@ -350,18 +354,17 @@ class TaskFunc {
             }
         }
         $out .= '</div>';
-        $out .= '<div id="labels-chosen-edit" class="labels-right" ondrop="onDrop(event)" ondragover="onDragOver(event)" style="margin:0;height:125px;max-height:125px;overflow-y:scroll;">';
+        $out .= '<div id="labels-chosen-edit" class="column-right" ondrop="onDrop(event, \'labels-edit\', \'add\')" ondragover="onDragOver(event)" style="margin:0;height:125px;max-height:125px;overflow-y:scroll;">';
         foreach($containedLabels as &$label) {
             $out .= $label;
         }
         $out .= '</div>';
         $out .= '<input id="labels-input" name="labels-edit" type="hidden" value="'.$labelsValue.'">';
-        $out .= '<div class="clear"></div>';
         $out .= '</div>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
         $out .= '<button class="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
-        $out .= '<input type="submit" class="submit" name="edit" value="Submit">';
+        $out .= '<input type="submit" class="submit" name="edit-task" value="Submit">';
         $out .= '</fieldset>';
         $out .= '</div>';
         $out .= '</div>';
