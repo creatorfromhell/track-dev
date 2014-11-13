@@ -293,29 +293,19 @@ class ProjectFunc {
     }
 
     public static function getTasksChartData($project, $months, $completed) {
-        $monthData = '';
-        $totalData = "";
-        $completedData = "";
+        $data = "";
         if($months) {
             for ($i = -6; $i <= 0; $i++){
-                if( $i > -6) { $monthData .= ','; }
-                $monthData .= '"'.date('M', strtotime("$i month")).'"';
+                if( $i > -6) { $data .= ','; }
+                $data .= '"'.date('M', strtotime("$i month")).'"';
             }
-            return $monthData;
         } else {
-            if($completed) {
-                for ($i = -6; $i <= 0; $i++){
-                    if( $i > -6) { $completedData .= ","; }
-                    $completedData .= self::getTaskCountByMonth($project, date('m', strtotime("$i month")), true);
-                }
-                return $completedData;
-            }
             for ($i = -6; $i <= 0; $i++){
-                if( $i > -6) { $totalData .= ","; }
-                $totalData .= self::getTaskCountByMonth($project, date('m', strtotime("$i month")), false);
+                if( $i > -6) { $data .= ","; }
+                $data .= self::getTaskCountByMonth($project, date('m', strtotime("$i month")), $completed);
             }
-            return $totalData;
         }
+        return $data;
     }
 
     public static function getTaskCountByMonth($project, $month, $completed) {
@@ -323,19 +313,11 @@ class ProjectFunc {
         $lists = self::returnValues($project);
 
         $from = "";
-        if($completed) {
-            for($i = 0; $i < count($lists); $i++) {
-                if($i > 0) { $from .= " UNION ALL "; }
-                $from .= "SELECT title, EXTRACT(YEAR FROM finished) AS year, EXTRACT(MONTH FROM finished) AS month FROM `".$prefix."_".$project."_".$lists[$i]."` WHERE task_status = 1";
-            }
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM (".$from.") AS a WHERE year = ".date("Y")." AND month = ".$month);
-            $stmt->execute();
-            $result = $stmt->fetchColumn();
-            return ($result) ? $result : 0;
-        }
+        $date = ($completed) ? "finished" : "created";
+        $status = ($completed) ? " WHERE task_status = 1" : "";
         for($i = 0; $i < count($lists); $i++) {
             if($i > 0) { $from .= " UNION ALL "; }
-            $from .= "SELECT title, EXTRACT(YEAR FROM created) AS year, EXTRACT(MONTH FROM created) AS month FROM `".$prefix."_".$project."_".$lists[$i]."`";
+            $from .= "SELECT title, EXTRACT(YEAR FROM ".$date.") AS year, EXTRACT(MONTH FROM ".$date.") AS month FROM `".$prefix."_".$project."_".$lists[$i]."`".$status;
         }
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM (".$from.") AS a WHERE year = ".date("Y")." AND month = ".$month);
         $stmt->execute();
