@@ -366,27 +366,12 @@ class ProjectFunc {
         $completedArray = $dataArray[2];
 
         if($users) {
-            $userString = "";
-            for($i = 0; $i < count($userArray); $i++) {
-                if( $i > 0) { $userString .= ","; }
-                $userString .= "'".$userArray[$i]."'";
-            }
-            return $userString;
+            return implode(",", $userArray);
         } else {
             if($completed) {
-                $completedString = "";
-                for($i = 0; $i < count($completedArray); $i++) {
-                    if( $i > 0) { $completedString .= ","; }
-                    $completedString .= $completedArray[$i];
-                }
-                return $completedString;
+                return implode(",", $completedArray);
             } else {
-                $totalString = "";
-                for($i = 0; $i < count($totalArray); $i++) {
-                    if( $i > 0) { $totalString .= ","; }
-                    $totalString .= $totalArray[$i];
-                }
-                return $totalString;
+                return implode(",", $totalArray);
             }
         }
     }
