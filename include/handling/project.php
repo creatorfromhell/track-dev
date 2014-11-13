@@ -17,12 +17,12 @@ if(isset($_POST['add-project'])) {
             if(isset($_POST['public']) && trim($_POST['public']) != "") {
                 if(isset($_POST['mainproject']) && trim($_POST['mainproject']) != "") {
                     if(isset($_POST['overseer']) && trim($_POST['overseer']) != "") {
-                        if(!ProjectFunc::exists($_POST['name'])) {
+                        if(!ProjectFunc::projectExists($_POST['name'])) {
                             $created = date("Y-m-d H:i:s");
                             if($_POST['mainproject'] != 0) {
                                 ProjectFunc::removePreset();
                             }
-                            ProjectFunc::add($_POST['name'], $_POST['mainproject'], 0, $_POST['author'], $created, $_POST['overseer'], $_POST['public']);
+                            ProjectFunc::addProject($_POST['name'], $_POST['mainproject'], 0, $_POST['author'], $created, $_POST['overseer'], $_POST['public']);
                             $params = "public:".$_POST['public'].",overseer:".$_POST['overseer'];
                             ActivityFunc::log($currentUser->name, $_POST['name'], "none", "project:add", $params, 0, $created);
                         } else {
@@ -64,16 +64,16 @@ if(isset($_POST['edit-project'])) {
                 if(isset($_POST['mainproject']) && trim($_POST['mainproject']) != "") {
                     if(isset($_POST['mainlist']) && trim($_POST['mainlist']) != "") {
                         if(isset($_POST['overseer']) && trim($_POST['overseer']) != "") {
-                            $details = ProjectFunc::getDetails($_POST['id']);
-                            if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !ProjectFunc::exists($_POST['name'])) {
+                            $details = ProjectFunc::projectDetails($_POST['id']);
+                            if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !ProjectFunc::projectExists($_POST['name'])) {
                                 $created = date("Y-m-d H:i:s");
                                 if($details['preset'] == 0 && $_POST['mainproject'] == 1) {
                                     ProjectFunc::removePreset();
                                 }
                                 if($details['name'] != $_POST['name']) {
-                                    ProjectFunc::rename($_POST['id'], $details['name'], $_POST['name']);
+                                    ProjectFunc::renameProject($_POST['id'], $details['name'], $_POST['name']);
                                 }
-                                ProjectFunc::edit($_POST['id'], $_POST['name'], $_POST['mainproject'], $_POST['mainlist'], $_POST['overseer'], $_POST['public']);
+                                ProjectFunc::editProject($_POST['id'], $_POST['name'], $_POST['mainproject'], $_POST['mainlist'], $_POST['overseer'], $_POST['public']);
                                 $params = "id:".$_POST['id'].",public:".$_POST['public'].",overseer:".$_POST['overseer'];
                                 ActivityFunc::log($currentUser->name, $_POST['name'], "none", "project:edit", $params, 0, date("Y-m-d H:i:s"));
                             } else {

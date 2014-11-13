@@ -59,7 +59,7 @@ if(isset($_GET['page'])) {
 					echo 'showMessage("success", "The status of task #'.$editID.' has been changed to closed.");';
 					echo '</script>';
 				} else if($action == "delete") {
-					TaskFunc::delete($project, $list, $editID);
+					TaskFunc::deleteTask($project, $list, $editID);
 					$params = "id:".$editID;
 					ActivityFunc::log(getName(), $project, $list, "task:delete", $params, 0, date("Y-m-d H:i:s"));
 					echo '<script type="text/javascript">';
@@ -72,7 +72,7 @@ if(isset($_GET['page'])) {
 				if($action == "edit") {
 					$editing = true;
 				} else if($action == "delete") {
-					LabelFunc::delete($editID);
+					LabelFunc::deleteLabel($editID);
 					$params = "id:".$editID;
 					ActivityFunc::log(getName(), $project, $list, "label:delete", $params, 0, date("Y-m-d H:i:s"));
 					echo '<script type="text/javascript">';

@@ -28,7 +28,7 @@ if(isset($_POST['add-user'])) {
                                     $user->password = generateHash(cleanInput($_POST['password']));
                                     $user->group = Group::load(cleanInput($_POST['group']));
                                     $user->permissions = explode(",", cleanInput($_POST['permissions-value']));
-                                    User::add($user);
+                                    User::addUser($user);
                                     $params = "name:".cleanInput($_POST['username']).",email:".cleanInput($_POST['email']).",group:".cleanInput($_POST['group']);
                                     ActivityFunc::log($currentUser->name, "none", "none", "user:add", $params, 0, date("Y-m-d H:i:s"));
                                     destroySession("userspluscaptcha");

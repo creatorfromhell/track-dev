@@ -11,7 +11,7 @@ require_once("include/function/listfunc.php");
 class ProjectFunc {
 
     //add project
-    public static function add($project, $preset, $main, $creator, $created, $overseer, $public) {
+    public static function addProject($project, $preset, $main, $creator, $created, $overseer, $public) {
 		global $prefix, $pdo;
 		$permissions = 'view:none,edit:none';
         $t = $prefix."_projects";
@@ -34,11 +34,11 @@ class ProjectFunc {
             $listid = ListFunc::getID($project, $list);
             ListFunc::remove($listid);
         }
-        self::delete($id);
+        self::deleteProject($id);
     }
 
     //delete project
-    public static function delete($id) {
+    public static function deleteProject($id) {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
@@ -47,7 +47,7 @@ class ProjectFunc {
     }
 
     //edit project
-    public static function edit($id, $project, $preset, $main, $overseer, $public) {
+    public static function editProject($id, $project, $preset, $main, $overseer, $public) {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ?, preset = ?, main = ?, overseer = ?, public = ? WHERE id = ?");
@@ -182,7 +182,7 @@ class ProjectFunc {
         $stmt->execute();
     }
 
-    public static function getDetails($id) {
+    public static function projectDetails($id) {
         $return = array();
         global $prefix, $pdo;
         $t = $prefix."_projects";
@@ -203,7 +203,7 @@ class ProjectFunc {
     }
 
     //reproject project
-    public static function rename($id, $oldname, $project) {
+    public static function renameProject($id, $oldname, $project) {
         $lists = self::lists($oldname);
         foreach($lists as &$list) {
             ListFunc::changeProject(ListFunc::getID($oldname, $list), $project);
@@ -217,7 +217,7 @@ class ProjectFunc {
     }
 
     //exists
-    public static function exists($project) {
+    public static function projectExists($project) {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ?");
@@ -538,7 +538,7 @@ class ProjectFunc {
     }
 
     public static function printEditForm($id) {
-        $details = self::getDetails($id);
+        $details = self::projectDetails($id);
         $out = '';
         $out .= '<h3>Edit Project</h3>';
         $out .= '<div id="holder">';

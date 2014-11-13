@@ -22,7 +22,7 @@ if(isset($_POST['add-group'])) {
                         $group->admin = (cleanInput($_POST['admin']) == '1') ? true : false;
                         $group->preset = (cleanInput($_POST['preset']) == '1') ? true : false;
                         $group->permissions = explode(",", cleanInput($_POST['permissions-value']));
-                        Group::add($group);
+                        Group::addGroup($group);
                         $params = "name:".cleanInput($_POST['name']).",admin:".cleanInput($_POST['admin']).",preset:".cleanInput($_POST['preset']);
                         ActivityFunc::log($currentUser->name, "none", "none", "group:add", $params, 0, date("Y-m-d H:i:s"));
                         destroySession("userspluscaptcha");

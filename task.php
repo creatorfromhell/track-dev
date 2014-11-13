@@ -16,7 +16,7 @@ if(isset($_GET['id'])) {
 include("include/header.php");
 
 $back = "list.php?p=".$project."&l=".$list;
-$taskDetails = TaskFunc::getDetails($project, $list, $id);
+$taskDetails = TaskFunc::taskDetails($project, $list, $id);
 
 $finished = ($taskDetails['finished'] != "0000-00-00") ? $taskDetails['finished'] : "None";
 $due = ($taskDetails['due'] != "0000-00-00") ? $taskDetails['due'] : "None";
@@ -61,7 +61,7 @@ if($status == "3") { $statusName = "Closed"; $statusClass = "error"; }
                 $labelString = $taskDetails['labels'];
                 $labels = explode(",", $labelString);
                 foreach($labels as &$l) {
-                    $ldetails = LabelFunc::details($l);
+                    $ldetails = LabelFunc::labelDetails($l);
                     echo '<label class="task-label" style="background:'.$ldetails['background'].';color:'.$ldetails['text'].';border:1px solid '.$ldetails['text'].';">'.$ldetails['label'].'</label>';
                 }
                 ?>

@@ -11,7 +11,7 @@ require_once("include/function/projectfunc.php");
 class ListFunc {
 
     //add list
-    public static function add($list, $project, $public, $creator, $created, $overseer, $minimal, $guestview, $guestedit, $viewpermission, $editpermission) {
+    public static function addList($list, $project, $public, $creator, $created, $overseer, $minimal, $guestview, $guestedit, $viewpermission, $editpermission) {
 		$guestPermissions = "view:".$guestview.",edit:".$guestedit;
         $listPermissions = "view:".$viewpermission.",edit:".$editpermission;
         global $prefix, $pdo;
@@ -56,11 +56,11 @@ class ListFunc {
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("DROP TABLE IF EXISTS `".$t."`");
         $stmt->execute();
-        self::delete($id);
+        self::deleteList($id);
     }
 
     //delete list
-    public static function delete($id) {
+    public static function deleteList($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
@@ -69,7 +69,7 @@ class ListFunc {
     }
 
     //edit list
-    public static function edit($id, $list, $project, $public, $overseer, $minimal, $guestview, $guestedit, $viewpermission, $editpermission) {
+    public static function editList($id, $list, $project, $public, $overseer, $minimal, $guestview, $guestedit, $viewpermission, $editpermission) {
         $guestPermissions = "view:".$guestview.",edit:".$guestedit;
         $listPermissions = "view:".$viewpermission.",edit:".$editpermission;
         global $prefix, $pdo;
@@ -173,7 +173,7 @@ class ListFunc {
         return $result['id'];
     }
 
-    public static function getDetails($id) {
+    public static function listDetails($id) {
         $return = array();
         global $prefix, $pdo;
         $t = $prefix."_lists";
@@ -226,7 +226,7 @@ class ListFunc {
 
     //change list project
     public static function changeProject($id, $project) {
-        $details = self::getDetails($id);
+        $details = self::listDetails($id);
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
@@ -268,8 +268,8 @@ class ListFunc {
     }
 
     //rename list
-    public static function rename($id, $list) {
-        $details = self::getDetails($id);
+    public static function renameList($id, $list) {
+        $details = self::listDetails($id);
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET list = ? WHERE id = ?");
@@ -283,7 +283,7 @@ class ListFunc {
     }
 
     //exists
-    public static function exists($project, $list) {
+    public static function listExists($project, $list) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ? AND list = ?");

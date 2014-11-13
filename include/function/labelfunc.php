@@ -10,7 +10,7 @@
 class LabelFunc {
 
     //add label
-    public static function add($project, $list, $name, $textcolor, $backgroundcolor) {
+    public static function addLabel($project, $list, $name, $textcolor, $backgroundcolor) {
 		global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, project, list, label_name, text_color, background_color) VALUES ('', ?, ?, ?, ?, ?)");
@@ -23,7 +23,7 @@ class LabelFunc {
     }
 
     //delete label
-    public static function delete($id) {
+    public static function deleteLabel($id) {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
@@ -32,7 +32,7 @@ class LabelFunc {
     }
 
     //edit label
-    public static function edit($id, $project, $list, $name, $textcolor, $backgroundcolor) {
+    public static function editLabel($id, $project, $list, $name, $textcolor, $backgroundcolor) {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ?, list = ?, label_name = ?, text_color = ?, background_color = ? WHERE id = ?");
@@ -57,7 +57,7 @@ class LabelFunc {
     }
 
     //rename label
-    public static function rename($id, $name) {
+    public static function renameLabel($id, $name) {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET label_name = ? WHERE id = ?");
@@ -66,7 +66,7 @@ class LabelFunc {
         $stmt->execute();
     }
 
-    public static function details($id) {
+    public static function labelDetails($id) {
         $details = array();
         global $prefix, $pdo;
         $t = $prefix."_labels";
@@ -137,7 +137,7 @@ class LabelFunc {
     }
 
     public static function printEditForm($id) {
-        $details = self::details($id);
+        $details = self::labelDetails($id);
         $out = '';
         $out .= '<div id="page_1">';
         $out .= '<fieldset id="inputs">';

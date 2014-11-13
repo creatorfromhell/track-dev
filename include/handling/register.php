@@ -26,7 +26,7 @@ if(isset($_POST['register'])) {
                                 $user->password = generateHash(cleanInput($_POST['password']));
                                 $user->group = Group::load(Group::preset());
                                 $user->activationKey = generateSessionID(40);
-                                User::add($user);
+                                User::addUser($user);
                                 $params = "name:".cleanInput($_POST['username']).",email:".$_POST['email'];
                                 ActivityFunc::log(User::getIP(), "none", "none", "user:register", $params, 0, date("Y-m-d H:i:s"));
                                 destroySession("userspluscaptcha");

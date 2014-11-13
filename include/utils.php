@@ -140,7 +140,7 @@ function canEditTask($listID, $taskID) {
     if(!isset($_SESSION['usersplusprofile']) || !User::exists($_SESSION['usersplusprofile'])) { return false; }
     if(isAdmin()) { return true; }
     if(ProjectFunc::getOverseer(ListFunc::getProject($listID)) == getName() || ListFunc::getOverseer($listID) == getName()) { return true; }
-    $details = TaskFunc::getDetails(ListFunc::getProject($listID), ListFunc::getName($listID), $taskID);
+    $details = TaskFunc::taskDetails(ListFunc::getProject($listID), ListFunc::getName($listID), $taskID);
     if($details['author'] == getName()) { return true; }
 	$user = User::load($_SESSION['usersplusprofile']);
     if($editPermission != "none" && nodeValidID($editPermission) && $user->hasPermission($editPermission) && $details['editable'] == '1') { return true; }

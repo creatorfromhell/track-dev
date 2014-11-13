@@ -10,7 +10,7 @@
 class TaskFunc {
 
     //add task
-    public static function add($project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
+    public static function addTask($project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, title, description, author, assignee, due, created, finished, version_name, labels, editable, task_status, progress) VALUES('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -30,7 +30,7 @@ class TaskFunc {
     }
 
     //delete task
-    public static function delete($project, $list, $id) {
+    public static function deleteTask($project, $list, $id) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
@@ -39,7 +39,7 @@ class TaskFunc {
     }
 
     //edit task
-    public static function edit($id, $project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
+    public static function editTask($id, $project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("UPDATE `".$t."` SET title = ?, description = ?, author = ?, assignee = ?, due = ?, created = ?, finished = ?, version_name = ?, labels = ?, editable = ?, task_status = ?, progress = ? WHERE id = ?");
@@ -59,7 +59,7 @@ class TaskFunc {
         $stmt->execute();
     }
 
-    public static function getDetails($project, $list, $id) {
+    public static function taskDetails($project, $list, $id) {
         $return = array();
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
@@ -255,7 +255,7 @@ class TaskFunc {
     }
 
     public static function printEditForm($project, $list, $id) {
-        $details = self::getDetails($project, $list, $id);
+        $details = self::taskDetails($project, $list, $id);
 
         $out = '';
         $out .= '<h3>Edit Task</h3>';

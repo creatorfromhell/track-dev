@@ -41,7 +41,7 @@ class Group {
         $stmt->execute();
     }
 
-    public static function add($group) {
+    public static function addGroup($group) {
         if(!is_a($group, "Group")) { return; }
         global $pdo, $prefix;
         $t = $prefix."_groups";

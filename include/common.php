@@ -71,26 +71,26 @@ if(isset($_GET['lang']) && $langmanager->exists($_GET['lang'])) {
     $language = $_COOKIE['lang'];
 }
 
-if(isset($_GET['p']) && ProjectFunc::exists($_GET['p'])) {
+if(isset($_GET['p']) && ProjectFunc::projectExists($_GET['p'])) {
     $project = $_GET['p'];
     $_SESSION['p'] = $project;
     setcookie('p', $project, time() + (3600 * 24 * 30));
     $list = ProjectFunc::getMain($project);
-} else if(isset($_SESSION['p']) && ProjectFunc::exists($_SESSION['p'])) {
+} else if(isset($_SESSION['p']) && ProjectFunc::projectExists($_SESSION['p'])) {
     $project = $_SESSION['p'];
     $list = ProjectFunc::getMain($project);
-} else if(isset($_COOKIE['p']) && ProjectFunc::exists($_COOKIE['p'])) {
+} else if(isset($_COOKIE['p']) && ProjectFunc::projectExists($_COOKIE['p'])) {
     $project = $_COOKIE['p'];
     $list = ProjectFunc::getMain($project);
 }
 
-if(isset($_GET['l']) && ListFunc::exists($project, $_GET['l'])) {
+if(isset($_GET['l']) && ListFunc::listExists($project, $_GET['l'])) {
     $list = $_GET['l'];
     $_SESSION['l'] = $list;
     setcookie('l', $list, time() + (3600 * 24 * 30));
-} else if(isset($_SESSION['l']) && ListFunc::exists($project, $_SESSION['l'])) {
+} else if(isset($_SESSION['l']) && ListFunc::listExists($project, $_SESSION['l'])) {
     $list = $_SESSION['l'];
-} else if(isset($_COOKIE['l']) && ListFunc::exists($project, $_COOKIE['l'])) {
+} else if(isset($_COOKIE['l']) && ListFunc::listExists($project, $_COOKIE['l'])) {
     $list = $_COOKIE['l'];
 }
 

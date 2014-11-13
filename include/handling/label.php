@@ -13,7 +13,7 @@ if(isset($_POST['add-label'])) {
             if(isset($_POST['labelname']) && trim($_POST['labelname']) != "") {
                 if(isset($_POST['textcolor']) && trim($_POST['textcolor']) != "") {
                     if(isset($_POST['backgroundcolor']) && trim($_POST['backgroundcolor']) != "") {
-                        LabelFunc::add($_POST['project'], $_POST['list'], $_POST['labelname'], $_POST['textcolor'], $_POST['backgroundcolor']);
+                        LabelFunc::addLabel($_POST['project'], $_POST['list'], $_POST['labelname'], $_POST['textcolor'], $_POST['backgroundcolor']);
                         $params = "name:".$_POST['name'].",textcolor:".$_POST['textcolor'].",backgroundcolor:".$_POST['backgroundcolor'];
                         ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['list'], "label:add", $params, 0, date("Y-m-d H:i:s"));
                     } else {
@@ -50,7 +50,7 @@ if(isset($_POST['edit-label'])) {
                 if(isset($_POST['labelname']) && trim($_POST['labelname']) != "") {
                     if(isset($_POST['textcolor']) && trim($_POST['textcolor']) != "") {
                         if(isset($_POST['backgroundcolor']) && trim($_POST['backgroundcolor']) != "") {
-                            LabelFunc::edit($_POST['id'], $_POST['project'], $_POST['list'], $_POST['labelname'], $_POST['textcolor'], $_POST['backgroundcolor']);
+                            LabelFunc::editLabel($_POST['id'], $_POST['project'], $_POST['list'], $_POST['labelname'], $_POST['textcolor'], $_POST['backgroundcolor']);
                             $params = "id:".$_POST['id'].",name:".$_POST['name'].",textcolor:".$_POST['textcolor'].",backgroundcolor:".$_POST['backgroundcolor'];
                             ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['list'], "label:edit", $params, 0, date("Y-m-d H:i:s"));
                         } else {

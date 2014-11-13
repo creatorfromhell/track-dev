@@ -23,10 +23,10 @@ if(isset($_POST['add-list'])) {
                                     if(isset($_POST['guestedit']) && trim($_POST['guestedit']) != "") {
                                         if(isset($_POST['viewpermission']) && trim($_POST['viewpermission']) != "") {
                                             if(isset($_POST['editpermission']) && trim($_POST['editpermission']) != "") {
-                                                if(ProjectFunc::exists($_POST['project'])) {
-                                                    if(!ListFunc::exists($_POST['project'], $_POST['name'])) {
+                                                if(ProjectFunc::projectExists($_POST['project'])) {
+                                                    if(!ListFunc::listExists($_POST['project'], $_POST['name'])) {
                                                         $created = date("Y-m-d H:i:s");
-                                                        ListFunc::add($_POST['name'], $_POST['project'], $_POST['public'], $_POST['author'], $created, $_POST['overseer'], $_POST['minimal'], $_POST['guestview'], $_POST['guestedit'], $_POST['viewpermission'], $_POST['editpermission']);
+                                                        ListFunc::addList($_POST['name'], $_POST['project'], $_POST['public'], $_POST['author'], $created, $_POST['overseer'], $_POST['minimal'], $_POST['guestview'], $_POST['guestedit'], $_POST['viewpermission'], $_POST['editpermission']);
                                                         ListFunc::create($_POST['project'], $_POST['name']);
                                                         if($_POST['mainlist'] != 0) {
                                                             ProjectFunc::changeMain(ProjectFunc::getID($_POST['project']), ListFunc::getID($_POST['project'], $_POST['name']));
@@ -115,23 +115,23 @@ if(isset($_POST['edit-list'])) {
                                     if(isset($_POST['guestedit']) && trim($_POST['guestedit']) != "") {
                                         if(isset($_POST['viewpermission']) && trim($_POST['viewpermission']) != "") {
                                             if(isset($_POST['editpermission']) && trim($_POST['editpermission']) != "") {
-                                                if(ProjectFunc::exists($_POST['project'])) {
+                                                if(ProjectFunc::projectExists($_POST['project'])) {
                                                     $id = $_POST['id'];
-                                                    $details = ListFunc::getDetails($id);
-                                                    if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !ListFunc::exists($_POST['project'], $_POST['name'])) {
+                                                    $details = ListFunc::listDetails($id);
+                                                    if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !ListFunc::listExists($_POST['project'], $_POST['name'])) {
                                                         $created = date("Y-m-d H:i:s");
                                                         if($_POST['project'] != $details['project']) {
                                                             ListFunc::changeProject($id, $_POST['project']);
                                                         }
 
                                                         if($_POST['name'] != $details['name']) {
-                                                            ListFunc::rename($id, $_POST['name']);
+                                                            ListFunc::renameList($id, $_POST['name']);
                                                         }
 
                                                         if(ProjectFunc::getMain(ProjectFunc::getID($details['project'])) != $id && $_POST['mainlist'] == 1) {
                                                             ProjectFunc::changeMain(ProjectFunc::getID($_POST['project']), ListFunc::getID($_POST['project'], $_POST['name']));
                                                         }
-                                                        ListFunc::edit($id, $_POST['name'], $_POST['project'], $_POST['public'], $_POST['overseer'], $_POST['minimal'], $_POST['guestview'], $_POST['guestedit'], $_POST['viewpermission'], $_POST['editpermission']);
+                                                        ListFunc::editList($id, $_POST['name'], $_POST['project'], $_POST['public'], $_POST['overseer'], $_POST['minimal'], $_POST['guestview'], $_POST['guestedit'], $_POST['viewpermission'], $_POST['editpermission']);
                                                         $params = "id:".$id.",public:".$_POST['public'].",overseer:".$_POST['overseer'];
                                                         ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['name'], "list:edit", $params, 0, $created);
                                                         echo '<script type="text/javascript">';

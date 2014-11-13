@@ -14,7 +14,7 @@ class VersionFunc {
      */
 
     //add version
-    public static function add($version, $project, $status, $due, $released, $type) {
+    public static function addVersion($version, $project, $status, $due, $released, $type) {
 		global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, version_name, project, version_status, due, released, version_type) VALUES ('', ?, ?, ?, ?, ?, ?)");
@@ -28,7 +28,7 @@ class VersionFunc {
     }
 
     //delete version
-    public static function delete($id) {
+    public static function deleteVersion($id) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
@@ -37,7 +37,7 @@ class VersionFunc {
     }
 
     //edit version
-    public static function edit($id, $version, $project, $status, $due, $released, $type) {
+    public static function editVersion($id, $version, $project, $status, $due, $released, $type) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ?, project = ?, version_status = ?, due = ?, released = ?, version_type = ? WHERE id = ?");
@@ -103,7 +103,7 @@ class VersionFunc {
 	}
 
     //reversion version
-    public static function rename($id, $version) {
+    public static function renameVersion($id, $version) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ? WHERE id = ?");
@@ -139,7 +139,7 @@ class VersionFunc {
 		return $versions;
 	}
 	
-	public static function getDetails($id) {
+	public static function versionDetails($id) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("SELECT version_name, project, version_status, due, released, version_type FROM `".$t."` WHERE id = ?");
@@ -156,7 +156,7 @@ class VersionFunc {
         return $return;
 	}
 	
-	public static function exists($name) {
+	public static function versionExists($name) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE version_name = ?");
@@ -219,7 +219,7 @@ class VersionFunc {
 
     public static function printEditForm($id) {
 		$out = '';
-		$details = self::getDetails($id);
+		$details = self::versionDetails($id);
 		$out .= '<h3>Edit Version</h3>';
 		$out .= '<div id="holder">';
 		$out .= '<div id="page_1">';
@@ -343,7 +343,7 @@ class VersionFunc {
 		return $types;
 	}
 	
-	public static function getTypeDetails($id) {
+	public static function typeDetails($id) {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("SELECT version_type, description, version_stability FROM `".$t."` WHERE id = ?");
@@ -407,7 +407,7 @@ class VersionFunc {
 
     public static function printTypeEditForm($id) {
 		$out = '';
-		$details = self::getTypeDetails($id);
+		$details = self::typeDetails($id);
 		$out .= '<h3>Edit Version Type</h3>';
 		$out .= '<div id="holder">';
 		$out .= '<div id="page_1">';

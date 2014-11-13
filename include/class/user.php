@@ -146,7 +146,7 @@ class User {
         return $result['user_password'];
     }
 
-    public static function add($user) {
+    public static function addUser($user) {
         if(!is_a($user, "User")) { return; }
         global $pdo, $prefix;
         $t = $prefix."_users";
