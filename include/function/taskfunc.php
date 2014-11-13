@@ -38,12 +38,6 @@ class TaskFunc {
         $stmt->execute();
     }
 
-    //check task table
-    public static function checkTable($project, $list) {
-        global $prefix, $pdo;
-        $t = $prefix."_".$project."_".$list;
-    }
-
     //edit task
     public static function edit($id, $project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
         global $prefix, $pdo;
@@ -108,13 +102,6 @@ class TaskFunc {
         $stmt->execute();
     }
 
-    //change task list
-    public static function changeList($project, $list, $id, $newList) {
-        global $prefix, $pdo;
-        $t = $prefix."_".$project."_".$list;
-        //use INTO SELECT
-    }
-
     //change task progress
     public static function changeProgress($project, $list, $id, $progress) {
         global $prefix, $pdo;
@@ -123,13 +110,6 @@ class TaskFunc {
         $stmt->bindParam(1, $progress);
         $stmt->bindParam(2, $id);
         $stmt->execute();
-    }
-
-    //change project
-    public static function changeProject($project, $list, $id, $newProject) {
-        global $prefix, $pdo;
-        $t = $prefix."_".$project."_".$list;
-        //use INTO SELECT
     }
 
     public static function changeFinished($project, $list, $id, $finished) {

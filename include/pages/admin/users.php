@@ -68,8 +68,7 @@ if($subPage == "user" && isset($_GET['name']) && User::exists($_GET['name'])) {
                         $stmt = $pdo->prepare("SELECT id, group_name FROM `".$t."`");
                         $stmt->execute();
                         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            $selected = ($row['id'] == $user->group->id) ? "selected" : "";
-                            echo "<option value='".$row['id']."' ".$selected.">".$row['group_name']."</option>";
+                            echo "<option value='".$row['id']."'".(($row['id'] == $user->group->id) ? " selected" : "").">".$row['group_name']."</option>";
                         }
                         ?>
                     </select><br />
@@ -142,8 +141,7 @@ if($subPage == "user" && isset($_GET['name']) && User::exists($_GET['name'])) {
                     $stmt = $pdo->prepare("SELECT id, group_name FROM `".$t."`");
                     $stmt->execute();
                     while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        $selected = ($row['id'] == Group::preset()) ? "selected" : "";
-                        echo "<option value='".$row['id']."' ".$selected.">".$row['group_name']."</option>";
+                        echo "<option value='".$row['id']."'".(($row['id'] == Group::preset()) ? " selected" : "").">".$row['group_name']."</option>";
                     }
                 ?>
                 </select><br />
