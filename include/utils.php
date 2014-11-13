@@ -44,25 +44,16 @@ function uploadFile($file, $name, $maxSize = 1000000) {
 	$bannedTypes = array("php", "js", "cs");
 	
 	if(in_array($type, $bannedTypes)) {
-		echo '<script type="text/javascript">';
-		echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->upload->blacklist)).'");';
-		echo '</script>';
 		return;
 	}
 	
 	if($file['size'] > $maxSize) {
-		echo '<script type="text/javascript">';
-		echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->upload->overmax)).'");';
-		echo '</script>';
 		return;
 	}
 	
 	if(move_uploaded_file($file['tmp_name'], $move)) {
 		return;
 	}
-	echo '<script type="text/javascript">';
-	echo 'showMessage("error", "'.$formatter->replaceShortcuts(((string)$languageinstance->site->forms->upload->failed)).'");';
-	echo '</script>';
 	return;
 }
 
@@ -124,7 +115,7 @@ function userNav() {
 function canViewList($id) {
     $viewPermission = ListFunc::viewPermission($id);
     if(ListFunc::guestView($id)) { return true; }
-    if(!isset($_SESSION['usersplusprofile']) || !User::exist($_SESSION['usersplusprofile'])) { return false; }
+    if(!isset($_SESSION['usersplusprofile']) || !User::exists($_SESSION['usersplusprofile'])) { return false; }
     if(isAdmin()) { return true; }
     if(ProjectFunc::getOverseer(ListFunc::getProject($id)) == getName() || ListFunc::getOverseer($id) == getName()) { return true; }
 	$user = User::load($_SESSION['usersplusprofile']);

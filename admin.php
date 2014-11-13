@@ -13,12 +13,6 @@ $type = "dashboard";
 if(isset($_GET['t'])) {
     $type = $_GET['t'];
 }
-$pn = 1;
-if(isset($_GET['pn'])) {
-    if($_GET['pn'] > 0) {
-        $pn = $_GET['pn'];
-    }
-}
 
 $adminTabs = array(
 	"dashboard" => array(

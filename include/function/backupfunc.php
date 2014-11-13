@@ -9,7 +9,7 @@
  */
 class BackupFunc {
 
-	$directory = "resources/backup/";
+	public static $directory = "resources/backup/";
 	
 	/*
 	 * Backup all logged activities

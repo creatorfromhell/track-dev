@@ -15,7 +15,7 @@ class Pagination {
     public $startingValue = 0;
     public $items = 10;
     public $page = 1;
-    public $totalPages = 1;
+    public $totalPages = 1.0;
     public $columnString = "*";
     public $table = "";
     public $pageString = "";

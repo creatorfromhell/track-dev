@@ -15,7 +15,7 @@ class Configuration {
 
     //Load the configuration in the constructor
     public function __construct() {
-        $this->config = parse_ini_file("resources/config.ini", 1);
+        $this->config = parse_ini_file("resources/config.ini", true);
     }
 
     //Save the configuration in the destructor

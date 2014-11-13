@@ -1,6 +1,6 @@
 <?php
 
-public ExamplePlugin implements IPlugin {
+class ExamplePlugin implements IPlugin {
 
 }
 

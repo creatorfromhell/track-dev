@@ -146,6 +146,7 @@ class VersionFunc {
 		$stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $return = array();
         $return['name'] = $result['version_name'];
         $return['project'] = $result['project'];
         $return['status'] = $result['version_status'];
@@ -186,7 +187,7 @@ class VersionFunc {
 		$out .= '<label for="version-type">Version Type:</label>';
 		$out .= '<select name="version-type" id="version-type">';
 		$out .= '<option value="0" selected>None</option>';
-		$types = self::types();
+		$types = self::types($project);
 		foreach($types as &$type) {
 			$out .= '<option value="'.$type.'">'.$type.'</option>';
 		}
@@ -235,7 +236,7 @@ class VersionFunc {
 		$out .= '<label for="version-type">Version Type:</label>';
 		$out .= '<select name="version-type" id="version-type">';
 		$out .= '<option value="none"'.(($details['type'] == 'none') ? ' selected' : '').'>None</option>';
-		$types = self::types();
+		$types = self::types($details['project']);
 		foreach($types as &$type) {
 			$out .= '<option value="'.$type.'"'.(($details['type'] == $type) ? ' selected' : '').'>'.$type.'</option>';
 		}
@@ -327,7 +328,7 @@ class VersionFunc {
         return false;
 	}
 	
-	public static function types() {
+	public static function types($project) {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("SELECT version_type FROM `".$t."`");
@@ -349,6 +350,7 @@ class VersionFunc {
 		$stmt->bindParam(1, $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $return = array();
         $return['name'] = $result['version_type'];
         $return['description'] = $result['description'];
         $return['stability'] = $result['version_stability'];

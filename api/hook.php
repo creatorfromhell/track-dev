@@ -1,6 +1,1 @@
-<?php
-public abstract class Hook {
-	public $friendlyName = "generic";
-	public $arguments = array();
-}
-?>
+<?phpabstract class Hook {	public $friendlyName = "generic";	public $arguments = array();    function __construct($name, $arguments) {        $this->friendlyName = $name;        $this->arguments = $arguments;    }}?>

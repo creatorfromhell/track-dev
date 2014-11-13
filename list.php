@@ -19,17 +19,10 @@ if(isset($_GET['page'])) {
 		$switchable = $_GET['page'];
 	}
 }
-
-$pn = 1;
-if(isset($_GET['pn'])) {
-    if($_GET['pn'] > 0) {
-        $pn = $_GET['pn'];
-    }
-}
 ?>
     <div id="main">
         <?php
-        $id = 0;
+        $editID = 0;
         $editing = false;
         if(isset($_GET['action']) && isset($_GET['id']) && canEditTask(ListFunc::getID($project, $list), cleanInput($_GET['id']))) {
             $action = $_GET['action'];

@@ -48,6 +48,7 @@ $installation_path = rtrim($configurationValues["urls"]["base_url"], "/").rtrim(
 $path = $_SERVER["PHP_SELF"];
 $pageFull = basename($path);
 $page = basename($path, ".php");
+$pn = 1;
 $currentUser = null;
 $language = $configurationValues["main"]["language"];
 $project = ProjectFunc::getPreset();
@@ -92,6 +93,13 @@ if(isset($_GET['l']) && ListFunc::exists($project, $_GET['l'])) {
 } else if(isset($_COOKIE['l']) && ListFunc::exists($project, $_COOKIE['l'])) {
     $list = $_COOKIE['l'];
 }
+
+if(isset($_GET['pn'])) {
+    if($_GET['pn'] > 0) {
+        $pn = $_GET['pn'];
+    }
+}
+
 $languageinstance = $langmanager->languages[$language];
 $return = $pageFull.'?p='.$project.'&l='.$list;
 $lists = ProjectFunc::lists($project);
