@@ -108,6 +108,8 @@ $rawMsg = "";
 $msg = "";
 $msgType = "general";
 
+global $language, $langmanager;
+
 if(trim($rawMsg) !== "") {
     if(strContains($rawMsg, ":")) {
         $array = explode(":", $rawMsg);

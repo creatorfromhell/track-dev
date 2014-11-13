@@ -44,5 +44,9 @@ class LanguageManager {
         }
         return false;
     }
+
+    public function getValue($name, $path) {
+        return (string)$this->languages[$name]->xpath(str_ireplace("->", "/", $path))[0];
+    }
 }
 ?>
