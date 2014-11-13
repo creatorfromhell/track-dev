@@ -29,7 +29,7 @@ class ProjectFunc {
 
     public static function remove($id) {
         $project = self::getName($id);
-        $lists = self::lists($project);
+        $lists = self::returnValues($project);
         foreach($lists as &$list) {
             $listid = ListFunc::getID($project, $list);
             ListFunc::remove($listid);
@@ -204,7 +204,7 @@ class ProjectFunc {
 
     //reproject project
     public static function renameProject($id, $oldname, $project) {
-        $lists = self::lists($oldname);
+        $lists = self::returnValues($oldname);
         foreach($lists as &$list) {
             ListFunc::changeProject(ListFunc::getID($oldname, $list), $project);
         }
@@ -232,64 +232,48 @@ class ProjectFunc {
     }
 
     public static function hasProjects() {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."`");
-        $stmt->execute();
-        if($stmt->fetch(PDO::FETCH_NUM) > 0) {
+        $projects = self::returnValues();
+        if(count($projects) > 0) {
             return true;
         }
         return false;
     }
 
     public static function hasLists($project) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->execute();
-        if($stmt->fetch(PDO::FETCH_NUM) > 0) {
+        $lists = self::returnValues($project);
+        if(count($lists) > 0) {
             return true;
         }
         return false;
     }
 
-    public static function projects() {
+    public static function returnValues($project = null) {
         global $prefix, $pdo;
         $t = $prefix."_projects";
-        $stmt = $pdo->prepare("SELECT project FROM `".$t."`");
+        $stmt = null;
+        $values = array();
+        $result = null;
+
+        if(empty($project)) {
+            $stmt = $pdo->prepare("SELECT project FROM `".$t."`");
+        } else {
+            $t = $prefix."_lists";
+            $stmt = $pdo->prepare("SELECT list FROM `".$t."` WHERE project = ?");
+            $stmt->bindParam(1, $project);
+        }
         $stmt->execute();
         $result = $stmt->fetchAll();
 
-        $projects = array();
         for($i = 0; $i < count($result); $i++) {
-            $project = $result[$i];
-            $projects[$i] = $project[0];
+            $values[$i] = $result[$i][0];
         }
 
-        return $projects;
-    }
-
-    public static function lists($project) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT list FROM `".$t."` WHERE project = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
-
-        $lists = array();
-        for($i = 0; $i < count($result); $i++) {
-            $list = $result[$i];
-            $lists[$i] = $list[0];
-        }
-
-        return $lists;
+        return $values;
     }
 
     public static function latestTasks($project) {
         global $prefix, $pdo;
-        $lists = self::lists($project);
+        $lists = self::returnValues($project);
         $from = "";
 
         for($i = 0; $i < count($lists); $i++) {
@@ -336,7 +320,7 @@ class ProjectFunc {
 
     public static function getTaskCountByMonth($project, $month, $completed) {
         global $prefix, $pdo;
-        $lists = self::lists($project);
+        $lists = self::returnValues($project);
 
         $from = "";
         if($completed) {
@@ -378,7 +362,7 @@ class ProjectFunc {
 
     public static function getTopAssignedUsers($project) {
         global $prefix, $pdo;
-        $lists = self::lists($project);
+        $lists = self::returnValues($project);
         $users = array();
         $totals = array();
         $completed = array();
@@ -413,7 +397,7 @@ class ProjectFunc {
 
     public static function hasEvent($project, $year, $month, $day) {
         global $prefix, $pdo;
-        $lists = self::lists($project);
+        $lists = self::returnValues($project);
 
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM (SELECT id, project, EXTRACT(YEAR FROM created) AS year, EXTRACT(MONTH FROM created) AS month, EXTRACT(DAY FROM created) AS day FROM `".$prefix."_lists`) AS a WHERE project = ".$project." AND year = ".$year." AND month = ".$month." AND day = ".$day);
         $stmt->execute();
@@ -436,7 +420,7 @@ class ProjectFunc {
 
     public static function getEvents($project, $year, $month, $day) {
         global $prefix, $pdo;
-        $lists = self::lists($project);
+        $lists = self::returnValues($project);
         $toReturn = "";
         if(self::hasEvent($project, $year, $month, $day)) {
             $toReturn .= "<ul>";
@@ -553,7 +537,7 @@ class ProjectFunc {
         $out .= '</select><br />';
         $out .= '<label for="mainlist">Main List:</label>';
         $out .= '<select name="mainlist" id="mainlist">';
-        $lists = self::lists($details['name']);
+        $lists = self::returnValues($details['name']);
         foreach($lists as &$list) {
             $listID = ListFunc::getID($details['name'], $list);
             $out .= '<option value="'.$listID.'"'.(($listID == $details['main']) ? ' selected' : '').'>'.$list.'</option>';

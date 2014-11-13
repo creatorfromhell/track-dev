@@ -407,7 +407,7 @@ class ListFunc {
         $out .= '<input id="name" name="name" type="text" placeholder="Name" value="'.$result['list'].'">';
         $out .= '<label for="project">Project:</label>';
         $out .= '<select name="project" id="project">';
-        $projects = ProjectFunc::projects();
+        $projects = ProjectFunc::returnValues();
         foreach($projects as &$p) {
             $out .= '<option value="'.$p.'"'.(($p == $result['project']) ? ' selected' : '').'>'.$p.'</option>';
         }
