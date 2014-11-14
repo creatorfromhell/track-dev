@@ -10,11 +10,7 @@
 
 class TrackrTest extends PHPUnit_Framework_TestCase {
 
-    public function testSetup() {
-        echo "Preparing to test setup methods....";
-        $setup = new SetupTest();
-        echo "Testing ReadSQLFile Method...";
-        $setup->testSQLSetup();
-        echo "Finished testing setup methods....";
+    public function hello() {
+        echo "Hello Travis CI...";
     }
 }

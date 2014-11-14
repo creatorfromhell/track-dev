@@ -1,0 +1,14 @@
+{
+    "name": "Trackr",
+    "description":"PHP Project Management Suite",
+    "keywords":["trackr","track","project","management"],
+    "type":"application",
+    "authors":[
+        {
+            "name":"Daniel Vidmar",
+            "email": "daniel.viddy@gmail.com",
+            "homepage":"http://creatorfromhell.com"
+        }
+    ],
+    "homepage": "http://github.com/creatorfromhell/track-dev"
+}
