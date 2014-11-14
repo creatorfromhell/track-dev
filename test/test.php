@@ -7,7 +7,11 @@
  * Last Modified: 11/13/14 at 10:50 PM
  * Last Modified by Daniel Vidmar.
  */
+if (file_exists(__DIR__.'/../vendor/autoload.php')) {
+    require_once(__DIR__.'/../vendor/autoload.php');
+}
 require_once("trackrtest.php");
+
 
 $test = new TrackrTest();
 $test->testSetup();

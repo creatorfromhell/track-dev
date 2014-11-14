@@ -7,8 +7,10 @@
  * Last Modified: 11/13/14 at 9:09 PM
  * Last Modified by Daniel Vidmar.
  */
+if (file_exists(__DIR__.'/../vendor/autoload.php')) {
+    require_once(__DIR__.'/../vendor/autoload.php');
+}
 include_once "test-utils.php";
-require_once("PHPUnit/Autoload.php");
 
 class SetupTest extends PHPUnit_Framework_TestCase {
     function testReadSQLFile() {

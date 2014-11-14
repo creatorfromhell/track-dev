@@ -9,8 +9,10 @@
  */
 
 //Our required test filed & includes
+if (file_exists(__DIR__.'/../vendor/autoload.php')) {
+    require_once(__DIR__.'/../vendor/autoload.php');
+}
 require_once("setuptest.php");
-require_once("PHPUnit/Autoload.php");
 
 class TrackrTest extends PHPUnit_Framework_TestCase {
 
