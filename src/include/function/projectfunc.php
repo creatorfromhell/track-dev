@@ -308,6 +308,9 @@ class ProjectFunc {
         return $data;
     }
 
+    /**
+     * @param string $month
+     */
     public static function getTaskCountByMonth($project, $month, $completed) {
         global $prefix, $pdo;
         $lists = self::returnValues($project);
