@@ -11,7 +11,7 @@
 //Our required test filed & includes
 require_once("setuptest.php");
 
-class TrackrTest extends PHPUnit_Framework_TestCase {
+class TrackrTest extends \PHPUnit_Framework_TestCase {
 
     public function testSetup() {
         echo "Preparing to test setup methods....";

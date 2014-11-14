@@ -9,7 +9,7 @@
  */
 include_once("test-utils.php");
 
-class SetupTest extends PHPUnit_Framework_TestCase {
+class SetupTest extends \PHPUnit_Framework_TestCase {
     function testReadSQLFile() {
         $pdo = new PDO("mysql:host=127.0.0.1;dbname=trackr_tests", "root", "");
         $queries = parseQueries("travis-ci-tables.sql");
