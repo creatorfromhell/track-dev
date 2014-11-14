@@ -9,6 +9,5 @@ php:
 
 before_script:
   - mysql -e 'create database trackr_tests;'
-  
-after_script:
-  - php test/test.php
+
+script: phpunit --configuration phpunit.xml --coverage-text

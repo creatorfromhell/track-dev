@@ -1,19 +1,17 @@
 <?php
 /**
  * Created by Daniel Vidmar.
- * Date: 11/13/14
- * Time: 9:09 PM
+ * Date: 11/14/14
+ * Time: 12:06 AM
  * Version: Beta 2
- * Last Modified: 11/13/14 at 9:09 PM
+ * Last Modified: 11/14/14 at 12:06 AM
  * Last Modified by Daniel Vidmar.
  */
-if (file_exists(__DIR__.'/../vendor/autoload.php')) {
-    require_once(__DIR__.'/../vendor/autoload.php');
-}
-include_once "test-utils.php";
 
+include_once "test-utils.php";
 class SetupTest extends PHPUnit_Framework_TestCase {
-    function testReadSQLFile() {
+
+    public function testSQLSetup() {
         $pdo = new PDO("mysql:host=127.0.0.1;dbname=trackr_tests", "root", "");
         $queries = parseQueries("travis-ci-tables.sql");
         foreach($queries as &$query) {
@@ -22,4 +20,3 @@ class SetupTest extends PHPUnit_Framework_TestCase {
         }
     }
 }
-?>

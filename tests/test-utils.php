@@ -9,12 +9,10 @@
  */
 function parseQueries($file) {
     $queries = array();
-
     $file = fopen($file, 'r');
     $comment = false;
     $longQuery = false;
     $queryStatement = '';
-
     while(!feof($file)) {
         $line = stream_get_line($file, 30000, "\n");
         $l = trim($line);
@@ -30,18 +28,15 @@ function parseQueries($file) {
             continue;
         }
         if($comment) { continue; }
-
         if($longQuery) {
             $queryStatement .= $l;
             continue;
         }
-
         if(substr($l, 6) === 'CREATE') {
             $longQuery = true;
             $queryStatement = $l;
             continue;
         }
-
         if($longQuery && substr($l, -strlen(';')) === ';') {
             $queryStatement .= $l;
             $queries[] = $queryStatement;

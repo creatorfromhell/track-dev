@@ -1,18 +1,12 @@
 <?php
 /**
  * Created by Daniel Vidmar.
- * Date: 11/13/14
- * Time: 10:31 PM
+ * Date: 11/14/14
+ * Time: 12:06 AM
  * Version: Beta 2
- * Last Modified: 11/13/14 at 10:31 PM
+ * Last Modified: 11/14/14 at 12:06 AM
  * Last Modified by Daniel Vidmar.
  */
-
-//Our required test filed & includes
-if (file_exists(__DIR__.'/../vendor/autoload.php')) {
-    require_once(__DIR__.'/../vendor/autoload.php');
-}
-require_once("setuptest.php");
 
 class TrackrTest extends PHPUnit_Framework_TestCase {
 
@@ -24,4 +18,3 @@ class TrackrTest extends PHPUnit_Framework_TestCase {
         echo "Finished testing setup methods....";
     }
 }
-?>
