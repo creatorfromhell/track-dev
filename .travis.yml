@@ -11,4 +11,4 @@ before_script:
   - mysql -e 'create database trackr_tests;'
   
 after_script:
-  - php test/setup.php
+  - php test/test.php
