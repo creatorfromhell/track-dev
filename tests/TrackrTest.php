@@ -10,7 +10,7 @@
 
 class TrackrTest extends PHPUnit_Framework_TestCase {
 
-    public function hello() {
+    public function testHello() {
         echo "Hello Travis CI...";
     }
 }
