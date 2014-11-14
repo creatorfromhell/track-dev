@@ -161,6 +161,9 @@ function pageLocked($user, $node = "", $guest = false, $admin = false, $group = 
     return pageLockedNode($user, $node, $guest);
 }
 
+/**
+ * @param string $node
+ */
 function pageLockedNode($user, $node, $guest = false) {
     if($guest) { return false; }
     if($user === null) { return true; }
@@ -179,6 +182,9 @@ function pageLockedAdmin($user) {
     return true;
 }
 
+/**
+ * @param string $group
+ */
 function pageLockedGroup($user, $group) {
     if($user === null) { return true; }
     if(!is_a($user, "User")) { return true; }
@@ -187,6 +193,9 @@ function pageLockedGroup($user, $group) {
     return true;
 }
 
+/**
+ * @param string $name
+ */
 function pageLockedUser($user, $name) {
     if($user === null) { return true; }
     if(!is_a($user, "User")) { return true; }
@@ -301,6 +310,9 @@ function nodes() {
  * Session Functions
  */
 
+/**
+ * @param string $identifier
+ */
 function checkSession($identifier) {
     if($identifier === null) { return false; }
     return isset($_SESSION[$identifier]);
