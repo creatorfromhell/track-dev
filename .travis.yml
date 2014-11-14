@@ -1,0 +1,14 @@
+#Used for Travis CI
+language: php
+php:
+  - 5.6
+  - 5.5
+  - 5.4
+  - 5.3
+  - hhvm
+
+before_script:
+  - mysql -e 'create database trackr_tests;'
+  
+after_script:
+  - php test/setup.php

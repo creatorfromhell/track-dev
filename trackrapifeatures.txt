@@ -1,0 +1,77 @@
+Main Features
+===============
+- Add new pages
+  - sub pages
+  - main pages
+  - admin pages
+
+- Redo current pages
+  - change the page include to a custom one
+
+
+Features By Page
+=================
+All
+- Add sub tab
+
+Overview
+- Add/Remove modules
+
+
+API Hooks
+==================
+Addon Hooks
+- onThemeLoaded
+- onLanguageLoaded
+
+Download Hooks
+- onDownloadCreated
+- onDownloadFileAdded
+- onDownloadModified
+- onDownloadDeleted
+
+Group Hooks
+- onGroupCreated
+- onGroupModified
+- onGroupDeleted
+
+Label Hooks
+- onLabelCreated
+- onLabelModified
+- onLabelDeleted
+
+List Hooks
+- onListCreated
+- onListModified
+- onListDeleted
+
+Node Hooks
+- onNodeCreated
+- onNodeModified
+- onNodeDeleted
+
+Project Hooks
+- onProjectCreated
+- onProjectModified
+- onProjectDeleted
+
+Task Hooks
+- onTaskCreated
+- onTaskStatusChange
+- onTaskModified
+- onTaskDeleted
+
+User Hooks
+- onLogin
+- onRegister
+- onLogout
+- onSwitchPage
+- onEnterAdminPanel
+- onLeaveAdminPanel
+
+Version Hooks
+- onVersionCreated
+- onVersionModified
+- onVersionStatusChange
+- onVersionReleased
+- onVersionDeleted
