@@ -66,6 +66,9 @@ function hasValues($table, $extra = '') {
     return false;
 }
 
+/**
+ * @param string $table
+ */
 function countColumns($table, $extra = '') {
     global $prefix, $pdo;
     $t = $prefix."_".$table;
