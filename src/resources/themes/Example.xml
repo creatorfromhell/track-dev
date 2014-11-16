@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!-- Example Theme for Track
+Things to note:
+Tags can be used in values.
+-Example: If you wanted to use the value of the name tag then you could write %name, and the value will be replaced
+upon loading the theme.
+-->
+<theme>
+    <!-- Main Theme Information -->
+    <name>Example</name><!-- The name of the theme. -->
+    <author>creatorfromhell</author><!-- The author's name. -->
+    <version>1.0</version><!-- The current version of the theme. -->
+    <copyright>Copyright (c) %year %author.</copyright><!-- The copyright notice to display at the bottom of the page. -->
+    <!-- CSS/JS related information -->
+    <directory>%name</directory><!-- The directory that contains all of the theme's CSS, JS, and images. -->
+</theme>

@@ -1,0 +1,217 @@
+<?xml version="1.0" ?>
+<language>
+    <!-- The name of this language -->
+    <name>Dansk</name>
+    <!-- The abbreviation for this language -->
+    <short>dk</short>
+    <!-- The author of this language file. -->
+    <author>quaisaq</author>
+    <!-- The version of this language file. -->
+    <version>1.0</version>
+    <!-- The symbol for this language. Located in the theme's image folder. -->
+    <symbol>dk.gif</symbol>
+
+    <!-- Everything that can be translated to different languages is located below -->
+    <!-- Words starting with % are shortcuts that are replaced by the script before processing. Please do not translate
+         any of the shortcuts. -->
+    <site>
+        <title>%project - Trackr</title>
+        <header>%list - %project</header>
+        <pages>
+            <overview>
+                <navlink>Oversigt</navlink>
+                <header>Oversigt - %project</header>
+                <calendar>
+                    <navlink>Kalender</navlink>
+                    <header>Kalender - %project</header>
+                </calendar>
+                <project>
+                    <navlink>Projekt</navlink>
+                    <header>Oversigt for %project</header>
+                </project>
+            </overview>
+            <admin>
+                <navlink>Admin</navlink>
+                <header>Administrations Panel</header>
+                <dashboard>Dashboard</dashboard>
+                <activity>Activity</activity>
+                <groups>Groups</groups>
+                <options>Options</options>
+                <themes>Themes</themes>
+                <users>Users</users>
+            </admin>
+            <projects>
+                <navlink>Projekter</navlink>
+                <header>Projekt %project</header>
+            </projects>
+            <lists>
+                <navlink>Lister</navlink>
+                <header>Lister for %project</header>
+            </lists>
+        </pages>
+        <tables>
+            <name>navn</name>
+            <archived>Archived</archived>
+            <activity>Activity</activity>
+            <logged>Logged</logged>
+            <assignee>Erhverver</assignee>
+            <created>Skabt</created>
+            <creator>Skaber</creator>
+            <author>Author</author>
+            <actions>Handlinger</actions>
+            <overseer>Overseer</overseer>
+            <permission>Permission</permission>
+            <short>Short</short>
+            <icon>Icon</icon>
+            <admin>Admin</admin>
+            <version>Version</version>
+            <email>Email</email>
+            <group>Group</group>
+            <registered>Registered</registered>
+            <yes>Yes</yes>
+            <no>No</no>
+            <none>ingen</none>
+            <notask>Der er intet på listen.</notask>
+            <nolist>Der er ingen lister for dette projekt.</nolist>
+            <noproject>Der er ingen projekter på nuværende tidspunkt.</noproject>
+        </tables>
+        <forms>
+            <login>
+                <invalidlogin>Invalid login credentials!</invalidlogin>
+                <nopassword>No password entered!</nopassword>
+                <nousername>No username entered!</nousername>
+                <noemail>No email address entered!</noemail>
+                <confirm>You must confirm your password!</confirm>
+                <invalidpasswords>Passwords do not match!</invalidpasswords>
+                <taken>Username already in use!</taken>
+            </login>
+            <project>
+                <noname>No name entered!</noname>
+                <taken>A project with that name already exists!</taken>
+                <noauthor>Invalid author entered!</noauthor>
+                <nooverseer>Invalid overseer entered!</nooverseer>
+                <nopublic>You must fill out the public field!</nopublic>
+                <nomain>You must fill out the main field!</nomain>
+            </project>
+            <list>
+                <created>The list %list has been created!</created>
+                <taken>A list with that name already exists!</taken>
+                <invalidproject>The project specified does not exist!</invalidproject>
+                <noproject>You must enter a project for this list!</noproject>
+                <nominimal>You must fill out the minimal field!</nominimal>
+                <noguestview>You must fill out the guest view field!</noguestview>
+                <noguestedit>You must fill out the guest edit field!</noguestedit>
+                <noviewperm>You must fill out the view permission field!</noviewperm>
+                <noeditperm>You must fill out the edit permission field!</noeditperm>
+            </list>
+            <task>
+                <invalidlist>The list specified does not exist!</invalidlist>
+                <invalidstatus>Invalid status entered!</invalidstatus>
+                <notitle>You must fill out the title field!</notitle>
+                <nodescription>You must fill out the description field!</nodescription>
+                <noeditable>You must fill out the editable field!</noeditable>
+            </task>
+            <label>
+                <nolabel>You must fill out the label field!</nolabel>
+                <notextcolor>You must choose a text color!</notextcolor>
+                <nobackgroundcolor>You must choose a background color!</nobackgroundcolor>
+            </label>
+        </forms>
+        <actions>
+            <!-- TODO: make actions language-based -->
+            <general>
+                <edit>edit</edit>
+                <delete>delete</delete>
+                <open>open</open>
+                <done>done</done>
+                <progress>in progress</progress>
+                <close>close</close>
+                <delconfirm>Do you really want to delete this forever?</delconfirm>
+            </general>
+            <project>
+                <created>The project %name has been created!</created>
+                <created>Edit successful!</created>
+                <deleted>The project %name has been deleted!</deleted>
+            </project>
+            <list>
+                <created>The list %name has been created!</created>
+                <deleted>The list %name has been deleted!</deleted>
+            </list>
+            <label>
+                <created>The label %name has been created!</created>
+                <deleted>The label %name has been deleted!</deleted>
+            </label>
+            <task>
+                <created>Task #%id has been created!</created>
+                <deleted>Task #%id has been deleted!</deleted>
+                <status>The status of task #%id has been changed to %status.</status>
+            </task>
+            <user>
+                <register>Thanks for registering! You may now login.</register>
+                <noregister>I'm sorry, but registration has been disabled.</noregister>
+                <logout>You have been logged out successfully!</logout>
+            </user>
+        </actions>
+        <activities>
+            <activity>
+                <backup>%user backed up the activity logs.</backup>
+                <delete>%user deleted an activity.</delete>
+                <archive>%user archived an activity.</archive>
+                <unarchive>%user unarchived an activity.</unarchive>
+            </activity>
+            <general>
+                <options>%user modified the site options.</options>
+            </general>
+            <group>
+                <add>%user added a new group.</add>
+                <edit>%user edited a group.</edit>
+                <delete>%user deleted a group.</delete>
+            </group>
+            <label>
+                <add>%user added a new label.</add>
+                <edit>%user edited a label.</edit>
+                <delete>%user deleted a label.</delete>
+            </label>
+            <language>
+                <upload>%user uploaded a language.</upload>
+                <edit>%user edited a language.</edit>
+                <delete>%user deleted a language.</delete>
+                <default>%user changed the default language to %name.</default>
+            </language>
+            <list>
+                <add>%user added a new list.</add>
+                <edit>%user edited a list.</edit>
+                <delete>%user deleted a list.</delete>
+            </list>
+            <project>
+                <add>%user added a new project.</add>
+                <edit>%user edited a project.</edit>
+                <delete>%user deleted a project.</delete>
+            </project>
+            <task>
+                <add>%user created a new task.</add>
+                <edit>%user edited a task.</edit>
+                <status>%user changed the status of a task to %status.</status>
+                <delete>%user deleted a task.</delete>
+            </task>
+            <theme>
+                <upload>%user uploaded a theme.</upload>
+                <edit>%user edited a theme.</edit>
+                <delete>%user deleted a theme.</delete>
+                <default>%user changed the default theme to %name.</default>
+            </theme>
+            <user>
+                <login>%user logged in.</login>
+                <logout>%user logged out.</logout>
+                <register>%user just registered.</register>
+                <add>%user added a new user.</add>
+                <edit>%user edit a user.</edit>
+                <delete>%user deleted a user.</delete>
+            </user>
+        </activities>
+    </site>
+    <email>
+        <subject>Trackr Verification</subject>
+        <verification>Velkommen %user,\r\rDu, eller en anden som bruger din email addresse, har fuldf�rt registreringen for %url. Du kan fuldf�re din registrering ved at klikke p� f�lgende link: %activation\r\rHvis du mener dette er en fejl, kan du ignorere denne mail.\r\rMed venlig hilsen, Website Administrator</verification>
+    </email>
+</language>
