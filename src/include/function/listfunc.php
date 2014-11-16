@@ -154,13 +154,7 @@ class ListFunc {
     }
 
     public static function minimal($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT minimal_view FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return ($result['minimal_view'] != 0) ? true : false;
+        return (value("lists", "minimal_view", " WHERE id = '".cleanInput($id)."'") == '1') ? true : false;
     }
 
     public static function getOverseer($id) {

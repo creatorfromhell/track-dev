@@ -43,8 +43,9 @@ function value($table, $column, $extra = '') {
     $t = $prefix."_".$table;
     $stmt = $pdo->prepare("SELECT ".$column." FROM `".$t."`".$extra);
     $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    return $stmt->fetch(PDO::FETCH_ASSOC)[$column];
+    return $result[$column];
 }
 
 /**

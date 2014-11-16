@@ -224,15 +224,7 @@ class VersionFunc {
     }
 	
 	public static function stable($type) {
-        global $prefix, $pdo;
-        $t = $prefix."_version_types";
-		$stmt = $pdo->prepare("SELECT version_stability FROM `".$t."` WHERE version_type = ?");
-		$stmt->execute(array($type));
-		$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		if($result['version_stability'] == '1') {
-			return true;
-		}
-		return false;
+        return (value("version_types", "version_stability", " WHERE version_type = '".cleanInput($type)."'") == '1') ? true : false;
 	}
 	
 	public static function typeDetails($id) {

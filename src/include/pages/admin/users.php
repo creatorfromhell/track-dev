@@ -16,13 +16,13 @@ if(isset($_GET['sub'])) {
 if(isset($_GET['action'])) {
     $action = cleanInput($_GET['action']);
 
-    if($action == "edit" && isset($_GET['id']) && User::exists(User::getName(cleanInput($_GET['id'])))) {
+    if($action == "edit" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".cleanInput($_GET['id'])."'"))) {
         $editing = true;
-    } else if($action == "delete" && isset($_GET['id']) && User::exists(User::getName(cleanInput($_GET['id'])))) {
+    } else if($action == "delete" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".cleanInput($_GET['id'])."'"))) {
         $params = "id:".$id.",status:".$action;
         ActivityFunc::log(getName(), $project, $list, "user:delete", $params, 0, date("Y-m-d H:i:s"));
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "User '.User::getName(cleanInput($_GET['id'])).' has been delete.");';
+        echo 'showMessage("success", "User '.value("users", "user_name", " WHERE id = '".cleanInput($_GET['id'])."'").' has been delete.");';
         echo '</script>';
         User::delete(cleanInput($_GET['id']));
     }

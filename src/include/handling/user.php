@@ -60,7 +60,7 @@ if(isset($_POST['add-user'])) {
 }
 
 if(isset($_POST['edit-user'])) {
-    if(isset($_POST['id']) && trim($_POST['id']) != '' && User::validID(cleanInput($_POST['id']))) {
+    if(isset($_POST['id']) && trim($_POST['id']) != '' && hasValues("users", " WHERE id = '".cleanInput($_POST['id'])."'")) {
         $user = User::load($_POST['id'], false, true);
         if(isset($_POST['username']) && trim($_POST['username']) != '') {
             if(isset($_POST['email']) && trim($_POST['email']) != '' && validEmail($_POST['email'])) {

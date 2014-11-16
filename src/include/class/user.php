@@ -99,15 +99,6 @@ class User {
         return false;
     }
 
-    public static function getName($id) {
-        global $pdo, $prefix;
-        $t = $prefix."_users";
-        $stmt = $pdo->prepare("SELECT user_name FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['user_name'];
-    }
-
     public static function getHashedPassword($name, $email = false) {
         global $pdo, $prefix;
         $t = $prefix."_users";
@@ -132,19 +123,6 @@ class User {
         $t = $prefix."_users";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->execute(array($id));
-    }
-
-    public static function validID($id) {
-        global $pdo, $prefix;
-        $t = $prefix."_users";
-        $stmt = $pdo->prepare("SELECT user_name FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if($result) {
-            return true;
-        }
-        return false;
     }
 
     public static function getIP() {

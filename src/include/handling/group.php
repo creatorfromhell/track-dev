@@ -54,8 +54,8 @@ if(isset($_POST['add-group'])) {
 }
 
 if(isset($_POST['edit-group'])) {
-    if(isset($_POST['id']) && trim($_POST['id']) != '' && Group::validID(cleanInput($_POST['id']))) {
-        $oldName = Group::getName(cleanInput($_POST['id']));
+    if(isset($_POST['id']) && trim($_POST['id']) != '' && hasValues("groups", " WHERE id = '".cleanInput($_POST['id'])."'")) {
+        $oldName = value("groups", "group_name", " WHERE id = '".cleanInput($_POST['id'])."'");
         if(isset($_POST['name']) && trim($_POST['name']) != '') {
             if(isset($_POST['admin']) && trim($_POST['admin']) != '') {
                 if(isset($_POST['preset']) && trim($_POST['preset']) != '') {

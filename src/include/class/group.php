@@ -61,21 +61,7 @@ class Group {
     }
 
     public static function preset() {
-        global $pdo, $prefix;
-        $t = $prefix."_groups";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE group_preset = 1");
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['id'];
-    }
-
-    public static function getName($id) {
-        global $pdo, $prefix;
-        $t = $prefix."_groups";
-        $stmt = $pdo->prepare("SELECT group_name FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['group_name'];
+        return value("groups", "id", " WHERE group_preset = 1");
     }
 
     public static function delete($id) {
@@ -83,18 +69,5 @@ class Group {
         $t = $prefix."_groups";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->execute(array($id));
-    }
-
-    public static function validID($id) {
-        global $pdo, $prefix;
-        $t = $prefix."_groups";
-        $stmt = $pdo->prepare("SELECT group_name FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if($result) {
-            return true;
-        }
-        return false;
     }
 }

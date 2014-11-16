@@ -41,17 +41,18 @@ class Captcha {
         imageline($this->image, 70, 0, 30, 35, $colorRect);
     }
 
-    public function printImage() {
+    public function getBase64() {
         ob_start();
         imagejpeg($this->image, NULL, 100);
         $bytes = ob_get_clean();
-        echo "<img id='captcha_image' src='data:image/jpeg;base64," . base64_encode($bytes) . "' />";
+        return base64_encode($bytes);
+    }
+
+    public function printImage() {
+        echo "<img id='captcha_image' src='data:image/jpeg;base64,".$this->getBase64()."' />";
     }
 	
 	public function returnImage() {
-        ob_start();
-        imagejpeg($this->image, NULL, 100);
-        $bytes = ob_get_clean();
-        return "<img id='captcha_image' src='data:image/jpeg;base64," . base64_encode($bytes) . "' />";
+        return "<img id='captcha_image' src='data:image/jpeg;base64,".$this->getBase64()."' />";
 	}
 }

@@ -13,7 +13,7 @@ $subPage = "all";
 if(isset($_GET['sub'])) {
     $subPage = $_GET['sub'];
 }
-if(isset($_GET['action']) && isset($_GET['id']) && hasValues("groups", " WHERE group_name = '".cleanInput(Group::getName(cleanInput($_GET['id'])))."'")) {
+if(isset($_GET['action']) && isset($_GET['id']) && hasValues("groups", " WHERE group_name = '".cleanInput(value("groups", "group_name", " WHERE id = '".cleanInput($_GET['id'])."'"))."'")) {
 	$editID = cleanInput($_GET['id']);
     $action = cleanInput($_GET['action']);
 
@@ -23,7 +23,7 @@ if(isset($_GET['action']) && isset($_GET['id']) && hasValues("groups", " WHERE g
         $params = "id:".$editID.",status:".$action;
         ActivityFunc::log(getName(), $project, $list, "group:delete", $params, 0, date("Y-m-d H:i:s"));
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "Group '.Group::getName($editID).' has been delete.");';
+        echo 'showMessage("success", "Group '.value("groups", "group_name", " WHERE id = '".$editID."'").' has been delete.");';
         echo '</script>';
         Group::delete($editID);
     }
