@@ -38,6 +38,15 @@ function strContains($string, $word) {
     return false;
 }
 
+function toOptions($data, $value = null) {
+    $return = '';
+    $options = $data;
+    foreach($options as &$option) {
+        $return .= '<option value="'.$option.'"'.(($value !== null && $value == $option) ? ' selected' : '').'>'.$option.'</option>';
+    }
+    return $return;
+}
+
 function uploadFile($file, $name, $maxSize = 1000000) {
 	$type = pathinfo(basename($file['name']), PATHINFO_EXTENSION);
 	$move = $name.".".$type;

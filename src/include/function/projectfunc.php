@@ -458,10 +458,7 @@ class ProjectFunc {
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
         $out .= '<option value="none" selected>None</option>';
-		$users = users();
-        foreach($users as &$user) {
-            $out .= '<option value="'.$user.'">'.$user.'</option>';
-        }
+        $out .= toOptions(users());
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
@@ -511,10 +508,7 @@ class ProjectFunc {
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
         $out .= '<option value="none"'.(($details['overseer'] == 'none') ? ' selected' : '').'>None</option>';
-		$users = users();
-        foreach($users as &$user) {
-            $out .= '<option value="'.$user.'"'.(($details['overseer'] == $user) ? ' selected' : '').'>'.$user.'</option>';
-        }
+        $out .= toOptions(users(), $details['overseer']);
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';

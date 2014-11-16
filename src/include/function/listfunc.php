@@ -270,10 +270,7 @@ class ListFunc {
         $out .= '<input id="author" name="author" type="hidden" value="'.$username.'">';
         $out .= '<label for="project">Project:</label>';
         $out .= '<select name="project" id="project">';
-        foreach($projects as &$p) {
-            $selected = ($p == $project) ? "selected" : "";
-            $out .= '<option value="'.$p.'" '.$selected.'>'.$p.'</option>';
-        }
+        $out .= toOptions($projects);
         $out .= '</select><br />';
         $out .= '<label for="public">Public:</label>';
         $out .= '<select name="public" id="public">';
@@ -300,10 +297,7 @@ class ListFunc {
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
         $out .= '<option value="none" selected>None</option>';
-		$users = users();
-        foreach($users as &$user) {
-            $out .= '<option value="'.$user.'">'.$user.'</option>';
-        }
+        $out .= toOptions(users());
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
@@ -368,10 +362,7 @@ class ListFunc {
         $out .= '<input id="name" name="name" type="text" placeholder="Name" value="'.$result['list'].'">';
         $out .= '<label for="project">Project:</label>';
         $out .= '<select name="project" id="project">';
-        $projects = ProjectFunc::returnValues();
-        foreach($projects as &$p) {
-            $out .= '<option value="'.$p.'"'.(($p == $result['project']) ? ' selected' : '').'>'.$p.'</option>';
-        }
+        $out .= toOptions(ProjectFunc::returnValues(), $result['project']);
         $out .= '</select><br />';
         $out .= '<label for="public">Public:</label>';
         $out .= '<select name="public" id="public">';
@@ -398,10 +389,7 @@ class ListFunc {
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
         $out .= '<option value="none"'.(($result['overseer'] == 'none') ? ' selected' : '').'>None</option>';
-		$users = users();
-        foreach($users as &$user) {
-            $out .= '<option value="'.$user.'"'.(($result['overseer'] == $user) ? ' selected' : '').'>'.$user.'</option>';
-        }
+        $out .= toOptions(users(), $result['overseer']);
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';

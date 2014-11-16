@@ -140,10 +140,7 @@ class TaskFunc {
         $out .= '<label for="assignee">Assignee:</label>';
         $out .= '<select name="assignee" id="assignee">';
         $out .= '<option value="none" selected>None</option>';
-		$users = users();
-        foreach($users as &$user) {
-            $out .= '<option value="'.$user.'">'.$user.'</option>';
-        }
+		$out .= toOptions(users());
         $out .= '</select><br />';
         $out .= '<label for="due-date">Due Date:</label>';
         $out .= '<input id="due-date" name="due-date" type="text" placeholder="0000-00-00" readonly>';
@@ -169,10 +166,7 @@ class TaskFunc {
         $out .= '<label for="version">Version:</label>';
         $out .= '<select name="version" id="version">';
         $out .= '<option value="none" selected>None</option>';
-		$versions = VersionFunc::versions($project);
-		foreach($versions as &$version) {
-			$out .= '<option value="'.$version.'">'.$version.'</option>';
-		}
+		$out .= toOptions(VersionFunc::versions($project));
         $out .= '</select><br />';
         $out .= '<label for="progress">Progress:<label id="progress_value">0</label></label><br />';
         $out .= '<input type="range" id="progress" name="progress" value="0" min="0" max="100" oninput="showValue(\'progress_value\', this.value);">';
@@ -227,10 +221,7 @@ class TaskFunc {
         $out .= '<label for="assignee">Assignee:</label>';
         $out .= '<select name="assignee" id="assignee">';
         $out .= '<option value="none"'.(($details['assignee'] == 'none') ? ' selected' : '').'>None</option>';
-		$users = users();
-        foreach($users as &$user) {
-            $out .= '<option value="'.$user.'"'.(($details['assignee'] == $user) ? ' selected' : '').'>'.$user.'</option>';
-        }
+		$out .= toOptions(users(), $details['assignee']);
         $out .= '</select><br />';
         $out .= '<label for="due-date">Due Date:</label>';
         $out .= '<input id="due-date" name="due-date" type="text" value="'.$details['due'].'" readonly>';
@@ -256,10 +247,7 @@ class TaskFunc {
         $out .= '<label for="version">Version:</label>';
         $out .= '<select name="version" id="version">';
         $out .= '<option value="none"'.(($details['version'] == "none") ? " selected" : "").'>None</option>';
-		$versions = VersionFunc::versions($project);
-		foreach($versions as &$version) {
-			$out .= '<option value="'.$version.'"'.(($version == $details['version']) ? ' selected' : '').'>'.$version.'</option>';
-		}
+        $out .= toOptions(VersionFunc::versions($project), $details['version']);
         $out .= '</select><br />';
         $out .= '<label for="progress">Progress:<label id="progress_value">'.$details['progress'].'</label></label><br />';
         $out .= '<input type="range" id="progress" name="progress" value="'.$details['progress'].'" min="0" max="100" oninput="showValue(\'progress_value\', this.value);">';
