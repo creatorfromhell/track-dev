@@ -63,11 +63,7 @@ class StringFormatter {
             foreach($this->blacklist as &$word) {
                 $length = strlen($word);
                 $value = substr($word, 0, 1).str_repeat('*', $length - 2).substr($word, $length - 1, 1);
-                if($i < $count) {
-                    $replacements .= $value.",";
-                } else {
-                    $replacements .= $value;
-                }
+                ($i < $count) ? $replacements .= $value."," : $replacements .= $value;
                 $i++;
             }
             $this->blacklist_replacements = explode(",", $replacements);

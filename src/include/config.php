@@ -23,8 +23,7 @@ class Configuration {
         $save = "";
         $save .= ";Trackr Configuration File\n";
         foreach($this->config as $key => $value) {
-            if(strtolower($key) == "trackr") { $save .= ";Do not modify the below values.\n"; }
-            if(strtolower($key) == "main") { $save .= ";Modify the below values accordingly.\n"; }
+            (strtolower($key) == "trackr") ? $save .= ";Do not modify the below values.\n" : $save .= ";Modify the below values accordingly.\n";
             $save .= "[".$key."]\n";
             foreach($value as $k => $v) {
                 $save .= $k." = ".$v."\n";
