@@ -38,6 +38,10 @@ function strContains($string, $word) {
     return false;
 }
 
+/**
+ * @param string $table
+ * @param string $column
+ */
 function values($table, $column, $extra = '') {
     global $prefix, $pdo;
     $t = $prefix."_".$table;
@@ -52,6 +56,9 @@ function values($table, $column, $extra = '') {
     return $values;
 }
 
+/**
+ * @param string $table
+ */
 function hasValues($table, $extra = '') {
     if(countColumns($table, $extra) > 0) {
         return true;
