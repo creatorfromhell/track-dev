@@ -38,6 +38,10 @@ function strContains($string, $word) {
     return false;
 }
 
+/**
+ * @param string $table
+ * @param string $column
+ */
 function value($table, $column, $extra = '') {
     global $prefix, $pdo;
     $t = $prefix."_".$table;
@@ -48,6 +52,10 @@ function value($table, $column, $extra = '') {
     return $result[$column];
 }
 
+/**
+ * @param string $table
+ * @param string $column
+ */
 function setValue($table, $column, $value, $extra = '') {
     global $prefix, $pdo;
     $t = $prefix."_".$table;
