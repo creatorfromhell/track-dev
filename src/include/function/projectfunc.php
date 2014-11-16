@@ -47,12 +47,7 @@ class ProjectFunc {
 
     //get project id
     public static function getID($project) {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ?");
-        $stmt->execute(array($project));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['id'];
+        return value("projects", "id", " WHERE project = '".cleanInput($project)."'");
     }
 
     //change main list id
@@ -65,33 +60,18 @@ class ProjectFunc {
 
     //get main list id
     public static function getMain($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("SELECT main FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['main'];
+        return value("projects", "main", " WHERE id = '".cleanInput($id)."'");
     }
 
     public static function getMainList($project) {
         $id = self::getID($project);
         $listID = self::getMain($id);
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT list FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($listID));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['list'];
+        return value("lists", "lists", " WHERE id = '".cleanInput($listID)."'");
     }
 
     //get overseer
     public static function getOverseer($project) {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("SELECT overseer FROM `".$t."` WHERE project = ?");
-        $stmt->execute(array($project));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['overseer'];
+        return value("projects", "overseer", " WHERE project = '".cleanInput($project)."'");
     }
 
     //change overseer
@@ -103,22 +83,12 @@ class ProjectFunc {
     }
 
     public static function getName($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("SELECT project FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['project'];
+        return value("projects", "project", " WHERE id = '".cleanInput($id)."'");
     }
 
     //get preset project
     public static function getPreset() {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("SELECT project FROM `".$t."` WHERE preset = 1");
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['project'];
+        return value("projects", "project", " WHERE preset = 1");
     }
 
     //make preset project

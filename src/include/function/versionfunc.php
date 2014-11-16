@@ -70,13 +70,7 @@ class VersionFunc {
     }
 	
 	public static function getProject($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_versions";
-        $stmt = $pdo->prepare("SELECT project FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-		$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		
-		return $result['project'];
+        return value("versions", "project", " WHERE id = '".cleanInput($id)."'");
 	}
 
     //reversion version

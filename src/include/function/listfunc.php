@@ -127,13 +127,7 @@ class ListFunc {
 
     //get list id
     public static function getID($project, $list) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ? AND list = ?");
-        $stmt->execute(array($project, $list));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $result['id'];
+        return value("lists", "id", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($list)."'");
     }
 
     public static function listDetails($id) {
@@ -158,23 +152,11 @@ class ListFunc {
     }
 
     public static function getOverseer($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT overseer FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $result['overseer'];
+        return value("lists", "overseer", " WHERE id = '".cleanInput($id)."'");
     }
 
     public static function getProject($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT project FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $result['project'];
+        return value("lists", "project", " WHERE id = '".cleanInput($id)."'");
     }
 
     //change list project
@@ -199,12 +181,7 @@ class ListFunc {
     }
 
     public static function getName($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT list FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['list'];
+        return value("lists", "list", " WHERE id = '".cleanInput($id)."'");
     }
 
     //make list public
