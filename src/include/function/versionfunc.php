@@ -39,34 +39,22 @@ class VersionFunc {
 
     //change due date
     public static function changeDue($id, $due) {
-        global $prefix, $pdo;
-        $t = $prefix."_versions";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET due = ? WHERE id = ?");
-        $stmt->execute(array($due, $id));
+        setValue("versions", "due", $due, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change project
     public static function changeProject($id, $project) {
-        global $prefix, $pdo;
-        $t = $prefix."_versions";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
-        $stmt->execute(array($project, $id));
+        setValue("versions", "project", $project, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change release date
     public static function changeRelease($id, $release) {
-        global $prefix, $pdo;
-        $t = $prefix."_versions";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET release = ? WHERE id = ?");
-        $stmt->execute(array($release, $id));
+        setValue("versions", "release", $release, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change version type
     public static function changeType($id, $type) {
-        global $prefix, $pdo;
-        $t = $prefix."_versions";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_type = ? WHERE id = ?");
-        $stmt->execute(array($type, $id));
+        setValue("versions", "version_type", $type, " WHERE id = '".cleanInput($id)."'");
     }
 	
 	public static function getProject($id) {
@@ -75,10 +63,7 @@ class VersionFunc {
 
     //reversion version
     public static function renameVersion($id, $version) {
-        global $prefix, $pdo;
-        $t = $prefix."_versions";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ? WHERE id = ?");
-        $stmt->execute(array($version, $id));
+        setValue("versions", "version_name", $version, " WHERE id = '".cleanInput($id)."'");
     }
 	
 	public static function versionDetails($id) {

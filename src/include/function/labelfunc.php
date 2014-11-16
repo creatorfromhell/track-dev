@@ -43,10 +43,7 @@ class LabelFunc {
 
     //rename label
     public static function renameLabel($id, $name) {
-        global $prefix, $pdo;
-        $t = $prefix."_labels";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET label_name = ? WHERE id = ?");
-        $stmt->execute(array($name, $id));
+        setValue("labels", "label_name", $name, " WHERE id = '".cleanInput($id)."'");
     }
 
     public static function labelDetails($id) {

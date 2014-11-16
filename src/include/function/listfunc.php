@@ -163,9 +163,7 @@ class ListFunc {
     public static function changeProject($id, $project) {
         $details = self::listDetails($id);
         global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
-        $stmt->execute(array($project, $id));
+        setValue("lists", "project", $project, " WHERE id = '".cleanInput($id)."'");
         $t = $prefix."_".$details['project']."_".$details['name'];
         $t2 = $prefix."_".$project."_".$details['name'];
         $stmt = $pdo->prepare("RENAME TABLE `".$t."` TO `".$t2."`");
@@ -186,19 +184,14 @@ class ListFunc {
 
     //make list public
     public static function makePublic($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET public = 1 WHERE id = ?");
-        $stmt->execute(array($id));
+        setValue("lists", "public", "1", " WHERE id = '".cleanInput($id)."'");
     }
 
     //rename list
     public static function renameList($id, $list) {
         $details = self::listDetails($id);
         global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET list = ? WHERE id = ?");
-        $stmt->execute(array($list, $id));
+        setValue("lists", "list", $list, " WHERE id = '".cleanInput($id)."'");
         $t = $prefix."_".$details['project']."_".$details['name'];
         $t2 = $prefix."_".$details['project']."_".$list;
         $stmt = $pdo->prepare("RENAME TABLE `".$t."` TO `".$t2."`");

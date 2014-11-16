@@ -57,57 +57,36 @@ class TaskFunc {
 
     //change task assignee
     public static function changeAssignee($project, $list, $id, $assignee) {
-        global $prefix, $pdo;
-        $t = $prefix."_".$project."_".$list;
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET assignee = ? WHERE id = ?");
-        $stmt->execute(array($assignee, $id));
+        setValue($project."_".$list, "assignee", $assignee, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change task labels
     public static function changeLabels($project, $list, $id, $labels) {
-        global $prefix, $pdo;
-        $t = $prefix."_".$project."_".$list;
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET labels = ? WHERE id = ?");
-        $stmt->execute(array($labels, $id));
+        setValue($project."_".$list, "labels", $labels, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change task progress
     public static function changeProgress($project, $list, $id, $progress) {
-        global $prefix, $pdo;
-        $t = $prefix."_".$project."_".$list;
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET progress = ? WHERE id = ?");
-        $stmt->execute(array($progress, $id));
+        setValue($project."_".$list, "progress", $progress, " WHERE id = '".cleanInput($id)."'");
     }
 
     public static function changeFinished($project, $list, $id, $finished) {
-        global $prefix, $pdo;
-        $t = $prefix."_".$project."_".$list;
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET finished = ? WHERE id = ?");
-        $stmt->execute(array($finished, $id));
+        setValue($project."_".$list, "finished", $finished, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change task status
     public static function changeStatus($project, $list, $id, $status) {
-        global $prefix, $pdo;
-        $t = $prefix."_".$project."_".$list;
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET task_status = ? WHERE id = ?");
-        $stmt->execute(array($status, $id));
+        setValue($project."_".$list, "task_status", $status, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change task title
     public static function changeTitle($project, $list, $id, $title) {
-        global $prefix, $pdo;
-        $t = $prefix."_".$project."_".$list;
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET title = ? WHERE id = ?");
-        $stmt->execute(array($title, $id));
+        setValue($project."_".$list, "title", $title, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change task version
     public static function changeVersion($project, $list, $id, $version) {
-        global $prefix, $pdo;
-        $t = $prefix."_".$project."_".$list;
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ? WHERE id = ?");
-        $stmt->execute(array($version, $id));
+        setValue($project."_".$list, "version_name", $version, " WHERE id = '".cleanInput($id)."'");
     }
 
     public static function hasLabel($project, $list, $id, $label) {

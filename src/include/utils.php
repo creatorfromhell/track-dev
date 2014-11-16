@@ -48,6 +48,13 @@ function value($table, $column, $extra = '') {
     return $result[$column];
 }
 
+function setValue($table, $column, $value, $extra = '') {
+    global $prefix, $pdo;
+    $t = $prefix."_".$table;
+    $stmt = $pdo->prepare("UPDATE `".$t."` SET ".$column." = ?".$extra);
+    $stmt->execute(array($value));
+}
+
 /**
  * @param string $table
  * @param string $column
@@ -242,21 +249,11 @@ function pageLockedUser($user, $name) {
  * Permission Functions
  */
 function nodeID($node) {
-    global $pdo, $prefix;
-    $t = $prefix."_nodes";
-    $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE node_name = ?");
-    $stmt->execute(array($node));
-    $return = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $return['id'];
+    return value("nodes", "id", " WHERE node_name = '".cleanInput($node)."'");
 }
 
 function nodeName($id) {
-    global $pdo, $prefix;
-    $t = $prefix."_nodes";
-    $stmt = $pdo->prepare("SELECT node_name FROM `".$t."` WHERE id = ?");
-    $stmt->execute(array($id));
-    $return = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $return['node_name'];
+    return value("nodes", "node_name", " WHERE id = '".cleanInput($id)."'");
 }
 
 function nodeDetails($id) {

@@ -52,10 +52,7 @@ class ProjectFunc {
 
     //change main list id
     public static function changeMain($id, $main) {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET main = ? WHERE id = ?");
-        $stmt->execute(array($main, $id));
+        setValue("projects", "main", $main, " WHERE id = '".cleanInput($id)."'");
     }
 
     //get main list id
@@ -76,10 +73,7 @@ class ProjectFunc {
 
     //change overseer
     public static function changeOverseer($id, $overseer) {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET overseer = ? WHERE id = ?");
-        $stmt->execute(array($overseer, $id));
+        setValue("projects", "overseer", $overseer, " WHERE id = '".cleanInput($id)."'");
     }
 
     public static function getName($id) {
@@ -94,34 +88,22 @@ class ProjectFunc {
     //make preset project
     public static function makePreset($id) {
         self::removePreset();
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET preset = 1 WHERE id = ?");
-        $stmt->execute(array($id));
+        setValue("projects", "preset", "1", " WHERE id = '".cleanInput($id)."'");
     }
 
     public static function removePreset() {
         $id = self::getID(self::getPreset());
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET preset = 0 WHERE id = ?");
-        $stmt->execute(array($id));
+        setValue("projects", "preset", "0", " WHERE id = '".cleanInput($id)."'");
     }
 
     //make project private
     public static function makePrivate($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET public = 0 WHERE id = ?");
-        $stmt->execute(array($id));
+        setValue("projects", "public", "0", " WHERE id = '".cleanInput($id)."'");
     }
 
     //make project public
     public static function makePublic($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET public = 1 WHERE id = ?");
-        $stmt->execute(array($id));
+        setValue("projects", "public", "1", " WHERE id = '".cleanInput($id)."'");
     }
 
     public static function projectDetails($id) {
@@ -149,10 +131,7 @@ class ProjectFunc {
         foreach($lists as &$list) {
             ListFunc::changeProject(ListFunc::getID($oldname, $list), $project);
         }
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
-        $stmt->execute(array($project, $id));
+        setValue("projects", "project", $project, " WHERE id = '".cleanInput($id)."'");
     }
 
     public static function latestTasks($project) {
