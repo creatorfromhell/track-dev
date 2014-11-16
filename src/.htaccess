@@ -1,9 +1,0 @@
-# prevent access to PHP error log
-<Files trackr-errors.log>
- Order allow,deny
- Deny from all
- Satisfy All
-</Files>
-
-# enable PHP error logging
-php_flag  log_errors on

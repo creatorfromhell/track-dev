@@ -1,3 +1,0 @@
-Options -Indexes
-RewriteEngine on
-RewriteRule ^config.ini.*$ cantdothatstarfox.ini [R=301,L]
