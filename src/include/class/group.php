@@ -91,16 +91,6 @@ class Group {
         return $result['group_name'];
     }
 
-    public static function getAvailableID() {
-        global $pdo, $prefix;
-        $t = $prefix."_groups";
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM `".$t."`");
-        $stmt->execute();
-        $id = $stmt->fetchColumn();
-        $id++;
-        return $id;
-    }
-
     public static function delete($id) {
         global $pdo, $prefix;
         $t = $prefix."_groups";

@@ -17,7 +17,6 @@ if(isset($_POST['register'])) {
                             if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && checkCaptcha(cleanInput($_POST['captcha']))) {
                                 $date = date("Y-m-d H:i:s");
                                 $user = new User();
-                                $user->id = User::getAvailableID();
                                 $user->ip = User::getIP();
                                 $user->name = cleanInput($_POST['username']);
                                 $user->email = cleanInput($_POST['email']);

@@ -158,7 +158,7 @@ class VersionFunc {
 		$out .= '<label for="version-type">Version Type:</label>';
 		$out .= '<select name="version-type" id="version-type">';
 		$out .= '<option value="0" selected>None</option>';
-		$types = self::types($project);
+		$types = self::types();
 		foreach($types as &$type) {
 			$out .= '<option value="'.$type.'">'.$type.'</option>';
 		}
@@ -207,7 +207,7 @@ class VersionFunc {
 		$out .= '<label for="version-type">Version Type:</label>';
 		$out .= '<select name="version-type" id="version-type">';
 		$out .= '<option value="none"'.(($details['type'] == 'none') ? ' selected' : '').'>None</option>';
-		$types = self::types($details['project']);
+		$types = self::types();
 		foreach($types as &$type) {
 			$out .= '<option value="'.$type.'"'.(($details['type'] == $type) ? ' selected' : '').'>'.$type.'</option>';
 		}
