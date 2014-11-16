@@ -1,0 +1,8 @@
+tools:
+    php_sim: true
+    php_pdepend: true
+    php_analyzer:
+        enabled: true
+        config:
+            doc_comment_fixes:
+                enabled: true
