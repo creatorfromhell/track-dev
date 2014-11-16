@@ -23,6 +23,9 @@ function function_loader($class) {
     load("/src/include/function/".$class.".php");
 }
 
+/**
+ * @param string $file
+ */
 function load($file) {
     if (file_exists($file)) {
         require $file;
