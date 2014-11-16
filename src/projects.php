@@ -67,7 +67,7 @@ if(isset($_GET['page'])) {
 			</form>
 			<?php
 			}
-			if(ProjectFunc::hasProjects()) {
+			if(hasValues("projects")) {
 				global $prefix;
 				$pagination = new Pagination($prefix."_projects", "id, project, creator, created, overseer", $pn, 10);
 				echo $pagination->pageString;
@@ -132,7 +132,7 @@ if(isset($_GET['page'])) {
 			</form>
 			<?php
 			}
-			if(VersionFunc::hasTypes()) {
+			if(hasValues("version_types")) {
 				global $prefix;
 				$pagination = new Pagination($prefix."_version_types", "id, version_type, description, version_stability", $pn, 10);
 				echo $pagination->pageString;

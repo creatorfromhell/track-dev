@@ -125,18 +125,6 @@ class ListFunc {
         return explode(':', explode(',', $result['list_permissions'])[0])[1];
     }
 
-    //Check if the list has any tasks
-    public static function isEmpty($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_".self::getProject($id)."_".self::getName($id);
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."`");
-        $stmt->execute();
-        if($stmt->fetch(PDO::FETCH_NUM) > 0) {
-            return false;
-        }
-        return true;
-    }
-
     //get list id
     public static function getID($project, $list) {
         global $prefix, $pdo;
@@ -270,7 +258,7 @@ class ListFunc {
         $out .= '<input id="author" name="author" type="hidden" value="'.$username.'">';
         $out .= '<label for="project">Project:</label>';
         $out .= '<select name="project" id="project">';
-        $out .= toOptions($projects);
+        $out .= toOptions($projects, $project);
         $out .= '</select><br />';
         $out .= '<label for="public">Public:</label>';
         $out .= '<select name="public" id="public">';
@@ -362,7 +350,7 @@ class ListFunc {
         $out .= '<input id="name" name="name" type="text" placeholder="Name" value="'.$result['list'].'">';
         $out .= '<label for="project">Project:</label>';
         $out .= '<select name="project" id="project">';
-        $out .= toOptions(ProjectFunc::returnValues(), $result['project']);
+        $out .= toOptions(values("projects", "project"), $result['project']);
         $out .= '</select><br />';
         $out .= '<label for="public">Public:</label>';
         $out .= '<select name="public" id="public">';

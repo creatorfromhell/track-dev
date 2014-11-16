@@ -69,7 +69,7 @@ if(isset($_GET['page'])) {
 
 			<!-- Lists -->
 			<?php
-			if(ProjectFunc::hasLists($project)) {
+			if(hasValues("lists", " WHERE project = '".cleanInput($project)."'")) {
 				global $prefix;
 				$pagination = new Pagination($prefix."_lists", "id, list, created, creator, overseer", $pn, 10, "?p=".$project."&page=lists&", "WHERE `project` = '".$project."'");
 				echo $pagination->pageString;
@@ -145,7 +145,7 @@ if(isset($_GET['page'])) {
 				</script>
 			<?php } ?>			
 			<?php
-			if(VersionFunc::hasVersions($project)) {
+			if(hasValues("versions", " WHERE project = '".cleanInput($project)."'")) {
 				global $prefix;
 				$pagination = new Pagination($prefix."_versions", "id, version_name, version_status, version_type", $pn, 10);
 				echo $pagination->pageString;

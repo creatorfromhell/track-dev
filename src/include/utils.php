@@ -38,6 +38,36 @@ function strContains($string, $word) {
     return false;
 }
 
+function values($table, $column, $extra = '') {
+    global $prefix, $pdo;
+    $t = $prefix."_".$table;
+    $stmt = $pdo->prepare("SELECT ".$column." FROM `".$t."`".$extra);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+
+    $values = array();
+    foreach($result as &$r) {
+        $values[] = $r;
+    }
+    return $values;
+}
+
+function hasValues($table, $extra = '') {
+    if(countColumns($table, $extra) > 0) {
+        return true;
+    }
+    return false;
+}
+
+function countColumns($table, $extra = '') {
+    global $prefix, $pdo;
+    $t = $prefix."_".$table;
+    $stmt = $pdo->prepare("SELECT * FROM `".$t."`".$extra);
+    $stmt->execute();
+
+    return $stmt->fetch(PDO::FETCH_NUM);
+}
+
 function toOptions($data, $value = null) {
     $return = '';
     $options = $data;

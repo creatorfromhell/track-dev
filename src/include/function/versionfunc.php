@@ -87,31 +87,6 @@ class VersionFunc {
         $stmt->execute(array($version, $id));
     }
 	
-	public static function hasVersions($project) {
-        global $prefix, $pdo;
-        $t = $prefix."_versions";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ?");
-		$stmt->execute(array($project));
-        if($stmt->fetch(PDO::FETCH_NUM) > 0) {
-            return true;
-        }
-        return false;
-	}
-	
-	public static function versions($project) {
-        global $prefix, $pdo;
-        $t = $prefix."_versions";
-        $stmt = $pdo->prepare("SELECT version_name FROM `".$t."` WHERE project = ?");
-		$stmt->execute(array($project));
-        $result = $stmt->fetchAll();
-
-		$versions = array();
-		for($i = 0; $i < count($result); $i++) {
-			$versions[$i] = $result[$i][0];
-		}
-		return $versions;
-	}
-	
 	public static function versionDetails($id) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
@@ -158,7 +133,7 @@ class VersionFunc {
 		$out .= '<label for="version-type">Version Type:</label>';
 		$out .= '<select name="version-type" id="version-type">';
 		$out .= '<option value="0" selected>None</option>';
-        $out .= toOptions(self::types());
+        $out .= toOptions(values("version_types", "version_type"));
 		$out .= '</select><br />';
 		$out .= '</fieldset>';
 		$out .= '<fieldset id="links">';
@@ -204,7 +179,7 @@ class VersionFunc {
 		$out .= '<label for="version-type">Version Type:</label>';
 		$out .= '<select name="version-type" id="version-type">';
 		$out .= '<option value="none"'.(($details['type'] == 'none') ? ' selected' : '').'>None</option>';
-        $out .= toOptions(self::types(), $details['type']);
+        $out .= toOptions(values("version_types", "version_type"), $details['type']);
 		$out .= '</select><br />';
 		$out .= '</fieldset>';
 		$out .= '<fieldset id="links">';
@@ -271,30 +246,6 @@ class VersionFunc {
 			return true;
 		}
 		return false;
-	}
-	
-	public static function hasTypes() {
-        global $prefix, $pdo;
-        $t = $prefix."_version_types";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."`");
-        $stmt->execute();
-        if($stmt->fetch(PDO::FETCH_NUM) > 0) {
-            return true;
-        }
-        return false;
-	}
-	
-	public static function types() {
-        global $prefix, $pdo;
-        $t = $prefix."_version_types";
-        $stmt = $pdo->prepare("SELECT version_type FROM `".$t."`");
-        $result = $stmt->fetchAll();
-
-		$types = array();
-		for($i = 0; $i < count($result); $i++) {
-			$types[$i] = $result[$i][0];
-		}
-		return $types;
 	}
 	
 	public static function typeDetails($id) {

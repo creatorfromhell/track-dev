@@ -112,7 +112,7 @@ if(isset($_GET['page'])) {
 
         <!-- Tasks -->
         <?php
-        if(!ListFunc::isEmpty(ListFunc::getID($project, $list)) && canViewList(ListFunc::getID($project, $list))) {
+        if(hasValues($project."_".$list) && canViewList(ListFunc::getID($project, $list))) {
             global $prefix;
             $pagination = new Pagination($prefix."_".$project."_".$list, "id, title, author, assignee, created, editable, task_status", $pn, 10, "?p=".$project."&l=".$list."&page=tasks&", "ORDER BY task_status, id");
 			echo $pagination->pageString;
@@ -206,7 +206,7 @@ if(isset($_GET['page'])) {
 				</div>
 			</form>
             <?php } 
-			if(LabelFunc::hasLabels($project, $list)) {
+			if(hasValues("labels", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($list)."'")) {
 				global $prefix;
 				$pagination = new Pagination($prefix."_labels", "id, label_name, text_color, background_color", $pn, 10, "?p=".$project."&l=".$list."&page=labels&", "WHERE project = '".$project."' AND list = '".$list."' ORDER BY id");
 				echo $pagination->pageString;

@@ -52,7 +52,7 @@ $pn = 1;
 $currentUser = null;
 $language = $configurationValues["main"]["language"];
 $project = ProjectFunc::getPreset();
-$projects = ProjectFunc::returnValues();
+$projects = values("projects", "project");
 $list = ProjectFunc::getMain(ProjectFunc::getID($project));
 
 if(isset($_SESSION['usersplusprofile'])) {
@@ -102,7 +102,7 @@ if(isset($_GET['pn'])) {
 
 $languageinstance = $langmanager->languages[$language];
 $return = $pageFull.'?p='.$project.'&l='.$list;
-$lists = ProjectFunc::returnValues($project);
+$lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
 $formatter = new StringFormatter(getName(), $project, $list, $configuration->config, $languageinstance);
 $rawMsg = "";
 $msg = "";

@@ -21,7 +21,7 @@ class ProjectFunc {
 
     public static function remove($id) {
         $project = self::getName($id);
-        $lists = self::returnValues($project);
+        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
         foreach($lists as &$list) {
             $listid = ListFunc::getID($project, $list);
             ListFunc::remove($listid);
@@ -175,7 +175,7 @@ class ProjectFunc {
 
     //reproject project
     public static function renameProject($id, $oldname, $project) {
-        $lists = self::returnValues($oldname);
+        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
         foreach($lists as &$list) {
             ListFunc::changeProject(ListFunc::getID($oldname, $list), $project);
         }
@@ -199,49 +199,9 @@ class ProjectFunc {
         return false;
     }
 
-    public static function hasProjects() {
-        $projects = self::returnValues();
-        if(count($projects) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    public static function hasLists($project) {
-        $lists = self::returnValues($project);
-        if(count($lists) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    public static function returnValues($project = null) {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = null;
-        $values = array();
-        $result = null;
-
-        if(empty($project)) {
-            $stmt = $pdo->prepare("SELECT project FROM `".$t."`");
-        } else {
-            $t = $prefix."_lists";
-            $stmt = $pdo->prepare("SELECT list FROM `".$t."` WHERE project = ?");
-            $stmt->bindParam(1, $project);
-        }
-        $stmt->execute();
-        $result = $stmt->fetchAll();
-
-        for($i = 0; $i < count($result); $i++) {
-            $values[$i] = $result[$i][0];
-        }
-
-        return $values;
-    }
-
     public static function latestTasks($project) {
         global $prefix, $pdo;
-        $lists = self::returnValues($project);
+        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
         $from = "";
 
         for($i = 0; $i < count($lists); $i++) {
@@ -281,7 +241,7 @@ class ProjectFunc {
      */
     public static function getTaskCountByMonth($project, $month, $completed) {
         global $prefix, $pdo;
-        $lists = self::returnValues($project);
+        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
 
         $from = "";
         $date = ($completed) ? "finished" : "created";
@@ -315,7 +275,7 @@ class ProjectFunc {
 
     public static function getTopAssignedUsers($project) {
         global $prefix, $pdo;
-        $lists = self::returnValues($project);
+        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
         $users = array();
         $totals = array();
         $completed = array();
@@ -350,7 +310,7 @@ class ProjectFunc {
 
     public static function hasEvent($project, $year, $month, $day) {
         global $prefix, $pdo;
-        $lists = self::returnValues($project);
+        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
 
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM (SELECT id, project, EXTRACT(YEAR FROM created) AS year, EXTRACT(MONTH FROM created) AS month, EXTRACT(DAY FROM created) AS day FROM `".$prefix."_lists`) AS a WHERE project = ".$project." AND year = ".$year." AND month = ".$month." AND day = ".$day);
         $stmt->execute();
@@ -373,7 +333,7 @@ class ProjectFunc {
 
     public static function getEvents($project, $year, $month, $day) {
         global $prefix, $pdo;
-        $lists = self::returnValues($project);
+        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
         $toReturn = "";
         if(self::hasEvent($project, $year, $month, $day)) {
             $toReturn .= "<ul>";
@@ -487,7 +447,7 @@ class ProjectFunc {
         $out .= '</select><br />';
         $out .= '<label for="mainlist">Main List:</label>';
         $out .= '<select name="mainlist" id="mainlist">';
-        $lists = self::returnValues($details['name']);
+        $lists = values("lists", "list", " WHERE project = '".cleanInput($details['name'])."'");
         foreach($lists as &$list) {
             $listID = ListFunc::getID($details['name'], $list);
             $out .= '<option value="'.$listID.'"'.(($listID == $details['main']) ? ' selected' : '').'>'.$list.'</option>';

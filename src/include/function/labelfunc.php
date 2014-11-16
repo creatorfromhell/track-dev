@@ -63,17 +63,6 @@ class LabelFunc {
         $details['background'] = $result['background_color'];
         return $details;
     }
-	
-	public static function hasLabels($project, $list) {
-        global $prefix, $pdo;
-        $t = $prefix."_labels";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ? AND list = ?");
-        $stmt->execute(array($project, $list));
-        if($stmt->fetch(PDO::FETCH_NUM) > 0) {
-            return true;
-        }
-        return false;
-	}
 
     public static function labels($project, $list) {
         global $prefix, $pdo;

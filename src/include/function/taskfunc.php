@@ -166,7 +166,7 @@ class TaskFunc {
         $out .= '<label for="version">Version:</label>';
         $out .= '<select name="version" id="version">';
         $out .= '<option value="none" selected>None</option>';
-		$out .= toOptions(VersionFunc::versions($project));
+		$out .= toOptions(values("versions", "version_name", " WHERE project = '".cleanInput($project)."'"));
         $out .= '</select><br />';
         $out .= '<label for="progress">Progress:<label id="progress_value">0</label></label><br />';
         $out .= '<input type="range" id="progress" name="progress" value="0" min="0" max="100" oninput="showValue(\'progress_value\', this.value);">';
@@ -247,7 +247,7 @@ class TaskFunc {
         $out .= '<label for="version">Version:</label>';
         $out .= '<select name="version" id="version">';
         $out .= '<option value="none"'.(($details['version'] == "none") ? " selected" : "").'>None</option>';
-        $out .= toOptions(VersionFunc::versions($project), $details['version']);
+        $out .= toOptions(values("versions", "version_name", " WHERE project = '".cleanInput($project)."'"), $details['version']);
         $out .= '</select><br />';
         $out .= '<label for="progress">Progress:<label id="progress_value">'.$details['progress'].'</label></label><br />';
         $out .= '<input type="range" id="progress" name="progress" value="'.$details['progress'].'" min="0" max="100" oninput="showValue(\'progress_value\', this.value);">';
