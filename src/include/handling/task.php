@@ -17,8 +17,8 @@ if(isset($_POST['add-task'])) {
             if(isset($_POST['author']) && trim($_POST['author']) != "") {
                 if(isset($_POST['editable']) && trim($_POST['editable']) != "") {
                     if(isset($_POST['status']) && trim($_POST['status']) != "") {
-                        if(ProjectFunc::projectExists($project)) {
-                            if(ListFunc::listExists($project, $list)) {
+                        if(hasValues("projects", " WHERE project = '".cleanInput($project)."'")) {
+                            if(hasValues("lists", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($list)."'")) {
                                 $created = date("Y-m-d H:i:s");
 								$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? cleanInput($_POST['due-date']) : "0000-00-00";
                                 $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;
@@ -74,8 +74,8 @@ if(isset($_POST['edit-task'])) {
                 if(isset($_POST['author']) && trim($_POST['author']) != "") {
                     if(isset($_POST['editable']) && trim($_POST['editable']) != "") {
                         if(isset($_POST['status']) && trim($_POST['status']) != "") {
-                            if(ProjectFunc::projectExists($project)) {
-                                if(ListFunc::listExists($project, $list)) {
+                            if(hasValues("projects", " WHERE project = '".cleanInput($project)."'")) {
+                                if(hasValues("lists", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($list)."'")) {
                                     $created = date("Y-m-d H:i:s");
 									$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? cleanInput($_POST['due-date']) : "0000-0-00";
                                     $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;

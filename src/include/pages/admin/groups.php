@@ -13,7 +13,7 @@ $subPage = "all";
 if(isset($_GET['sub'])) {
     $subPage = $_GET['sub'];
 }
-if(isset($_GET['action']) && isset($_GET['id']) && Group::exists(Group::getName(cleanInput($_GET['id'])))) {
+if(isset($_GET['action']) && isset($_GET['id']) && hasValues("groups", " WHERE group_name = '".cleanInput(Group::getName(cleanInput($_GET['id'])))."'")) {
 	$editID = cleanInput($_GET['id']);
     $action = cleanInput($_GET['action']);
 
@@ -28,7 +28,7 @@ if(isset($_GET['action']) && isset($_GET['id']) && Group::exists(Group::getName(
         Group::delete($editID);
     }
 }
-if($subPage == "group" && isset($_GET['name']) && Group::exists($_GET['name'])) {
+if($subPage == "group" && isset($_GET['name']) && hasValues("groups", " WHERE group_name = '".cleanInput($_GET['name'])."'")) {
     ?>
     <div id="group-view">
 

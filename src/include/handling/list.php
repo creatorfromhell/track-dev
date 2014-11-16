@@ -23,8 +23,8 @@ if(isset($_POST['add-list'])) {
                                     if(isset($_POST['guestedit']) && trim($_POST['guestedit']) != "") {
                                         if(isset($_POST['viewpermission']) && trim($_POST['viewpermission']) != "") {
                                             if(isset($_POST['editpermission']) && trim($_POST['editpermission']) != "") {
-                                                if(ProjectFunc::projectExists($_POST['project'])) {
-                                                    if(!ListFunc::listExists($_POST['project'], $_POST['name'])) {
+                                                if(hasValues("projects", " WHERE project = '".cleanInput($_POST['project'])."'")) {
+                                                    if(!hasValues("lists", " WHERE project = '".cleanInput($_POST['project'])."' AND list = '".cleanInput($_POST['name'])."'")) {
                                                         $created = date("Y-m-d H:i:s");
                                                         ListFunc::addList($_POST['name'], $_POST['project'], $_POST['public'], $_POST['author'], $created, $_POST['overseer'], $_POST['minimal'], $_POST['guestview'], $_POST['guestedit'], $_POST['viewpermission'], $_POST['editpermission']);
                                                         ListFunc::create($_POST['project'], $_POST['name']);
@@ -115,10 +115,10 @@ if(isset($_POST['edit-list'])) {
                                     if(isset($_POST['guestedit']) && trim($_POST['guestedit']) != "") {
                                         if(isset($_POST['viewpermission']) && trim($_POST['viewpermission']) != "") {
                                             if(isset($_POST['editpermission']) && trim($_POST['editpermission']) != "") {
-                                                if(ProjectFunc::projectExists($_POST['project'])) {
+                                                if(hasValues("projects", " WHERE project = '".cleanInput($_POST['project'])."'")) {
                                                     $id = $_POST['id'];
                                                     $details = ListFunc::listDetails($id);
-                                                    if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !ListFunc::listExists($_POST['project'], $_POST['name'])) {
+                                                    if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !hasValues("lists", " WHERE project = '".cleanInput($_POST['project'])."' AND list = '".cleanInput($_POST['name'])."'")) {
                                                         $created = date("Y-m-d H:i:s");
                                                         if($_POST['project'] != $details['project']) {
                                                             ListFunc::changeProject($id, $_POST['project']);

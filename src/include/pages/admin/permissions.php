@@ -12,9 +12,9 @@ $editing = false;
 if(isset($_GET['action'])) {
     $action = cleanInput($_GET['action']);
 
-    if($action == "edit" && isset($_GET['id']) && nodeValidID(cleanInput($_GET['id']))) {
+    if($action == "edit" && isset($_GET['id']) && hasValues("nodes", " WHERE id = '".cleanInput($_GET['id'])."'")) {
         $editing = true;
-    } else if($action == "delete" && isset($_GET['id']) && nodeValidID(cleanInput($_GET['id']))) {
+    } else if($action == "delete" && isset($_GET['id']) && hasValues("nodes", " WHERE id = '".cleanInput($_GET['id'])."'")) {
         nodeDelete(cleanInput($_GET['id']));
     }
 }

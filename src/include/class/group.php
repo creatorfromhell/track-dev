@@ -60,19 +60,6 @@ class Group {
         return $group;
     }
 
-    public static function exists($name) {
-        global $pdo, $prefix;
-        $t = $prefix."_groups";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE group_name = ?");
-        $stmt->execute(array($name));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if($result) {
-            return true;
-        }
-        return false;
-    }
-
     public static function preset() {
         global $pdo, $prefix;
         $t = $prefix."_groups";

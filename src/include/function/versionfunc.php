@@ -103,19 +103,6 @@ class VersionFunc {
         return $return;
 	}
 	
-	public static function versionExists($name) {
-        global $prefix, $pdo;
-        $t = $prefix."_versions";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE version_name = ?");
-        $stmt->execute(array($name));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if($result) {
-            return true;
-        }
-        return false;
-	}
-	
 	public static function printAddForm($project) {
 		$out = '';
 		$out .= '<h3>Add Version</h3>';
@@ -259,19 +246,6 @@ class VersionFunc {
         $return['description'] = $result['description'];
         $return['stability'] = $result['version_stability'];
         return $return;
-	}
-	
-	public static function typeExists($name) {
-        global $prefix, $pdo;
-        $t = $prefix."_version_types";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE version_type = ?");
-        $stmt->execute(array($name));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if($result) {
-            return true;
-        }
-        return false;
 	}
 	
 	public static function printTypeAddForm() {

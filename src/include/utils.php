@@ -110,32 +110,7 @@ function getName() {
 }
 
 function latestUsers() {
-    $connect = new Connect();
-    $c = $connect->connection;
-    $t = $connect->prefix."_users";
-    $stmt = $c->prepare("SELECT user_name FROM `".$t."` ORDER BY user_registered DESC LIMIT 7");
-    $stmt->execute();
-    $result = $stmt->fetchAll();
-
-    $users = array();
-    for($i = 0; $i < count($result); $i++) {
-        $users[$i] = $result[$i][0];
-    }
-    return $users;
-}
-
-function users() {
-    global $prefix, $pdo;
-    $t = $prefix."_users";
-    $stmt = $pdo->prepare("SELECT user_name FROM ".$t);
-    $stmt->execute();
-    $result = $stmt->fetchAll();
-
-    $users = array();
-    for($i = 0; $i < count($result); $i++) {
-        $users[$i] = $result[$i][0];
-    }
-    return $users;
+    //new method values("users", "user_name", " ORDER BY user_registered DESC LIMIT 7");
 }
 
 function userNav() {
@@ -158,7 +133,7 @@ function canViewList($id) {
     if(isAdmin()) { return true; }
     if(ProjectFunc::getOverseer(ListFunc::getProject($id)) == getName() || ListFunc::getOverseer($id) == getName()) { return true; }
 	$user = User::load($_SESSION['usersplusprofile']);
-    if($viewPermission != "none" && nodeValidID($viewPermission) && $user->hasPermission($viewPermission)) { return true; }
+    if($viewPermission != "none" && hasValues("nodes", " WHERE id = '".cleanInput($viewPermission)."'") && $user->hasPermission($viewPermission)) { return true; }
     return false;
 }
 
@@ -169,7 +144,7 @@ function canEditList($id) {
     if(isAdmin()) { return true; }
     if(ProjectFunc::getOverseer(ListFunc::getProject($id)) == getName() || ListFunc::getOverseer($id) == getName()) { return true; }
     $user = User::load($_SESSION['usersplusprofile']);
-	if($editPermission != "none" && nodeValidID($editPermission) && $user->hasPermission($editPermission)) { return true; }
+	if($editPermission != "none" && hasValues("nodes", " WHERE id = '".cleanInput($editPermission)."'") && $user->hasPermission($editPermission)) { return true; }
     return false;
 }
 
@@ -182,7 +157,7 @@ function canEditTask($listID, $taskID) {
     $details = TaskFunc::taskDetails(ListFunc::getProject($listID), ListFunc::getName($listID), $taskID);
     if($details['author'] == getName()) { return true; }
 	$user = User::load($_SESSION['usersplusprofile']);
-    if($editPermission != "none" && nodeValidID($editPermission) && $user->hasPermission($editPermission) && $details['editable'] == '1') { return true; }
+    if($editPermission != "none" && hasValues("nodes", " WHERE id = '".cleanInput($editPermission)."'") && $user->hasPermission($editPermission) && $details['editable'] == '1') { return true; }
     return false;
 }
 
@@ -208,7 +183,7 @@ function pageLockedNode($user, $node, $guest = false) {
     if($user === null) { return true; }
     if(!is_a($user, "User")) { return true; }
     if($user->isAdmin()) { return false; }
-    if(!nodeExists($node)) { return true; }
+    if(!hasValues("nodes", " WHERE node_name = '".cleanInput($node)."'")) { return true; }
     if($user->hasPermission(nodeID($node))) { return false; }
     if($user->group->hasPermission(nodeID($node))) { return false; }
     return true;
@@ -273,32 +248,6 @@ function nodeDetails($id) {
     return $result;
 }
 
-function nodeValidID($id) {
-    global $pdo, $prefix;
-    $t = $prefix."_nodes";
-    $stmt = $pdo->prepare("SELECT node_name FROM `".$t."` WHERE id = ?");
-    $stmt->execute(array($id));
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if($result) {
-        return true;
-    }
-    return false;
-}
-
-function nodeExists($node) {
-    global $pdo, $prefix;
-    $t = $prefix."_nodes";
-    $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE node_name = ?");
-    $stmt->execute(array($node));
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if($result) {
-        return true;
-    }
-    return false;
-}
-
 function nodeAdd($node, $description) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
@@ -318,20 +267,6 @@ function nodeDelete($id) {
     $t = $prefix."_nodes";
     $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
     $stmt->execute(array($id));
-}
-
-function nodes() {
-    global $prefix, $pdo;
-    $t = $prefix."_nodes";
-    $stmt = $pdo->prepare("SELECT node_name FROM ".$t);
-    $stmt->execute();
-    $result = $stmt->fetchAll();
-
-    $nodes = array();
-    for($i = 0; $i < count($result); $i++) {
-        $nodes[$i] = $result[$i][0];
-    }
-    return $nodes;
 }
 
 /*

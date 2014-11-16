@@ -185,20 +185,6 @@ class ProjectFunc {
         $stmt->execute(array($project, $id));
     }
 
-    //exists
-    public static function projectExists($project) {
-        global $prefix, $pdo;
-        $t = $prefix."_projects";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ?");
-        $stmt->execute(array($project));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if($result) {
-            return true;
-        }
-        return false;
-    }
-
     public static function latestTasks($project) {
         global $prefix, $pdo;
         $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
@@ -418,7 +404,7 @@ class ProjectFunc {
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
         $out .= '<option value="none" selected>None</option>';
-        $out .= toOptions(users());
+        $out .= toOptions(values("users", "user_name"));
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
@@ -468,7 +454,7 @@ class ProjectFunc {
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
         $out .= '<option value="none"'.(($details['overseer'] == 'none') ? ' selected' : '').'>None</option>';
-        $out .= toOptions(users(), $details['overseer']);
+        $out .= toOptions(values("users", "user_name"), $details['overseer']);
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';

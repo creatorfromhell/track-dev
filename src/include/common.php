@@ -71,26 +71,26 @@ if(isset($_GET['lang']) && $langmanager->exists($_GET['lang'])) {
     $language = $_COOKIE['lang'];
 }
 
-if(isset($_GET['p']) && ProjectFunc::projectExists($_GET['p'])) {
+if(isset($_GET['p']) && hasValues("projects", " WHERE project = '".cleanInput($_GET['p'])."'")) {
     $project = $_GET['p'];
     $_SESSION['p'] = $project;
     setcookie('p', $project, time() + (3600 * 24 * 30));
     $list = ProjectFunc::getMain($project);
-} else if(isset($_SESSION['p']) && ProjectFunc::projectExists($_SESSION['p'])) {
+} else if(isset($_SESSION['p']) && hasValues("projects", " WHERE project = '".cleanInput($_SESSION['p'])."'")) {
     $project = $_SESSION['p'];
     $list = ProjectFunc::getMain($project);
-} else if(isset($_COOKIE['p']) && ProjectFunc::projectExists($_COOKIE['p'])) {
+} else if(isset($_COOKIE['p']) && hasValues("projects", " WHERE project = '".cleanInput($_COOKIE['p'])."'")) {
     $project = $_COOKIE['p'];
     $list = ProjectFunc::getMain($project);
 }
 
-if(isset($_GET['l']) && ListFunc::listExists($project, $_GET['l'])) {
+if(isset($_GET['l']) && hasValues("lists", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($_GET['l'])."'")) {
     $list = $_GET['l'];
     $_SESSION['l'] = $list;
     setcookie('l', $list, time() + (3600 * 24 * 30));
-} else if(isset($_SESSION['l']) && ListFunc::listExists($project, $_SESSION['l'])) {
+} else if(isset($_SESSION['l']) && hasValues("lists", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($_SESSION['l'])."'")) {
     $list = $_SESSION['l'];
-} else if(isset($_COOKIE['l']) && ListFunc::listExists($project, $_COOKIE['l'])) {
+} else if(isset($_COOKIE['l']) && hasValues("lists", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($_COOKIE['l'])."'")) {
     $list = $_COOKIE['l'];
 }
 

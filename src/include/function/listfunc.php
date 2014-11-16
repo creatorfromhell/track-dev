@@ -234,20 +234,6 @@ class ListFunc {
         $stmt->execute();
     }
 
-    //exists
-    public static function listExists($project, $list) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ? AND list = ?");
-        $stmt->execute(array($project, $list));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if($result) {
-            return true;
-        }
-        return false;
-    }
-
     public static function printAddForm($project, $projects, $username) {
         $out = '';
         $out .= '<h3>Add List</h3>';
@@ -285,7 +271,7 @@ class ListFunc {
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
         $out .= '<option value="none" selected>None</option>';
-        $out .= toOptions(users());
+        $out .= toOptions(values("users", "user_name"));
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
@@ -308,7 +294,7 @@ class ListFunc {
         $out .= '<label for="viewpermission">View Permission:</label>';
         $out .= '<select name="viewpermission" id="viewpermission">';
         $out .= '<option value="none" selected>None</option>';
-		$nodes = nodes();
+		$nodes = values("nodes", "node_name");
         foreach($nodes as &$node) {
             $out .= '<option value="'.nodeID($node).'">'.$node.'</option>';
         }
@@ -316,7 +302,7 @@ class ListFunc {
         $out .= '<label for="editpermission">Edit Permission:</label>';
         $out .= '<select name="editpermission" id="editpermission">';
         $out .= '<option value="none" selected>None</option>';
-		$nodes = nodes();
+		$nodes = values("nodes", "node_name");
         foreach($nodes as &$node) {
             $out .= '<option value="'.nodeID($node).'">'.$node.'</option>';
         }
@@ -377,7 +363,7 @@ class ListFunc {
         $out .= '<label for="overseer">Overseer:</label>';
         $out .= '<select name="overseer" id="overseer">';
         $out .= '<option value="none"'.(($result['overseer'] == 'none') ? ' selected' : '').'>None</option>';
-        $out .= toOptions(users(), $result['overseer']);
+        $out .= toOptions(values("users", "user_name"), $result['overseer']);
         $out .= '</select>';
         $out .= '</fieldset>';
         $out .= '<fieldset id="links">';
@@ -400,7 +386,7 @@ class ListFunc {
         $out .= '<label for="viewpermission">View Permission:</label>';
         $out .= '<select name="viewpermission" id="viewpermission">';
         $out .= '<option value="none"'.((self::viewPermission($id) == 'none') ? ' selected' : '').'>None</option>';
-		$nodes = nodes();
+		$nodes = values("nodes", "node_name");
         foreach($nodes as &$node) {
             $out .= '<option value="'.nodeID($node).'"'.((self::viewPermission($id) == $node) ? ' selected' : '').'>'.$node.'</option>';
         }
@@ -408,7 +394,7 @@ class ListFunc {
         $out .= '<label for="editpermission">Edit Permission:</label>';
         $out .= '<select name="editpermission" id="editpermission">';
         $out .= '<option value="none"'.((self::editPermission($id) == "none") ? ' selected' : '').'>None</option>';
-		$nodes = nodes();
+		$nodes = values("nodes", "node_name");
         foreach($nodes as &$node) {
             $out .= '<option value="'.nodeID($node).'"'.((self::editPermission($id) == $node) ? ' selected' : '').'>'.$node.'</option>';
         }

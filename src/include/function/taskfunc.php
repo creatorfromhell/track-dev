@@ -140,7 +140,7 @@ class TaskFunc {
         $out .= '<label for="assignee">Assignee:</label>';
         $out .= '<select name="assignee" id="assignee">';
         $out .= '<option value="none" selected>None</option>';
-		$out .= toOptions(users());
+		$out .= toOptions(values("users", "user_name"));
         $out .= '</select><br />';
         $out .= '<label for="due-date">Due Date:</label>';
         $out .= '<input id="due-date" name="due-date" type="text" placeholder="0000-00-00" readonly>';
@@ -221,7 +221,7 @@ class TaskFunc {
         $out .= '<label for="assignee">Assignee:</label>';
         $out .= '<select name="assignee" id="assignee">';
         $out .= '<option value="none"'.(($details['assignee'] == 'none') ? ' selected' : '').'>None</option>';
-		$out .= toOptions(users(), $details['assignee']);
+		$out .= toOptions(values("users", "user_name"), $details['assignee']);
         $out .= '</select><br />';
         $out .= '<label for="due-date">Due Date:</label>';
         $out .= '<input id="due-date" name="due-date" type="text" value="'.$details['due'].'" readonly>';

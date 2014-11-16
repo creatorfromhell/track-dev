@@ -15,7 +15,7 @@ if(isset($_POST['add-group'])) {
     if(isset($_POST['name']) && trim($_POST['name']) != '') {
         if(isset($_POST['admin']) && trim($_POST['admin']) != '') {
             if(isset($_POST['preset']) && trim($_POST['preset']) != '') {
-                if(!Group::exists(cleanInput($_POST['name']))) {
+                if(!hasValues("groups", " WHERE group_name = '".cleanInput($_POST['name'])."'")) {
                     if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && checkCaptcha(cleanInput($_POST['captcha']))) {
                         $group = new Group();
                         $group->name = cleanInput($_POST['name']);
@@ -59,7 +59,7 @@ if(isset($_POST['edit-group'])) {
         if(isset($_POST['name']) && trim($_POST['name']) != '') {
             if(isset($_POST['admin']) && trim($_POST['admin']) != '') {
                 if(isset($_POST['preset']) && trim($_POST['preset']) != '') {
-                    if(cleanInput($_POST['name']) != $oldName && !Group::exists(cleanInput($_POST['name'])) || cleanInput($_POST['name']) == $oldName) {
+                    if(cleanInput($_POST['name']) != $oldName && !hasValues("groups", " WHERE group_name = '".cleanInput($_POST['name'])."'") || cleanInput($_POST['name']) == $oldName) {
                         if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && checkCaptcha(cleanInput($_POST['captcha']))) {
                             if($_POST['preset'] == '1') {
                                 $old = Group::load(Group::preset());

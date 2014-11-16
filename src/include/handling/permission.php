@@ -27,7 +27,7 @@ if(isset($_POST['add-permission'])) {
 }
 
 if(isset($_POST['edit-permission'])) {
-    if(isset($_POST['id']) && trim($_POST['id']) != '' && nodeValidID(cleanInput($_POST['id']))) {
+    if(isset($_POST['id']) && trim($_POST['id']) != '' && hasValues("nodes", " WHERE id = '".cleanInput($_POST['id'])."'")) {
         if(isset($_POST['node']) && trim($_POST['node']) != '') {
             if(isset($_POST['description']) && trim($_POST['description']) != '') {
                 if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && checkCaptcha(cleanInput($_POST['captcha']))) {

@@ -17,7 +17,7 @@ if(isset($_POST['add-project'])) {
             if(isset($_POST['public']) && trim($_POST['public']) != "") {
                 if(isset($_POST['mainproject']) && trim($_POST['mainproject']) != "") {
                     if(isset($_POST['overseer']) && trim($_POST['overseer']) != "") {
-                        if(!ProjectFunc::projectExists($_POST['name'])) {
+                        if(!hasValues("projects", " WHERE project = '".cleanInput($_POST['name'])."'")) {
                             $created = date("Y-m-d H:i:s");
                             if($_POST['mainproject'] != 0) {
                                 ProjectFunc::removePreset();
@@ -65,7 +65,7 @@ if(isset($_POST['edit-project'])) {
                     if(isset($_POST['mainlist']) && trim($_POST['mainlist']) != "") {
                         if(isset($_POST['overseer']) && trim($_POST['overseer']) != "") {
                             $details = ProjectFunc::projectDetails($_POST['id']);
-                            if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !ProjectFunc::projectExists($_POST['name'])) {
+                            if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !hasValues("projects", " WHERE project = '".cleanInput($_POST['name'])."'")) {
                                 $created = date("Y-m-d H:i:s");
                                 if($details['preset'] == 0 && $_POST['mainproject'] == 1) {
                                     ProjectFunc::removePreset();
