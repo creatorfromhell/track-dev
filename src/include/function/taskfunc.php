@@ -14,19 +14,7 @@ class TaskFunc {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, title, description, author, assignee, due, created, finished, version_name, labels, editable, task_status, progress) VALUES('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bindParam(1, $title);
-        $stmt->bindParam(2, $description);
-        $stmt->bindParam(3, $author);
-        $stmt->bindParam(4, $assignee);
-        $stmt->bindParam(5, $due);
-        $stmt->bindParam(6, $created);
-        $stmt->bindParam(7, $finish);
-        $stmt->bindParam(8, $version);
-        $stmt->bindParam(9, $labels);
-        $stmt->bindParam(10, $editable);
-        $stmt->bindParam(11, $status);
-        $stmt->bindParam(12, $progress);
-        $stmt->execute();
+        $stmt->execute(array($title, $description, $author, $assignee, $due, $created, $finish, $version, $labels, $editable, $status, $progress));
     }
 
     //delete task
@@ -34,8 +22,7 @@ class TaskFunc {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     //edit task
@@ -43,20 +30,7 @@ class TaskFunc {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("UPDATE `".$t."` SET title = ?, description = ?, author = ?, assignee = ?, due = ?, created = ?, finished = ?, version_name = ?, labels = ?, editable = ?, task_status = ?, progress = ? WHERE id = ?");
-        $stmt->bindParam(1, $title);
-        $stmt->bindParam(2, $description);
-        $stmt->bindParam(3, $author);
-        $stmt->bindParam(4, $assignee);
-        $stmt->bindParam(5, $due);
-        $stmt->bindParam(6, $created);
-        $stmt->bindParam(7, $finish);
-        $stmt->bindParam(8, $version);
-        $stmt->bindParam(9, $labels);
-        $stmt->bindParam(10, $editable);
-        $stmt->bindParam(11, $status);
-        $stmt->bindParam(12, $progress);
-        $stmt->bindParam(13, $id);
-        $stmt->execute();
+        $stmt->execute($title, $description, $author, $assignee, $due, $created, $finish, $version, $labels, $editable, $status, $progress, $id);
     }
 
     public static function taskDetails($project, $list, $id) {
@@ -64,8 +38,7 @@ class TaskFunc {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("SELECT title, description, author, assignee, due, created, finished, version_name, labels, editable, task_status, progress FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $return['title'] = $result['title'];
         $return['description'] = $result['description'];
@@ -87,9 +60,7 @@ class TaskFunc {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("UPDATE `".$t."` SET assignee = ? WHERE id = ?");
-        $stmt->bindParam(1, $assignee);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($assignee, $id));
     }
 
     //change task labels
@@ -97,9 +68,7 @@ class TaskFunc {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("UPDATE `".$t."` SET labels = ? WHERE id = ?");
-        $stmt->bindParam(1, $labels);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($labels, $id));
     }
 
     //change task progress
@@ -107,18 +76,14 @@ class TaskFunc {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("UPDATE `".$t."` SET progress = ? WHERE id = ?");
-        $stmt->bindParam(1, $progress);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($progress, $id));
     }
 
     public static function changeFinished($project, $list, $id, $finished) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("UPDATE `".$t."` SET finished = ? WHERE id = ?");
-        $stmt->bindParam(1, $finished);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($finished, $id));
     }
 
     //change task status
@@ -126,9 +91,7 @@ class TaskFunc {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("UPDATE `".$t."` SET task_status = ? WHERE id = ?");
-        $stmt->bindParam(1, $status);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($status, $id));
     }
 
     //change task title
@@ -136,9 +99,7 @@ class TaskFunc {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("UPDATE `".$t."` SET title = ? WHERE id = ?");
-        $stmt->bindParam(1, $title);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($title, $id));
     }
 
     //change task version
@@ -146,17 +107,14 @@ class TaskFunc {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ? WHERE id = ?");
-        $stmt->bindParam(1, $version);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($version, $id));
     }
 
     public static function hasLabel($project, $list, $id, $label) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("SELECT labels FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $labelstring = $result['labels'];

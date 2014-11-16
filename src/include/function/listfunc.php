@@ -17,16 +17,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, list, project, public, creator, created, overseer, minimal_view, guest_permissions, list_permissions) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bindParam(1, $list);
-        $stmt->bindParam(2, $project);
-        $stmt->bindParam(3, $public);
-        $stmt->bindParam(4, $creator);
-        $stmt->bindParam(5, $created);
-        $stmt->bindParam(6, $overseer);
-        $stmt->bindParam(7, $minimal);
-        $stmt->bindParam(8, $guestPermissions);
-        $stmt->bindParam(9, $listPermissions);
-        $stmt->execute();
+        $stmt->execute(array($list, $project, $public, $creator, $created, $overseer, $minimal, $guestPermissions, $listPermissions));
     }
 
     public static function create($project, $list) {
@@ -64,8 +55,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     //edit list
@@ -74,16 +64,8 @@ class ListFunc {
         $listPermissions = "view:".$viewpermission.",edit:".$editpermission;
         global $prefix, $pdo;
         $t = $prefix."_lists";
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET list = ?, project = ?, public = ?, overseer = ?, minimal_view = ?, guest_permissions = ?, list_permissions = ? WHERE id = ?");
-        $stmt->bindParam(1, $list);
-        $stmt->bindParam(2, $project);
-        $stmt->bindParam(3, $public);
-        $stmt->bindParam(4, $overseer);
-        $stmt->bindParam(5, $minimal);
-        $stmt->bindParam(6, $guestPermissions);
-        $stmt->bindParam(7, $listPermissions);
-        $stmt->bindParam(8, $id);
-        $stmt->execute();
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ?, list = ?, public = ?, overseer = ?, minimal_view = ?, guest_permissions = ?, list_permissions = ? WHERE id = ?");
+        $stmt->execute(array($project, $list, $public, $overseer, $minimal, $guestPermissions, $listPermissions, $id));
     }
 
     //return all the configuration options for this list
@@ -91,8 +73,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT public, minimal_view, guest_permissions, list_permissions FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result;
@@ -102,8 +83,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT guest_permissions FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if(explode(':', explode(',', $result['guest_permissions'])[0])[1] == '1') {
@@ -116,8 +96,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT guest_permissions FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if(explode(':', explode(',', $result['guest_permissions'])[1])[1] == '1') {
@@ -130,8 +109,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT list_permissions FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return explode(':', explode(',', $result['list_permissions'])[1])[1];
@@ -141,8 +119,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT list_permissions FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return explode(':', explode(',', $result['list_permissions'])[0])[1];
@@ -164,10 +141,8 @@ class ListFunc {
     public static function getID($project, $list) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE list = ? AND project = ?");
-        $stmt->bindParam(1, $list);
-        $stmt->bindParam(2, $project);
-        $stmt->execute();
+        $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ? AND list = ?");
+        $stmt->execute(array($project, $list));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result['id'];
@@ -178,8 +153,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT list, project, public, creator, created, overseer FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $return['name'] = $result['list'];
         $return['project'] = $result['project'];
@@ -195,8 +169,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT minimal_view FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return ($result['minimal_view'] != 0) ? true : false;
@@ -206,8 +179,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT overseer FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result['overseer'];
@@ -217,8 +189,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT project FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result['project'];
@@ -230,9 +201,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($project, $id));
         $t = $prefix."_".$details['project']."_".$details['name'];
         $t2 = $prefix."_".$project."_".$details['name'];
         $stmt = $pdo->prepare("RENAME TABLE `".$t."` TO `".$t2."`");
@@ -244,16 +213,14 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET public = 0 WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     public static function getName($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT list FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['list'];
     }
@@ -263,8 +230,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET public = 1 WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     //rename list
@@ -273,9 +239,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET list = ? WHERE id = ?");
-        $stmt->bindParam(1, $list);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($list, $id));
         $t = $prefix."_".$details['project']."_".$details['name'];
         $t2 = $prefix."_".$details['project']."_".$list;
         $stmt = $pdo->prepare("RENAME TABLE `".$t."` TO `".$t2."`");
@@ -287,9 +251,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ? AND list = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $list);
-        $stmt->execute();
+        $stmt->execute(array($project, $list));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($result) {
@@ -393,8 +355,7 @@ class ListFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT list, project, public, overseer, minimal_view FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $main = ProjectFunc::getMain($result['project']);
 

@@ -211,8 +211,7 @@ function nodeID($node) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
     $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE node_name = ?");
-    $stmt->bindParam(1, $node);
-    $stmt->execute();
+    $stmt->execute(array($node));
     $return = $stmt->fetch(PDO::FETCH_ASSOC);
     return $return['id'];
 }
@@ -221,8 +220,7 @@ function nodeName($id) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
     $stmt = $pdo->prepare("SELECT node_name FROM `".$t."` WHERE id = ?");
-    $stmt->bindParam(1, $id);
-    $stmt->execute();
+    $stmt->execute(array($id));
     $return = $stmt->fetch(PDO::FETCH_ASSOC);
     return $return['node_name'];
 }
@@ -231,8 +229,7 @@ function nodeDetails($id) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
     $stmt = $pdo->prepare("SELECT node_name, node_description FROM `".$t."` WHERE id = ?");
-    $stmt->bindParam(1, $id);
-    $stmt->execute();
+    $stmt->execute(array($id));
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result;
 }
@@ -241,8 +238,7 @@ function nodeValidID($id) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
     $stmt = $pdo->prepare("SELECT node_name FROM `".$t."` WHERE id = ?");
-    $stmt->bindParam(1, $id);
-    $stmt->execute();
+    $stmt->execute(array($id));
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($result) {
@@ -255,8 +251,7 @@ function nodeExists($node) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
     $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE node_name = ?");
-    $stmt->bindParam(1, $node);
-    $stmt->execute();
+    $stmt->execute(array($node));
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($result) {
@@ -269,27 +264,21 @@ function nodeAdd($node, $description) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
     $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, node_name, node_description) VALUES('', ?, ?)");
-    $stmt->bindParam(1, $node);
-    $stmt->bindParam(2, $description);
-    $stmt->execute();
+    $stmt->execute(array($node, $description));
 }
 
 function nodeEdit($id, $node, $description) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
     $stmt = $pdo->prepare("UPDATE `".$t."` SET node_name = ?, node_description = ? WHERE id = ?");
-    $stmt->bindParam(1, $node);
-    $stmt->bindParam(2, $description);
-    $stmt->bindParam(3, $id);
-    $stmt->execute();
+    $stmt->execute(array($node, $description, $id));
 }
 
 function nodeDelete($id) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
     $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
-    $stmt->bindParam(1, $id);
-    $stmt->execute();
+    $stmt->execute(array($id));
 }
 
 function nodes() {

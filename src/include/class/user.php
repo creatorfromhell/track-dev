@@ -43,21 +43,7 @@ class User {
         $t = $prefix."_users";
         $perm = implode(",", $this->permissions);
         $stmt = $pdo->prepare("UPDATE `".$t."` SET user_name = ?, user_password = ?, user_email = ?, user_group = ?, user_permissions = ?, user_avatar = ?, user_ip = ?, user_registered = ?, logged_in = ?, user_banned = ?, user_online = ?, user_activated = ?, activation_key = ? WHERE id = ?");
-        $stmt->bindParam(1, $this->name);
-        $stmt->bindParam(2, $this->password);
-        $stmt->bindParam(3, $this->email);
-        $stmt->bindParam(4, $this->group->id);
-        $stmt->bindParam(5, $perm);
-        $stmt->bindParam(6, $this->avatar);
-        $stmt->bindParam(7, $this->ip);
-        $stmt->bindParam(8, $this->registered);
-        $stmt->bindParam(9, $this->loggedIn);
-        $stmt->bindParam(10, $this->banned);
-        $stmt->bindParam(11, $this->online);
-        $stmt->bindParam(12, $this->activated);
-        $stmt->bindParam(13, $this->activationKey);
-        $stmt->bindParam(14, $this->id);
-        $stmt->execute();
+        $stmt->execute(array($this->id, $this->name, $this->password, $this->email, $this->group->id, $perm, $this->avatar, $this->ip, $this->registered, $this->loggedIn, $this->banned, $this->online, $this->activated, $this->activationKey, $this->id));
     }
 
     public function sendActivation() {
@@ -80,8 +66,7 @@ class User {
 
         $user = new User();
         $stmt = $pdo->prepare($query);
-        $stmt->bindParam(1, $name);
-        $stmt->execute();
+        $stmt->execute(array($name));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $user->id = ($id) ? $name : $result['id'];
         $user->ip = $result['user_ip'];
@@ -105,8 +90,7 @@ class User {
         $t = $prefix."_users";
         $query = ($email) ? "SELECT id FROM `".$t."` WHERE user_email = ?" : "SELECT id FROM `".$t."` WHERE user_name = ?";
         $stmt = $pdo->prepare($query);
-        $stmt->bindParam(1, $name);
-        $stmt->execute();
+        $stmt->execute(array($name));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($result) {
@@ -119,8 +103,7 @@ class User {
         global $pdo, $prefix;
         $t = $prefix."_users";
         $stmt = $pdo->prepare("SELECT user_name FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['user_name'];
     }
@@ -140,8 +123,7 @@ class User {
         $t = $prefix."_users";
         $query = ($email) ? "SELECT user_password FROM `".$t."` WHERE user_email = ?" : "SELECT user_password FROM `".$t."` WHERE user_name = ?";
         $stmt = $pdo->prepare($query);
-        $stmt->bindParam(1, $name);
-        $stmt->execute();
+        $stmt->execute(array($name));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['user_password'];
     }
@@ -152,37 +134,21 @@ class User {
         $t = $prefix."_users";
         $perm = implode(",", $user->permissions);
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, user_name, user_password, user_email, user_group, user_permissions, user_avatar, user_ip, user_registered, logged_in, user_banned, user_online, user_activated, activation_key) VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bindParam(1, $user->id);
-        $stmt->bindParam(2, $user->name);
-        $stmt->bindParam(3, $user->password);
-        $stmt->bindParam(4, $user->email);
-        $stmt->bindParam(5, $user->group->id);
-        $stmt->bindParam(6, $perm);
-        $stmt->bindParam(7, $user->avatar);
-        $stmt->bindParam(8, $user->ip);
-        $stmt->bindParam(9, $user->registered);
-        $stmt->bindParam(10, $user->loggedIn);
-        $stmt->bindParam(11, $user->banned);
-        $stmt->bindParam(12, $user->online);
-        $stmt->bindParam(13, $user->activated);
-        $stmt->bindParam(14, $user->activationKey);
-        $stmt->execute();
+        $stmt->execute(array($user->id, $user->name, $user->password, $user->email, $user->group->id, $perm, $user->avatar, $user->ip, $user->registered, $user->loggedIn, $user->banned, $user->online, $user->activated, $user->activationKey));
     }
 
     public static function delete($id) {
         global $pdo, $prefix;
         $t = $prefix."_users";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     public static function validID($id) {
         global $pdo, $prefix;
         $t = $prefix."_users";
         $stmt = $pdo->prepare("SELECT user_name FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($result) {

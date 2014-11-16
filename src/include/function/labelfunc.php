@@ -14,12 +14,7 @@ class LabelFunc {
 		global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, project, list, label_name, text_color, background_color) VALUES ('', ?, ?, ?, ?, ?)");
-        $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $list);
-        $stmt->bindParam(3, $name);
-        $stmt->bindParam(4, $textcolor);
-        $stmt->bindParam(5, $backgroundcolor);
-        $stmt->execute();
+        $stmt->execute(array($project, $list, $name, $textcolor, $backgroundcolor));
     }
 
     //delete label
@@ -27,8 +22,7 @@ class LabelFunc {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     //edit label
@@ -36,13 +30,7 @@ class LabelFunc {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ?, list = ?, label_name = ?, text_color = ?, background_color = ? WHERE id = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $list);
-        $stmt->bindParam(3, $name);
-        $stmt->bindParam(4, $textcolor);
-        $stmt->bindParam(5, $backgroundcolor);
-        $stmt->bindParam(6, $id);
-        $stmt->execute();
+        $stmt->execute(array($project, $list, $name, $textcolor, $backgroundcolor, $id));
     }
 
     //change color
@@ -50,10 +38,7 @@ class LabelFunc {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET text_color = ?, background_color = ? WHERE id = ?");
-        $stmt->bindParam(1, $textcolor);
-        $stmt->bindParam(2, $backgroundcolor);
-        $stmt->bindParam(3, $id);
-        $stmt->execute();
+        $stmt->execute(array($textcolor, $backgroundcolor, $id));
     }
 
     //rename label
@@ -61,9 +46,7 @@ class LabelFunc {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET label_name = ? WHERE id = ?");
-        $stmt->bindParam(1, $name);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($name, $id));
     }
 
     public static function labelDetails($id) {
@@ -71,8 +54,7 @@ class LabelFunc {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("SELECT project, list, label_name, text_color, background_color FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $details['project'] = $result['project'];
         $details['list'] = $result['list'];
@@ -86,9 +68,7 @@ class LabelFunc {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ? AND list = ?");
-		$stmt->bindParam(1, $project);
-		$stmt->bindParam(2, $list);
-        $stmt->execute();
+        $stmt->execute(array($project, $list));
         if($stmt->fetch(PDO::FETCH_NUM) > 0) {
             return true;
         }
@@ -99,9 +79,7 @@ class LabelFunc {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("SELECT id, label_name, text_color, background_color FROM `".$t."` WHERE project = ? AND list = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $list);
-        $stmt->execute();
+        $stmt->execute(array($project, $list));
         $result = $stmt->fetchAll();
 
         $labels = array();

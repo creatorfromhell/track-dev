@@ -16,15 +16,7 @@ class ProjectFunc {
 		$permissions = 'view:none,edit:none';
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, project, preset, main, creator, created, overseer, project_permissions, public) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $preset);
-        $stmt->bindParam(3, $main);
-        $stmt->bindParam(4, $creator);
-        $stmt->bindParam(5, $created);
-        $stmt->bindParam(6, $overseer);
-        $stmt->bindParam(7, $permissions);
-        $stmt->bindParam(8, $public);
-        $stmt->execute();
+        $stmt->execute(array($project, $preset, $main, $creator, $created, $overseer, $permissions, $public));
     }
 
     public static function remove($id) {
@@ -42,8 +34,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     //edit project
@@ -51,13 +42,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ?, preset = ?, main = ?, overseer = ?, public = ? WHERE id = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $preset);
-        $stmt->bindParam(3, $main);
-        $stmt->bindParam(4, $overseer);
-        $stmt->bindParam(5, $public);
-        $stmt->bindParam(6, $id);
-        $stmt->execute();
+        $stmt->execute(array($project, $preset, $main, $overseer, $public, $id));
     }
 
     //get project id
@@ -65,8 +50,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->execute();
+        $stmt->execute(array($project));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['id'];
     }
@@ -76,9 +60,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET main = ? WHERE id = ?");
-        $stmt->bindParam(1, $main);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($main, $id));
     }
 
     //get main list id
@@ -86,8 +68,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("SELECT main FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['main'];
     }
@@ -98,8 +79,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT list FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $listID);
-        $stmt->execute();
+        $stmt->execute(array($listID));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['list'];
     }
@@ -109,8 +89,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("SELECT overseer FROM `".$t."` WHERE project = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->execute();
+        $stmt->execute(array($project));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['overseer'];
     }
@@ -120,17 +99,14 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET overseer = ? WHERE id = ?");
-        $stmt->bindParam(1, $overseer);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($overseer, $id));
     }
 
     public static function getName($id) {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("SELECT project FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['project'];
     }
@@ -151,17 +127,15 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET preset = 1 WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     public static function removePreset() {
-        $presetID = self::getID(self::getPreset());
+        $id = self::getID(self::getPreset());
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET preset = 0 WHERE id = ?");
-        $stmt->bindParam(1, $presetID);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     //make project private
@@ -169,8 +143,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET public = 0 WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     //make project public
@@ -178,8 +151,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET public = 1 WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     public static function projectDetails($id) {
@@ -187,8 +159,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("SELECT project, preset, main, creator, created, overseer, project_permissions, public FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $return['name'] = $result['project'];
         $return['preset'] = $result['preset'];
@@ -211,9 +182,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($project, $id));
     }
 
     //exists
@@ -221,8 +190,7 @@ class ProjectFunc {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->execute();
+        $stmt->execute(array($project));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($result) {

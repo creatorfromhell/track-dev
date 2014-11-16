@@ -18,13 +18,7 @@ class VersionFunc {
 		global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, version_name, project, version_status, due, released, version_type) VALUES ('', ?, ?, ?, ?, ?, ?)");
-        $stmt->bindParam(1, $version);
-        $stmt->bindParam(2, $project);
-        $stmt->bindParam(3, $status);
-        $stmt->bindParam(4, $due);
-        $stmt->bindParam(5, $released);
-        $stmt->bindParam(6, $type);
-        $stmt->execute();
+        $stmt->execute(array($version, $project, $status, $due, $released, $type));
     }
 
     //delete version
@@ -32,8 +26,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     //edit version
@@ -41,14 +34,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ?, project = ?, version_status = ?, due = ?, released = ?, version_type = ? WHERE id = ?");
-        $stmt->bindParam(1, $version);
-        $stmt->bindParam(2, $project);
-        $stmt->bindParam(3, $status);
-        $stmt->bindParam(4, $due);
-        $stmt->bindParam(5, $released);
-        $stmt->bindParam(6, $type);
-        $stmt->bindParam(7, $id);
-        $stmt->execute();
+        $stmt->execute(array($version, $project, $status, $due, $released, $type, $id));
     }
 
     //change due date
@@ -56,9 +42,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET due = ? WHERE id = ?");
-        $stmt->bindParam(1, $due);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($due, $id));
     }
 
     //change project
@@ -66,9 +50,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ? WHERE id = ?");
-        $stmt->bindParam(1, $project);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($project, $id));
     }
 
     //change release date
@@ -76,9 +58,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET release = ? WHERE id = ?");
-        $stmt->bindParam(1, $release);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($release, $id));
     }
 
     //change version type
@@ -86,17 +66,14 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET version_type = ? WHERE id = ?");
-        $stmt->bindParam(1, $type);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($type, $id));
     }
 	
 	public static function getProject($id) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("SELECT project FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		
 		return $result['project'];
@@ -107,17 +84,14 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET version_name = ? WHERE id = ?");
-        $stmt->bindParam(1, $version);
-        $stmt->bindParam(2, $id);
-        $stmt->execute();
+        $stmt->execute(array($version, $id));
     }
 	
 	public static function hasVersions($project) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE project = ?");
-		$stmt->bindParam(1, $project);
-        $stmt->execute();
+		$stmt->execute(array($project));
         if($stmt->fetch(PDO::FETCH_NUM) > 0) {
             return true;
         }
@@ -128,8 +102,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("SELECT version_name FROM `".$t."` WHERE project = ?");
-		$stmt->bindParam(1, $project);
-        $stmt->execute();
+		$stmt->execute(array($project));
         $result = $stmt->fetchAll();
 
 		$versions = array();
@@ -143,8 +116,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("SELECT version_name, project, version_status, due, released, version_type FROM `".$t."` WHERE id = ?");
-		$stmt->bindParam(1, $id);
-        $stmt->execute();
+		$stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $return = array();
         $return['name'] = $result['version_name'];
@@ -160,8 +132,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE version_name = ?");
-        $stmt->bindParam(1, $name);
-        $stmt->execute();
+        $stmt->execute(array($name));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($result) {
@@ -277,10 +248,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, version_type, description, version_stability) VALUES ('', ?, ?, ?)");
-        $stmt->bindParam(1, $type);
-        $stmt->bindParam(2, $description);
-        $stmt->bindParam(3, $stable);
-        $stmt->execute();
+        $stmt->execute(array($type, $description, $stable));
     }
 
     //edit version type
@@ -288,11 +256,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET version_type = ?, description = ?, version_stability = ? WHERE id = ?");
-        $stmt->bindParam(1, $type);
-        $stmt->bindParam(2, $description);
-        $stmt->bindParam(3, $stable);
-        $stmt->bindParam(4, $id);
-        $stmt->execute();
+        $stmt->execute(array($type, $description, $stable, $id));
     }
 
     //delete version type
@@ -300,16 +264,14 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 	
 	public static function stable($type) {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
 		$stmt = $pdo->prepare("SELECT version_stability FROM `".$t."` WHERE version_type = ?");
-		$stmt->bindParam(1, $type);
-		$stmt->execute();
+		$stmt->execute(array($type));
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		if($result['version_stability'] == '1') {
 			return true;
@@ -328,12 +290,10 @@ class VersionFunc {
         return false;
 	}
 	
-	public static function types($project) {
+	public static function types() {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("SELECT version_type FROM `".$t."`");
-		$stmt->bindParam(1, $project);
-        $stmt->execute();
         $result = $stmt->fetchAll();
 
 		$types = array();
@@ -347,8 +307,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("SELECT version_type, description, version_stability FROM `".$t."` WHERE id = ?");
-		$stmt->bindParam(1, $id);
-        $stmt->execute();
+		$stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $return = array();
         $return['name'] = $result['version_type'];
@@ -361,8 +320,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE version_type = ?");
-        $stmt->bindParam(1, $name);
-        $stmt->execute();
+        $stmt->execute(array($name));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($result) {

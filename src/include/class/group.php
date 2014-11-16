@@ -33,12 +33,7 @@ class Group {
         $perm = implode(",", $this->permissions);
         $t = $prefix."_groups";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET group_name = ?, group_permissions = ?, group_admin = ?, group_preset = ? WHERE id = ?");
-        $stmt->bindParam(1, $this->name);
-        $stmt->bindParam(2, $perm);
-        $stmt->bindParam(3, $this->admin);
-        $stmt->bindParam(4, $this->preset);
-        $stmt->bindParam(5, $this->id);
-        $stmt->execute();
+        $stmt->execute(array($this->name, $perm, $this->admin, $this->preset, $this->id));
     }
 
     public static function addGroup($group) {
@@ -47,12 +42,7 @@ class Group {
         $t = $prefix."_groups";
         $perm = implode(",", $group->permissions);
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, group_name, group_permissions, group_admin, group_preset) VALUES(?, ?, ?, ?, ?)");
-        $stmt->bindParam(1, $group->id);
-        $stmt->bindParam(2, $group->name);
-        $stmt->bindParam(3, $perm);
-        $stmt->bindParam(4, $group->admin);
-        $stmt->bindParam(5, $group->preset);
-        $stmt->execute();
+        $stmt->execute(array($group->id, $group->name, $perm, $group->admin, $group->preset));
     }
 
     public static function load($id) {
@@ -60,8 +50,7 @@ class Group {
         $t = $prefix."_groups";
         $group = new Group();
         $stmt = $pdo->prepare("SELECT group_name, group_permissions, group_admin, group_preset FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $group->id = $id;
         $group->name = $result['group_name'];
@@ -75,8 +64,7 @@ class Group {
         global $pdo, $prefix;
         $t = $prefix."_groups";
         $stmt = $pdo->prepare("SELECT id FROM `".$t."` WHERE group_name = ?");
-        $stmt->bindParam(1, $name);
-        $stmt->execute();
+        $stmt->execute(array($name));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($result) {
@@ -98,8 +86,7 @@ class Group {
         global $pdo, $prefix;
         $t = $prefix."_groups";
         $stmt = $pdo->prepare("SELECT group_name FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['group_name'];
     }
@@ -118,16 +105,14 @@ class Group {
         global $pdo, $prefix;
         $t = $prefix."_groups";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     public static function validID($id) {
         global $pdo, $prefix;
         $t = $prefix."_groups";
         $stmt = $pdo->prepare("SELECT group_name FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($result) {

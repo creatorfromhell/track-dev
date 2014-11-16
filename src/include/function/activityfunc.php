@@ -14,22 +14,14 @@ class ActivityFunc {
 		global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, username, project, list, activity_type, activity_parameters, archived, logged) VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bindParam(1, $username);
-        $stmt->bindParam(2, $project);
-        $stmt->bindParam(3, $list);
-        $stmt->bindParam(4, $type);
-        $stmt->bindParam(5, $parameters);
-        $stmt->bindParam(6, $archived);
-        $stmt->bindParam(7, $logged);
-        $stmt->execute();
+        $stmt->execute(array($username, $project, $list, $type, $parameters, $archived, $logged));
     }
 
     public static function parseType($id, $language) {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("SELECT activity_type FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         //Example Type: user:login
         $type = explode(":", $result['activity_type']);
@@ -43,8 +35,7 @@ class ActivityFunc {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("SELECT username, project, list, activity_parameters, archived, logged FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $replace = array("%user", "%project", "%list", "%logged");
@@ -69,8 +60,7 @@ class ActivityFunc {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET archived = 1 WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+       $stmt->execute(array($id));
     }
 
     //unarchive log
@@ -78,16 +68,14 @@ class ActivityFunc {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET archived = 0 WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     public static function delete($id) {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
+        $stmt->execute(array($id));
     }
 
     //clean logs
