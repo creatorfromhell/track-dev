@@ -8,22 +8,72 @@
  * Last Modified by Daniel Vidmar.
  */
 require_once('group.php');
+
+/**
+ * Class User
+ */
 class User {
+    /**
+     * @var null
+     */
     public $id = null;
+    /**
+     * @var null
+     */
     public $ip = null;
+    /**
+     * @var string
+     */
     public $avatar = "";
+    /**
+     * @var null
+     */
     public $name = null;
+    /**
+     * @var null
+     */
     public $password = null;
+    /**
+     * @var null
+     */
     public $group = null;
+    /**
+     * @var array
+     */
     public $permissions = array();
+    /**
+     * @var null
+     */
     public $email = null;
+    /**
+     * @var null
+     */
     public $registered = null;
+    /**
+     * @var null
+     */
     public $loggedIn = null;
+    /**
+     * @var null
+     */
     public $activationKey = null;
+    /**
+     * @var int
+     */
     public $activated = 0;
+    /**
+     * @var int
+     */
     public $banned = 0;
+    /**
+     * @var int
+     */
     public $online = 0;
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public function hasPermission($id) {
         foreach($this->permissions as &$perm) {
             if($perm == $id) {
@@ -34,10 +84,16 @@ class User {
         return $this->group->hasPermission($id);
     }
 
+    /**
+     * @return mixed
+     */
     public function isAdmin() {
         return $this->group->isAdmin();
     }
 
+    /**
+     *
+     */
     public function save() {
         global $pdo, $prefix;
         $t = $prefix."_users";
@@ -46,12 +102,21 @@ class User {
         $stmt->execute(array($this->id, $this->name, $this->password, $this->email, $this->group->id, $perm, $this->avatar, $this->ip, $this->registered, $this->loggedIn, $this->banned, $this->online, $this->activated, $this->activationKey, $this->id));
     }
 
+    /**
+     *
+     */
     public function sendActivation() {
         global $url, $admin_email;
         $headers = 'From: '.$admin_email."\r\n" . 'Reply-To: '.$admin_email . "\r\n" . 'X-Mailer: PHP/' . phpversion();
         mail($this->email, "Account Activation", "Hello ".$this->name.",\r\n You or someone using your email has registered on ".$url.". Please click the following link if you registered on this site, ".$url."/activation.php?page=activate&name=".$this->name."&key=".$this->activationKey.".", $headers);
     }
 
+    /**
+     * @param $name
+     * @param bool $email
+     * @param bool $id
+     * @return User
+     */
     public static function load($name, $email = false, $id = false) {
         global $pdo, $prefix;
         $t = $prefix."_users";
@@ -85,6 +150,11 @@ class User {
         return $user;
     }
 
+    /**
+     * @param $name
+     * @param bool $email
+     * @return bool
+     */
     public static function exists($name, $email = false) {
         global $pdo, $prefix;
         $t = $prefix."_users";
@@ -99,6 +169,11 @@ class User {
         return false;
     }
 
+    /**
+     * @param $name
+     * @param bool $email
+     * @return mixed
+     */
     public static function getHashedPassword($name, $email = false) {
         global $pdo, $prefix;
         $t = $prefix."_users";
@@ -109,6 +184,9 @@ class User {
         return $result['user_password'];
     }
 
+    /**
+     * @param $user
+     */
     public static function addUser($user) {
         if(!is_a($user, "User")) { return; }
         global $pdo, $prefix;
@@ -118,6 +196,9 @@ class User {
         $stmt->execute(array($user->id, $user->name, $user->password, $user->email, $user->group->id, $perm, $user->avatar, $user->ip, $user->registered, $user->loggedIn, $user->banned, $user->online, $user->activated, $user->activationKey));
     }
 
+    /**
+     * @param $id
+     */
     public static function delete($id) {
         global $pdo, $prefix;
         $t = $prefix."_users";
@@ -125,6 +206,9 @@ class User {
         $stmt->execute(array($id));
     }
 
+    /**
+     * @return string
+     */
     public static function getIP() {
         $ip = "";
         if (isset($_SERVER["REMOTE_ADDR"])) {

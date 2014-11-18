@@ -8,9 +8,22 @@
  * Last Modified by Daniel Vidmar.
  */
 require_once("include/function/listfunc.php");
+
+/**
+ * Class ProjectFunc
+ */
 class ProjectFunc {
 
     //add project
+    /**
+     * @param $project
+     * @param $preset
+     * @param $main
+     * @param $creator
+     * @param $created
+     * @param $overseer
+     * @param $public
+     */
     public static function addProject($project, $preset, $main, $creator, $created, $overseer, $public) {
 		global $prefix, $pdo;
 		$permissions = 'view:none,edit:none';
@@ -19,6 +32,9 @@ class ProjectFunc {
         $stmt->execute(array($project, $preset, $main, $creator, $created, $overseer, $permissions, $public));
     }
 
+    /**
+     * @param $id
+     */
     public static function remove($id) {
         $project = self::getName($id);
         $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
@@ -30,6 +46,9 @@ class ProjectFunc {
     }
 
     //delete project
+    /**
+     * @param $id
+     */
     public static function deleteProject($id) {
         global $prefix, $pdo;
         $t = $prefix."_projects";
@@ -38,6 +57,14 @@ class ProjectFunc {
     }
 
     //edit project
+    /**
+     * @param $id
+     * @param $project
+     * @param $preset
+     * @param $main
+     * @param $overseer
+     * @param $public
+     */
     public static function editProject($id, $project, $preset, $main, $overseer, $public) {
         global $prefix, $pdo;
         $t = $prefix."_projects";
@@ -46,20 +73,36 @@ class ProjectFunc {
     }
 
     //get project id
+    /**
+     * @param $project
+     * @return mixed
+     */
     public static function getID($project) {
         return value("projects", "id", " WHERE project = '".cleanInput($project)."'");
     }
 
     //change main list id
+    /**
+     * @param $id
+     * @param $main
+     */
     public static function changeMain($id, $main) {
         setValue("projects", "main", $main, " WHERE id = '".cleanInput($id)."'");
     }
 
     //get main list id
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function getMain($id) {
         return value("projects", "main", " WHERE id = '".cleanInput($id)."'");
     }
 
+    /**
+     * @param $project
+     * @return mixed
+     */
     public static function getMainList($project) {
         $id = self::getID($project);
         $listID = self::getMain($id);
@@ -67,45 +110,76 @@ class ProjectFunc {
     }
 
     //get overseer
+    /**
+     * @param $project
+     * @return mixed
+     */
     public static function getOverseer($project) {
         return value("projects", "overseer", " WHERE project = '".cleanInput($project)."'");
     }
 
     //change overseer
+    /**
+     * @param $id
+     * @param $overseer
+     */
     public static function changeOverseer($id, $overseer) {
         setValue("projects", "overseer", $overseer, " WHERE id = '".cleanInput($id)."'");
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function getName($id) {
         return value("projects", "project", " WHERE id = '".cleanInput($id)."'");
     }
 
     //get preset project
+    /**
+     * @return mixed
+     */
     public static function getPreset() {
         return value("projects", "project", " WHERE preset = 1");
     }
 
     //make preset project
+    /**
+     * @param $id
+     */
     public static function makePreset($id) {
         self::removePreset();
         setValue("projects", "preset", "1", " WHERE id = '".cleanInput($id)."'");
     }
 
+    /**
+     *
+     */
     public static function removePreset() {
         $id = self::getID(self::getPreset());
         setValue("projects", "preset", "0", " WHERE id = '".cleanInput($id)."'");
     }
 
     //make project private
+    /**
+     * @param $id
+     */
     public static function makePrivate($id) {
         setValue("projects", "public", "0", " WHERE id = '".cleanInput($id)."'");
     }
 
     //make project public
+    /**
+     * @param $id
+     */
     public static function makePublic($id) {
         setValue("projects", "public", "1", " WHERE id = '".cleanInput($id)."'");
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
     public static function projectDetails($id) {
         $return = array();
         global $prefix, $pdo;
@@ -126,6 +200,11 @@ class ProjectFunc {
     }
 
     //reproject project
+    /**
+     * @param $id
+     * @param $oldname
+     * @param $project
+     */
     public static function renameProject($id, $oldname, $project) {
         $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
         foreach($lists as &$list) {
@@ -134,6 +213,10 @@ class ProjectFunc {
         setValue("projects", "project", $project, " WHERE id = '".cleanInput($id)."'");
     }
 
+    /**
+     * @param $project
+     * @return array
+     */
     public static function latestTasks($project) {
         global $prefix, $pdo;
         $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
@@ -155,6 +238,12 @@ class ProjectFunc {
         return $tasks;
     }
 
+    /**
+     * @param $project
+     * @param $months
+     * @param $completed
+     * @return string
+     */
     public static function getTasksChartData($project, $months, $completed) {
         $data = "";
         if($months) {
@@ -191,6 +280,12 @@ class ProjectFunc {
         return ($result) ? $result : 0;
     }
 
+    /**
+     * @param $project
+     * @param $users
+     * @param $completed
+     * @return string
+     */
     public static function getAssignedUsersChartData($project, $users, $completed) {
         $dataArray = self::getTopAssignedUsers($project);
         $userArray = $dataArray[0];
@@ -208,6 +303,10 @@ class ProjectFunc {
         }
     }
 
+    /**
+     * @param $project
+     * @return array
+     */
     public static function getTopAssignedUsers($project) {
         global $prefix, $pdo;
         $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
@@ -243,6 +342,13 @@ class ProjectFunc {
         return array($users, $totals, $completed);
     }
 
+    /**
+     * @param $project
+     * @param $year
+     * @param $month
+     * @param $day
+     * @return bool
+     */
     public static function hasEvent($project, $year, $month, $day) {
         global $prefix, $pdo;
         $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
@@ -266,6 +372,13 @@ class ProjectFunc {
         return false;
     }
 
+    /**
+     * @param $project
+     * @param $year
+     * @param $month
+     * @param $day
+     * @return string
+     */
     public static function getEvents($project, $year, $month, $day) {
         global $prefix, $pdo;
         $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
@@ -296,6 +409,12 @@ class ProjectFunc {
         return $toReturn;
     }
 
+    /**
+     * @param $year
+     * @param $month
+     * @param $day
+     * @return int
+     */
     public static function getCorrectDate($year, $month, $day) {
         $newYear = $year;
         $newMonth = $month;
@@ -325,6 +444,10 @@ class ProjectFunc {
         return $newTime;
     }
 
+    /**
+     * @param $username
+     * @return string
+     */
     public static function printAddForm($username) {
         $out = '';
         $out .= '<h3>Add Project</h3>';
@@ -366,6 +489,10 @@ class ProjectFunc {
         return $out;
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
     public static function printEditForm($id) {
         $details = self::projectDetails($id);
         $out = '';

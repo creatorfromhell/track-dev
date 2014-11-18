@@ -10,6 +10,13 @@
 class LabelFunc {
 
     //add label
+    /**
+     * @param $project
+     * @param $list
+     * @param $name
+     * @param $textcolor
+     * @param $backgroundcolor
+     */
     public static function addLabel($project, $list, $name, $textcolor, $backgroundcolor) {
 		global $prefix, $pdo;
         $t = $prefix."_labels";
@@ -18,6 +25,9 @@ class LabelFunc {
     }
 
     //delete label
+    /**
+     * @param $id
+     */
     public static function deleteLabel($id) {
         global $prefix, $pdo;
         $t = $prefix."_labels";
@@ -26,6 +36,14 @@ class LabelFunc {
     }
 
     //edit label
+    /**
+     * @param $id
+     * @param $project
+     * @param $list
+     * @param $name
+     * @param $textcolor
+     * @param $backgroundcolor
+     */
     public static function editLabel($id, $project, $list, $name, $textcolor, $backgroundcolor) {
         global $prefix, $pdo;
         $t = $prefix."_labels";
@@ -34,6 +52,11 @@ class LabelFunc {
     }
 
     //change color
+    /**
+     * @param $id
+     * @param $textcolor
+     * @param $backgroundcolor
+     */
     public static function changeColor($id, $textcolor, $backgroundcolor) {
         global $prefix, $pdo;
         $t = $prefix."_labels";
@@ -42,10 +65,18 @@ class LabelFunc {
     }
 
     //rename label
+    /**
+     * @param $id
+     * @param $name
+     */
     public static function renameLabel($id, $name) {
         setValue("labels", "label_name", $name, " WHERE id = '".cleanInput($id)."'");
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
     public static function labelDetails($id) {
         $details = array();
         global $prefix, $pdo;
@@ -61,6 +92,11 @@ class LabelFunc {
         return $details;
     }
 
+    /**
+     * @param $project
+     * @param $list
+     * @return array
+     */
     public static function labels($project, $list) {
         global $prefix, $pdo;
         $t = $prefix."_labels";
@@ -82,6 +118,11 @@ class LabelFunc {
         return $labels;
     }
 
+    /**
+     * @param $project
+     * @param $list
+     * @return string
+     */
     public static function printAddForm($project, $list) {
         $out = '';
         $out .= '<div id="page_1">';
@@ -100,6 +141,10 @@ class LabelFunc {
         return $out;
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
     public static function printEditForm($id) {
         $details = self::labelDetails($id);
         $out = '';

@@ -7,16 +7,30 @@
  * Last Modified: 8/7/14 at 1:10 PM
  * Last Modified by Daniel Vidmar.
  */
-
+/**
+ * Class Captcha
+ */
 class Captcha {
+    /**
+     * @var null|string
+     */
     public $code = null;
+    /**
+     * @var null
+     */
     public $image = null;
 
+    /**
+     * @param null $code
+     */
     function __construct($code = null) {
         $this->code = ($code !== null) ? $code : $this->generateCode();
         $this->generateImage();
     }
 
+    /**
+     * @return string
+     */
     public function generateCode() {
         $validchars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+123456789";
         $c = "";
@@ -26,6 +40,9 @@ class Captcha {
         return $c;
     }
 
+    /**
+     *
+     */
     public function generateImage() {
         if($this->code === null) {
             $this->code = $this->generateCode();
@@ -41,6 +58,9 @@ class Captcha {
         imageline($this->image, 70, 0, 30, 35, $colorRect);
     }
 
+    /**
+     * @return string
+     */
     public function getBase64() {
         ob_start();
         imagejpeg($this->image, NULL, 100);
@@ -48,11 +68,17 @@ class Captcha {
         return base64_encode($bytes);
     }
 
+    /**
+     *
+     */
     public function printImage() {
         echo "<img id='captcha_image' src='data:image/jpeg;base64,".$this->getBase64()."' />";
     }
-	
-	public function returnImage() {
+
+    /**
+     * @return string
+     */
+    public function returnImage() {
         return "<img id='captcha_image' src='data:image/jpeg;base64,".$this->getBase64()."' />";
 	}
 }

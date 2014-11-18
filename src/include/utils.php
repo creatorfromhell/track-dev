@@ -11,18 +11,34 @@
 /*
  * Miscellaneous Functions
  */
+/**
+ * @param $input
+ * @return string
+ */
 function cleanInput($input) {
     return strip_tags(trim($input));
 }
 
+/**
+ * @param $value
+ * @return int
+ */
 function validUsername($value) {
     return preg_match('/^[a-zA-Z0-9_.-]+$/i', $value);
 }
 
+/**
+ * @param $value
+ * @return mixed
+ */
 function validEmail($value) {
     return filter_var($value, FILTER_VALIDATE_EMAIL);
 }
 
+/**
+ * @param $value
+ * @return bool
+ */
 function checkCaptcha($value) {
     if($value === null) { return false; }
     if(!isset($_SESSION['userspluscaptcha'])) {
@@ -31,6 +47,11 @@ function checkCaptcha($value) {
     return $_SESSION['userspluscaptcha'] == $value;
 }
 
+/**
+ * @param $string
+ * @param $word
+ * @return bool
+ */
 function strContains($string, $word) {
     if (strpos($string, $word) !== false) {
         return true;
@@ -103,6 +124,11 @@ function countColumns($table, $extra = '') {
     return $stmt->fetch(PDO::FETCH_NUM);
 }
 
+/**
+ * @param $data
+ * @param null $value
+ * @return string
+ */
 function toOptions($data, $value = null) {
     $return = '';
     $options = $data;
@@ -112,6 +138,11 @@ function toOptions($data, $value = null) {
     return $return;
 }
 
+/**
+ * @param $file
+ * @param $name
+ * @param int $maxSize
+ */
 function uploadFile($file, $name, $maxSize = 1000000) {
 	$type = pathinfo(basename($file['name']), PATHINFO_EXTENSION);
 	$move = $name.".".$type;
@@ -134,20 +165,32 @@ function uploadFile($file, $name, $maxSize = 1000000) {
 /*
  * User Functions
  */
+/**
+ * @return bool
+ */
 function isAdmin() {
     if(isset($_SESSION['usersplusprofile']) && User::exists($_SESSION['usersplusprofile']) && User::load($_SESSION['usersplusprofile'])->isAdmin()) { return true; }
     return false;
 }
 
+/**
+ * @return string
+ */
 function getName() {
     if(isset($_SESSION['usersplusprofile']) && User::exists($_SESSION['usersplusprofile'])) { return $_SESSION['usersplusprofile']; }
     return "Guest(".User::getIP().")";
 }
 
+/**
+ *
+ */
 function latestUsers() {
     //new method values("users", "user_name", " ORDER BY user_registered DESC LIMIT 7");
 }
 
+/**
+ * @return string
+ */
 function userNav() {
     $out = '';
     $out .= '<nav class="userNav">';
@@ -161,6 +204,10 @@ function userNav() {
     return $out;
 }
 
+/**
+ * @param $id
+ * @return bool
+ */
 function canViewList($id) {
     $viewPermission = ListFunc::viewPermission($id);
     if(ListFunc::guestView($id)) { return true; }
@@ -172,6 +219,10 @@ function canViewList($id) {
     return false;
 }
 
+/**
+ * @param $id
+ * @return bool
+ */
 function canEditList($id) {
     $editPermission = ListFunc::editPermission($id);
     if(ListFunc::guestEdit($id)) { return true; }
@@ -183,6 +234,11 @@ function canEditList($id) {
     return false;
 }
 
+/**
+ * @param $listID
+ * @param $taskID
+ * @return bool
+ */
 function canEditTask($listID, $taskID) {
     $editPermission = ListFunc::editPermission($listID);
     if(ListFunc::guestEdit($listID)) { return true; }
@@ -196,12 +252,26 @@ function canEditTask($listID, $taskID) {
     return false;
 }
 
+/**
+ * @return bool
+ */
 function loggedIn() {
     return (checkSession("usersplusprofile"));
 }
 
 /*
  * Page Functions
+ */
+/**
+ * @param $user
+ * @param string $node
+ * @param bool $guest
+ * @param bool $admin
+ * @param string $group
+ * @param bool $useGroup
+ * @param string $name
+ * @param bool $useName
+ * @return bool
  */
 function pageLocked($user, $node = "", $guest = false, $admin = false, $group = "", $useGroup = false, $name = "", $useName = false) {
     if($useGroup) { return pageLockedGroup($user, $group); }
@@ -224,6 +294,10 @@ function pageLockedNode($user, $node, $guest = false) {
     return true;
 }
 
+/**
+ * @param $user
+ * @return bool
+ */
 function pageLockedAdmin($user) {
     if($user === null) { return true; }
     if(!is_a($user, "User")) { return true; }
@@ -256,14 +330,26 @@ function pageLockedUser($user, $name) {
 /*
  * Permission Functions
  */
+/**
+ * @param $node
+ * @return mixed
+ */
 function nodeID($node) {
     return value("nodes", "id", " WHERE node_name = '".cleanInput($node)."'");
 }
 
+/**
+ * @param $id
+ * @return mixed
+ */
 function nodeName($id) {
     return value("nodes", "node_name", " WHERE id = '".cleanInput($id)."'");
 }
 
+/**
+ * @param $id
+ * @return mixed
+ */
 function nodeDetails($id) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
@@ -273,6 +359,10 @@ function nodeDetails($id) {
     return $result;
 }
 
+/**
+ * @param $node
+ * @param $description
+ */
 function nodeAdd($node, $description) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
@@ -280,6 +370,11 @@ function nodeAdd($node, $description) {
     $stmt->execute(array($node, $description));
 }
 
+/**
+ * @param $id
+ * @param $node
+ * @param $description
+ */
 function nodeEdit($id, $node, $description) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
@@ -287,6 +382,9 @@ function nodeEdit($id, $node, $description) {
     $stmt->execute(array($node, $description, $id));
 }
 
+/**
+ * @param $id
+ */
 function nodeDelete($id) {
     global $pdo, $prefix;
     $t = $prefix."_nodes";
@@ -306,6 +404,9 @@ function checkSession($identifier) {
     return isset($_SESSION[$identifier]);
 }
 
+/**
+ * @param $identifier
+ */
 function destroySession($identifier) {
     if($identifier === null) { return; }
     if(isset($_SESSION[$identifier])) {
@@ -313,6 +414,9 @@ function destroySession($identifier) {
     }
 }
 
+/**
+ *
+ */
 function destroyEntireSession() {
     session_destroy();
 }
@@ -320,10 +424,20 @@ function destroyEntireSession() {
 /*
  * Hashing/Generation Functions
  */
+/**
+ * @param int $length
+ * @return string
+ */
 function generateSalt($length = 25) {
     return substr(md5(generateUUID()), 0, $length);
 }
 
+/**
+ * @param $value
+ * @param bool $useSalt
+ * @param string $salt
+ * @return string
+ */
 function generateHash($value, $useSalt = false, $salt = "") {
     if($useSalt) {
         if(trim($salt) != "" && strlen(trim($salt)) == 25) {
@@ -333,11 +447,19 @@ function generateHash($value, $useSalt = false, $salt = "") {
     return hash('sha256', $value);
 }
 
+/**
+ * @param $hash
+ * @param $value
+ * @return bool
+ */
 function checkHash($hash, $value) {
     return $hash == hash('sha256', $value);
 }
 
 //Thanks to this comment: http://php.net/manual/en/function.uniqid.php#94959
+/**
+ * @return string
+ */
 function generateUUID() {
     return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
         mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
@@ -348,6 +470,10 @@ function generateUUID() {
     );
 }
 
+/**
+ * @param int $length
+ * @return string
+ */
 function generateSessionID($length = 35) {
     return substr(md5(generateSalt(30).generateUUID()), 0, $length);
 }

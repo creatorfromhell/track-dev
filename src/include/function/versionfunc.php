@@ -14,6 +14,14 @@ class VersionFunc {
      */
 
     //add version
+    /**
+     * @param $version
+     * @param $project
+     * @param $status
+     * @param $due
+     * @param $released
+     * @param $type
+     */
     public static function addVersion($version, $project, $status, $due, $released, $type) {
 		global $prefix, $pdo;
         $t = $prefix."_versions";
@@ -22,6 +30,9 @@ class VersionFunc {
     }
 
     //delete version
+    /**
+     * @param $id
+     */
     public static function deleteVersion($id) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
@@ -30,6 +41,15 @@ class VersionFunc {
     }
 
     //edit version
+    /**
+     * @param $id
+     * @param $version
+     * @param $project
+     * @param $status
+     * @param $due
+     * @param $released
+     * @param $type
+     */
     public static function editVersion($id, $version, $project, $status, $due, $released, $type) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
@@ -38,35 +58,63 @@ class VersionFunc {
     }
 
     //change due date
+    /**
+     * @param $id
+     * @param $due
+     */
     public static function changeDue($id, $due) {
         setValue("versions", "due", $due, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change project
+    /**
+     * @param $id
+     * @param $project
+     */
     public static function changeProject($id, $project) {
         setValue("versions", "project", $project, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change release date
+    /**
+     * @param $id
+     * @param $release
+     */
     public static function changeRelease($id, $release) {
         setValue("versions", "release", $release, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change version type
+    /**
+     * @param $id
+     * @param $type
+     */
     public static function changeType($id, $type) {
         setValue("versions", "version_type", $type, " WHERE id = '".cleanInput($id)."'");
     }
-	
-	public static function getProject($id) {
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public static function getProject($id) {
         return value("versions", "project", " WHERE id = '".cleanInput($id)."'");
 	}
 
     //reversion version
+    /**
+     * @param $id
+     * @param $version
+     */
     public static function renameVersion($id, $version) {
         setValue("versions", "version_name", $version, " WHERE id = '".cleanInput($id)."'");
     }
-	
-	public static function versionDetails($id) {
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public static function versionDetails($id) {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("SELECT version_name, project, version_status, due, released, version_type FROM `".$t."` WHERE id = ?");
@@ -81,8 +129,12 @@ class VersionFunc {
         $return['type'] = $result['version_type'];
         return $return;
 	}
-	
-	public static function printAddForm($project) {
+
+    /**
+     * @param $project
+     * @return string
+     */
+    public static function printAddForm($project) {
 		$out = '';
 		$out .= '<h3>Add Version</h3>';
 		$out .= '<div id="holder">';
@@ -126,6 +178,10 @@ class VersionFunc {
 		return $out;
 	}
 
+    /**
+     * @param $id
+     * @return string
+     */
     public static function printEditForm($id) {
 		$out = '';
 		$details = self::versionDetails($id);
@@ -179,6 +235,11 @@ class VersionFunc {
      */
 
     //add version type
+    /**
+     * @param $type
+     * @param $description
+     * @param $stable
+     */
     public static function addType($type, $description, $stable) {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
@@ -187,6 +248,12 @@ class VersionFunc {
     }
 
     //edit version type
+    /**
+     * @param $id
+     * @param $type
+     * @param $description
+     * @param $stable
+     */
     public static function editType($id, $type, $description, $stable) {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
@@ -195,18 +262,29 @@ class VersionFunc {
     }
 
     //delete version type
+    /**
+     * @param $id
+     */
     public static function deleteType($id) {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
         $stmt->execute(array($id));
     }
-	
-	public static function stable($type) {
+
+    /**
+     * @param $type
+     * @return bool
+     */
+    public static function stable($type) {
         return (value("version_types", "version_stability", " WHERE version_type = '".cleanInput($type)."'") == '1') ? true : false;
 	}
-	
-	public static function typeDetails($id) {
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public static function typeDetails($id) {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("SELECT version_type, description, version_stability FROM `".$t."` WHERE id = ?");
@@ -218,8 +296,11 @@ class VersionFunc {
         $return['stability'] = $result['version_stability'];
         return $return;
 	}
-	
-	public static function printTypeAddForm() {
+
+    /**
+     * @return string
+     */
+    public static function printTypeAddForm() {
 		$out = '';
 		$out .= '<h3>Add Version Type</h3>';
 		$out .= '<div id="holder">';
@@ -253,6 +334,10 @@ class VersionFunc {
 		return $out;
 	}
 
+    /**
+     * @param $id
+     * @return string
+     */
     public static function printTypeEditForm($id) {
 		$out = '';
 		$details = self::typeDetails($id);

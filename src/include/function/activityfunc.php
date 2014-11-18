@@ -10,6 +10,15 @@
 class ActivityFunc {
 
     //log activity
+    /**
+     * @param $username
+     * @param $project
+     * @param $list
+     * @param $type
+     * @param $parameters
+     * @param $archived
+     * @param $logged
+     */
     public static function log($username, $project, $list, $type, $parameters, $archived, $logged) {
 		global $prefix, $pdo;
         $t = $prefix."_activity";
@@ -17,6 +26,11 @@ class ActivityFunc {
         $stmt->execute(array($username, $project, $list, $type, $parameters, $archived, $logged));
     }
 
+    /**
+     * @param $id
+     * @param $language
+     * @return string
+     */
     public static function parseType($id, $language) {
         global $prefix, $pdo;
         $t = $prefix."_activity";
@@ -31,6 +45,11 @@ class ActivityFunc {
     }
 
     //get readable activity
+    /**
+     * @param $id
+     * @param $language
+     * @return mixed
+     */
     public static function getReadableActivity($id, $language) {
         global $prefix, $pdo;
         $t = $prefix."_activity";
@@ -56,6 +75,9 @@ class ActivityFunc {
     }
 
     //archive log
+    /**
+     * @param $id
+     */
     public static function archive($id) {
         global $prefix, $pdo;
         $t = $prefix."_activity";
@@ -64,6 +86,9 @@ class ActivityFunc {
     }
 
     //unarchive log
+    /**
+     * @param $id
+     */
     public static function unarchive($id) {
         global $prefix, $pdo;
         $t = $prefix."_activity";
@@ -71,6 +96,9 @@ class ActivityFunc {
         $stmt->execute(array($id));
     }
 
+    /**
+     * @param $id
+     */
     public static function delete($id) {
         global $prefix, $pdo;
         $t = $prefix."_activity";
@@ -79,6 +107,9 @@ class ActivityFunc {
     }
 
     //clean logs
+    /**
+     *
+     */
     public static function clean() {
         global $prefix, $pdo;
         $t = $prefix."_activity";

@@ -8,13 +8,35 @@
  * Last Modified by Daniel Vidmar.
  */
 
+/**
+ * Class Group
+ */
 class Group {
+    /**
+     * @var null
+     */
     public $id = null;
+    /**
+     * @var null
+     */
     public $name = null;
+    /**
+     * @var null
+     */
     public $admin = null;
+    /**
+     * @var array
+     */
     public $permissions = array();
+    /**
+     * @var null
+     */
     public $preset = null;
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public function hasPermission($id) {
         foreach($this->permissions as &$perm) {
             if($perm == $id) {
@@ -24,10 +46,16 @@ class Group {
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function isAdmin() {
         return ($this->admin == 1) ? true : false;
     }
 
+    /**
+     *
+     */
     public function save() {
         global $pdo, $prefix;
         $perm = implode(",", $this->permissions);
@@ -36,6 +64,9 @@ class Group {
         $stmt->execute(array($this->name, $perm, $this->admin, $this->preset, $this->id));
     }
 
+    /**
+     * @param $group
+     */
     public static function addGroup($group) {
         if(!is_a($group, "Group")) { return; }
         global $pdo, $prefix;
@@ -45,6 +76,10 @@ class Group {
         $stmt->execute(array($group->id, $group->name, $perm, $group->admin, $group->preset));
     }
 
+    /**
+     * @param $id
+     * @return Group
+     */
     public static function load($id) {
         global $pdo, $prefix;
         $t = $prefix."_groups";
@@ -60,10 +95,16 @@ class Group {
         return $group;
     }
 
+    /**
+     * @return mixed
+     */
     public static function preset() {
         return value("groups", "id", " WHERE group_preset = 1");
     }
 
+    /**
+     * @param $id
+     */
     public static function delete($id) {
         global $pdo, $prefix;
         $t = $prefix."_groups";

@@ -8,9 +8,26 @@
  * Last Modified by Daniel Vidmar.
  */
 require_once("include/function/projectfunc.php");
+
+/**
+ * Class ListFunc
+ */
 class ListFunc {
 
     //add list
+    /**
+     * @param $list
+     * @param $project
+     * @param $public
+     * @param $creator
+     * @param $created
+     * @param $overseer
+     * @param $minimal
+     * @param $guestview
+     * @param $guestedit
+     * @param $viewpermission
+     * @param $editpermission
+     */
     public static function addList($list, $project, $public, $creator, $created, $overseer, $minimal, $guestview, $guestedit, $viewpermission, $editpermission) {
 		$guestPermissions = "view:".$guestview.",edit:".$guestedit;
         $listPermissions = "view:".$viewpermission.",edit:".$editpermission;
@@ -20,6 +37,10 @@ class ListFunc {
         $stmt->execute(array($list, $project, $public, $creator, $created, $overseer, $minimal, $guestPermissions, $listPermissions));
     }
 
+    /**
+     * @param $project
+     * @param $list
+     */
     public static function create($project, $list) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
@@ -40,6 +61,9 @@ class ListFunc {
                             );");
     }
 
+    /**
+     * @param $id
+     */
     public static function remove($id) {
         $project = self::getProject($id);
         $list = self::getName($id);
@@ -51,6 +75,9 @@ class ListFunc {
     }
 
     //delete list
+    /**
+     * @param $id
+     */
     public static function deleteList($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
@@ -59,6 +86,18 @@ class ListFunc {
     }
 
     //edit list
+    /**
+     * @param $id
+     * @param $list
+     * @param $project
+     * @param $public
+     * @param $overseer
+     * @param $minimal
+     * @param $guestview
+     * @param $guestedit
+     * @param $viewpermission
+     * @param $editpermission
+     */
     public static function editList($id, $list, $project, $public, $overseer, $minimal, $guestview, $guestedit, $viewpermission, $editpermission) {
         $guestPermissions = "view:".$guestview.",edit:".$guestedit;
         $listPermissions = "view:".$viewpermission.",edit:".$editpermission;
@@ -69,6 +108,10 @@ class ListFunc {
     }
 
     //return all the configuration options for this list
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function configurations($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
@@ -79,6 +122,10 @@ class ListFunc {
         return $result;
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public static function guestView($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
@@ -92,6 +139,10 @@ class ListFunc {
         return false;
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public static function guestEdit($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
@@ -105,6 +156,10 @@ class ListFunc {
         return false;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function editPermission($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
@@ -115,6 +170,10 @@ class ListFunc {
         return explode(':', explode(',', $result['list_permissions'])[1])[1];
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function viewPermission($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
@@ -126,10 +185,19 @@ class ListFunc {
     }
 
     //get list id
+    /**
+     * @param $project
+     * @param $list
+     * @return mixed
+     */
     public static function getID($project, $list) {
         return value("lists", "id", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($list)."'");
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
     public static function listDetails($id) {
         $return = array();
         global $prefix, $pdo;
@@ -147,19 +215,35 @@ class ListFunc {
         return $return;
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public static function minimal($id) {
         return (value("lists", "minimal_view", " WHERE id = '".cleanInput($id)."'") == '1') ? true : false;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function getOverseer($id) {
         return value("lists", "overseer", " WHERE id = '".cleanInput($id)."'");
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function getProject($id) {
         return value("lists", "project", " WHERE id = '".cleanInput($id)."'");
     }
 
     //change list project
+    /**
+     * @param $id
+     * @param $project
+     */
     public static function changeProject($id, $project) {
         $details = self::listDetails($id);
         global $prefix, $pdo;
@@ -171,6 +255,9 @@ class ListFunc {
     }
 
     //make list private
+    /**
+     * @param $id
+     */
     public static function makePrivate($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
@@ -178,16 +265,27 @@ class ListFunc {
         $stmt->execute(array($id));
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function getName($id) {
         return value("lists", "list", " WHERE id = '".cleanInput($id)."'");
     }
 
     //make list public
+    /**
+     * @param $id
+     */
     public static function makePublic($id) {
         setValue("lists", "public", "1", " WHERE id = '".cleanInput($id)."'");
     }
 
     //rename list
+    /**
+     * @param $id
+     * @param $list
+     */
     public static function renameList($id, $list) {
         $details = self::listDetails($id);
         global $prefix, $pdo;
@@ -198,6 +296,12 @@ class ListFunc {
         $stmt->execute();
     }
 
+    /**
+     * @param $project
+     * @param $projects
+     * @param $username
+     * @return string
+     */
     public static function printAddForm($project, $projects, $username) {
         $out = '';
         $out .= '<h3>Add List</h3>';
@@ -283,6 +387,10 @@ class ListFunc {
         return $out;
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
     public static function printEditForm($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";

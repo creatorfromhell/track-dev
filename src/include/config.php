@@ -11,14 +11,23 @@
 class Configuration {
 
     //Array variable to hold the configurations loaded
+    /**
+     * @var array
+     */
     public $config;
 
     //Load the configuration in the constructor
+    /**
+     *
+     */
     public function __construct() {
         $this->config = parse_ini_file("resources/config.ini", true);
     }
 
     //Save the configuration in the destructor
+    /**
+     *
+     */
     public function save() {
         $save = "";
         $save .= ";Trackr Configuration File\n";

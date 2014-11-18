@@ -9,14 +9,26 @@
  */
 class ThemeManager {
 
+    /**
+     * @var array
+     */
     public $themes = array();
+    /**
+     * @var array
+     */
     public static $shortcuts = array("%name", "%author", "%version", "%date", "%year", "%month", "%day");
 
+    /**
+     *
+     */
     public function __construct() {
         //load all themes
         $this->loadAll();
     }
 
+    /**
+     *
+     */
     public function loadAll() {
         foreach(glob("resources/themes/*.xml") as $theme) {
             $name = explode(".", trim($theme, "resources/themes/"))[0];
@@ -24,20 +36,34 @@ class ThemeManager {
         }
     }
 
+    /**
+     * @param $name
+     */
     public function load($name) {
         $file = @simplexml_load_file("resources/themes/".$name.".xml", null, true);
         $this->themes[$name] = $file;
     }
 
+    /**
+     * @param $name
+     */
     public function save($name) {
         $this->themes[$name]->asXML("resources/themes/".$name.".xml");
     }
 
+    /**
+     * @param $name
+     */
     public function reload($name) {
         $this->save($name);
         $this->load($name);
     }
 
+    /**
+     * @param $name
+     * @param $value
+     * @return mixed
+     */
     public function replaceShortcuts($name, $value) {
         $theme = $this->themes[$name];
         $replacements = array((string)$theme->name, (string)$theme->author, (string)$theme->version, date("Y-m-d"), date('Y'), date('F'), date('l'));
@@ -46,6 +72,10 @@ class ThemeManager {
     }
 
     //Get functions
+    /**
+     * @param $name
+     * @return array
+     */
     public function getIncludes($name) {
         $theme = $this->themes[$name];
         $includes = array();

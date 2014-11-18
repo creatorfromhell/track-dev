@@ -8,18 +8,64 @@
  * Last Modified by Daniel Vidmar.
  */
 
+/**
+ * Class Pagination
+ */
 class Pagination {
 
+    /**
+     * @var string
+     */
     public $returnValue = "?";
+
+    /**
+     * @var string
+     */
     public $extraQuery = "";
+
+    /**
+     * @var int
+     */
     public $startingValue = 0;
+
+    /**
+     * @var int
+     */
     public $items = 10;
+
+    /**
+     * @var float|int
+     */
     public $page = 1;
+
+    /**
+     * @var float
+     */
     public $totalPages = 1.0;
+
+    /**
+     * @var string
+     */
     public $columnString = "*";
+
+    /**
+     * @var string
+     */
     public $table = "";
+
+    /**
+     * @var string
+     */
     public $pageString = "";
 
+    /**
+     * @param $t
+     * @param $c
+     * @param $p
+     * @param int $i
+     * @param string $r
+     * @param string $extra
+     */
     function __construct($t, $c, $p, $i = 10, $r = "?", $extra = "") {
         $this->table = $t;
         $this->columnString = $c;
@@ -35,6 +81,9 @@ class Pagination {
         $this->buildPageString();
     }
 
+    /**
+     *
+     */
     public function paginate() {
         global $pdo;
         $stmt = $pdo->prepare("SELECT ".$this->columnString." FROM `".$this->table."` ".$this->extraQuery." LIMIT ".$this->startingValue.", ".$this->items);
@@ -52,6 +101,9 @@ class Pagination {
         }
     }
 
+    /**
+     * @return array
+     */
     public function paginateReturn() {
         global $pdo;
         $stmt = $pdo->prepare("SELECT ".$this->columnString." FROM `".$this->table."` ".$this->extraQuery." LIMIT ".$this->startingValue.", ".$this->items);
@@ -61,6 +113,9 @@ class Pagination {
         return $result;
     }
 
+    /**
+     *
+     */
     public function prepareValues() {
         global $pdo;
 
@@ -72,6 +127,9 @@ class Pagination {
         $this->totalPages = ceil($count / $this->items);
     }
 
+    /**
+     *
+     */
     public function buildPageString() {
         $this->pageString = "";
         $this->pageString .= "<div id='pages'>";

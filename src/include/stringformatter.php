@@ -10,16 +10,41 @@
 
 class StringFormatter {
 
+    /**
+     * @var
+     */
     public $languageinstance;
 
+    /**
+     * @var array
+     */
     private static $shortcuts = array("%user", "%project", "%list", "%theme", "%none");
+    /**
+     * @var array
+     */
     private $replacements;
 
+    /**
+     * @var
+     */
     private $dateFormat;
 
+    /**
+     * @var array
+     */
     private $blacklist;
+    /**
+     * @var array
+     */
     private $blacklist_replacements;
 
+    /**
+     * @param $user
+     * @param $project
+     * @param $list
+     * @param $config
+     * @param $language
+     */
     public function __construct($user, $project, $list, $config, $language) {
         $this->languageinstance = $language;
         $this->replacements = array($user, $project, $list, $config["main"]["theme"], ((string)$language->site->tables->none));
@@ -34,18 +59,34 @@ class StringFormatter {
         $this->generateReplacements();
     }
 
+    /**
+     * @param $string
+     * @return mixed
+     */
     public function replace($string) {
         return $this->removeBlacklistWords($this->replaceShortcuts($string));
     }
 
+    /**
+     * @param $string
+     * @return mixed
+     */
     public function replaceShortcuts($string) {
         return str_ireplace(self::$shortcuts, $this->replacements, $string);
     }
 
+    /**
+     * @param $string
+     * @return mixed
+     */
     public function removeBlacklistWords($string) {
         return str_ireplace($this->blacklist, $this->blacklist_replacements, $string);
     }
 
+    /**
+     * @param $date
+     * @return mixed
+     */
     public function formatDate($date) {
         $d = explode(" ", $date);
         $date_parts = explode("-", $d[0]);
@@ -55,6 +96,9 @@ class StringFormatter {
         return str_ireplace($replace, $replacements, $this->dateFormat);
     }
 
+    /**
+     *
+     */
     public function generateReplacements() {
         if($this->blacklist != null && count($this->blacklist) > 0) {
             $count = count($this->blacklist);

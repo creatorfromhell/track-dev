@@ -10,6 +10,22 @@
 class TaskFunc {
 
     //add task
+    /**
+     * @param $project
+     * @param $list
+     * @param $title
+     * @param $description
+     * @param $author
+     * @param $assignee
+     * @param $created
+     * @param $due
+     * @param $finish
+     * @param $version
+     * @param $labels
+     * @param $editable
+     * @param $status
+     * @param $progress
+     */
     public static function addTask($project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
@@ -18,6 +34,11 @@ class TaskFunc {
     }
 
     //delete task
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     */
     public static function deleteTask($project, $list, $id) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
@@ -26,6 +47,23 @@ class TaskFunc {
     }
 
     //edit task
+    /**
+     * @param $id
+     * @param $project
+     * @param $list
+     * @param $title
+     * @param $description
+     * @param $author
+     * @param $assignee
+     * @param $created
+     * @param $due
+     * @param $finish
+     * @param $version
+     * @param $labels
+     * @param $editable
+     * @param $status
+     * @param $progress
+     */
     public static function editTask($id, $project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
@@ -33,6 +71,12 @@ class TaskFunc {
         $stmt->execute($title, $description, $author, $assignee, $due, $created, $finish, $version, $labels, $editable, $status, $progress, $id);
     }
 
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     * @return array
+     */
     public static function taskDetails($project, $list, $id) {
         $return = array();
         global $prefix, $pdo;
@@ -56,39 +100,88 @@ class TaskFunc {
     }
 
     //change task assignee
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     * @param $assignee
+     */
     public static function changeAssignee($project, $list, $id, $assignee) {
         setValue($project."_".$list, "assignee", $assignee, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change task labels
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     * @param $labels
+     */
     public static function changeLabels($project, $list, $id, $labels) {
         setValue($project."_".$list, "labels", $labels, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change task progress
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     * @param $progress
+     */
     public static function changeProgress($project, $list, $id, $progress) {
         setValue($project."_".$list, "progress", $progress, " WHERE id = '".cleanInput($id)."'");
     }
 
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     * @param $finished
+     */
     public static function changeFinished($project, $list, $id, $finished) {
         setValue($project."_".$list, "finished", $finished, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change task status
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     * @param $status
+     */
     public static function changeStatus($project, $list, $id, $status) {
         setValue($project."_".$list, "task_status", $status, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change task title
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     * @param $title
+     */
     public static function changeTitle($project, $list, $id, $title) {
         setValue($project."_".$list, "title", $title, " WHERE id = '".cleanInput($id)."'");
     }
 
     //change task version
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     * @param $version
+     */
     public static function changeVersion($project, $list, $id, $version) {
         setValue($project."_".$list, "version_name", $version, " WHERE id = '".cleanInput($id)."'");
     }
 
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     * @param $label
+     * @return bool
+     */
     public static function hasLabel($project, $list, $id, $label) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
@@ -107,6 +200,12 @@ class TaskFunc {
         return false;
     }
 
+    /**
+     * @param $project
+     * @param $list
+     * @param $username
+     * @return string
+     */
     public static function printAddForm($project, $list, $username) {
         $out = '';
         $out .= '<h3>Add Task</h3>';
@@ -185,6 +284,12 @@ class TaskFunc {
         return $out;
     }
 
+    /**
+     * @param $project
+     * @param $list
+     * @param $id
+     * @return string
+     */
     public static function printEditForm($project, $list, $id) {
         $details = self::taskDetails($project, $list, $id);
 

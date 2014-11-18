@@ -9,12 +9,18 @@
  */
 class BackupFunc {
 
-	public static $directory = "resources/backup/";
+    /**
+     * @var string
+     */
+    public static $directory = "resources/backup/";
 	
 	/*
 	 * Backup all logged activities
 	 */
-	public static function backupActivities($format) {
+    /**
+     * @param $format
+     */
+    public static function backupActivities($format) {
         if($format == "xml") {
             self::backupActivitiesXML();
         } else if($format == "csv") {
@@ -26,6 +32,9 @@ class BackupFunc {
 	
 	/*
      * Create an XML backup of all activities
+     */
+    /**
+     *
      */
     private static function backupActivitiesXML() {
         global $prefix, $pdo;
@@ -56,6 +65,9 @@ class BackupFunc {
     /*
      * Create a CSV backup of all activities
      */
+    /**
+     *
+     */
     private static function backupActivitiesCSV() {
         global $prefix, $pdo;
         $t = $prefix."_activity";
@@ -73,6 +85,9 @@ class BackupFunc {
 
     /*
      * Create a plain text backup of all activities
+     */
+    /**
+     *
      */
     private static function backupActivitiesPT() {
         global $prefix, $pdo;
