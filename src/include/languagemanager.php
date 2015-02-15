@@ -28,7 +28,7 @@ class LanguageManager {
      */
     public function loadAll() {
         foreach(glob("resources/languages/*.xml") as $theme) {
-            $name = explode(".", trim($theme, "resources/languages/"))[0];
+            $name = array_pop(explode(".", trim($theme, "resources/languages/")));
             $this->load($name);
         }
     }
