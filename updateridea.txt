@@ -1,1 +1,0 @@
-Trackr Updater wanted features- Read and run multiple queries dynamically via .SQL files- Dynamically load a PHP file for hard coded modifications/queriesPHP File Exampleclass BetaTwo implements Update {	public function update() {		//Do something	}}interface Update {	public function update();}
