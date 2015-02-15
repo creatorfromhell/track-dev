@@ -31,7 +31,7 @@ class ThemeManager {
      */
     public function loadAll() {
         foreach(glob("resources/themes/*.xml") as $theme) {
-            $name = explode(".", trim($theme, "resources/themes/"))[0];
+            $name = array_pop(explode(".", trim($theme, "resources/themes/")));
             $this->load($name);
         }
     }
