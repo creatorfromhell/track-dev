@@ -1,0 +1,1 @@
+<p class="announce">{ site->content->announce }</p>
