@@ -120,7 +120,7 @@ class PluginManager {
                 if(!$reflector->getDocComment()) {
                     throw new InvalidPluginInfoException($path_info['filename'].".php");
                 }
-                $plugin_info = $this->parse_info(trim(substr($reflector->getDocComment(), 3, -2)));
+                $plugin_info = $this->parse_properties($reflector->getDocComment(), array('name', 'version', 'author', 'license', 'link', 'copyright'));
                 if(!isset($plugin_info['name'])) {
                     $plugin_info['name'] = $path_info['filename'];
                 }
@@ -128,43 +128,26 @@ class PluginManager {
                     'file' => $plugin,
                     'info' => $plugin_info
                 );
-                $this->load_callbacks($reflector, $path_info['filename']);
+                $this->load_callbacks($reflector);
             }
         }
 	}
 
-    private function parse_info($info_block) {
-        $valid = array('name', 'version', 'author', 'license', 'link', 'copyright');
-        $info = array();
-        $parsed_properties = explode('@', str_ireplace('*', '', $info_block));
-        foreach($parsed_properties as &$property) {
-            $array = explode(' ', trim($property));
-            if(in_array(trim($array[0]), $valid)) {
-                $info[trim($array[0])] = trim($array[1]);
-            }
-        }
-        return $info;
-    }
-
-    private function load_callbacks($reflector) {
-        if($reflector instanceof ReflectionClass) {
+    private function load_callbacks($reflector)
+    {
+        if ($reflector instanceof ReflectionClass) {
             $methods = $reflector->getMethods();
-            foreach($methods as &$method) {
-                if(!$method->getDocComment()) {
+            foreach ($methods as &$method) {
+                if (!$method->getDocComment()) {
                     continue;
                 }
                 $comment = $method->getDocComment();
-                if(strpos($comment, '@hook-callback') === false || strpos($comment, '@hook') === false) {
+                if (strpos($comment, '@hook-callback') === false || strpos($comment, '@hook') === false) {
                     continue;
                 }
-                $valid = array('hook', 'priority');
-                $callback = array('priority' => 5);
-                $callback_properties = explode('@', str_ireplace('*', '', trim(substr($comment, 3, -2))));
-                foreach($callback_properties as &$property) {
-                    $array = explode(' ', trim($property));
-                    if(in_array(trim($array[0]), $valid)) {
-                        $callback[trim($array[0])] = trim($array[1]);
-                    }
+                $callback = $this->parse_properties($comment, array('hook', 'priority'));
+                if(empty($callback['priority'])) {
+                    $callback = array('priority' => 5);
                 }
                 $callback['callable'] = array(
                     'class' => $reflector->newInstance(),
@@ -173,6 +156,18 @@ class PluginManager {
                 $this->bind($callback['hook'], $callback['callable'], $callback['priority']);
             }
         }
+    }
+
+    private function parse_properties($properties_string, $valid_properties) {
+        $return = array();
+        $callback_properties = explode('@', str_ireplace('*', '', trim(substr($properties_string, 3, -2))));
+        foreach($callback_properties as &$property) {
+            $array = explode(' ', trim($property));
+            if(in_array(trim($array[0]), $valid_properties)) {
+                $return[trim($array[0])] = trim($array[1]);
+            }
+        }
+        return $return;
     }
 }
 ?>
