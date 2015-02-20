@@ -222,7 +222,8 @@ class ProjectFunc {
         $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
         $from = "";
 
-        for($i = 0; $i < count($lists); $i++) {
+        $list_count = count($lists);
+        for($i = 0; $i < $list_count; $i++) {
             if($i > 0) { $from .= " UNION ALL "; }
             $from .= "SELECT title, created FROM `".$prefix."_".$project."_".$lists[$i]."`";
         }
@@ -231,7 +232,8 @@ class ProjectFunc {
         $result = $stmt->fetchAll();
 
         $tasks = array();
-        for($i = 0; $i < count($result); $i++) {
+        $result_count = count($result);
+        for($i = 0; $i < $result_count; $i++) {
             $task = $result[$i];
             $tasks[$i] = $task[0];
         }
@@ -246,14 +248,12 @@ class ProjectFunc {
      */
     public static function get_tasks_chart_data($project, $months, $completed) {
         $data = "";
-        if($months) {
-            for ($i = -6; $i <= 0; $i++){
-                if( $i > -6) { $data .= ','; }
+        for ($i = -6; $i <= 0; $i++){
+            if( $i > -6) { $data .= ','; }
+            $data .= '"'.date('M', strtotime("$i month")).'"';
+            if($months) {
                 $data .= '"'.date('M', strtotime("$i month")).'"';
-            }
-        } else {
-            for ($i = -6; $i <= 0; $i++){
-                if( $i > -6) { $data .= ","; }
+            } else {
                 $data .= self::get_task_count_by_month($project, date('m', strtotime("$i month")), $completed);
             }
         }
@@ -273,7 +273,8 @@ class ProjectFunc {
         $from = "";
         $date = ($completed) ? "finished" : "created";
         $status = ($completed) ? " WHERE task_status = 1" : "";
-        for($i = 0; $i < count($lists); $i++) {
+        $list_count = count($lists);
+        for($i = 0; $i < $list_count; $i++) {
             if($i > 0) { $from .= " UNION ALL "; }
             $from .= "SELECT title, EXTRACT(YEAR FROM ".$date.") AS year, EXTRACT(MONTH FROM ".$date.") AS month FROM `".$prefix."_".$project."_".$lists[$i]."`".$status;
         }
@@ -318,7 +319,8 @@ class ProjectFunc {
         $completed = array();
 
         $from = "";
-        for($i = 0; $i < count($lists); $i++) {
+        $list_count = count($lists);
+        for($i = 0; $i < $list_count; $i++) {
             if($i > 0) { $from .= " UNION ALL "; }
             $from .= "SELECT id, assignee FROM `".$prefix."_".$project."_".$lists[$i]."`";
         }
@@ -331,9 +333,11 @@ class ProjectFunc {
             $id++;
         }
 
-        for($i = 0; $i < count($users); $i++) {
+        $user_count = count($users);
+        for($i = 0; $i < $user_count; $i++) {
             $from = "";
-            for($i2 = 0; $i2 < count($lists); $i2++) {
+            $list_count = count($lists);
+            for($i2 = 0; $i2 < $list_count; $i2++) {
                 if($i2 > 0) { $from .= " UNION ALL "; }
                 $from .= "SELECT id FROM `".$prefix."_".$project."_".$lists[$i2]."` WHERE assignee = '".$users[$i]."' AND task_status = 1";
             }
@@ -363,7 +367,8 @@ class ProjectFunc {
         }
 
         $from = "";
-        for($i = 0; $i < count($lists); $i++) {
+        $list_count = count($lists);
+        for($i = 0; $i < $list_count; $i++) {
             if($i > 0) { $from .= " UNION ALL "; }
             $from .= "SELECT id, EXTRACT(YEAR FROM due) AS year, EXTRACT(MONTH FROM due) AS month, EXTRACT(DAY FROM due) AS day FROM `".$prefix."_".$project."_".$lists[$i]."`";
         }
@@ -396,7 +401,8 @@ class ProjectFunc {
             }
 
             $from = "";
-            for($i = 0; $i < count($lists); $i++) {
+            $list_count = count($lists);
+            for($i = 0; $i < $list_count; $i++) {
                 if($i > 0) { $from .= " UNION ALL "; }
                 $from .= "SELECT id, title, author, EXTRACT(YEAR FROM due) AS year, EXTRACT(MONTH FROM due) AS month, EXTRACT(DAY FROM due) AS day FROM `".$prefix."_".$project."_".$lists[$i]."`";
             }
@@ -424,24 +430,20 @@ class ProjectFunc {
         $newDay = $day;
         $newTime = mktime(0, 0, 0, $newMonth, $newDay, $newYear);
 
-        if($newDay < 1 || $newDay > date('t', $newTime)) {
-            if($newDay < 1) {
-                $newMonth--;
-                $newDay = date('t', mktime(0, 0, 0, $newMonth, 1, $newYear));
-            } else {
-                $newMonth++;
-                $newDay = 1;
-            }
+        if($newDay < 1) {
+            $newMonth--;
+            $newDay = date('t', mktime(0, 0, 0, $newMonth, 1, $newYear));
+        } else if($newDay > date('t', $newTime)) {
+            $newMonth++;
+            $newDay = 1;
         }
 
-        if($newMonth < 1 || $newMonth > 12) {
-            if($newMonth < 1) {
-                $newMonth = 12;
-                $newYear--;
-            } else {
-                $newMonth = 1;
-                $newYear++;
-            }
+        if($newMonth < 1) {
+            $newMonth = 12;
+            $newYear--;
+        } else if($newMonth > 12) {
+            $newMonth = 1;
+            $newYear++;
         }
         $newTime = mktime(0, 0, 0, $newMonth, $newDay, $newYear);
         return $newTime;
