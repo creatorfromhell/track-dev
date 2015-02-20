@@ -24,13 +24,13 @@ class LanguageManager {
             $this->plugin_instance = $plugin_manager;
         }
         //load all languages
-        $this->loadAll();
+        $this->load_all();
     }
 
     /**
      *
      */
-    public function loadAll() {
+    public function load_all() {
         foreach(glob("resources/languages/*.xml") as $theme) {
             $path_info = pathinfo($theme);
             $this->load($path_info['filename']);
@@ -79,7 +79,7 @@ class LanguageManager {
      * @param $path
      * @return string
      */
-    public function getValue($name, $path) {
+    public function get_value($name, $path) {
         return (string)$this->languages[$name]->xpath(str_ireplace("->", "/", $path))[0];
     }
 }

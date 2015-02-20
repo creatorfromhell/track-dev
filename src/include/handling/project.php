@@ -17,42 +17,42 @@ if(isset($_POST['add-project'])) {
             if(isset($_POST['public']) && trim($_POST['public']) != "") {
                 if(isset($_POST['mainproject']) && trim($_POST['mainproject']) != "") {
                     if(isset($_POST['overseer']) && trim($_POST['overseer']) != "") {
-                        if(!hasValues("projects", " WHERE project = '".cleanInput($_POST['name'])."'")) {
+                        if(!has_values("projects", " WHERE project = '".clean_input($_POST['name'])."'")) {
                             $created = date("Y-m-d H:i:s");
                             if($_POST['mainproject'] != 0) {
-                                ProjectFunc::removePreset();
+                                ProjectFunc::remove_preset();
                             }
-                            ProjectFunc::addProject($_POST['name'], $_POST['mainproject'], 0, $_POST['author'], $created, $_POST['overseer'], $_POST['public']);
+                            ProjectFunc::add_project($_POST['name'], $_POST['mainproject'], 0, $_POST['author'], $created, $_POST['overseer'], $_POST['public']);
                             $params = "public:".$_POST['public'].",overseer:".$_POST['overseer'];
-                            ActivityFunc::log($currentUser->name, $_POST['name'], "none", "project:add", $params, 0, $created);
+                            ActivityFunc::log($current_user->name, $_POST['name'], "none", "project:add", $params, 0, $created);
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->taken")).'");';
+                            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->taken")).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nooverseer")).'");';
+                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nooverseer")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nomain")).'");';
+                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nomain")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nopublic")).'");';
+                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nopublic")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noauthor")).'");';
+            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->noauthor")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noname")).'");';
+        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->noname")).'");';
         echo '</script>';
     }
 }
@@ -64,51 +64,51 @@ if(isset($_POST['edit-project'])) {
                 if(isset($_POST['mainproject']) && trim($_POST['mainproject']) != "") {
                     if(isset($_POST['mainlist']) && trim($_POST['mainlist']) != "") {
                         if(isset($_POST['overseer']) && trim($_POST['overseer']) != "") {
-                            $details = ProjectFunc::projectDetails($_POST['id']);
-                            if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !hasValues("projects", " WHERE project = '".cleanInput($_POST['name'])."'")) {
+                            $details = ProjectFunc::project_details($_POST['id']);
+                            if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !has_values("projects", " WHERE project = '".clean_input($_POST['name'])."'")) {
                                 $created = date("Y-m-d H:i:s");
                                 if($details['preset'] == 0 && $_POST['mainproject'] == 1) {
-                                    ProjectFunc::removePreset();
+                                    ProjectFunc::remove_preset();
                                 }
                                 if($details['name'] != $_POST['name']) {
-                                    ProjectFunc::renameProject($_POST['id'], $details['name'], $_POST['name']);
+                                    ProjectFunc::rename_project($_POST['id'], $details['name'], $_POST['name']);
                                 }
-                                ProjectFunc::editProject($_POST['id'], $_POST['name'], $_POST['mainproject'], $_POST['mainlist'], $_POST['overseer'], $_POST['public']);
+                                ProjectFunc::edit_project($_POST['id'], $_POST['name'], $_POST['mainproject'], $_POST['mainlist'], $_POST['overseer'], $_POST['public']);
                                 $params = "id:".$_POST['id'].",public:".$_POST['public'].",overseer:".$_POST['overseer'];
-                                ActivityFunc::log($currentUser->name, $_POST['name'], "none", "project:edit", $params, 0, date("Y-m-d H:i:s"));
+                                ActivityFunc::log($current_user->name, $_POST['name'], "none", "project:edit", $params, 0, date("Y-m-d H:i:s"));
                             } else {
                                 echo '<script type="text/javascript">';
-                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->taken")).'");';
+                                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->taken")).'");';
                                 echo '</script>';
                             }
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nooverseer")).'");';
+                            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nooverseer")).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nomainlist")).'");';
+                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nomainlist")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nomain")).'");';
+                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nomain")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nopublic")).'");';
+                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nopublic")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noname")).'");';
+            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->noname")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->invalidid")).'");';
+        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->invalidid")).'");';
         echo '</script>';
     }
 }

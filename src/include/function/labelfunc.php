@@ -14,21 +14,21 @@ class LabelFunc {
      * @param $project
      * @param $list
      * @param $name
-     * @param $textcolor
-     * @param $backgroundcolor
+     * @param $text_color
+     * @param $background_color
      */
-    public static function addLabel($project, $list, $name, $textcolor, $backgroundcolor) {
+    public static function add_label($project, $list, $name, $text_color, $background_color) {
 		global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, project, list, label_name, text_color, background_color) VALUES ('', ?, ?, ?, ?, ?)");
-        $stmt->execute(array($project, $list, $name, $textcolor, $backgroundcolor));
+        $stmt->execute(array($project, $list, $name, $text_color, $background_color));
     }
 
     //delete label
     /**
      * @param $id
      */
-    public static function deleteLabel($id) {
+    public static function delete_label($id) {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
@@ -41,27 +41,27 @@ class LabelFunc {
      * @param $project
      * @param $list
      * @param $name
-     * @param $textcolor
-     * @param $backgroundcolor
+     * @param $text_color
+     * @param $background_color
      */
-    public static function editLabel($id, $project, $list, $name, $textcolor, $backgroundcolor) {
+    public static function edit_label($id, $project, $list, $name, $text_color, $background_color) {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ?, list = ?, label_name = ?, text_color = ?, background_color = ? WHERE id = ?");
-        $stmt->execute(array($project, $list, $name, $textcolor, $backgroundcolor, $id));
+        $stmt->execute(array($project, $list, $name, $text_color, $background_color, $id));
     }
 
     //change color
     /**
      * @param $id
-     * @param $textcolor
-     * @param $backgroundcolor
+     * @param $text_color
+     * @param $background_color
      */
-    public static function changeColor($id, $textcolor, $backgroundcolor) {
+    public static function change_color($id, $text_color, $background_color) {
         global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET text_color = ?, background_color = ? WHERE id = ?");
-        $stmt->execute(array($textcolor, $backgroundcolor, $id));
+        $stmt->execute(array($text_color, $background_color, $id));
     }
 
     //rename label
@@ -69,15 +69,15 @@ class LabelFunc {
      * @param $id
      * @param $name
      */
-    public static function renameLabel($id, $name) {
-        setValue("labels", "label_name", $name, " WHERE id = '".cleanInput($id)."'");
+    public static function rename_label($id, $name) {
+        set_value("labels", "label_name", $name, " WHERE id = '".clean_input($id)."'");
     }
 
     /**
      * @param $id
      * @return array
      */
-    public static function labelDetails($id) {
+    public static function label_details($id) {
         $details = array();
         global $prefix, $pdo;
         $t = $prefix."_labels";
@@ -116,28 +116,5 @@ class LabelFunc {
         }
 
         return $labels;
-    }
-
-    /**
-     * @param $id
-     * @return string
-     */
-    public static function printEditForm($id) {
-        $details = self::labelDetails($id);
-        $out = '';
-        $out .= '<div id="page_1">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<input name="id" type="hidden" value="'.$id.'">';
-        $out .= '<input name="project" type="hidden" value="'.$details['project'].'">';
-        $out .= '<input name="list" type="hidden" value="'.$details['list'].'">';
-        $out .= '<input name="labelname" type="text" value="'.$details['label'].'" placeholder="Label Name">';
-        $out .= '<label for="textcolor">Text Color: </label><label id="labelcolor-text" style="background:'.$details['text'].';" onclick="linkColorField(event, \'labelcolor-text\', \'textcolor\'); return false;"></label><input type="hidden" name="textcolor" value="'.$details['text'].'"><br />';
-        $out .= '<label for="backgroundcolor">Background Color: </label><label id="labelcolor-background" style="background:'.$details['background'].';"onclick="linkColorField(event, \'labelcolor-background\', \'backgroundcolor\'); return false;"></label><input type="hidden" name="backgroundcolor" value="'.$details['background'].'"><br />';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<input type="submit" class="submit" name="edit-label" value="Edit">';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        return $out;
     }
 }

@@ -14,20 +14,20 @@ if(isset($_GET['sub'])) {
     $subPage = $_GET['sub'];
 }
 if(isset($_GET['action'])) {
-    $action = cleanInput($_GET['action']);
+    $action = clean_input($_GET['action']);
 
-    if($action == "edit" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".cleanInput($_GET['id'])."'"))) {
+    if($action == "edit" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".clean_input($_GET['id'])."'"))) {
         $editing = true;
-    } else if($action == "delete" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".cleanInput($_GET['id'])."'"))) {
+    } else if($action == "delete" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".clean_input($_GET['id'])."'"))) {
         $params = "id:".$id.",status:".$action;
-        ActivityFunc::log(getName(), $project, $list, "user:delete", $params, 0, date("Y-m-d H:i:s"));
+        ActivityFunc::log(get_name(), $project, $list, "user:delete", $params, 0, date("Y-m-d H:i:s"));
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "User '.value("users", "user_name", " WHERE id = '".cleanInput($_GET['id'])."'").' has been delete.");';
+        echo 'showMessage("success", "User '.value("users", "user_name", " WHERE id = '".clean_input($_GET['id'])."'").' has been delete.");';
         echo '</script>';
-        User::delete(cleanInput($_GET['id']));
+        User::delete(clean_input($_GET['id']));
     }
 }
-$rules['form']['templates']['user'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/UserAddForm.tpl").'}';
+$rules['form']['templates']['user'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/UserAddForm.tpl").'}';
 $group_values = '';
 global $prefix, $pdo;
 $t = $prefix."_groups";
@@ -39,7 +39,7 @@ while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 $node_values = '';
 $nodes = values("nodes", "node_name");
 foreach($nodes as &$node) {
-    $node_values .= '<div id="node-'.nodeID($node).'" class="draggable-node" draggable="true" ondragstart="onDrag(event)">'.$node.'</div>';
+    $node_values .= '<div id="node-'.node_id($node).'" class="draggable-node" draggable="true" ondragstart="onDrag(event)">'.$node.'</div>';
 }
 $rules['form']['content'] = array(
     'nodes' => $node_values,
@@ -47,28 +47,28 @@ $rules['form']['content'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'users' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
+        'users' => '{include->'.$theme_manager->get_template((string)$theme->name, "basic/AnnounceContent.tpl").'}',
     ),
 );
 $rules['table']['th'] = array(
-    'name' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->name)),
-    'email' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->email)),
-    'group' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->group)),
-    'registered' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->registered)),
-    'actions' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->actions)),
+    'name' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->name)),
+    'email' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->email)),
+    'group' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->group)),
+    'registered' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->registered)),
+    'actions' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->actions)),
 );
 $rules['table']['pages'] = array(
     'users' => ' ',
 );
-$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$language_instance->site->tables->nogroups));
+$rules['site']['content']['announce'] = $formatter->replace_shortcuts(((string)$language_instance->site->tables->nogroups));
 $rules['table']['content'] = array(
     'users' => ' ',
 );
 global $prefix;
 $pagination = new Pagination($prefix."_users", "id, user_name, user_email, user_group, user_registered", $pn, 10, "?t=".$type."&amp;");
-if(hasValues("users")) {
-    $rules['table']['templates']['users'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Users.tpl").'}';
-    $entries = $pagination->paginateReturn();
+if(has_values("users")) {
+    $rules['table']['templates']['users'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Users.tpl").'}';
+    $entries = $pagination->paginate_return();
     $table_content = "";
     foreach ($entries as &$entry) {
         $g = Group::load($entry['user_group'])->name;
@@ -83,6 +83,6 @@ if(hasValues("users")) {
         $table_content .= "</td>";
         $table_content .= "</tr>";
     }
-    $rules['table']['pages']['users'] = $pagination->pageString;
+    $rules['table']['pages']['users'] = $pagination->page_string;
     $rules['table']['content']['users'] = $table_content;
 }

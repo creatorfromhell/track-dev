@@ -24,7 +24,7 @@ class ProjectFunc {
      * @param $overseer
      * @param $public
      */
-    public static function addProject($project, $preset, $main, $creator, $created, $overseer, $public) {
+    public static function add_project($project, $preset, $main, $creator, $created, $overseer, $public) {
 		global $prefix, $pdo;
 		$permissions = 'view:none,edit:none';
         $t = $prefix."_projects";
@@ -36,20 +36,20 @@ class ProjectFunc {
      * @param $id
      */
     public static function remove($id) {
-        $project = self::getName($id);
-        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
+        $project = self::get_name($id);
+        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
         foreach($lists as &$list) {
-            $listid = ListFunc::getID($project, $list);
-            ListFunc::remove($listid);
+            $list_id = ListFunc::get_id($project, $list);
+            ListFunc::remove($list_id);
         }
-        self::deleteProject($id);
+        self::delete_project($id);
     }
 
     //delete project
     /**
      * @param $id
      */
-    public static function deleteProject($id) {
+    public static function delete_project($id) {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
@@ -65,7 +65,7 @@ class ProjectFunc {
      * @param $overseer
      * @param $public
      */
-    public static function editProject($id, $project, $preset, $main, $overseer, $public) {
+    public static function edit_project($id, $project, $preset, $main, $overseer, $public) {
         global $prefix, $pdo;
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ?, preset = ?, main = ?, overseer = ?, public = ? WHERE id = ?");
@@ -77,8 +77,8 @@ class ProjectFunc {
      * @param $project
      * @return mixed
      */
-    public static function getID($project) {
-        return value("projects", "id", " WHERE project = '".cleanInput($project)."'");
+    public static function get_id($project) {
+        return value("projects", "id", " WHERE project = '".clean_input($project)."'");
     }
 
     //change main list id
@@ -86,8 +86,8 @@ class ProjectFunc {
      * @param $id
      * @param $main
      */
-    public static function changeMain($id, $main) {
-        setValue("projects", "main", $main, " WHERE id = '".cleanInput($id)."'");
+    public static function change_main($id, $main) {
+        set_value("projects", "main", $main, " WHERE id = '".clean_input($id)."'");
     }
 
     //get main list id
@@ -95,18 +95,18 @@ class ProjectFunc {
      * @param $id
      * @return mixed
      */
-    public static function getMain($id) {
-        return value("projects", "main", " WHERE id = '".cleanInput($id)."'");
+    public static function get_main($id) {
+        return value("projects", "main", " WHERE id = '".clean_input($id)."'");
     }
 
     /**
      * @param $project
      * @return mixed
      */
-    public static function getMainList($project) {
-        $id = self::getID($project);
-        $listID = self::getMain($id);
-        return value("lists", "lists", " WHERE id = '".cleanInput($listID)."'");
+    public static function get_main_list($project) {
+        $id = self::get_id($project);
+        $listID = self::get_main($id);
+        return value("lists", "lists", " WHERE id = '".clean_input($listID)."'");
     }
 
     //get overseer
@@ -114,8 +114,8 @@ class ProjectFunc {
      * @param $project
      * @return mixed
      */
-    public static function getOverseer($project) {
-        return value("projects", "overseer", " WHERE project = '".cleanInput($project)."'");
+    public static function get_overseer($project) {
+        return value("projects", "overseer", " WHERE project = '".clean_input($project)."'");
     }
 
     //change overseer
@@ -123,23 +123,23 @@ class ProjectFunc {
      * @param $id
      * @param $overseer
      */
-    public static function changeOverseer($id, $overseer) {
-        setValue("projects", "overseer", $overseer, " WHERE id = '".cleanInput($id)."'");
+    public static function change_overseer($id, $overseer) {
+        set_value("projects", "overseer", $overseer, " WHERE id = '".clean_input($id)."'");
     }
 
     /**
      * @param $id
      * @return mixed
      */
-    public static function getName($id) {
-        return value("projects", "project", " WHERE id = '".cleanInput($id)."'");
+    public static function get_name($id) {
+        return value("projects", "project", " WHERE id = '".clean_input($id)."'");
     }
 
     //get preset project
     /**
      * @return mixed
      */
-    public static function getPreset() {
+    public static function get_preset() {
         return value("projects", "project", " WHERE preset = 1");
     }
 
@@ -147,40 +147,40 @@ class ProjectFunc {
     /**
      * @param $id
      */
-    public static function makePreset($id) {
-        self::removePreset();
-        setValue("projects", "preset", "1", " WHERE id = '".cleanInput($id)."'");
+    public static function make_preset($id) {
+        self::remove_preset();
+        set_value("projects", "preset", "1", " WHERE id = '".clean_input($id)."'");
     }
 
     /**
      *
      */
-    public static function removePreset() {
-        $id = self::getID(self::getPreset());
-        setValue("projects", "preset", "0", " WHERE id = '".cleanInput($id)."'");
+    public static function remove_preset() {
+        $id = self::get_id(self::get_preset());
+        set_value("projects", "preset", "0", " WHERE id = '".clean_input($id)."'");
     }
 
     //make project private
     /**
      * @param $id
      */
-    public static function makePrivate($id) {
-        setValue("projects", "public", "0", " WHERE id = '".cleanInput($id)."'");
+    public static function make_private($id) {
+        set_value("projects", "public", "0", " WHERE id = '".clean_input($id)."'");
     }
 
     //make project public
     /**
      * @param $id
      */
-    public static function makePublic($id) {
-        setValue("projects", "public", "1", " WHERE id = '".cleanInput($id)."'");
+    public static function make_public($id) {
+        set_value("projects", "public", "1", " WHERE id = '".clean_input($id)."'");
     }
 
     /**
      * @param $id
      * @return array
      */
-    public static function projectDetails($id) {
+    public static function project_details($id) {
         $return = array();
         global $prefix, $pdo;
         $t = $prefix."_projects";
@@ -205,21 +205,21 @@ class ProjectFunc {
      * @param $oldname
      * @param $project
      */
-    public static function renameProject($id, $oldname, $project) {
-        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
+    public static function rename_project($id, $oldname, $project) {
+        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
         foreach($lists as &$list) {
-            ListFunc::changeProject(ListFunc::getID($oldname, $list), $project);
+            ListFunc::change_project(ListFunc::get_id($oldname, $list), $project);
         }
-        setValue("projects", "project", $project, " WHERE id = '".cleanInput($id)."'");
+        set_value("projects", "project", $project, " WHERE id = '".clean_input($id)."'");
     }
 
     /**
      * @param $project
      * @return array
      */
-    public static function latestTasks($project) {
+    public static function latest_tasks($project) {
         global $prefix, $pdo;
-        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
         $from = "";
 
         for($i = 0; $i < count($lists); $i++) {
@@ -244,7 +244,7 @@ class ProjectFunc {
      * @param $completed
      * @return string
      */
-    public static function getTasksChartData($project, $months, $completed) {
+    public static function get_tasks_chart_data($project, $months, $completed) {
         $data = "";
         if($months) {
             for ($i = -6; $i <= 0; $i++){
@@ -254,18 +254,21 @@ class ProjectFunc {
         } else {
             for ($i = -6; $i <= 0; $i++){
                 if( $i > -6) { $data .= ","; }
-                $data .= self::getTaskCountByMonth($project, date('m', strtotime("$i month")), $completed);
+                $data .= self::get_task_count_by_month($project, date('m', strtotime("$i month")), $completed);
             }
         }
         return $data;
     }
 
     /**
+     * @param string $project
      * @param string $month
+     * @param bool $completed
+     * @return int
      */
-    public static function getTaskCountByMonth($project, $month, $completed) {
+    public static function get_task_count_by_month($project, $month, $completed) {
         global $prefix, $pdo;
-        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
 
         $from = "";
         $date = ($completed) ? "finished" : "created";
@@ -286,8 +289,8 @@ class ProjectFunc {
      * @param $completed
      * @return string
      */
-    public static function getAssignedUsersChartData($project, $users, $completed) {
-        $dataArray = self::getTopAssignedUsers($project);
+    public static function get_assigned_users_chart_data($project, $users, $completed) {
+        $dataArray = self::get_top_assigned_users($project);
         $userArray = $dataArray[0];
         $totalArray = $dataArray[1];
         $completedArray = $dataArray[2];
@@ -307,9 +310,9 @@ class ProjectFunc {
      * @param $project
      * @return array
      */
-    public static function getTopAssignedUsers($project) {
+    public static function get_top_assigned_users($project) {
         global $prefix, $pdo;
-        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
         $users = array();
         $totals = array();
         $completed = array();
@@ -349,9 +352,9 @@ class ProjectFunc {
      * @param $day
      * @return bool
      */
-    public static function hasEvent($project, $year, $month, $day) {
+    public static function has_event($project, $year, $month, $day) {
         global $prefix, $pdo;
-        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
 
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM (SELECT id, project, EXTRACT(YEAR FROM created) AS year, EXTRACT(MONTH FROM created) AS month, EXTRACT(DAY FROM created) AS day FROM `".$prefix."_lists`) AS a WHERE project = ".$project." AND year = ".$year." AND month = ".$month." AND day = ".$day);
         $stmt->execute();
@@ -379,11 +382,11 @@ class ProjectFunc {
      * @param $day
      * @return string
      */
-    public static function getEvents($project, $year, $month, $day) {
+    public static function get_events($project, $year, $month, $day) {
         global $prefix, $pdo;
-        $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
         $toReturn = "";
-        if(self::hasEvent($project, $year, $month, $day)) {
+        if(self::has_event($project, $year, $month, $day)) {
             $toReturn .= "<ul>";
 
             $stmt = $pdo->prepare("SELECT name, author FROM (SELECT id, name, author, project, EXTRACT(YEAR FROM created) AS year, EXTRACT(MONTH FROM created) AS month, EXTRACT(DAY FROM created) AS day FROM `".$prefix."_lists`) AS a WHERE project = ".$project." AND year = ".$year." AND month = ".$month." AND day = ".$day);
@@ -415,7 +418,7 @@ class ProjectFunc {
      * @param $day
      * @return int
      */
-    public static function getCorrectDate($year, $month, $day) {
+    public static function get_correct_date($year, $month, $day) {
         $newYear = $year;
         $newMonth = $month;
         $newDay = $day;
@@ -442,59 +445,5 @@ class ProjectFunc {
         }
         $newTime = mktime(0, 0, 0, $newMonth, $newDay, $newYear);
         return $newTime;
-    }
-
-    /**
-     * @param $id
-     * @return string
-     */
-    public static function printEditForm($id) {
-        $details = self::projectDetails($id);
-        $out = '';
-        $out .= '<h3>Edit Project</h3>';
-        $out .= '<div id="holder">';
-        $out .= '<div id="page_1">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<input id="id" name="id" type="hidden" value="'.$id.'">';
-        $out .= '<input id="name" name="name" type="text" placeholder="Name" value="'.$details['name'].'">';
-        $out .= '<label for="public">Public:</label>';
-        $out .= '<select name="public" id="public">';
-        $out .= '<option value="0"'.(($details['public'] == 0) ? ' selected' : '').'>No</option>';
-        $out .= '<option value="1"'.(($details['public'] == 1) ? ' selected' : '').'>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="mainlist">Main List:</label>';
-        $out .= '<select name="mainlist" id="mainlist">';
-        $lists = values("lists", "list", " WHERE project = '".cleanInput($details['name'])."'");
-        foreach($lists as &$list) {
-            $listID = ListFunc::getID($details['name'], $list);
-            $out .= '<option value="'.$listID.'"'.(($listID == $details['main']) ? ' selected' : '').'>'.$list.'</option>';
-        }
-        $out .= '</select><br />';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button id="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '<div id="page_2">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<label for="mainproject">Main:</label>';
-        $out .= '<select name="mainproject" id="mainproject">';
-        $out .= '<option value="0"'.(($details['main'] == 0) ? ' selected' : '').'>No</option>';
-        $out .= '<option value="1"'.(($details['main'] == 1) ? ' selected' : '').'>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="overseer">Overseer:</label>';
-        $out .= '<select name="overseer" id="overseer">';
-        $out .= '<option value="none"'.(($details['overseer'] == 'none') ? ' selected' : '').'>None</option>';
-        $out .= toOptions(values("users", "user_name"), $details['overseer']);
-        $out .= '</select>';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button id="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
-        $out .= '<input type="submit" id="submit" name="edit-project" value="Submit">';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '</div>';
-
-        return $out;
     }
 }

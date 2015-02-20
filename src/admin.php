@@ -8,7 +8,7 @@
  * Last Modified by Daniel Vidmar.
  */
 include("include/header.php");
-if(pageLockedAdmin($currentUser)) { header('LOCATION: index.php'); }
+if(page_locked_admin($current_user)) { header('LOCATION: index.php'); }
 $type = "dashboard";
 if(isset($_GET['t'])) {
     $type = $_GET['t'];
@@ -69,14 +69,14 @@ foreach($keys as &$tab) {
     $admin_tabs_string .= '<li'.$class.'><a href="'.$admin_tabs[$tab]['location'].'">'.ucfirst($tab).'</a></li>';
 }
 
-$rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "Admin.tpl").'}';
-$rules['pages']['content']['admin'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "base/AnnounceContent.tpl").'}';
+$rules['site']['page']['content'] = '{include->'.$theme_manager->get_template((string)$theme->name, "Admin.tpl").'}';
+$rules['pages']['content']['admin'] = '{include->'.$theme_manager->get_template((string)$theme->name, "base/AnnounceContent.tpl").'}';
 $rules['site']['content']['announce'] = 'The page you are looking for could not be found.';
-$rules['navigation']['admin']['template'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/AdminNavigation.tpl").'}';
+$rules['navigation']['admin']['template'] = '{include->'.$theme_manager->get_template((string)$theme->name, "basic/AdminNavigation.tpl").'}';
 $rules['navigation']['admin']['tabs'] = $admin_tabs_string;
 
 if(array_key_exists($type, $admin_tabs)) {
     include_once($admin_tabs[$type]['include']);
-    $rules['pages']['content']['admin'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, $admin_tabs[$type]['template']).'}';
+    $rules['pages']['content']['admin'] = '{include->'.$theme_manager->get_template((string)$theme->name, $admin_tabs[$type]['template']).'}';
 }
-new SimpleTemplate($theme_manager->GetTemplate((string)$theme->name, "basic/AdminPage.tpl"), $rules, true);
+new SimpleTemplate($theme_manager->get_template((string)$theme->name, "basic/AdminPage.tpl"), $rules, true);

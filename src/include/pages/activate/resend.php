@@ -11,12 +11,12 @@ $rules['site']['content']['announce'] = 'A new activation key has been sent to y
 if(!isset($_GET['name'])) {
     $rules['site']['content']['announce'] = 'Invalid request.';
 }
-$email = (!validEmail($_GET['name'])) ? false : true;
-if(!User::exists(cleanInput($_GET['name']), $email)) {
+$email = (!valid_email($_GET['name'])) ? false : true;
+if(!User::exists(clean_input($_GET['name']), $email)) {
     $rules['site']['content']['announce'] = 'The specified user does not exist.';
 }
 
-$user = User::load(cleanInput($_GET['name']), $email);
-$user->activationKey = generateSessionID(40);
+$user = User::load(clean_input($_GET['name']), $email);
+$user->activation_key = generate_session_id(40);
 $user->save();
-$user->sendActivation();
+$user->send_activation();

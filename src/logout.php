@@ -9,19 +9,19 @@
  */
 
 include("include/header.php");
-$currentUser = User::load($_SESSION['usersplusprofile']);
-if($currentUser === null) { header('LOCATION: index.php'); }
-ActivityFunc::log($currentUser->name, "none", "none", "user:logout", "", 0, date("Y-m-d H:i:s"));
+$current_user = User::load($_SESSION['usersplusprofile']);
+if($current_user === null) { header('LOCATION: index.php'); }
+ActivityFunc::log($current_user->name, "none", "none", "user:logout", "", 0, date("Y-m-d H:i:s"));
 $date = date("Y-m-d H:i:s");
-$currentUser->loggedIn = $date;
-$currentUser->online = 0;
-$currentUser->save();
+$current_user->logged_in = $date;
+$current_user->online = 0;
+$current_user->save();
 
-$user_logout_hook = new UserLogoutHook($currentUser->name, $date, $currentUser->getIP());
+$user_logout_hook = new UserLogoutHook($current_user->name, $date, $current_user->getIP());
 $plugin_manager->trigger($user_logout_hook);
 
-destroySession("usersplusprofile");
-$rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "Logout.tpl").'}';
-$rules['pages']['logout']['announce'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}';
+destroy_session("usersplusprofile");
+$rules['site']['page']['content'] = '{include->'.$theme_manager->get_template((string)$theme->name, "Logout.tpl").'}';
+$rules['pages']['logout']['announce'] = '{include->'.$theme_manager->get_template((string)$theme->name, "basic/AnnounceContent.tpl").'}';
 $rules['site']['content']['announce'] = 'You have been logged out successfully.';
-new SimpleTemplate($theme_manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
+new SimpleTemplate($theme_manager->get_template((string)$theme->name, "basic/Page.tpl"), $rules, true);

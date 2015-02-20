@@ -28,13 +28,13 @@ class ListFunc {
      * @param $viewpermission
      * @param $editpermission
      */
-    public static function addList($list, $project, $public, $creator, $created, $overseer, $minimal, $guestview, $guestedit, $viewpermission, $editpermission) {
-		$guestPermissions = "view:".$guestview.",edit:".$guestedit;
-        $listPermissions = "view:".$viewpermission.",edit:".$editpermission;
+    public static function add_list($list, $project, $public, $creator, $created, $overseer, $minimal, $guest_view, $guest_edit, $view_permission, $edit_permission) {
+		$guest_permissions = "view:".$guest_view.",edit:".$guest_edit;
+        $list_permissions = "view:".$view_permission.",edit:".$edit_permission;
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, list, project, public, creator, created, overseer, minimal_view, guest_permissions, list_permissions) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute(array($list, $project, $public, $creator, $created, $overseer, $minimal, $guestPermissions, $listPermissions));
+        $stmt->execute(array($list, $project, $public, $creator, $created, $overseer, $minimal, $guest_permissions, $list_permissions));
     }
 
     /**
@@ -65,20 +65,20 @@ class ListFunc {
      * @param $id
      */
     public static function remove($id) {
-        $project = self::getProject($id);
-        $list = self::getName($id);
+        $project = self::get_project($id);
+        $list = self::get_name($id);
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("DROP TABLE IF EXISTS `".$t."`");
         $stmt->execute();
-        self::deleteList($id);
+        self::delete_list($id);
     }
 
     //delete list
     /**
      * @param $id
      */
-    public static function deleteList($id) {
+    public static function delete_list($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
@@ -98,13 +98,13 @@ class ListFunc {
      * @param $viewpermission
      * @param $editpermission
      */
-    public static function editList($id, $list, $project, $public, $overseer, $minimal, $guestview, $guestedit, $viewpermission, $editpermission) {
-        $guestPermissions = "view:".$guestview.",edit:".$guestedit;
-        $listPermissions = "view:".$viewpermission.",edit:".$editpermission;
+    public static function edit_list($id, $list, $project, $public, $overseer, $minimal, $guest_view, $guest_edit, $view_permission, $edit_permission) {
+        $guest_permissions = "view:".$guest_view.",edit:".$guest_edit;
+        $list_permissions = "view:".$view_permission.",edit:".$edit_permission;
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET project = ?, list = ?, public = ?, overseer = ?, minimal_view = ?, guest_permissions = ?, list_permissions = ? WHERE id = ?");
-        $stmt->execute(array($project, $list, $public, $overseer, $minimal, $guestPermissions, $listPermissions, $id));
+        $stmt->execute(array($project, $list, $public, $overseer, $minimal, $guest_permissions, $list_permissions, $id));
     }
 
     //return all the configuration options for this list
@@ -126,7 +126,7 @@ class ListFunc {
      * @param $id
      * @return bool
      */
-    public static function guestView($id) {
+    public static function guest_view($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT guest_permissions FROM `".$t."` WHERE id = ?");
@@ -143,7 +143,7 @@ class ListFunc {
      * @param $id
      * @return bool
      */
-    public static function guestEdit($id) {
+    public static function guest_edit($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT guest_permissions FROM `".$t."` WHERE id = ?");
@@ -160,7 +160,7 @@ class ListFunc {
      * @param $id
      * @return mixed
      */
-    public static function editPermission($id) {
+    public static function edit_permission($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT list_permissions FROM `".$t."` WHERE id = ?");
@@ -174,7 +174,7 @@ class ListFunc {
      * @param $id
      * @return mixed
      */
-    public static function viewPermission($id) {
+    public static function view_permission($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT list_permissions FROM `".$t."` WHERE id = ?");
@@ -190,15 +190,15 @@ class ListFunc {
      * @param $list
      * @return mixed
      */
-    public static function getID($project, $list) {
-        return value("lists", "id", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($list)."'");
+    public static function get_id($project, $list) {
+        return value("lists", "id", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'");
     }
 
     /**
      * @param $id
      * @return array
      */
-    public static function listDetails($id) {
+    public static function list_details($id) {
         $return = array();
         global $prefix, $pdo;
         $t = $prefix."_lists";
@@ -220,23 +220,23 @@ class ListFunc {
      * @return bool
      */
     public static function minimal($id) {
-        return (value("lists", "minimal_view", " WHERE id = '".cleanInput($id)."'") == '1') ? true : false;
+        return (value("lists", "minimal_view", " WHERE id = '".clean_input($id)."'") == '1') ? true : false;
     }
 
     /**
      * @param $id
      * @return mixed
      */
-    public static function getOverseer($id) {
-        return value("lists", "overseer", " WHERE id = '".cleanInput($id)."'");
+    public static function get_overseer($id) {
+        return value("lists", "overseer", " WHERE id = '".clean_input($id)."'");
     }
 
     /**
      * @param $id
      * @return mixed
      */
-    public static function getProject($id) {
-        return value("lists", "project", " WHERE id = '".cleanInput($id)."'");
+    public static function get_project($id) {
+        return value("lists", "project", " WHERE id = '".clean_input($id)."'");
     }
 
     //change list project
@@ -244,10 +244,10 @@ class ListFunc {
      * @param $id
      * @param $project
      */
-    public static function changeProject($id, $project) {
-        $details = self::listDetails($id);
+    public static function change_project($id, $project) {
+        $details = self::list_details($id);
         global $prefix, $pdo;
-        setValue("lists", "project", $project, " WHERE id = '".cleanInput($id)."'");
+        set_value("lists", "project", $project, " WHERE id = '".clean_input($id)."'");
         $t = $prefix."_".$details['project']."_".$details['name'];
         $t2 = $prefix."_".$project."_".$details['name'];
         $stmt = $pdo->prepare("RENAME TABLE `".$t."` TO `".$t2."`");
@@ -258,7 +258,7 @@ class ListFunc {
     /**
      * @param $id
      */
-    public static function makePrivate($id) {
+    public static function make_private($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("UPDATE `".$t."` SET public = 0 WHERE id = ?");
@@ -269,16 +269,16 @@ class ListFunc {
      * @param $id
      * @return mixed
      */
-    public static function getName($id) {
-        return value("lists", "list", " WHERE id = '".cleanInput($id)."'");
+    public static function get_name($id) {
+        return value("lists", "list", " WHERE id = '".clean_input($id)."'");
     }
 
     //make list public
     /**
      * @param $id
      */
-    public static function makePublic($id) {
-        setValue("lists", "public", "1", " WHERE id = '".cleanInput($id)."'");
+    public static function make_public($id) {
+        set_value("lists", "public", "1", " WHERE id = '".clean_input($id)."'");
     }
 
     //rename list
@@ -286,108 +286,13 @@ class ListFunc {
      * @param $id
      * @param $list
      */
-    public static function renameList($id, $list) {
-        $details = self::listDetails($id);
+    public static function rename_list($id, $list) {
+        $details = self::list_details($id);
         global $prefix, $pdo;
-        setValue("lists", "list", $list, " WHERE id = '".cleanInput($id)."'");
+        set_value("lists", "list", $list, " WHERE id = '".clean_input($id)."'");
         $t = $prefix."_".$details['project']."_".$details['name'];
         $t2 = $prefix."_".$details['project']."_".$list;
         $stmt = $pdo->prepare("RENAME TABLE `".$t."` TO `".$t2."`");
         $stmt->execute();
-    }
-
-    /**
-     * @param $id
-     * @return string
-     */
-    public static function printEditForm($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT list, project, public, overseer, minimal_view FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $main = ProjectFunc::getMain($result['project']);
-
-        $out = '';
-        $out .= '<h3>Edit List</h3>';
-        $out .= '<div id="holder">';
-        $out .= '<div id="page_1">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<input id="id" name="id" type="hidden" value="'.$id.'">';
-        $out .= '<input id="name" name="name" type="text" placeholder="Name" value="'.$result['list'].'">';
-        $out .= '<label for="project">Project:</label>';
-        $out .= '<select name="project" id="project">';
-        $out .= toOptions(values("projects", "project"), $result['project']);
-        $out .= '</select><br />';
-        $out .= '<label for="public">Public:</label>';
-        $out .= '<select name="public" id="public">';
-        $out .= '<option value="0"'.(($result['public'] == 0) ? ' selected' : '').'>No</option>';
-        $out .= '<option value="1"'.(($result['public'] == 1) ? ' selected' : '').'>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button id="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '<div id="page_2">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<label for="minimal">Minimal View:</label>';
-        $out .= '<select name="minimal" id="minimal">';
-        $out .= '<option value="0"'.(($result['minimal_view'] == 0) ? ' selected' : '').'>No</option>';
-        $out .= '<option value="1"'.(($result['minimal_view'] == 1) ? ' selected' : '').'>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="mainlist">Main:</label>';
-        $out .= '<select name="mainlist" id="mainlist">';
-        $out .= '<option value="0"'.(($main != $id) ?' selected' : '').'>No</option>';
-        $out .= '<option value="1"'.(($main == $id) ? ' selected' : '').'>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="overseer">Overseer:</label>';
-        $out .= '<select name="overseer" id="overseer">';
-        $out .= '<option value="none"'.(($result['overseer'] == 'none') ? ' selected' : '').'>None</option>';
-        $out .= toOptions(values("users", "user_name"), $result['overseer']);
-        $out .= '</select>';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
-        $out .= '<button class="submit" onclick="switchPage(event, \'page_2\', \'page_3\'); return false;">Next</button>';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '<div id="page_3">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<label for="guestview">Guest View:</label>';
-        $out .= '<select name="guestview" id="guestview">';
-        $out .= '<option value="0"'.((!self::guestView($id)) ? ' selected' : '').'>No</option>';
-        $out .= '<option value="1"'.((self::guestView($id)) ? ' selected' : '').'>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="guestedit">Guest Edit:</label>';
-        $out .= '<select name="guestedit" id="guestedit">';
-        $out .= '<option value="0"'.((!self::guestEdit($id)) ? ' selected' : '').'>No</option>';
-        $out .= '<option value="1"'.((self::guestEdit($id)) ? ' selected' : '').'>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="viewpermission">View Permission:</label>';
-        $out .= '<select name="viewpermission" id="viewpermission">';
-        $out .= '<option value="none"'.((self::viewPermission($id) == 'none') ? ' selected' : '').'>None</option>';
-		$nodes = values("nodes", "node_name");
-        foreach($nodes as &$node) {
-            $out .= '<option value="'.nodeID($node).'"'.((self::viewPermission($id) == $node) ? ' selected' : '').'>'.$node.'</option>';
-        }
-        $out .= '</select><br />';
-        $out .= '<label for="editpermission">Edit Permission:</label>';
-        $out .= '<select name="editpermission" id="editpermission">';
-        $out .= '<option value="none"'.((self::editPermission($id) == "none") ? ' selected' : '').'>None</option>';
-		$nodes = values("nodes", "node_name");
-        foreach($nodes as &$node) {
-            $out .= '<option value="'.nodeID($node).'"'.((self::editPermission($id) == $node) ? ' selected' : '').'>'.$node.'</option>';
-        }
-        $out .= '</select><br />';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
-        $out .= '<input type="submit" class="submit" name="edit-list" value="Submit">';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '</div>';
-
-        return $out;
     }
 }

@@ -10,38 +10,38 @@
 include_once("include/handling/permission.php");
 $editing = false;
 if(isset($_GET['action'])) {
-    $action = cleanInput($_GET['action']);
+    $action = clean_input($_GET['action']);
 
-    if($action == "edit" && isset($_GET['id']) && hasValues("nodes", " WHERE id = '".cleanInput($_GET['id'])."'")) {
+    if($action == "edit" && isset($_GET['id']) && has_values("nodes", " WHERE id = '".clean_input($_GET['id'])."'")) {
         $editing = true;
-    } else if($action == "delete" && isset($_GET['id']) && hasValues("nodes", " WHERE id = '".cleanInput($_GET['id'])."'")) {
-        nodeDelete(cleanInput($_GET['id']));
+    } else if($action == "delete" && isset($_GET['id']) && has_values("nodes", " WHERE id = '".clean_input($_GET['id'])."'")) {
+        node_delete(clean_input($_GET['id']));
     }
 }
-$rules['form']['templates']['permission'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/NodeAddForm.tpl").'}';
+$rules['form']['templates']['permission'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/NodeAddForm.tpl").'}';
 $rules['table'] = array(
     'templates' => array(
-        'permissions' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
+        'permissions' => '{include->'.$theme_manager->get_template((string)$theme->name, "basic/AnnounceContent.tpl").'}',
     ),
 );
 $rules['table']['th'] = array(
-    'node' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->node)),
-    'description' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->description)),
-    'actions' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->actions)),
+    'node' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->node)),
+    'description' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->description)),
+    'actions' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->actions)),
 );
 $rules['table']['pages'] = array(
     'permissions' => ' ',
 );
-$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$language_instance->site->tables->nonodes));
+$rules['site']['content']['announce'] = $formatter->replace_shortcuts(((string)$language_instance->site->tables->nonodes));
 $rules['table']['content'] = array(
     'permissions' => ' ',
 );
 
 global $prefix;
 $pagination = new Pagination($prefix."_nodes", "id, node_name, node_description", $pn, 10, "?t=".$type."&amp;");
-if(hasValues('nodes')) {
-    $rules['table']['templates']['permissions'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Permissions.tpl").'}';
-    $entries = $pagination->paginateReturn();
+if(has_values('nodes')) {
+    $rules['table']['templates']['permissions'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Permissions.tpl").'}';
+    $entries = $pagination->paginate_return();
     $table_content = "";
     foreach ($entries as &$entry) {
         $table_content .= "<tr>";
@@ -53,6 +53,6 @@ if(hasValues('nodes')) {
         $table_content .= "</td>";
         $table_content .= "</tr>";
     }
-    $rules['table']['pages']['permissions'] = $pagination->pageString;
+    $rules['table']['pages']['permissions'] = $pagination->page_string;
     $rules['table']['content']['permissions'] = $table_content;
 }

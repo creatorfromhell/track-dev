@@ -20,13 +20,13 @@ class BackupFunc {
     /**
      * @param $format
      */
-    public static function backupActivities($format) {
+    public static function backup_activities($format) {
         if($format == "xml") {
-            self::backupActivitiesXML();
+            self::backup_activities_XML();
         } else if($format == "csv") {
-            self::backupActivitiesCSV();
+            self::backup_activities_CSV();
         } else {
-            self::backupActivitiesPT();
+            self::backup_activities_PT();
         }
 	}
 	
@@ -36,14 +36,14 @@ class BackupFunc {
     /**
      *
      */
-    private static function backupActivitiesXML() {
+    private static function backup_activities_XML() {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("SELECT id, username, project, list, activity_type, activity_parameters, archived, logged FROM `".$t."`");
         $stmt->execute();
 
-        $fileName = self::directory."activity-backup-".date("Y-m-d").".xml";
-        $file = fopen($fileName, "w");
+        $file_name = self::directory."activity-backup-".date("Y-m-d").".xml";
+        $file = fopen($file_name, "w");
         fwrite($file, "<activities>\n");
         while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
             fwrite($file, "<activity>\n");
@@ -68,14 +68,14 @@ class BackupFunc {
     /**
      *
      */
-    private static function backupActivitiesCSV() {
+    private static function backup_activities_CSV() {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("SELECT id, username, project, list, activity_type, activity_parameters, archived, logged FROM `".$t."`");
         $stmt->execute();
 
-        $fileName = self::directory."activity-backup-".date("Y-m-d").".csv";
-        $file = fopen($fileName, "w");
+        $file_name = self::directory."activity-backup-".date("Y-m-d").".csv";
+        $file = fopen($file_name, "w");
         fwrite($file, "id,user,date,archived,project,list,type,parameters");
         while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
             fwrite($file, "\n".$result['id'].",".$result['username'].",".$result['logged'].",".$result['archived'].",".$result['project'].",".$result['list'].",".$result['activity_type'].",".$result['activity_parameters']);
@@ -89,14 +89,14 @@ class BackupFunc {
     /**
      *
      */
-    private static function backupActivitiesPT() {
+    private static function backup_activities_PT() {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("SELECT id, username, project, list, activity_type, activity_parameters, archived, logged FROM `".$t."`");
         $stmt->execute();
 
-        $fileName = self::directory."activity-backup-".date("Y-m-d").".txt";
-        $file = fopen($fileName, "w");
+        $file_name = self::directory."activity-backup-".date("Y-m-d").".txt";
+        $file = fopen($file_name, "w");
         fwrite($file, "Trackr Activity Generator\n");
         fwrite($file, "Generated: ".date("Y-m-d at H:i:s"));
         while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {

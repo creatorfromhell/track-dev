@@ -26,7 +26,7 @@ class TaskFunc {
      * @param $status
      * @param $progress
      */
-    public static function addTask($project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
+    public static function add_task($project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, title, description, author, assignee, due, created, finished, version_name, labels, editable, task_status, progress) VALUES('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -39,7 +39,7 @@ class TaskFunc {
      * @param $list
      * @param $id
      */
-    public static function deleteTask($project, $list, $id) {
+    public static function delete_task($project, $list, $id) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("DELETE FROM `".$t."` WHERE id = ?");
@@ -64,7 +64,7 @@ class TaskFunc {
      * @param $status
      * @param $progress
      */
-    public static function editTask($id, $project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
+    public static function edit_task($id, $project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("UPDATE `".$t."` SET title = ?, description = ?, author = ?, assignee = ?, due = ?, created = ?, finished = ?, version_name = ?, labels = ?, editable = ?, task_status = ?, progress = ? WHERE id = ?");
@@ -77,7 +77,7 @@ class TaskFunc {
      * @param $id
      * @return array
      */
-    public static function taskDetails($project, $list, $id) {
+    public static function task_details($project, $list, $id) {
         $return = array();
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
@@ -106,8 +106,8 @@ class TaskFunc {
      * @param $id
      * @param $assignee
      */
-    public static function changeAssignee($project, $list, $id, $assignee) {
-        setValue($project."_".$list, "assignee", $assignee, " WHERE id = '".cleanInput($id)."'");
+    public static function change_assignee($project, $list, $id, $assignee) {
+        set_value($project."_".$list, "assignee", $assignee, " WHERE id = '".clean_input($id)."'");
     }
 
     //change task labels
@@ -117,8 +117,8 @@ class TaskFunc {
      * @param $id
      * @param $labels
      */
-    public static function changeLabels($project, $list, $id, $labels) {
-        setValue($project."_".$list, "labels", $labels, " WHERE id = '".cleanInput($id)."'");
+    public static function change_labels($project, $list, $id, $labels) {
+        set_value($project."_".$list, "labels", $labels, " WHERE id = '".clean_input($id)."'");
     }
 
     //change task progress
@@ -128,8 +128,8 @@ class TaskFunc {
      * @param $id
      * @param $progress
      */
-    public static function changeProgress($project, $list, $id, $progress) {
-        setValue($project."_".$list, "progress", $progress, " WHERE id = '".cleanInput($id)."'");
+    public static function change_progress($project, $list, $id, $progress) {
+        set_value($project."_".$list, "progress", $progress, " WHERE id = '".clean_input($id)."'");
     }
 
     /**
@@ -138,8 +138,8 @@ class TaskFunc {
      * @param $id
      * @param $finished
      */
-    public static function changeFinished($project, $list, $id, $finished) {
-        setValue($project."_".$list, "finished", $finished, " WHERE id = '".cleanInput($id)."'");
+    public static function change_finished($project, $list, $id, $finished) {
+        set_value($project."_".$list, "finished", $finished, " WHERE id = '".clean_input($id)."'");
     }
 
     //change task status
@@ -149,8 +149,8 @@ class TaskFunc {
      * @param $id
      * @param $status
      */
-    public static function changeStatus($project, $list, $id, $status) {
-        setValue($project."_".$list, "task_status", $status, " WHERE id = '".cleanInput($id)."'");
+    public static function change_status($project, $list, $id, $status) {
+        set_value($project."_".$list, "task_status", $status, " WHERE id = '".clean_input($id)."'");
     }
 
     //change task title
@@ -160,8 +160,8 @@ class TaskFunc {
      * @param $id
      * @param $title
      */
-    public static function changeTitle($project, $list, $id, $title) {
-        setValue($project."_".$list, "title", $title, " WHERE id = '".cleanInput($id)."'");
+    public static function change_title($project, $list, $id, $title) {
+        set_value($project."_".$list, "title", $title, " WHERE id = '".clean_input($id)."'");
     }
 
     //change task version
@@ -171,8 +171,8 @@ class TaskFunc {
      * @param $id
      * @param $version
      */
-    public static function changeVersion($project, $list, $id, $version) {
-        setValue($project."_".$list, "version_name", $version, " WHERE id = '".cleanInput($id)."'");
+    public static function change_version($project, $list, $id, $version) {
+        set_value($project."_".$list, "version_name", $version, " WHERE id = '".clean_input($id)."'");
     }
 
     /**
@@ -182,15 +182,15 @@ class TaskFunc {
      * @param $label
      * @return bool
      */
-    public static function hasLabel($project, $list, $id, $label) {
+    public static function has_label($project, $list, $id, $label) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
         $stmt = $pdo->prepare("SELECT labels FROM `".$t."` WHERE id = ?");
         $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $labelstring = $result['labels'];
-        $labels = explode(',', $labelstring);
+        $label_string = $result['labels'];
+        $labels = explode(',', $label_string);
 
         foreach($labels as &$l) {
             if($l != "" && $l == $label) {
@@ -198,103 +198,5 @@ class TaskFunc {
             }
         }
         return false;
-    }
-
-    /**
-     * @param $project
-     * @param $list
-     * @param $id
-     * @return string
-     */
-    public static function printEditForm($project, $list, $id) {
-        $details = self::taskDetails($project, $list, $id);
-
-        $out = '';
-        $out .= '<h3>Edit Task</h3>';
-        $out .= '<div id="holder">';
-        $out .= '<div id="page_1">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<input name="id" type="hidden" value="'.$id.'">';
-        $out .= '<input id="title" name="title" type="text" value="'.$details['title'].'" placeholder="Title">';
-        $out .= '<textarea id="description" name="description" ROWS="3" COLS="40">'.$details['description'].'</textarea>';
-        $out .= '<input id="author" name="author" type="hidden" value="'.$details['author'].'">';
-        $out .= '<label for="assignee">Assignee:</label>';
-        $out .= '<select name="assignee" id="assignee">';
-        $out .= '<option value="none"'.(($details['assignee'] == 'none') ? ' selected' : '').'>None</option>';
-		$out .= toOptions(values("users", "user_name"), $details['assignee']);
-        $out .= '</select><br />';
-        $out .= '<label for="due-date">Due Date:</label>';
-        $out .= '<input id="due-date" name="due-date" type="text" value="'.$details['due'].'" readonly>';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '<div id="page_2">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<label for="editable">Editable:</label>';
-        $out .= '<select name="editable" id="editable">';
-        $out .= '<option value="0"'.(($details['editable'] == 0) ? " selected" : "").'>No</option>';
-        $out .= '<option value="1"'.(($details['editable'] == 1) ? " selected" : "").'>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="status">Status:</label>';
-        $out .= '<select name="status" id="status">';
-        $out .= '<option value="0"'.(($details['status'] == 0) ? " selected" : "").'>None</option>';
-        $out .= '<option value="1"'.(($details['status'] == 1) ? " selected" : "").'>Done</option>';
-        $out .= '<option value="2"'.(($details['status'] == 2) ? " selected" : "").'>In Progress</option>';
-        $out .= '<option value="3"'.(($details['status'] == 3) ? " selected" : "").'>Closed</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="version">Version:</label>';
-        $out .= '<select name="version" id="version">';
-        $out .= '<option value="none"'.(($details['version'] == "none") ? " selected" : "").'>None</option>';
-        $out .= toOptions(values("versions", "version_name", " WHERE project = '".cleanInput($project)."'"), $details['version']);
-        $out .= '</select><br />';
-        $out .= '<label for="progress">Progress:<label id="progress_value">'.$details['progress'].'</label></label><br />';
-        $out .= '<input type="range" id="progress" name="progress" value="'.$details['progress'].'" min="0" max="100" oninput="showValue(\'progress_value\', this.value);">';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
-        $out .= '<button class="submit" onclick="switchPage(event, \'page_2\', \'page_3\'); return false;">Next</button>';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '<div id="page_3">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<div class="pick-field">';
-        $out .= '<div class="title">Labels</div>';
-        $out .= '<div class="column-titles">';
-        $out .= '<label class="fmleft">Available</label>';
-        $out .= '<label class="fmright">Chosen</label>';
-        $out .= '<div class="clear"></div>';
-        $out .= '</div>';
-        $out .= '<div id="labels-available-edit" class="column-left" ondrop="onDrop(event, \'labels-edit\', \'remove\')" ondragover="onDragOver(event)" style="margin:0;">';
-        $containedLabels = array();
-        $labelsValue = "";
-        $labels = LabelFunc::labels($project, $list);
-        foreach($labels as &$label) {
-            $labelString = '<div id="label-'.$label['id'].'" class="draggable-node" style="background:'.$label['background'].';color:'.$label['text'].';border:1px solid '.$label['text'].';" draggable="true" ondragstart="onDrag(event)">'.$label['label'].'</div>';
-            if(!self::hasLabel($project, $list, $id, $label['id'])) {
-                $out .= $labelString;
-            } else {
-                $containedLabels[] = $labelString;
-                $labelsValue .= ($labelsValue != "") ? ",".$label['id'] : $label['id'];
-            }
-        }
-        $out .= '</div>';
-        $out .= '<div id="labels-chosen-edit" class="column-right" ondrop="onDrop(event, \'labels-edit\', \'add\')" ondragover="onDragOver(event)" style="margin:0;height:125px;max-height:125px;overflow-y:scroll;">';
-        foreach($containedLabels as &$label) {
-            $out .= $label;
-        }
-        $out .= '</div>';
-        $out .= '<input id="labels-input" name="labels-edit" type="hidden" value="'.$labelsValue.'">';
-        $out .= '</div>';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
-        $out .= '<input type="submit" class="submit" name="edit-task" value="Submit">';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '</div>';
-
-        return $out;
     }
 }

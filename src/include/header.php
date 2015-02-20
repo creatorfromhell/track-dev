@@ -9,19 +9,19 @@
  */
 include_once('common.php');
 
-$title = $formatter->replaceShortcuts(((string)$language_instance->site->title));
-$h1 = $formatter->replaceShortcuts(((string)$language_instance->site->header));
+$title = $formatter->replace_shortcuts(((string)$language_instance->site->title));
+$h1 = $formatter->replace_shortcuts(((string)$language_instance->site->header));
 $includes = "";
-$theme_copyright = $theme_manager->replaceShortcuts((string)$theme->name, (string)$theme->copyright);
+$theme_copyright = $theme_manager->replace_shortcuts((string)$theme->name, (string)$theme->copyright);
 $language_select = "";
-$user_bar = (loggedIn()) ? "<p>Welcome, </p>".userNav()."<p>.</p>" : "<a href=\"login.php?return=".$return."\">Login</a> or <a href=\"register.php\">Register</a>";
+$user_bar = (logged_in()) ? "<p>Welcome, </p>".user_nav()."<p>.</p>" : "<a href=\"login.php?return=".$return."\">Login</a> or <a href=\"register.php\">Register</a>";
 
-if($page == "index") { $h1 = $formatter->replaceShortcuts(((string)$language_instance->site->pages->overview->header)); }
-else if($page == "projects") { $h1 = $formatter->replaceShortcuts(((string)$language_instance->site->pages->projects->header)); }
-else if($page == "lists") { $h1 = $formatter->replaceShortcuts(((string)$language_instance->site->pages->lists->header)); }
-else if($page == "admin") { $h1 = $formatter->replaceShortcuts(((string)$language_instance->site->pages->admin->header)); }
+if($page == "index") { $h1 = $formatter->replace_shortcuts(((string)$language_instance->site->pages->overview->header)); }
+else if($page == "projects") { $h1 = $formatter->replace_shortcuts(((string)$language_instance->site->pages->projects->header)); }
+else if($page == "lists") { $h1 = $formatter->replace_shortcuts(((string)$language_instance->site->pages->lists->header)); }
+else if($page == "admin") { $h1 = $formatter->replace_shortcuts(((string)$language_instance->site->pages->admin->header)); }
 
-foreach($theme_manager->getIncludes((string)$theme->name) as $include) {
+foreach($theme_manager->get_includes((string)$theme->name) as $include) {
     $includes .= $include;
 }
 
@@ -50,15 +50,15 @@ $rules = array(
         'user_bar' => $user_bar,
         'header' => array(
             'h1' => $h1,
-            'template' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/Header.tpl").'}',
+            'template' => '{include->'.$theme_manager->get_template((string)$theme->name, "basic/Header.tpl").'}',
         ),
         'footer' => array(
-            'template' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/Footer.tpl").'}',
+            'template' => '{include->'.$theme_manager->get_template((string)$theme->name, "basic/Footer.tpl").'}',
         ),
     ),
     'navigation' => array(
         'main' => array(
-            'template' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/Navigation.tpl").'}',
+            'template' => '{include->'.$theme_manager->get_template((string)$theme->name, "basic/Navigation.tpl").'}',
         ),
     ),
     'pages'=> array(

@@ -16,17 +16,17 @@ class Pagination {
     /**
      * @var string
      */
-    public $returnValue = "?";
+    public $return_value = "?";
 
     /**
      * @var string
      */
-    public $extraQuery = "";
+    public $extra_query = "";
 
     /**
      * @var int
      */
-    public $startingValue = 0;
+    public $starting_value = 0;
 
     /**
      * @var int
@@ -41,12 +41,12 @@ class Pagination {
     /**
      * @var float
      */
-    public $totalPages = 1.0;
+    public $total_pages = 1.0;
 
     /**
      * @var string
      */
-    public $columnString = "*";
+    public $column_string = "*";
 
     /**
      * @var string
@@ -56,7 +56,7 @@ class Pagination {
     /**
      * @var string
      */
-    public $pageString = "";
+    public $page_string = "";
 
     /**
      * @param $t
@@ -68,17 +68,17 @@ class Pagination {
      */
     function __construct($t, $c, $p, $i = 10, $r = "?", $extra = "") {
         $this->table = $t;
-        $this->columnString = $c;
+        $this->column_string = $c;
         $this->page = $p;
         $this->items = $i;
-        $this->returnValue = $r;
-        $this->extraQuery = $extra;
-        $this->prepareValues();
-		if($this->page > $this->totalPages) {
-			$this->page = $this->totalPages;
-			$this->prepareValues();
+        $this->return_value = $r;
+        $this->extra_query = $extra;
+        $this->prepare_values();
+		if($this->page > $this->total_pages) {
+			$this->page = $this->total_pages;
+			$this->prepare_values();
 		}
-        $this->buildPageString();
+        $this->build_page_string();
     }
 
     /**
@@ -86,13 +86,13 @@ class Pagination {
      */
     public function paginate() {
         global $pdo;
-        $stmt = $pdo->prepare("SELECT ".$this->columnString." FROM `".$this->table."` ".$this->extraQuery." LIMIT ".$this->startingValue.", ".$this->items);
+        $stmt = $pdo->prepare("SELECT ".$this->column_string." FROM `".$this->table."` ".$this->extra_query." LIMIT ".$this->starting_value.", ".$this->items);
         $stmt->execute();
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $out = "";
             $out .= "<tr>";
-            $columns = explode(", ", $this->columnString);
+            $columns = explode(", ", $this->column_string);
             foreach($columns as &$column) {
                 $out .= "<td>".$row[$column]."</td>";
             }
@@ -104,9 +104,9 @@ class Pagination {
     /**
      * @return array
      */
-    public function paginateReturn() {
+    public function paginate_return() {
         global $pdo;
-        $stmt = $pdo->prepare("SELECT ".$this->columnString." FROM `".$this->table."` ".$this->extraQuery." LIMIT ".$this->startingValue.", ".$this->items);
+        $stmt = $pdo->prepare("SELECT ".$this->column_string." FROM `".$this->table."` ".$this->extra_query." LIMIT ".$this->starting_value.", ".$this->items);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -116,29 +116,29 @@ class Pagination {
     /**
      *
      */
-    public function prepareValues() {
+    public function prepare_values() {
         global $pdo;
 
         $stmt1 = $pdo->prepare("SELECT Count(*) FROM `".$this->table."`");
         $stmt1->execute();
         $count = intval($stmt1->fetchColumn());
 
-        $this->startingValue = (($this->page - 1) * $this->items);
-        $this->totalPages = ceil($count / $this->items);
+        $this->starting_value = (($this->page - 1) * $this->items);
+        $this->total_pages = ceil($count / $this->items);
     }
 
     /**
      *
      */
-    public function buildPageString() {
-        $this->pageString = "";
-        $this->pageString .= "<div id='pages'>";
-        $this->pageString .= "<strong><a href='".$this->returnValue."pn=1'>First</a></strong>";
-        for($i = 1; $i <= $this->totalPages; $i++) {
+    public function build_page_string() {
+        $this->page_string = "";
+        $this->page_string .= "<div id='pages'>";
+        $this->page_string .= "<strong><a href='".$this->return_value."pn=1'>First</a></strong>";
+        for($i = 1; $i <= $this->total_pages; $i++) {
             $active = ($i == $this->page) ? "class='active'" : "";
-            $this->pageString .= "<a ".$active." href='".$this->returnValue."pn=".$i."'>".$i."</a>";
+            $this->page_string .= "<a ".$active." href='".$this->return_value."pn=".$i."'>".$i."</a>";
         }
-        $this->pageString .= "<strong><a href='".$this->returnValue."pn=".$this->totalPages."'>Last</a></strong>";
-        $this->pageString .= "</div>";
+        $this->page_string .= "<strong><a href='".$this->return_value."pn=".$this->total_pages."'>Last</a></strong>";
+        $this->page_string .= "</div>";
     }
 }

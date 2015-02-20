@@ -10,23 +10,23 @@
 if(isset($_POST['login'])) {
     if(isset($_POST['username']) && trim($_POST['username']) != '') {
         if(isset($_POST['password']) && trim($_POST['password']) != '') {
-            if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && checkCaptcha(cleanInput($_POST['captcha']))) {
-                $name = cleanInput($_POST['username']);
-                $email = (!validEmail($name)) ? false : true;
-                if(User::exists($name, $email) && checkHash(User::getHashedPassword($name, $email), cleanInput($_POST['password']))) {
+            if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
+                $name = clean_input($_POST['username']);
+                $email = (!valid_email($name)) ? false : true;
+                if(User::exists($name, $email) && check_hash(User::get_hashed_password($name, $email), clean_input($_POST['password']))) {
                     $user = User::load($name, $email);
-					global $configurationValues;
-                    if($configurationValues["main"]["email_activation"] && $user->activated == 1 || !$configurationValues["main"]["email_activation"]) {
-                        $user->loggedIn = date("Y-m-d H:i:s");
+					global $configuration_values;
+                    if($configuration_values["main"]["email_activation"] && $user->activated == 1 || !$configuration_values["main"]["email_activation"]) {
+                        $user->logged_in = date("Y-m-d H:i:s");
                         $user->online = 1;
                         $user->save();
-                        ActivityFunc::log(cleanInput($_POST['username']), "none", "none", "user:login", "", 0, date("Y-m-d H:i:s"));
+                        ActivityFunc::log(clean_input($_POST['username']), "none", "none", "user:login", "", 0, date("Y-m-d H:i:s"));
 
-                        $user_login_hook = new UserLoginHook($user->name, $user->loggedIn, $user->getIP());
+                        $user_login_hook = new UserLoginHook($user->name, $user->logged_in, $user->get_ip());
                         $plugin_manager->trigger($user_login_hook);
 
                         $_SESSION['usersplusprofile'] = $user->name;
-                        destroySession("userspluscaptcha");
+                        destroy_session("userspluscaptcha");
                         ?>
                         <script>
                             window.location.assign("index.php");
@@ -34,27 +34,27 @@ if(isset($_POST['login'])) {
                     <?php
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->noactivation")).'");';
+                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->login->noactivation")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->invalidlogin")).'");';
+                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->login->invalidlogin")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->invalidcaptcha")).'");';
+                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->invalidcaptcha")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->nopassword")).'");';
+            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->login->nopassword")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->nousername")).'");';
+        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->login->nousername")).'");';
         echo '</script>';
     }
 }

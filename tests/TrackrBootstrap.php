@@ -36,4 +36,3 @@ spl_autoload_register('api_loader');
 spl_autoload_register('include_loader');
 spl_autoload_register('class_loader');
 spl_autoload_register('function_loader');
-?>

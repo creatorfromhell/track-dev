@@ -1,7 +1,7 @@
 <?php
 class PluginManager {
 
-    private $PLUGIN_DIRECTORY = "/resources/plugins/";
+    private $plugin_directory = "/resources/plugins/";
     private $base_directory = "";
 
     /**
@@ -108,7 +108,7 @@ class PluginManager {
      *
      */
     public function load_all() {
-        foreach(glob($this->base_directory.$this->PLUGIN_DIRECTORY."*.php", GLOB_NOSORT) as $plugin) {
+        foreach(glob($this->base_directory.$this->plugin_directory."*.php", GLOB_NOSORT) as $plugin) {
             include_once($plugin);
             $path_info = pathinfo($plugin);
             $reflector = new ReflectionClass($path_info['filename']);

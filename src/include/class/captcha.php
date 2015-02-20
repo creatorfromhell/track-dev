@@ -24,18 +24,18 @@ class Captcha {
      * @param null $code
      */
     function __construct($code = null) {
-        $this->code = ($code !== null) ? $code : $this->generateCode();
-        $this->generateImage();
+        $this->code = ($code !== null) ? $code : $this->generate_code();
+        $this->generate_image();
     }
 
     /**
      * @return string
      */
-    public function generateCode() {
-        $validchars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+123456789";
+    public function generate_code() {
+        $valid_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+123456789";
         $c = "";
         for($i = 0; $i < 6; $i++) {
-            $c .= $validchars[rand(0, strlen($validchars) - 1)];
+            $c .= $valid_chars[rand(0, strlen($valid_chars) - 1)];
         }
         return $c;
     }
@@ -43,9 +43,9 @@ class Captcha {
     /**
      *
      */
-    public function generateImage() {
+    public function generate_image() {
         if($this->code === null) {
-            $this->code = $this->generateCode();
+            $this->code = $this->generate_code();
         }
         $this->image = imagecreate(95, 35);
         $colorText = imagecolorallocate($this->image, 255, 255, 255);
@@ -61,7 +61,7 @@ class Captcha {
     /**
      * @return string
      */
-    public function getBase64() {
+    public function get_base64() {
         ob_start();
         imagejpeg($this->image, NULL, 100);
         $bytes = ob_get_clean();
@@ -69,16 +69,16 @@ class Captcha {
     }
 
     /**
-     *
+     * @deprecated return_image() should be used instead since we now have templating support
      */
-    public function printImage() {
-        echo "<img id='captcha_image' src='data:image/jpeg;base64,".$this->getBase64()."' />";
+    public function print_image() {
+        echo "<img id='captcha_image' src='data:image/jpeg;base64,".$this->get_base64()."' />";
     }
 
     /**
      * @return string
      */
-    public function returnImage() {
-        return "<img id='captcha_image' src='data:image/jpeg;base64,".$this->getBase64()."' />";
+    public function return_image() {
+        return "<img id='captcha_image' src='data:image/jpeg;base64,".$this->get_base64()."' />";
 	}
 }

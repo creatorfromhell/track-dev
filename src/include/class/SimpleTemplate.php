@@ -49,6 +49,7 @@
 			return $template;
 		}
 		echo $template;
+        return "";
 	}
 	
 	/*
@@ -140,7 +141,7 @@
 			if($value != null) {
 				return $value;
 			}
-			return;
+			return "";
 		}
 		
 		return "{ ".$rule." }";

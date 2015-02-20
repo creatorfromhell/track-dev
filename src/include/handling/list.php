@@ -23,82 +23,82 @@ if(isset($_POST['add-list'])) {
                                     if(isset($_POST['guestedit']) && trim($_POST['guestedit']) != "") {
                                         if(isset($_POST['viewpermission']) && trim($_POST['viewpermission']) != "") {
                                             if(isset($_POST['editpermission']) && trim($_POST['editpermission']) != "") {
-                                                if(hasValues("projects", " WHERE project = '".cleanInput($_POST['project'])."'")) {
-                                                    if(!hasValues("lists", " WHERE project = '".cleanInput($_POST['project'])."' AND list = '".cleanInput($_POST['name'])."'")) {
+                                                if(has_values("projects", " WHERE project = '".clean_input($_POST['project'])."'")) {
+                                                    if(!has_values("lists", " WHERE project = '".clean_input($_POST['project'])."' AND list = '".clean_input($_POST['name'])."'")) {
                                                         $created = date("Y-m-d H:i:s");
-                                                        ListFunc::addList($_POST['name'], $_POST['project'], $_POST['public'], $_POST['author'], $created, $_POST['overseer'], $_POST['minimal'], $_POST['guestview'], $_POST['guestedit'], $_POST['viewpermission'], $_POST['editpermission']);
+                                                        ListFunc::add_list($_POST['name'], $_POST['project'], $_POST['public'], $_POST['author'], $created, $_POST['overseer'], $_POST['minimal'], $_POST['guestview'], $_POST['guestedit'], $_POST['viewpermission'], $_POST['editpermission']);
                                                         ListFunc::create($_POST['project'], $_POST['name']);
                                                         if($_POST['mainlist'] != 0) {
-                                                            ProjectFunc::changeMain(ProjectFunc::getID($_POST['project']), ListFunc::getID($_POST['project'], $_POST['name']));
+                                                            ProjectFunc::change_main(ProjectFunc::get_id($_POST['project']), ListFunc::get_id($_POST['project'], $_POST['name']));
                                                             $params = "public:".$_POST['public'].",overseer:".$_POST['overseer'];
-                                                            ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['name'], "list:add", $params, 0, $created);
+                                                            ActivityFunc::log($current_user->name, $_POST['project'], $_POST['name'], "list:add", $params, 0, $created);
                                                         }
                                                         echo '<script type="text/javascript">';
-                                                        echo 'showMessage("success", "'.$formatter->replaceShortcuts(str_ireplace("%list", $_POST['name'], (string)$language_instance->site->forms->list->created)).'");';
+                                                        echo 'showMessage("success", "'.$formatter->replace_shortcuts(str_ireplace("%list", $_POST['name'], (string)$language_instance->site->forms->list->created)).'");';
                                                         echo '</script>';
                                                     } else {
                                                         echo '<script type="text/javascript">';
-                                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->taken")).'");';
+                                                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->taken")).'");';
                                                         echo '</script>';
                                                     }
                                                 } else {
                                                     echo '<script type="text/javascript">';
-                                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->invalidproject")).'");';
+                                                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->invalidproject")).'");';
                                                     echo '</script>';
                                                 }
                                             } else {
                                                 echo '<script type="text/javascript">';
-                                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noeditperm")).'");';
+                                                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->noeditperm")).'");';
                                                 echo '</script>';
                                             }
                                         } else {
                                             echo '<script type="text/javascript">';
-                                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noviewperm")).'");';
+                                            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->noviewperm")).'");';
                                             echo '</script>';
                                         }
                                     } else {
                                         echo '<script type="text/javascript">';
-                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noguestedit")).'");';
+                                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->noguestedit")).'");';
                                         echo '</script>';
                                     }
                                 } else {
                                     echo '<script type="text/javascript">';
-                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noguestview")).'");';
+                                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->noguestview")).'");';
                                     echo '</script>';
                                 }
                             } else {
                                 echo '<script type="text/javascript">';
-                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nooverseer")).'");';
+                                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nooverseer")).'");';
                                 echo '</script>';
                             }
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nomain")).'");';
+                            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nomain")).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->nominimal")).'");';
+                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->nominimal")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nopublic")).'");';
+                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nopublic")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noproject")).'");';
+                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->noproject")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noauthor")).'");';
+            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->noauthor")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noname")).'");';
+        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->noname")).'");';
         echo '</script>';
     }
 }
@@ -115,91 +115,91 @@ if(isset($_POST['edit-list'])) {
                                     if(isset($_POST['guestedit']) && trim($_POST['guestedit']) != "") {
                                         if(isset($_POST['viewpermission']) && trim($_POST['viewpermission']) != "") {
                                             if(isset($_POST['editpermission']) && trim($_POST['editpermission']) != "") {
-                                                if(hasValues("projects", " WHERE project = '".cleanInput($_POST['project'])."'")) {
+                                                if(has_values("projects", " WHERE project = '".clean_input($_POST['project'])."'")) {
                                                     $id = $_POST['id'];
-                                                    $details = ListFunc::listDetails($id);
-                                                    if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !hasValues("lists", " WHERE project = '".cleanInput($_POST['project'])."' AND list = '".cleanInput($_POST['name'])."'")) {
+                                                    $details = ListFunc::list_details($id);
+                                                    if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !has_values("lists", " WHERE project = '".clean_input($_POST['project'])."' AND list = '".clean_input($_POST['name'])."'")) {
                                                         $created = date("Y-m-d H:i:s");
                                                         if($_POST['project'] != $details['project']) {
-                                                            ListFunc::changeProject($id, $_POST['project']);
+                                                            ListFunc::change_project($id, $_POST['project']);
                                                         }
 
                                                         if($_POST['name'] != $details['name']) {
-                                                            ListFunc::renameList($id, $_POST['name']);
+                                                            ListFunc::rename_list($id, $_POST['name']);
                                                         }
 
-                                                        if(ProjectFunc::getMain(ProjectFunc::getID($details['project'])) != $id && $_POST['mainlist'] == 1) {
-                                                            ProjectFunc::changeMain(ProjectFunc::getID($_POST['project']), ListFunc::getID($_POST['project'], $_POST['name']));
+                                                        if(ProjectFunc::get_main(ProjectFunc::get_id($details['project'])) != $id && $_POST['mainlist'] == 1) {
+                                                            ProjectFunc::change_main(ProjectFunc::get_id($_POST['project']), ListFunc::get_id($_POST['project'], $_POST['name']));
                                                         }
-                                                        ListFunc::editList($id, $_POST['name'], $_POST['project'], $_POST['public'], $_POST['overseer'], $_POST['minimal'], $_POST['guestview'], $_POST['guestedit'], $_POST['viewpermission'], $_POST['editpermission']);
+                                                        ListFunc::edit_list($id, $_POST['name'], $_POST['project'], $_POST['public'], $_POST['overseer'], $_POST['minimal'], $_POST['guestview'], $_POST['guestedit'], $_POST['viewpermission'], $_POST['editpermission']);
                                                         $params = "id:".$id.",public:".$_POST['public'].",overseer:".$_POST['overseer'];
-                                                        ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['name'], "list:edit", $params, 0, $created);
+                                                        ActivityFunc::log($current_user->name, $_POST['project'], $_POST['name'], "list:edit", $params, 0, $created);
                                                         echo '<script type="text/javascript">';
-                                                        echo 'showMessage("success", "'.$formatter->replaceShortcuts(str_ireplace("%list", $_POST['name'], (string)$language_instance->site->forms->list->created)).'");';
+                                                        echo 'showMessage("success", "'.$formatter->replace_shortcuts(str_ireplace("%list", $_POST['name'], (string)$language_instance->site->forms->list->created)).'");';
                                                         echo '</script>';
                                                     } else {
                                                         echo '<script type="text/javascript">';
-                                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->taken")).'");';
+                                                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->taken")).'");';
                                                         echo '</script>';
                                                     }
                                                 } else {
                                                     echo '<script type="text/javascript">';
-                                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->invalidproject")).'");';
+                                                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->invalidproject")).'");';
                                                     echo '</script>';
                                                 }
                                             } else {
                                                 echo '<script type="text/javascript">';
-                                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noeditperm")).'");';
+                                                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->noeditperm")).'");';
                                                 echo '</script>';
                                             }
                                         } else {
                                             echo '<script type="text/javascript">';
-                                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noviewperm")).'");';
+                                            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->noviewperm")).'");';
                                             echo '</script>';
                                         }
                                     } else {
                                         echo '<script type="text/javascript">';
-                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noguestedit")).'");';
+                                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->noguestedit")).'");';
                                         echo '</script>';
                                     }
                                 } else {
                                     echo '<script type="text/javascript">';
-                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noguestview")).'");';
+                                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->noguestview")).'");';
                                     echo '</script>';
                                 }
                             } else {
                                 echo '<script type="text/javascript">';
-                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nooverseer")).'");';
+                                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nooverseer")).'");';
                                 echo '</script>';
                             }
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nomain")).'");';
+                            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nomain")).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->nominimal")).'");';
+                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->nominimal")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nopublic")).'");';
+                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->nopublic")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noproject")).'");';
+                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->noproject")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noname")).'");';
+            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->noname")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->invalidid")).'");';
+        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->invalidid")).'");';
         echo '</script>';
     }
 }

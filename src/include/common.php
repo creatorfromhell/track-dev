@@ -13,13 +13,12 @@ session_start();
 require_once("utils.php");
 require_once("Configuration.php");
 
-spl_autoload_register("autoload");
-spl_autoload_register("autoload_api");
+spl_autoload_register("auto_load");
+spl_autoload_register("auto_load_api");
 
-function autoload($class) {
+function auto_load($class) {
     $configuration = new Configuration();
-    $configurationValues = $configuration->config;
-    $root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configurationValues["urls"]["installation_path"], "/");
+    $root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configuration->config["urls"]["installation_path"], "/");
     if(file_exists($root."/include/function/".$class.".php")) {
         require_once($root."/include/function/".$class.".php");
         return true;
@@ -33,10 +32,9 @@ function autoload($class) {
     return false;
 }
 
-function autoload_api($class) {
+function auto_load_api($class) {
     $configuration = new Configuration();
-    $configurationValues = $configuration->config;
-    $root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configurationValues["urls"]["installation_path"], "/");
+    $root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configuration->config["urls"]["installation_path"], "/");
     if(file_exists($root."/api/".$class.".php")) {
         require_once($root."/api/".$class.".php");
         return true;
@@ -68,27 +66,27 @@ require_once('DB.php');
 //Global variables
 $prefix = $configuration->config["database"]["db_prefix"];
 $trackr_version = $configuration->config["trackr"]["version"];
-$configurationValues = $configuration->config;
-unset($configurationValues["database"]);
-unset($configurationValues["trackr"]);
-global $prefix, $configurationValues;
+$configuration_values = $configuration->config;
+unset($configuration_values["database"]);
+unset($configuration_values["trackr"]);
+global $prefix, $configuration_values;
 
 //Main Variables
-$theme = $theme_manager->themes[$configurationValues["main"]["theme"]];
-$installation_path = rtrim($configurationValues["urls"]["base_url"], "/").rtrim($configurationValues["urls"]["installation_path"], "/")."/";
+$theme = $theme_manager->themes[$configuration_values["main"]["theme"]];
+$installation_path = rtrim($configuration_values["urls"]["base_url"], "/").rtrim($configuration_values["urls"]["installation_path"], "/")."/";
 $path = $_SERVER["PHP_SELF"];
 $pageFull = basename($path);
 $page = basename($path, ".php");
 $pn = 1;
-$currentUser = null;
-$language = $configurationValues["main"]["language"];
-$project = ProjectFunc::getPreset();
+$current_user = null;
+$language = $configuration_values["main"]["language"];
+$project = ProjectFunc::get_preset();
 $projects = values("projects", "project");
-$list = ProjectFunc::getMain(ProjectFunc::getID($project));
+$list = ProjectFunc::get_main(ProjectFunc::get_id($project));
 
 if(isset($_SESSION['usersplusprofile'])) {
     if(User::exists($_SESSION['usersplusprofile'])) {
-        $currentUser = User::load($_SESSION['usersplusprofile']);
+        $current_user = User::load($_SESSION['usersplusprofile']);
     }
 }
 
@@ -102,26 +100,26 @@ if(isset($_GET['lang']) && $language_manager->exists($_GET['lang'])) {
     $language = $_COOKIE['lang'];
 }
 
-if(isset($_GET['p']) && hasValues("projects", " WHERE project = '".cleanInput($_GET['p'])."'")) {
+if(isset($_GET['p']) && has_values("projects", " WHERE project = '".clean_input($_GET['p'])."'")) {
     $project = $_GET['p'];
     $_SESSION['p'] = $project;
     setcookie('p', $project, time() + (3600 * 24 * 30));
-    $list = ProjectFunc::getMain($project);
-} else if(isset($_SESSION['p']) && hasValues("projects", " WHERE project = '".cleanInput($_SESSION['p'])."'")) {
+    $list = ProjectFunc::get_main($project);
+} else if(isset($_SESSION['p']) && has_values("projects", " WHERE project = '".clean_input($_SESSION['p'])."'")) {
     $project = $_SESSION['p'];
-    $list = ProjectFunc::getMain($project);
-} else if(isset($_COOKIE['p']) && hasValues("projects", " WHERE project = '".cleanInput($_COOKIE['p'])."'")) {
+    $list = ProjectFunc::get_main($project);
+} else if(isset($_COOKIE['p']) && has_values("projects", " WHERE project = '".clean_input($_COOKIE['p'])."'")) {
     $project = $_COOKIE['p'];
-    $list = ProjectFunc::getMain($project);
+    $list = ProjectFunc::get_main($project);
 }
 
-if(isset($_GET['l']) && hasValues("lists", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($_GET['l'])."'")) {
+if(isset($_GET['l']) && has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($_GET['l'])."'")) {
     $list = $_GET['l'];
     $_SESSION['l'] = $list;
     setcookie('l', $list, time() + (3600 * 24 * 30));
-} else if(isset($_SESSION['l']) && hasValues("lists", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($_SESSION['l'])."'")) {
+} else if(isset($_SESSION['l']) && has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($_SESSION['l'])."'")) {
     $list = $_SESSION['l'];
-} else if(isset($_COOKIE['l']) && hasValues("lists", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($_COOKIE['l'])."'")) {
+} else if(isset($_COOKIE['l']) && has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($_COOKIE['l'])."'")) {
     $list = $_COOKIE['l'];
 }
 
@@ -133,14 +131,14 @@ if(isset($_GET['pn'])) {
 
 $language_instance = $language_manager->languages[$language];
 $return = $pageFull.'?p='.$project.'&l='.$list;
-$lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
-$formatter = new StringFormatter(getName(), $project, $list, $configuration->config, $language_instance);
+$lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
+$formatter = new StringFormatter(get_name(), $project, $list, $configuration->config, $language_instance);
 $raw_msg = "";
 $msg = "";
 $msg_type = "general";
 
 if(trim($raw_msg) !== "") {
-    if(strContains($raw_msg, ":")) {
+    if(str_contains($raw_msg, ":")) {
         $array = explode(":", $raw_msg);
         $msg = $array[1];
         $type = $array[0];

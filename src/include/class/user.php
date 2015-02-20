@@ -52,11 +52,11 @@ class User {
     /**
      * @var null
      */
-    public $loggedIn = null;
+    public $logged_in = null;
     /**
      * @var null
      */
-    public $activationKey = null;
+    public $activation_key = null;
     /**
      * @var int
      */
@@ -74,21 +74,27 @@ class User {
      * @param $id
      * @return bool
      */
-    public function hasPermission($id) {
+    public function has_permission($id) {
         foreach($this->permissions as &$perm) {
             if($perm == $id) {
                 return true;
             }
         }
 
-        return $this->group->hasPermission($id);
+        if($this->group instanceof Group) {
+            return $this->group->has_permission($id);
+        }
+        return false;
     }
 
     /**
      * @return mixed
      */
-    public function isAdmin() {
-        return $this->group->isAdmin();
+    public function is_admin() {
+        if($this->group instanceof Group) {
+            return $this->group->is_admin();
+        }
+        return false;
     }
 
     /**
@@ -99,16 +105,16 @@ class User {
         $t = $prefix."_users";
         $perm = implode(",", $this->permissions);
         $stmt = $pdo->prepare("UPDATE `".$t."` SET user_name = ?, user_password = ?, user_email = ?, user_group = ?, user_permissions = ?, user_avatar = ?, user_ip = ?, user_registered = ?, logged_in = ?, user_banned = ?, user_online = ?, user_activated = ?, activation_key = ? WHERE id = ?");
-        $stmt->execute(array($this->id, $this->name, $this->password, $this->email, $this->group->id, $perm, $this->avatar, $this->ip, $this->registered, $this->loggedIn, $this->banned, $this->online, $this->activated, $this->activationKey, $this->id));
+        $stmt->execute(array($this->id, $this->name, $this->password, $this->email, $this->group->id, $perm, $this->avatar, $this->ip, $this->registered, $this->logged_in, $this->banned, $this->online, $this->activated, $this->activation_key, $this->id));
     }
 
     /**
      *
      */
-    public function sendActivation() {
+    public function send_activation() {
         global $url, $admin_email;
         $headers = 'From: '.$admin_email."\r\n" . 'Reply-To: '.$admin_email . "\r\n" . 'X-Mailer: PHP/' . phpversion();
-        mail($this->email, "Account Activation", "Hello ".$this->name.",\r\n You or someone using your email has registered on ".$url.". Please click the following link if you registered on this site, ".$url."/activation.php?page=activate&name=".$this->name."&key=".$this->activationKey.".", $headers);
+        mail($this->email, "Account Activation", "Hello ".$this->name.",\r\n You or someone using your email has registered on ".$url.". Please click the following link if you registered on this site, ".$url."/activation.php?page=activate&name=".$this->name."&key=".$this->activation_key.".", $headers);
     }
 
     /**
@@ -142,8 +148,8 @@ class User {
         $user->permissions = explode(",", $result['user_permissions']);
         $user->email = ($email) ? $name : $result['user_email'];
         $user->registered = $result['user_registered'];
-        $user->loggedIn = $result['logged_in'];
-        $user->activationKey = $result['activation_key'];
+        $user->logged_in = $result['logged_in'];
+        $user->activation_key = $result['activation_key'];
         $user->activated = $result['user_activated'];
         $user->banned = $result['user_banned'];
         $user->online = $result['user_online'];
@@ -174,7 +180,7 @@ class User {
      * @param bool $email
      * @return mixed
      */
-    public static function getHashedPassword($name, $email = false) {
+    public static function get_hashed_password($name, $email = false) {
         global $pdo, $prefix;
         $t = $prefix."_users";
         $query = ($email) ? "SELECT user_password FROM `".$t."` WHERE user_email = ?" : "SELECT user_password FROM `".$t."` WHERE user_name = ?";
@@ -187,7 +193,7 @@ class User {
     /**
      * @param $user
      */
-    public static function addUser($user) {
+    public static function add_user($user) {
         if(!is_a($user, "User")) { return; }
         global $pdo, $prefix;
         $t = $prefix."_users";
@@ -209,7 +215,7 @@ class User {
     /**
      * @return string
      */
-    public static function getIP() {
+    public static function get_ip() {
         $ip = "";
         if (isset($_SERVER["REMOTE_ADDR"])) {
             $ip = $_SERVER["REMOTE_ADDR"]." ";

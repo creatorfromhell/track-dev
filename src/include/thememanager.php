@@ -28,13 +28,13 @@ class ThemeManager {
             $this->plugin_instance = $plugin_manager;
         }
         //load all themes
-        $this->loadAll();
+        $this->load_all();
     }
 
     /**
      *
      */
-    public function loadAll() {
+    public function load_all() {
         foreach(glob("resources/themes/*.xml") as $theme) {
             $path_info = pathinfo($theme);
             $this->load($path_info['filename']);
@@ -67,7 +67,7 @@ class ThemeManager {
         $this->load($name);
     }
 
-    public function GetTemplate($theme, $template) {
+    public function get_template($theme, $template) {
         $theme_directory = (string)$this->themes[$theme]->directory;
         $directory = "resources/themes/".$theme_directory."/templates/";
         $template_location = $directory.$template;
@@ -86,7 +86,7 @@ class ThemeManager {
      * @param $value
      * @return mixed
      */
-    public function replaceShortcuts($name, $value) {
+    public function replace_shortcuts($name, $value) {
         $theme = $this->themes[$name];
         $replacements = array((string)$theme->name, (string)$theme->author, (string)$theme->version, date("Y-m-d"), date('Y'), date('F'), date('l'));
 
@@ -97,7 +97,7 @@ class ThemeManager {
      * @param $name
      * @return array
      */
-    public function getIncludes($name) {
+    public function get_includes($name) {
         $theme = $this->themes[$name];
         $includes = array();
 

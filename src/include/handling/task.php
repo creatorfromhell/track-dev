@@ -17,52 +17,52 @@ if(isset($_POST['add-task'])) {
             if(isset($_POST['author']) && trim($_POST['author']) != "") {
                 if(isset($_POST['editable']) && trim($_POST['editable']) != "") {
                     if(isset($_POST['status']) && trim($_POST['status']) != "") {
-                        if(hasValues("projects", " WHERE project = '".cleanInput($project)."'")) {
-                            if(hasValues("lists", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($list)."'")) {
+                        if(has_values("projects", " WHERE project = '".clean_input($project)."'")) {
+                            if(has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'")) {
                                 $created = date("Y-m-d H:i:s");
-								$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? cleanInput($_POST['due-date']) : "0000-00-00";
+								$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? clean_input($_POST['due-date']) : "0000-00-00";
                                 $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;
                                 $labels = (isset($_POST['labels']) && $_POST['labels'] != "") ? $_POST['labels'] : "";
                                 $status = $_POST['status'];
                                 if($progress > 0) {
                                     ($progress >= 100) ? $status = 1 : $status = 2;
                                 }
-                                TaskFunc::addTask($project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, $due, "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
+                                TaskFunc::add_task($project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, $due, "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
                                 $params = "title:".$_POST['title'].",description:".$_POST['description'].",status:".$status;
-                                ActivityFunc::log($currentUser->name, $project, $list, "task:add", $params, 0, $created);
+                                ActivityFunc::log($current_user->name, $project, $list, "task:add", $params, 0, $created);
                             } else {
                                 echo '<script type="text/javascript">';
-                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->task->invalidlist")).'");';
+                                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->invalidlist")).'");';
                                 echo '</script>';
                             }
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->invalidproject")).'");';
+                            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->invalidproject")).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->task->invalidstatus")).'");';
+                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->invalidstatus")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->task->noeditable")).'");';
+                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->noeditable")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noauthor")).'");';
+                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->noauthor")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->task->nodescription")).'");';
+            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->nodescription")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->task->notitle")).'");';
+        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->notitle")).'");';
         echo '</script>';
     }
 }
@@ -74,57 +74,57 @@ if(isset($_POST['edit-task'])) {
                 if(isset($_POST['author']) && trim($_POST['author']) != "") {
                     if(isset($_POST['editable']) && trim($_POST['editable']) != "") {
                         if(isset($_POST['status']) && trim($_POST['status']) != "") {
-                            if(hasValues("projects", " WHERE project = '".cleanInput($project)."'")) {
-                                if(hasValues("lists", " WHERE project = '".cleanInput($project)."' AND list = '".cleanInput($list)."'")) {
+                            if(has_values("projects", " WHERE project = '".clean_input($project)."'")) {
+                                if(has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'")) {
                                     $created = date("Y-m-d H:i:s");
-									$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? cleanInput($_POST['due-date']) : "0000-0-00";
+									$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? clean_input($_POST['due-date']) : "0000-0-00";
                                     $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;
                                     $labels = (isset($_POST['labels-edit']) && $_POST['labels-edit'] != "") ? $_POST['labels-edit'] : "";
                                     $status = $_POST['status'];
                                     if($progress > 0) {
                                         ($progress >= 100) ? $status = 1 : $status = 2;
                                     }
-                                    TaskFunc::editTask($_POST['id'], $project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, $due, "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
+                                    TaskFunc::edit_task($_POST['id'], $project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, $due, "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
                                     $params = "id:".$_POST['id'].",title:".$_POST['title'].",description:".$_POST['description'].",status:".$status;
-                                    ActivityFunc::log($currentUser->name, $project, $list, "task:edit", "", 0, date("Y-m-d H:i:s"));
+                                    ActivityFunc::log($current_user->name, $project, $list, "task:edit", "", 0, date("Y-m-d H:i:s"));
                                 } else {
                                     echo '<script type="text/javascript">';
-                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->task->invalidlist")).'");';
+                                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->invalidlist")).'");';
                                     echo '</script>';
                                 }
                             } else {
                                 echo '<script type="text/javascript">';
-                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->invalidproject")).'");';
+                                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->list->invalidproject")).'");';
                                 echo '</script>';
                             }
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->task->invalidstatus")).'");';
+                            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->invalidstatus")).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->task->noeditable")).'");';
+                        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->noeditable")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noauthor")).'");';
+                    echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->noauthor")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->task->nodescription")).'");';
+                echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->nodescription")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->task->notitle")).'");';
+            echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->notitle")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->invalidid")).'");';
+        echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->invalidid")).'");';
         echo '</script>';
     }
 }

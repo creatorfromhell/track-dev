@@ -69,7 +69,7 @@ $forwardMonth = "?p=".$project."&t=calendar&year=".$year."&month=".($month + 1);
                 }
             }
             $class = ($year == date('Y') && $month == date('n')) ? ($d <= date('d')) ? ($d < date('d')) ? 'class="old"' : 'class="today"' : '' : '';
-            if(ProjectFunc::hasEvent($project, $year, $month, $d)) { $class='class="marked" onclick="showDate('.$d.');"'; }
+            if(ProjectFunc::has_event($project, $year, $month, $d)) { $class='class="marked" onclick="showDate('.$d.');"'; }
             echo '<th '.$class.'><label class="date">'.$d.'</label></th>';
             if($d == date('t', $date) && $lastWeekDay < 6) {
                 $newYear = ($month + 1 == 13) ? $year++ : $year;
@@ -97,7 +97,7 @@ $forwardMonth = "?p=".$project."&t=calendar&year=".$year."&month=".($month + 1);
         <?php
             $monthDate = mktime(0, 0, 0, $month, 1, $year);
             $day = (isset($_GET['day'])) ? $_GET['day'] : 1;
-            $viewDate = ProjectFunc::getCorrectDate($year, $month, $day);
+            $viewDate = ProjectFunc::get_correct_date($year, $month, $day);
             $year = date('Y', $viewDate);
             $month = date('n', $viewDate);
             $day = date('j', $viewDate);
@@ -110,7 +110,7 @@ $forwardMonth = "?p=".$project."&t=calendar&year=".$year."&month=".($month + 1);
             $forwardDay = "?p=".$project."&t=calendarview&year=".$year."&month=".$month."&day=".($day + 1);
         ?>
         <h3><?php echo $back; ?><?php echo date('l M jS Y', $viewDate); ?></h3>
-        <?php echo ProjectFunc::getEvents($project, $year, $month, $day); ?>
+        <?php echo ProjectFunc::get_events($project, $year, $month, $day); ?>
         <h5><a title="Previous Year" href="<?php echo $backYear; ?>">&lt;&lt;&lt;</a>&nbsp;&nbsp;<a title="Previous Month" href="<?php echo $backMonth; ?>">&lt;&lt;</a>&nbsp;&nbsp;<a title="Previous Day" href="<?php echo $backDay; ?>">&lt;</a>&nbsp;&nbsp;<label style="font-weight:bolder;font-size:1.2em;">Navigation</label>&nbsp;&nbsp;<a title="Next Day" href="<?php echo $forwardDay; ?>">&gt;</a>&nbsp;&nbsp;<a title="Next Month" href="<?php echo $forwardMonth; ?>">&gt;&gt;</a>&nbsp;&nbsp;<a title="Next Year" href="<?php echo $forwardYear; ?>">&gt;&gt;&gt;</a></h5>
     </div>
 <?php } ?>

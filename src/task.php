@@ -16,7 +16,7 @@ if(isset($_GET['id'])) {
 include("include/header.php");
 
 $back = "list.php?p=".$project."&l=".$list;
-$task_details = TaskFunc::taskDetails($project, $list, $id);
+$task_details = TaskFunc::task_details($project, $list, $id);
 
 $finished = ($task_details['finished'] != "0000-00-00") ? $task_details['finished'] : "None";
 $due = ($task_details['due'] != "0000-00-00") ? $task_details['due'] : "None";
@@ -32,7 +32,7 @@ if($status == "3") { $status_name = "Closed"; $status_class = "error"; }
 $labels_string = '';
 $labels_array = explode(",", $task_details['labels']);
 foreach($labels_array as &$label) {
-    $label_details = LabelFunc::labelDetails($label);
+    $label_details = LabelFunc::label_details($label);
     $labels_string .= '<label class="task-label" style="background:'.$label_details['background'].';color:'.$label_details['text'].';border:1px solid '.$label_details['text'].';">'.$label_details['label'].'</label>';
 }
 
@@ -53,5 +53,5 @@ $rules['pages']['task'] = array(
     'description' => $task_details['description'],
     'labels' => $labels_string,
 );
-$rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "Task.tpl").'}';
-new SimpleTemplate($theme_manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
+$rules['site']['page']['content'] = '{include->'.$theme_manager->get_template((string)$theme->name, "Task.tpl").'}';
+new SimpleTemplate($theme_manager->get_template((string)$theme->name, "basic/Page.tpl"), $rules, true);

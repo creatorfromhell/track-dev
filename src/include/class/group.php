@@ -37,7 +37,7 @@ class Group {
      * @param $id
      * @return bool
      */
-    public function hasPermission($id) {
+    public function has_permission($id) {
         foreach($this->permissions as &$perm) {
             if($perm == $id) {
                 return true;
@@ -49,7 +49,7 @@ class Group {
     /**
      * @return bool
      */
-    public function isAdmin() {
+    public function is_admin() {
         return ($this->admin == 1) ? true : false;
     }
 
@@ -67,7 +67,7 @@ class Group {
     /**
      * @param $group
      */
-    public static function addGroup($group) {
+    public static function add_group($group) {
         if(!is_a($group, "Group")) { return; }
         global $pdo, $prefix;
         $t = $prefix."_groups";

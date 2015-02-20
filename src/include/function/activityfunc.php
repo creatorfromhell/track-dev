@@ -31,7 +31,7 @@ class ActivityFunc {
      * @param $language
      * @return string
      */
-    public static function parseType($id, $language) {
+    public static function parse_type($id, $language) {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("SELECT activity_type FROM `".$t."` WHERE id = ?");
@@ -50,7 +50,7 @@ class ActivityFunc {
      * @param $language
      * @return mixed
      */
-    public static function getReadableActivity($id, $language) {
+    public static function get_readable_activity($id, $language) {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("SELECT username, project, list, activity_parameters, archived, logged FROM `".$t."` WHERE id = ?");
@@ -59,7 +59,7 @@ class ActivityFunc {
 
         $replace = array("%user", "%project", "%list", "%logged");
         $replacements = array($result['username'], $result['project'], $result['list'], $result['logged']);
-        $description = self::parseType($id, $language);
+        $description = self::parse_type($id, $language);
 
         if(trim($result['activity_parameters']) != '') {
             $parameters = explode(',', $result['activity_parameters']);

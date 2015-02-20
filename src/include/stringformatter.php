@@ -22,7 +22,7 @@ class StringFormatter {
     /**
      * @var
      */
-    private $dateFormat;
+    private $date_format;
 
     /**
      * @var array
@@ -43,14 +43,14 @@ class StringFormatter {
     public function __construct($user, $project, $list, $config, $language) {
         $this->replacements = array($user, $project, $list, $config["main"]["theme"], ((string)$language->site->tables->none));
         $blacklist = $config["main"]["blacklist"];
-        $this->dateFormat = $config["main"]["dateformat"];
+        $this->date_format = $config["main"]["dateformat"];
         if($blacklist != null && trim($blacklist) != "") {
             $this->blacklist = explode(',', $blacklist);
         } else {
             $this->blacklist = array();
         }
         $this->blacklist_replacements = array();
-        $this->generateReplacements();
+        $this->generate_replacements();
     }
 
     /**
@@ -58,14 +58,14 @@ class StringFormatter {
      * @return mixed
      */
     public function replace($string) {
-        return $this->removeBlacklistWords($this->replaceShortcuts($string));
+        return $this->remove_blacklist_words($this->replace_shortcuts($string));
     }
 
     /**
      * @param $string
      * @return mixed
      */
-    public function replaceShortcuts($string) {
+    public function replace_shortcuts($string) {
         return str_ireplace(self::$shortcuts, $this->replacements, $string);
     }
 
@@ -73,7 +73,7 @@ class StringFormatter {
      * @param $string
      * @return mixed
      */
-    public function removeBlacklistWords($string) {
+    public function remove_blacklist_words($string) {
         return str_ireplace($this->blacklist, $this->blacklist_replacements, $string);
     }
 
@@ -81,19 +81,19 @@ class StringFormatter {
      * @param $date
      * @return mixed
      */
-    public function formatDate($date) {
+    public function format_date($date) {
         $d = explode(" ", $date);
         $date_parts = explode("-", $d[0]);
 
         $replace = array("d", "m", "y");
         $replacements = array($date_parts[2], $date_parts[1], $date_parts[0]);
-        return str_ireplace($replace, $replacements, $this->dateFormat);
+        return str_ireplace($replace, $replacements, $this->date_format);
     }
 
     /**
      *
      */
-    public function generateReplacements() {
+    public function generate_replacements() {
         if($this->blacklist != null && count($this->blacklist) > 0) {
             $count = count($this->blacklist);
             $i = 0;
