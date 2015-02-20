@@ -7,9 +7,6 @@
  * Last Modified: 8/23/14 at 12:12 PM
  * Last Modified by Daniel Vidmar.
  */
-
-global $language, $langmanager;
-
 //name, admin, preset, permissions-value, captcha
 if(isset($_POST['add-group'])) {
     if(isset($_POST['name']) && trim($_POST['name']) != '') {
@@ -28,27 +25,27 @@ if(isset($_POST['add-group'])) {
                         destroySession("userspluscaptcha");
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site/forms/invalidcaptcha")).'");';
+                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site/forms/invalidcaptcha")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site/forms/group/taken")).'");';
+                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site/forms/group/taken")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->group->nopreset")).'");';
+                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->group->nopreset")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->group->noadmin")).'");';
+            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->group->noadmin")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->noname")).'");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noname")).'");';
         echo '</script>';
     }
 }
@@ -77,32 +74,32 @@ if(isset($_POST['edit-group'])) {
                             destroySession("userspluscaptcha");
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->invalidcaptcha")).'");';
+                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language_manager, "site->forms->invalidcaptcha")).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->group->taken")).'");';
+                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language_manager, "site->forms->group->taken")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->group->nopreset")).'");';
+                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language_manager, "site->forms->group->nopreset")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->group->noadmin")).'");';
+                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language_manager, "site->forms->group->noadmin")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->noname")).'");';
+            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language_manager, "site->forms->project->noname")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->invalidid")).'");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language_manager, "site->forms->invalidid")).'");';
         echo '</script>';
     }
 }

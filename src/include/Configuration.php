@@ -42,4 +42,3 @@ class Configuration {
         file_put_contents("resources/config.ini", $save, LOCK_EX);
     }
 }
-?>

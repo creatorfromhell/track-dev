@@ -142,4 +142,3 @@ class Pagination {
         $this->pageString .= "</div>";
     }
 }
-?>

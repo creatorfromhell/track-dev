@@ -53,6 +53,5 @@ $rules['pages']['task'] = array(
     'description' => $task_details['description'],
     'labels' => $labels_string,
 );
-$rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "Task.tpl").'}';
-new SimpleTemplate($manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
-?>
+$rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "Task.tpl").'}';
+new SimpleTemplate($theme_manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);

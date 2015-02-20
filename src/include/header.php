@@ -9,23 +9,23 @@
  */
 include_once('common.php');
 
-$title = $formatter->replaceShortcuts(((string)$languageinstance->site->title));
-$h1 = $formatter->replaceShortcuts(((string)$languageinstance->site->header));
+$title = $formatter->replaceShortcuts(((string)$language_instance->site->title));
+$h1 = $formatter->replaceShortcuts(((string)$language_instance->site->header));
 $includes = "";
-$theme_copyright = $manager->replaceShortcuts((string)$theme->name, (string)$theme->copyright);
+$theme_copyright = $theme_manager->replaceShortcuts((string)$theme->name, (string)$theme->copyright);
 $language_select = "";
 $user_bar = (loggedIn()) ? "<p>Welcome, </p>".userNav()."<p>.</p>" : "<a href=\"login.php?return=".$return."\">Login</a> or <a href=\"register.php\">Register</a>";
 
-if($page == "index") { $h1 = $formatter->replaceShortcuts(((string)$languageinstance->site->pages->overview->header)); }
-else if($page == "projects") { $h1 = $formatter->replaceShortcuts(((string)$languageinstance->site->pages->projects->header)); }
-else if($page == "lists") { $h1 = $formatter->replaceShortcuts(((string)$languageinstance->site->pages->lists->header)); }
-else if($page == "admin") { $h1 = $formatter->replaceShortcuts(((string)$languageinstance->site->pages->admin->header)); }
+if($page == "index") { $h1 = $formatter->replaceShortcuts(((string)$language_instance->site->pages->overview->header)); }
+else if($page == "projects") { $h1 = $formatter->replaceShortcuts(((string)$language_instance->site->pages->projects->header)); }
+else if($page == "lists") { $h1 = $formatter->replaceShortcuts(((string)$language_instance->site->pages->lists->header)); }
+else if($page == "admin") { $h1 = $formatter->replaceShortcuts(((string)$language_instance->site->pages->admin->header)); }
 
-foreach($manager->getIncludes((string)$theme->name) as $include) {
+foreach($theme_manager->getIncludes((string)$theme->name) as $include) {
     $includes .= $include;
 }
 
-foreach($langmanager->languages as &$lang) {
+foreach($language_manager->languages as &$lang) {
     $selected = ((string)$lang->short == $language) ? "Selected" : "";
     $language_select .= '<option value="'.(string)$lang->short.'" '.$selected.'>'.(string)$lang->name.'</option>';
 }
@@ -42,7 +42,7 @@ $rules = array(
         'select' => $language_select,
     ),
     'message' => array(
-        'type' => $msgType,
+        'type' => $msg_type,
         'style' => (trim($msg) == '') ? 'display:none;' : ' ',
         'text' => $msg,
     ),
@@ -50,15 +50,15 @@ $rules = array(
         'user_bar' => $user_bar,
         'header' => array(
             'h1' => $h1,
-            'template' => '{include->'.$manager->GetTemplate((string)$theme->name, "basic/Header.tpl").'}',
+            'template' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/Header.tpl").'}',
         ),
         'footer' => array(
-            'template' => '{include->'.$manager->GetTemplate((string)$theme->name, "basic/Footer.tpl").'}',
+            'template' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/Footer.tpl").'}',
         ),
     ),
     'navigation' => array(
         'main' => array(
-            'template' => '{include->'.$manager->GetTemplate((string)$theme->name, "basic/Navigation.tpl").'}',
+            'template' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/Navigation.tpl").'}',
         ),
     ),
     'pages'=> array(
@@ -67,4 +67,3 @@ $rules = array(
     'year' => date('Y'),
 );
 include_once('navigation.php');
-?>

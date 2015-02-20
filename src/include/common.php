@@ -59,22 +59,22 @@ function autoload_api($class) {
 //Instances of Classes
 $configuration = new Configuration();
 $plugin_manager = new PluginManager($root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configuration->config["urls"]["installation_path"], "/"));
-$manager = new ThemeManager($plugin_manager);
-$langmanager = new LanguageManager($plugin_manager);
+$theme_manager = new ThemeManager($plugin_manager);
+$language_manager = new LanguageManager($plugin_manager);
 
 //Any includes that require other classes to be initiated go here
 require_once('DB.php');
 
 //Global variables
 $prefix = $configuration->config["database"]["db_prefix"];
-$trackrVersion = $configuration->config["trackr"]["version"];
+$trackr_version = $configuration->config["trackr"]["version"];
 $configurationValues = $configuration->config;
 unset($configurationValues["database"]);
 unset($configurationValues["trackr"]);
 global $prefix, $configurationValues;
 
 //Main Variables
-$theme = $manager->themes[$configurationValues["main"]["theme"]];
+$theme = $theme_manager->themes[$configurationValues["main"]["theme"]];
 $installation_path = rtrim($configurationValues["urls"]["base_url"], "/").rtrim($configurationValues["urls"]["installation_path"], "/")."/";
 $path = $_SERVER["PHP_SELF"];
 $pageFull = basename($path);
@@ -92,13 +92,13 @@ if(isset($_SESSION['usersplusprofile'])) {
     }
 }
 
-if(isset($_GET['lang']) && $langmanager->exists($_GET['lang'])) {
+if(isset($_GET['lang']) && $language_manager->exists($_GET['lang'])) {
     $language = $_GET['lang'];
     $_SESSION['lang'] = $language;
     setcookie('lang', $language, time() + (3600 * 24 * 30));
-} else if(isset($_SESSION['lang']) && $langmanager->exists($_SESSION['lang'])) {
+} else if(isset($_SESSION['lang']) && $language_manager->exists($_SESSION['lang'])) {
     $language = $_SESSION['lang'];
-} else if(isset($_COOKIE['lang']) && $langmanager->exists($_COOKIE['lang'])) {
+} else if(isset($_COOKIE['lang']) && $language_manager->exists($_COOKIE['lang'])) {
     $language = $_COOKIE['lang'];
 }
 
@@ -131,36 +131,33 @@ if(isset($_GET['pn'])) {
     }
 }
 
-$languageinstance = $langmanager->languages[$language];
+$language_instance = $language_manager->languages[$language];
 $return = $pageFull.'?p='.$project.'&l='.$list;
 $lists = values("lists", "list", " WHERE project = '".cleanInput($project)."'");
-$formatter = new StringFormatter(getName(), $project, $list, $configuration->config, $languageinstance);
-$rawMsg = "";
+$formatter = new StringFormatter(getName(), $project, $list, $configuration->config, $language_instance);
+$raw_msg = "";
 $msg = "";
-$msgType = "general";
+$msg_type = "general";
 
-global $language, $langmanager;
-
-if(trim($rawMsg) !== "") {
-    if(strContains($rawMsg, ":")) {
-        $array = explode(":", $rawMsg);
+if(trim($raw_msg) !== "") {
+    if(strContains($raw_msg, ":")) {
+        $array = explode(":", $raw_msg);
         $msg = $array[1];
         $type = $array[0];
 
         switch($type) {
             case "ERROR":
-                $msgType = "error";
+                $msg_type = "error";
                 break;
             case "GENERAL":
-                $msgType = "general";
+                $msg_type = "general";
                 break;
             case "SUCCESS":
-                $msgType = "success";
+                $msg_type = "success";
                 break;
             default:
-                $msgType = "general";
+                $msg_type = "general";
                 break;
         }
     }
 }
-?>

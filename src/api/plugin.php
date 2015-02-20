@@ -15,4 +15,3 @@ abstract class Plugin {
     public abstract function disable();
 
 }
-?>

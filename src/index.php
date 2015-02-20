@@ -13,11 +13,10 @@ if(isset($_GET['t'])) {
     $type = $_GET['t'];
 }
 $return .= "&t=".$type;
-$rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "Overview.tpl").'}';
+$rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "Overview.tpl").'}';
 if($type == "calendar" || $type == "calendarview") {
     include('include/pages/overview/calendar.php');
 } else {
     include('include/pages/overview/project.php');
 }
-new SimpleTemplate($manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
-?>
+new SimpleTemplate($theme_manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);

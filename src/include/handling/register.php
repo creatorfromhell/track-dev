@@ -37,11 +37,11 @@ if(isset($_POST['register'])) {
                                 if($configurationValues["main"]["email_activation"]) {
                                     $user->sendActivation();
                                     echo '<script type="text/javascript">';
-                                    echo 'showMessage("success", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->login->activation")).'");';
+                                    echo 'showMessage("success", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->activation")).'");';
                                     echo '</script>';
                                 } else {
                                     echo '<script type="text/javascript">';
-                                    echo 'showMessage("success", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->login->congrats")).'");';
+                                    echo 'showMessage("success", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->congrats")).'");';
                                     echo '</script>';
 
                                     echo '<script>';
@@ -52,38 +52,37 @@ if(isset($_POST['register'])) {
                             <?php
                             } else {
                                 echo '<script type="text/javascript">';
-                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->invalidcaptcha")).'");';
+                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->invalidcaptcha")).'");';
                                 echo '</script>';
                             }
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->login->invalidpasswords")).'");';
+                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->invalidpasswords")).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->login->taken")).'");';
+                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->taken")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->login->noconfirm")).'");';
+                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->noconfirm")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->login->nopassword")).'");';
+                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->nopassword")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->login->noemail")).'");';
+            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->noemail")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->login->nousername")).'");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->login->nousername")).'");';
         echo '</script>';
     }
 }
-?>

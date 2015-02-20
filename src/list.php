@@ -78,7 +78,7 @@ if(isset($_GET['action']) && isset($_GET['id']) && canEditTask(ListFunc::getID($
         }
     }
 }
-$rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "List.tpl").'}';
+$rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "List.tpl").'}';
 $rules['pages']['list']['tasks']['style'] = ' ';
 $rules['pages']['list']['labels']['style'] = ' ';
 $rules['form'] = array(
@@ -89,12 +89,12 @@ $rules['form'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'tasks' => '{include->'.$manager->GetTemplate((string)$theme->name, "tables/Tasks.tpl").'}',
-        'labels'=> '{include->'.$manager->GetTemplate((string)$theme->name, "tables/Labels.tpl").'}',
+        'tasks' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Tasks.tpl").'}',
+        'labels'=> '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Labels.tpl").'}',
     ),
 );
 if($switchable == 'tasks') {
-    $rules['site']['header']['h1'] = $formatter->replaceShortcuts(((string)$languageinstance->site->header));
+    $rules['site']['header']['h1'] = $formatter->replaceShortcuts(((string)$language_instance->site->header));
     $rules['pages']['list']['labels']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-right"><a href="?page=labels">Labels ></a></div>';
     if(isAdmin()) {
@@ -103,7 +103,7 @@ if($switchable == 'tasks') {
         foreach($labels as &$label) {
             $label_values .= '<div id="label-'.$label['id'].'" class="draggable-node" style="background:'.$label['background'].';color:'.$label['text'].';border:1px solid '.$label['text'].';" draggable="true" ondragstart="onDrag(event)">'.$label['label'].'</div>';
         }
-        $rules['form']['templates']['task'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/TaskAddForm.tpl").'}';
+        $rules['form']['templates']['task'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/TaskAddForm.tpl").'}';
         $rules['form']['content'] = array(
             'user' => $currentUser->name,
             'users' => toOptions(values("users", "user_name")),
@@ -111,38 +111,38 @@ if($switchable == 'tasks') {
             'labels' => $label_values,
         );
         if($editing) {
-            $rules['form']['templates']['task'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/TaskEditForm.tpl").'}';
+            $rules['form']['templates']['task'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/TaskEditForm.tpl").'}';
         }
     }
 } else if($switchable == 'labels') {
-    $rules['site']['header']['h1'] = $formatter->replaceShortcuts(((string)$languageinstance->site->pages->projects->versiontypeheader));
+    $rules['site']['header']['h1'] = $formatter->replaceShortcuts(((string)$language_instance->site->pages->projects->versiontypeheader));
     $rules['pages']['list']['tasks']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-left"><a href="?page=tasks">< Tasks</a></div>';
     if(isAdmin()) {
-        $rules['form']['templates']['label'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/LabelAddForm.tpl").'}';
+        $rules['form']['templates']['label'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/LabelAddForm.tpl").'}';
         $rules['form']['content'] = array(
             'project' => $project,
             'list' => $list,
         );
         if($editing) {
-            $rules['form']['templates']['label'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/LabelEditForm.tpl").'}';
+            $rules['form']['templates']['label'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/LabelEditForm.tpl").'}';
         }
     }
 }
 $rules['table']['th'] = array(
-    'name' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->name)),
-    'assignee' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->assignee)),
-    'created' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->created)),
-    'author' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->author)),
-    'actions' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)),
+    'name' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->name)),
+    'assignee' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->assignee)),
+    'created' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->created)),
+    'author' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->author)),
+    'actions' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->actions)),
 );
 $rules['table']['pages'] = array(
     'tasks' => '',
     'labels' => '',
 );
 $rules['table']['content'] = array(
-    'tasks' => '<p class="announce">'.$formatter->replaceShortcuts(((string)$languageinstance->site->tables->notasks)).'</p>',
-    'labels' => '<p class="announce">'.$formatter->replaceShortcuts(((string)$languageinstance->site->tables->nolabels)).'</p>',
+    'tasks' => '<p class="announce">'.$formatter->replaceShortcuts(((string)$language_instance->site->tables->notasks)).'</p>',
+    'labels' => '<p class="announce">'.$formatter->replaceShortcuts(((string)$language_instance->site->tables->nolabels)).'</p>',
 );
 
 global $prefix;
@@ -223,5 +223,4 @@ if(hasValues("labels", " WHERE project = '".cleanInput($project)."' AND list = '
     $rules['table']['pages']['labels'] = $pagination->pageString;
     $rules['table']['content']['labels'] = $table_content;
 }
-new SimpleTemplate($manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
-?>
+new SimpleTemplate($theme_manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);

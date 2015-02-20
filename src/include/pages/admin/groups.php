@@ -28,7 +28,7 @@ if(isset($_GET['action']) && isset($_GET['id']) && hasValues("groups", " WHERE g
         Group::delete($editID);
     }
 }
-$rules['form']['templates']['group'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/GroupAddForm.tpl").'}';
+$rules['form']['templates']['group'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/GroupAddForm.tpl").'}';
 $node_values = '';
 $nodes = values("nodes", "node_name");
 foreach($nodes as &$node) {
@@ -39,25 +39,25 @@ $rules['form']['content'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'groups' => '{include->'.$manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
+        'groups' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
     ),
 );
 $rules['table']['th'] = array(
-    'name' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->name)),
-    'admin' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->admin)),
-    'actions' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)),
+    'name' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->name)),
+    'admin' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->admin)),
+    'actions' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->actions)),
 );
 $rules['table']['pages'] = array(
     'groups' => ' ',
 );
-$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$languageinstance->site->tables->nogroups));
+$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$language_instance->site->tables->nogroups));
 $rules['table']['content'] = array(
     'groups' => ' ',
 );
 global $prefix;
 $pagination = new Pagination($prefix."_groups", "id, group_name, group_admin", $pn, 10, "?t=".$type."&amp;");
 if(hasValues("groups")) {
-    $rules['table']['templates']['groups'] = '{include->'.$manager->GetTemplate((string)$theme->name, "tables/Groups.tpl").'}';
+    $rules['table']['templates']['groups'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Groups.tpl").'}';
     $entries = $pagination->paginateReturn();
     $table_content = "";
     foreach ($entries as &$entry) {
@@ -74,4 +74,3 @@ if(hasValues("groups")) {
     $rules['table']['pages']['groups'] = $pagination->pageString;
     $rules['table']['content']['groups'] = $table_content;
 }
-?>

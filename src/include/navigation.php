@@ -73,4 +73,3 @@ foreach($keys as &$tab) {
     $navigation_tabs_string .= '</li>';
 }
 $rules['navigation']['main']['tabs'] = $navigation_tabs_string;
-?>

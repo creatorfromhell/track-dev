@@ -35,5 +35,3 @@ class ExamplePlugin extends Plugin {
         //array_shift($hook_arguments);
     }
 }
-
-?>

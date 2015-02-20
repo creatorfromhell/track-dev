@@ -34,71 +34,71 @@ if(isset($_POST['add-list'])) {
                                                             ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['name'], "list:add", $params, 0, $created);
                                                         }
                                                         echo '<script type="text/javascript">';
-                                                        echo 'showMessage("success", "'.$formatter->replaceShortcuts(str_ireplace("%list", $_POST['name'], (string)$languageinstance->site->forms->list->created)).'");';
+                                                        echo 'showMessage("success", "'.$formatter->replaceShortcuts(str_ireplace("%list", $_POST['name'], (string)$language_instance->site->forms->list->created)).'");';
                                                         echo '</script>';
                                                     } else {
                                                         echo '<script type="text/javascript">';
-                                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->taken")).'");';
+                                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->taken")).'");';
                                                         echo '</script>';
                                                     }
                                                 } else {
                                                     echo '<script type="text/javascript">';
-                                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->invalidproject")).'");';
+                                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->invalidproject")).'");';
                                                     echo '</script>';
                                                 }
                                             } else {
                                                 echo '<script type="text/javascript">';
-                                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->noeditperm")).'");';
+                                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noeditperm")).'");';
                                                 echo '</script>';
                                             }
                                         } else {
                                             echo '<script type="text/javascript">';
-                                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->noviewperm")).'");';
+                                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noviewperm")).'");';
                                             echo '</script>';
                                         }
                                     } else {
                                         echo '<script type="text/javascript">';
-                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->noguestedit")).'");';
+                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noguestedit")).'");';
                                         echo '</script>';
                                     }
                                 } else {
                                     echo '<script type="text/javascript">';
-                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->noguestview")).'");';
+                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noguestview")).'");';
                                     echo '</script>';
                                 }
                             } else {
                                 echo '<script type="text/javascript">';
-                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->nooverseer")).'");';
+                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nooverseer")).'");';
                                 echo '</script>';
                             }
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->nomain")).'");';
+                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nomain")).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->nominimal")).'");';
+                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->nominimal")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->nopublic")).'");';
+                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nopublic")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->noproject")).'");';
+                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noproject")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->noauthor")).'");';
+            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noauthor")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->noname")).'");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noname")).'");';
         echo '</script>';
     }
 }
@@ -135,72 +135,71 @@ if(isset($_POST['edit-list'])) {
                                                         $params = "id:".$id.",public:".$_POST['public'].",overseer:".$_POST['overseer'];
                                                         ActivityFunc::log($currentUser->name, $_POST['project'], $_POST['name'], "list:edit", $params, 0, $created);
                                                         echo '<script type="text/javascript">';
-                                                        echo 'showMessage("success", "'.$formatter->replaceShortcuts(str_ireplace("%list", $_POST['name'], (string)$languageinstance->site->forms->list->created)).'");';
+                                                        echo 'showMessage("success", "'.$formatter->replaceShortcuts(str_ireplace("%list", $_POST['name'], (string)$language_instance->site->forms->list->created)).'");';
                                                         echo '</script>';
                                                     } else {
                                                         echo '<script type="text/javascript">';
-                                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->taken")).'");';
+                                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->taken")).'");';
                                                         echo '</script>';
                                                     }
                                                 } else {
                                                     echo '<script type="text/javascript">';
-                                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->invalidproject")).'");';
+                                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->invalidproject")).'");';
                                                     echo '</script>';
                                                 }
                                             } else {
                                                 echo '<script type="text/javascript">';
-                                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->noeditperm")).'");';
+                                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noeditperm")).'");';
                                                 echo '</script>';
                                             }
                                         } else {
                                             echo '<script type="text/javascript">';
-                                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->noviewperm")).'");';
+                                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noviewperm")).'");';
                                             echo '</script>';
                                         }
                                     } else {
                                         echo '<script type="text/javascript">';
-                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->noguestedit")).'");';
+                                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noguestedit")).'");';
                                         echo '</script>';
                                     }
                                 } else {
                                     echo '<script type="text/javascript">';
-                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->noguestview")).'");';
+                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noguestview")).'");';
                                     echo '</script>';
                                 }
                             } else {
                                 echo '<script type="text/javascript">';
-                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->nooverseer")).'");';
+                                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nooverseer")).'");';
                                 echo '</script>';
                             }
                         } else {
                             echo '<script type="text/javascript">';
-                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->nomain")).'");';
+                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nomain")).'");';
                             echo '</script>';
                         }
                     } else {
                         echo '<script type="text/javascript">';
-                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->nominimal")).'");';
+                        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->nominimal")).'");';
                         echo '</script>';
                     }
                 } else {
                     echo '<script type="text/javascript">';
-                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->nopublic")).'");';
+                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->nopublic")).'");';
                     echo '</script>';
                 }
             } else {
                 echo '<script type="text/javascript">';
-                echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->list->noproject")).'");';
+                echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->list->noproject")).'");';
                 echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->project->noname")).'");';
+            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->project->noname")).'");';
             echo '</script>';
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->invalidid")).'");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->invalidid")).'");';
         echo '</script>';
     }
 }
-?>

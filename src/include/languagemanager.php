@@ -83,4 +83,3 @@ class LanguageManager {
         return (string)$this->languages[$name]->xpath(str_ireplace("->", "/", $path))[0];
     }
 }
-?>

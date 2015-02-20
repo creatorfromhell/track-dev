@@ -43,7 +43,7 @@ if(isset($_GET['action']) && isset($_GET['id'])) {
         }
     }
 }
-$rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "Projects.tpl").'}';
+$rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "Projects.tpl").'}';
 $rules['pages']['projects']['projects']['style'] = ' ';
 $rules['pages']['projects']['types']['style'] = ' ';
 $rules['form'] = array(
@@ -54,51 +54,51 @@ $rules['form'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'projects' => '{include->'.$manager->GetTemplate((string)$theme->name, "tables/Projects.tpl").'}',
-        'types'=> '{include->'.$manager->GetTemplate((string)$theme->name, "tables/VersionTypes.tpl").'}',
+        'projects' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Projects.tpl").'}',
+        'types'=> '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/VersionTypes.tpl").'}',
     ),
 );
 if($switchable == 'projects') {
-    $rules['site']['header']['h1'] = $formatter->replaceShortcuts(((string)$languageinstance->site->header));
+    $rules['site']['header']['h1'] = $formatter->replaceShortcuts(((string)$language_instance->site->header));
     $rules['pages']['projects']['types']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-right"><a href="?page=types">Version Types ></a></div>';
     if(isAdmin()) {
-        $rules['form']['templates']['project'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/ProjectAddForm.tpl").'}';
+        $rules['form']['templates']['project'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/ProjectAddForm.tpl").'}';
         $rules['form']['content'] = array(
             'user' => $currentUser->name,
             'users' => toOptions(values("users", "user_name")),
         );
         if($editing) {
-            $rules['form']['templates']['project'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/ProjectEditForm.tpl").'}';
+            $rules['form']['templates']['project'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/ProjectEditForm.tpl").'}';
         }
     }
 } else if($switchable == 'types') {
-    $rules['site']['header']['h1'] = $formatter->replaceShortcuts(((string)$languageinstance->site->pages->projects->versiontypeheader));
+    $rules['site']['header']['h1'] = $formatter->replaceShortcuts(((string)$language_instance->site->pages->projects->versiontypeheader));
     $rules['pages']['projects']['projects']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-left"><a href="?page=projects">< Projects</a></div>';
     if(isAdmin()) {
-        $rules['form']['templates']['type'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/TypeAddForm.tpl").'}';
+        $rules['form']['templates']['type'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/TypeAddForm.tpl").'}';
         if($editing) {
-            $rules['form']['templates']['type'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/TypeEditForm.tpl").'}';
+            $rules['form']['templates']['type'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/TypeEditForm.tpl").'}';
         }
     }
 }
 $rules['table']['th'] = array(
-    'name' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->name)),
-    'created' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->created)),
-    'creator' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->creator)),
-    'overseer' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->overseer)),
-    'actions' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)),
-    'stable' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->stable)),
-    'description' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->description)),
+    'name' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->name)),
+    'created' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->created)),
+    'creator' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->creator)),
+    'overseer' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->overseer)),
+    'actions' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->actions)),
+    'stable' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->stable)),
+    'description' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->description)),
 );
 $rules['table']['pages'] = array(
     'projects' => ' ',
     'types' => ' ',
 );
 $rules['table']['content'] = array(
-    'projects' => '<p class="announce">'.$formatter->replaceShortcuts(((string)$languageinstance->site->tables->noprojects)).'</p>',
-    'types' => '<p class="announce">'.$formatter->replaceShortcuts(((string)$languageinstance->site->tables->notypes)).'</p>',
+    'projects' => '<p class="announce">'.$formatter->replaceShortcuts(((string)$language_instance->site->tables->noprojects)).'</p>',
+    'types' => '<p class="announce">'.$formatter->replaceShortcuts(((string)$language_instance->site->tables->notypes)).'</p>',
 );
 
 global $prefix;
@@ -157,5 +157,4 @@ if(hasValues("version_types")) {
     $rules['table']['pages']['types'] = $pagination->pageString;
     $rules['table']['content']['types'] = $table_content;
 }
-new SimpleTemplate($manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
-?>
+new SimpleTemplate($theme_manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);

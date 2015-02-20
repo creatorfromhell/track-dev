@@ -26,4 +26,3 @@ abstract class Hook {
         $this->arguments = $arguments;
     }
 }
-?>

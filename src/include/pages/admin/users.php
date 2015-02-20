@@ -27,7 +27,7 @@ if(isset($_GET['action'])) {
         User::delete(cleanInput($_GET['id']));
     }
 }
-$rules['form']['templates']['user'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/UserAddForm.tpl").'}';
+$rules['form']['templates']['user'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/UserAddForm.tpl").'}';
 $group_values = '';
 global $prefix, $pdo;
 $t = $prefix."_groups";
@@ -47,27 +47,27 @@ $rules['form']['content'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'users' => '{include->'.$manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
+        'users' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
     ),
 );
 $rules['table']['th'] = array(
-    'name' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->name)),
-    'email' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->email)),
-    'group' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->group)),
-    'registered' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->registered)),
-    'actions' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)),
+    'name' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->name)),
+    'email' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->email)),
+    'group' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->group)),
+    'registered' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->registered)),
+    'actions' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->actions)),
 );
 $rules['table']['pages'] = array(
     'users' => ' ',
 );
-$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$languageinstance->site->tables->nogroups));
+$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$language_instance->site->tables->nogroups));
 $rules['table']['content'] = array(
     'users' => ' ',
 );
 global $prefix;
 $pagination = new Pagination($prefix."_users", "id, user_name, user_email, user_group, user_registered", $pn, 10, "?t=".$type."&amp;");
 if(hasValues("users")) {
-    $rules['table']['templates']['users'] = '{include->'.$manager->GetTemplate((string)$theme->name, "tables/Users.tpl").'}';
+    $rules['table']['templates']['users'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Users.tpl").'}';
     $entries = $pagination->paginateReturn();
     $table_content = "";
     foreach ($entries as &$entry) {
@@ -86,4 +86,3 @@ if(hasValues("users")) {
     $rules['table']['pages']['users'] = $pagination->pageString;
     $rules['table']['content']['users'] = $table_content;
 }
-?>

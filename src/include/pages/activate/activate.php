@@ -23,4 +23,3 @@ if($user->activationKey != $_GET['key']) {
 $user->activationKey = "";
 $user->activated = 1;
 $user->save();
-?>

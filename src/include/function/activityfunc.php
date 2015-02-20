@@ -117,4 +117,3 @@ class ActivityFunc {
         $stmt->execute();
     }
 }
-?>

@@ -170,4 +170,3 @@ class PluginManager {
         return $return;
     }
 }
-?>

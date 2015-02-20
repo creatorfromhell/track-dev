@@ -20,4 +20,3 @@ $rules['pages']['admin']['options'] = array(
     'url' => $configuration->config["urls"]["base_url"],
     'installation_path' => $configuration->config["urls"]["installation_path"],
 );
-?>

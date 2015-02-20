@@ -9,4 +9,3 @@
  */
 $pdo = new PDO("mysql:host=".$configuration->config["database"]["db_host"].";dbname=".$configuration->config["database"]["db_name"], $configuration->config["database"]["db_username"], $configuration->config["database"]["db_password"]);
 global $pdo;
-?>

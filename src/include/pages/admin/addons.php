@@ -9,19 +9,19 @@
  */
 $rules['table'] = array(
     'templates' => array(
-        'languages' => '{include->'.$manager->GetTemplate((string)$theme->name, "tables/Languages.tpl").'}',
-        'themes' => '{include->'.$manager->GetTemplate((string)$theme->name, "tables/Themes.tpl").'}',
-        'plugins' => '{include->'.$manager->GetTemplate((string)$theme->name, "tables/Plugins.tpl").'}',
+        'languages' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Languages.tpl").'}',
+        'themes' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Themes.tpl").'}',
+        'plugins' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Plugins.tpl").'}',
     ),
 );
 $rules['table']['th'] = array(
-    'short' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->short)),
-    'icon' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->icon)),
-    'name' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->name)),
-    'author' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->author)),
-    'version' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->version)),
+    'short' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->short)),
+    'icon' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->icon)),
+    'name' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->name)),
+    'author' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->author)),
+    'version' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->version)),
     'site' => 'site',
-    'actions' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)),
+    'actions' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->actions)),
 );
 $rules['table']['pages'] = array(
     'languages' => ' ',
@@ -30,7 +30,7 @@ $rules['table']['pages'] = array(
 $languages_content = '';
 $themes_content = '';
 $plugins_content = '';
-foreach($langmanager->languages as &$l) {
+foreach($language_manager->languages as &$l) {
     $languages_content .= "<tr>";
     $languages_content .= "<td class='short'>".(string)$l->short."</td>";
     $languages_content .= "<td class='icon'><img src='resources/themes/".(string)$theme->directory."/img/".(string)$l->symbol."' /></td>";
@@ -40,7 +40,7 @@ foreach($langmanager->languages as &$l) {
     $languages_content .= "<td class='actions'>".$formatter->replaceShortcuts('%none')."</td>";
     $languages_content .= "</tr>";
 }
-foreach($manager->themes as &$t) {
+foreach($theme_manager->themes as &$t) {
     $name = (string)$t->name;
     $themes_content .= "<tr>";
     $themes_content .= "<td class='name'>".$name."</td>";
@@ -69,5 +69,3 @@ $rules['table']['content'] = array(
     'themes' => $themes_content,
     'plugins' => $plugins_content,
 );
-
-?>

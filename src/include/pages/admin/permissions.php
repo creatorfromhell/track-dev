@@ -18,21 +18,21 @@ if(isset($_GET['action'])) {
         nodeDelete(cleanInput($_GET['id']));
     }
 }
-$rules['form']['templates']['permission'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/NodeAddForm.tpl").'}';
+$rules['form']['templates']['permission'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/NodeAddForm.tpl").'}';
 $rules['table'] = array(
     'templates' => array(
-        'permissions' => '{include->'.$manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
+        'permissions' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
     ),
 );
 $rules['table']['th'] = array(
-    'node' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->node)),
-    'description' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->description)),
-    'actions' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)),
+    'node' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->node)),
+    'description' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->description)),
+    'actions' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->actions)),
 );
 $rules['table']['pages'] = array(
     'permissions' => ' ',
 );
-$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$languageinstance->site->tables->nonodes));
+$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$language_instance->site->tables->nonodes));
 $rules['table']['content'] = array(
     'permissions' => ' ',
 );
@@ -40,7 +40,7 @@ $rules['table']['content'] = array(
 global $prefix;
 $pagination = new Pagination($prefix."_nodes", "id, node_name, node_description", $pn, 10, "?t=".$type."&amp;");
 if(hasValues('nodes')) {
-    $rules['table']['templates']['permissions'] = '{include->'.$manager->GetTemplate((string)$theme->name, "tables/Permissions.tpl").'}';
+    $rules['table']['templates']['permissions'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/Permissions.tpl").'}';
     $entries = $pagination->paginateReturn();
     $table_content = "";
     foreach ($entries as &$entry) {
@@ -56,4 +56,3 @@ if(hasValues('nodes')) {
     $rules['table']['pages']['permissions'] = $pagination->pageString;
     $rules['table']['content']['permissions'] = $table_content;
 }
-?>

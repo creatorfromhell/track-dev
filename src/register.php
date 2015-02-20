@@ -13,11 +13,10 @@ if($currentUser !== null) { header('LOCATION: index.php'); }
 include("include/handling/register.php");
 $captcha = new Captcha();
 $_SESSION['userspluscaptcha'] = $captcha->code;
-$rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}';
+$rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}';
 if($configuration->config["main"]["registration"]) {
-    $rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "Register.tpl").'}';
-    $rules['form']['templates']['register'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/RegistrationForm.tpl").'}';
+    $rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "Register.tpl").'}';
+    $rules['form']['templates']['register'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/RegistrationForm.tpl").'}';
     $rules['form']['captcha'] = $captcha->returnImage();
 }
-new SimpleTemplate($manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
-?>
+new SimpleTemplate($theme_manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);

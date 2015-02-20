@@ -20,4 +20,3 @@ $user = User::load(cleanInput($_GET['name']), $email);
 $user->activationKey = generateSessionID(40);
 $user->save();
 $user->sendActivation();
-?>

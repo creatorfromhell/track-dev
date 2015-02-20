@@ -8,5 +8,3 @@
  * Last Modified: 10/27/14 at 1:00 AM
  * Last Modified by Daniel Vidmar.
  */
-
-?>

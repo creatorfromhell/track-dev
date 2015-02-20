@@ -477,4 +477,3 @@ function generateUUID() {
 function generateSessionID($length = 35) {
     return substr(md5(generateSalt(30).generateUUID()), 0, $length);
 }
-?>

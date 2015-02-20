@@ -23,5 +23,4 @@ $rules['pages']['overview']['assigned_chart'] = array(
     'completed' => ProjectFunc::getAssignedUsersChartData($project, false, true),
 );
 $rules['pages']['overview']['latest_tasks'] = $latest_tasks_values;
-$rules['pages']['overview']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "pages/overview/Project.tpl").'}';
-?>
+$rules['pages']['overview']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "pages/overview/Project.tpl").'}';

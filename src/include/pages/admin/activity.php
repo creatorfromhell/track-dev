@@ -30,20 +30,20 @@ if(isAdmin() && isset($_GET['action']) && isset($_GET['id'])) {
 ActivityFunc::clean();
 $rules['table'] = array(
     'templates' => array(
-        'activities' => '{include->'.$manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
+        'activities' => '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
     ),
 );
 $rules['table']['th'] = array(
-    'activity' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->activity)),
-    'archived' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->archived)),
-    'logged' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->logged)),
-    'actions' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)),
+    'activity' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->activity)),
+    'archived' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->archived)),
+    'logged' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->logged)),
+    'actions' => $formatter->replaceShortcuts(((string)$language_instance->site->tables->actions)),
 );
 $rules['table']['pages'] = array(
     'activities' => ' ',
 );
 
-$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$languageinstance->site->tables->noactivities));
+$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$language_instance->site->tables->noactivities));
 $rules['table']['content'] = array(
     'activities' => ' ',
 );
@@ -51,7 +51,7 @@ global $prefix;
 $pagination = new Pagination($prefix."_activity", "id, archived, logged", $pn, 10, "?t=".$type."&", "ORDER BY logged DESC");
 
 if(hasValues("activity")) {
-    $rules['table']['templates']['activities'] = '{include->'.$manager->GetTemplate((string)$theme->name, "tables/activities.tpl").'}';
+    $rules['table']['templates']['activities'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "tables/activities.tpl").'}';
     $entries = $pagination->paginateReturn();
     $table_content = "";
     foreach ($entries as &$entry) {
@@ -77,4 +77,3 @@ if(hasValues("activity")) {
     $rules['table']['pages']['activities'] = $pagination->pageString;
     $rules['table']['content']['activities'] = $table_content;
 }
-?>

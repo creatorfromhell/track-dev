@@ -21,8 +21,7 @@ $user_logout_hook = new UserLogoutHook($currentUser->name, $date, $currentUser->
 $plugin_manager->trigger($user_logout_hook);
 
 destroySession("usersplusprofile");
-$rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "Logout.tpl").'}';
-$rules['pages']['logout']['announce'] = '{include->'.$manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}';
+$rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "Logout.tpl").'}';
+$rules['pages']['logout']['announce'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}';
 $rules['site']['content']['announce'] = 'You have been logged out successfully.';
-new SimpleTemplate($manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
-?>
+new SimpleTemplate($theme_manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);

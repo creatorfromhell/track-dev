@@ -289,4 +289,3 @@ class VersionFunc {
 		return $out;
     }
 }
-?>

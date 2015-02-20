@@ -16,8 +16,7 @@ if(isset($_SESSION['usersplusprofile'])) { header("Location: index.php"); }
 include("include/handling/login.php");
 $captcha = new Captcha();
 $_SESSION['userspluscaptcha'] = $captcha->code;
-$rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "Login.tpl").'}';
-$rules['form']['templates']['login'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/LoginForm.tpl").'}';
+$rules['site']['page']['content'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "Login.tpl").'}';
+$rules['form']['templates']['login'] = '{include->'.$theme_manager->GetTemplate((string)$theme->name, "forms/LoginForm.tpl").'}';
 $rules['form']['captcha'] = $captcha->returnImage();
-new SimpleTemplate($manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
-?>
+new SimpleTemplate($theme_manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);

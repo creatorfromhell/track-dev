@@ -33,7 +33,7 @@ if(isset($_POST['add-user'])) {
                                     destroySession("userspluscaptcha");
                                 } else {
                                     echo '<script type="text/javascript">';
-                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->invalidcaptcha")).'");';
+                                    echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->invalidcaptcha")).'");';
                                     echo '</script>';
                                 }
                             } else {
@@ -86,7 +86,7 @@ if(isset($_POST['edit-user'])) {
                                             destroySession("userspluscaptcha");
                                         } else {
                                             echo '<script type="text/javascript">';
-                                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->invalidcaptcha")).'");';
+                                            echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->invalidcaptcha")).'");';
                                             echo '</script>';
                                         }
                                     } else {
@@ -115,7 +115,7 @@ if(isset($_POST['edit-user'])) {
         }
     } else {
         echo '<script type="text/javascript">';
-        echo 'showMessage("error", "'.$formatter->replaceShortcuts($langmanager->getValue($language, "site->forms->invalidid")).'");';
+        echo 'showMessage("error", "'.$formatter->replaceShortcuts($language_manager->getValue($language, "site->forms->invalidid")).'");';
         echo '</script>';
     }
 }
