@@ -210,7 +210,7 @@ function user_nav() {
  */
 function can_view_list($id) {
     $viewPermission = ListFunc::view_permission($id);
-    if(ListFunc::guest_view($id)) { return true; }
+    if(ListFunc::guest_permissions($id)['view']) { return true; }
     if(!isset($_SESSION['usersplusprofile']) || !User::exists($_SESSION['usersplusprofile'])) { return false; }
     if(is_admin()) { return true; }
     if(ProjectFunc::get_overseer(ListFunc::get_project($id)) == get_name() || ListFunc::get_overseer($id) == get_name()) { return true; }
@@ -225,7 +225,7 @@ function can_view_list($id) {
  */
 function can_edit_list($id) {
     $editPermission = ListFunc::edit_permission($id);
-    if(ListFunc::guest_edit($id)) { return true; }
+    if(ListFunc::guest_permissions($id)['edit']) { return true; }
     if(!isset($_SESSION['usersplusprofile']) || !User::exists($_SESSION['usersplusprofile'])) { return false; }
     if(is_admin()) { return true; }
     if(ProjectFunc::get_overseer(ListFunc::get_project($id)) == get_name() || ListFunc::get_overseer($id) == get_name()) { return true; }
@@ -241,7 +241,7 @@ function can_edit_list($id) {
  */
 function can_edit_task($listID, $taskID) {
     $editPermission = ListFunc::edit_permission($listID);
-    if(ListFunc::guest_edit($listID)) { return true; }
+    if(ListFunc::guest_permissions($listID)['edit']) { return true; }
     if(!isset($_SESSION['usersplusprofile']) || !User::exists($_SESSION['usersplusprofile'])) { return false; }
     if(is_admin()) { return true; }
     if(ProjectFunc::get_overseer(ListFunc::get_project($listID)) == get_name() || ListFunc::get_overseer($listID) == get_name()) { return true; }

@@ -122,38 +122,19 @@ class ListFunc {
         return $result;
     }
 
-    /**
-     * @param $id
-     * @return bool
-     */
-    public static function guest_view($id) {
+    public static function guest_permissions($id) {
         global $prefix, $pdo;
         $t = $prefix."_lists";
         $stmt = $pdo->prepare("SELECT guest_permissions FROM `".$t."` WHERE id = ?");
         $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $permissions = explode(',', $result['guest_permissions']);
 
-        if(explode(':', explode(',', $result['guest_permissions'])[0])[1] == '1') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param $id
-     * @return bool
-     */
-    public static function guest_edit($id) {
-        global $prefix, $pdo;
-        $t = $prefix."_lists";
-        $stmt = $pdo->prepare("SELECT guest_permissions FROM `".$t."` WHERE id = ?");
-        $stmt->execute(array($id));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if(explode(':', explode(',', $result['guest_permissions'])[1])[1] == '1') {
-            return true;
-        }
-        return false;
+        $return = array(
+            'view' => explode(':', $permissions[0])[1],
+            'edit' => explode(':', $permissions[1])[1],
+        );
+        return $return;
     }
 
     /**
