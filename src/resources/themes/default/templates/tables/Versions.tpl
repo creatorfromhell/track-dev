@@ -1,4 +1,4 @@
-{ table->version->pages }
+{ table->pages->versions }
 <table id="versions" class="taskTable">
     <thead>
     <tr>
@@ -8,5 +8,5 @@
         <th id="versionAction" class="action">{ table->th->actions }</th>
     </tr>
     </thead>
-    <tbody>{ table->version->content }</tbody>
+    <tbody>{ table->content->versions }</tbody>
 </table>

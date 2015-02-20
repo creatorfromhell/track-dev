@@ -22,6 +22,9 @@ if(isset($_POST['login'])) {
                         $user->save();
                         ActivityFunc::log(cleanInput($_POST['username']), "none", "none", "user:login", "", 0, date("Y-m-d H:i:s"));
 
+                        $user_login_hook = new UserLoginHook($user->name, $user->loggedIn, $user->getIP());
+                        $plugin_manager->trigger($user_login_hook);
+
                         $_SESSION['usersplusprofile'] = $user->name;
                         destroySession("userspluscaptcha");
                         ?>

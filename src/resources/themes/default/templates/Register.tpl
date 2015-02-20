@@ -1,1 +1,1 @@
-{ pages->register->content }
+{ form->templates->register }

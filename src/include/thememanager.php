@@ -9,6 +9,8 @@
  */
 class ThemeManager {
 
+    private $plugin_instance;
+
     /**
      * @var array
      */
@@ -21,7 +23,10 @@ class ThemeManager {
     /**
      *
      */
-    public function __construct() {
+    public function __construct($plugin_manager) {
+        if($plugin_manager instanceof PluginManager) {
+            $this->plugin_instance = $plugin_manager;
+        }
         //load all themes
         $this->loadAll();
     }
@@ -31,8 +36,8 @@ class ThemeManager {
      */
     public function loadAll() {
         foreach(glob("resources/themes/*.xml") as $theme) {
-            $name = array_pop(explode(".", trim($theme, "resources/themes/")));
-            $this->load($name);
+            $path_info = pathinfo($theme);
+            $this->load($path_info['filename']);
         }
     }
 
@@ -42,6 +47,9 @@ class ThemeManager {
     public function load($name) {
         $file = @simplexml_load_file("resources/themes/".$name.".xml", null, true);
         $this->themes[$name] = $file;
+
+        $theme_load_hook = new ThemeLoadedHook($name, (string)$file->version);
+        $this->plugin_instance->trigger($theme_load_hook);
     }
 
     /**
@@ -59,6 +67,20 @@ class ThemeManager {
         $this->load($name);
     }
 
+    public function GetTemplate($theme, $template) {
+        $theme_directory = (string)$this->themes[$theme]->directory;
+        $directory = "resources/themes/".$theme_directory."/templates/";
+        $template_location = $directory.$template;
+        if(file_exists($template_location)) {
+            return $template_location;
+        }
+        if(isset($this->themes["Default"])) {
+            $theme_directory = (string)$this->themes[$theme]->directory;
+            return "resources/themes/".$theme_directory."/templates/".$template;
+        }
+        return $template;
+    }
+
     /**
      * @param $name
      * @param $value
@@ -71,7 +93,6 @@ class ThemeManager {
         return str_replace(self::$shortcuts, $replacements, $value);
     }
 
-    //Get functions
     /**
      * @param $name
      * @return array

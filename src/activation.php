@@ -13,16 +13,11 @@ $page = "activate";
 if(isset($_GET['page'])) {
     $page = $_GET['page'];
 }
-?>
-<div id="main">
-<?php
+$rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}';
 if($page == "resend") {
     include_once("include/pages/activate/resend.php");
 } else {
     include_once("include/pages/activate/activate.php");
 }
-?>
-</div>
-<?php
-include_once("include/footer.php");
+new SimpleTemplate($manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
 ?>

@@ -16,64 +16,43 @@ if(isset($_GET['id'])) {
 include("include/header.php");
 
 $back = "list.php?p=".$project."&l=".$list;
-$taskDetails = TaskFunc::taskDetails($project, $list, $id);
+$task_details = TaskFunc::taskDetails($project, $list, $id);
 
-$finished = ($taskDetails['finished'] != "0000-00-00") ? $taskDetails['finished'] : "None";
-$due = ($taskDetails['due'] != "0000-00-00") ? $taskDetails['due'] : "None";
-$version = ($taskDetails['version'] != "") ? $taskDetails['version'] : "None";
-$status = $taskDetails['status'];
-$statusName = "Open";
-$statusClass = "general";
+$finished = ($task_details['finished'] != "0000-00-00") ? $task_details['finished'] : "None";
+$due = ($task_details['due'] != "0000-00-00") ? $task_details['due'] : "None";
+$version = ($task_details['version'] != "") ? $task_details['version'] : "None";
+$progress = $task_details['progress']."%";
+$status = $task_details['status'];
+$status_name = "Open";
+$status_class = "general";
+if($status == "0") { $status_name = "Open"; $status_class = "general"; }
+if($status == "1") { $status_name = "Done"; $status_class = "success"; }
+if($status == "2") { $status_name = "In Progress"; $status_class = "ip"; }
+if($status == "3") { $status_name = "Closed"; $status_class = "error"; }
+$labels_string = '';
+$labels_array = explode(",", $task_details['labels']);
+foreach($labels_array as &$label) {
+    $label_details = LabelFunc::labelDetails($label);
+    $labels_string .= '<label class="task-label" style="background:'.$label_details['background'].';color:'.$label_details['text'].';border:1px solid '.$label_details['text'].';">'.$label_details['label'].'</label>';
+}
 
-if($status == "0") { $statusName = "Open"; $statusClass = "general"; }
-if($status == "1") { $statusName = "Done"; $statusClass = "success"; }
-if($status == "2") { $statusName = "In Progress"; $statusClass = "ip"; }
-if($status == "3") { $statusName = "Closed"; $statusClass = "error"; }
-?>
-
-    <div id="main">
-        <div class="content">
-            <!-- title, description, author, assignee, due, created, finished, versionname, labels, editable, taskstatus, progress -->
-            <h3><label class="fmleft"><a href="<?php echo $back; ?>" style="text-shadow:none;">Back</a></label><?php echo $taskDetails['title']; ?><label class="fmright"><label class="status <?php echo $statusClass; ?>"><?php echo $statusName; ?></label></label></h3>
-            <?php if($status == "2") {
-               $progress = $taskDetails['progress']."%";
-            ?>
-
-            <div title="<?php echo $progress; ?>" class="progress"><div class="progress-bar" style="width:<?php echo $progress; ?>;"></div></div>
-            <?php } ?>
-            <div class="task-info">
-                <div class="task-column fmleft">
-                    <label class="task-author">Author: <a href="#"><?php echo $taskDetails['author']; ?></a></label>
-                    <label class="task-created">Created: <?php echo $taskDetails['created']; ?></label>
-                    <label class="task-assignee">Assignee: <a href="#"><?php echo $taskDetails['assignee']; ?></a></label>
-                </div>
-                <div class="task-column fmright">
-                    <label class="task-version">Version: <a href="#"><?php echo $version; ?></a></label>
-                    <label class="task-due">Due Date: <?php echo $due; ?></label>
-                    <label class="task-finish">Completion Date: <?php echo $finished; ?></label>
-                </div>
-            </div>
-            <div class="clear"></div>
-            <pre class="task-description word-wrap"><label class="task-description-title">Description: </label><br /><?php echo $taskDetails['description']; ?></pre>
-            <?php if($taskDetails['labels'] != "") { ?>
-            <div class="labels">
-                <?php
-                $labelString = $taskDetails['labels'];
-                $labels = explode(",", $labelString);
-                foreach($labels as &$l) {
-                    $ldetails = LabelFunc::labelDetails($l);
-                    echo '<label class="task-label" style="background:'.$ldetails['background'].';color:'.$ldetails['text'].';border:1px solid '.$ldetails['text'].';">'.$ldetails['label'].'</label>';
-                }
-                ?>
-            </div>
-            <div class="clear"></div>
-            <?php } ?>
-        </div>
-        <!--<div class="below-content">
-            <h3>Task Comments</h3>
-        </div>-->
-    </div>
-
-<?php
-include("include/footer.php");
+$rules['pages']['task'] = array(
+    'back' => $back,
+    'title' => $task_details['title'],
+    'status' => array(
+        'name' => $status_name,
+        'class' => $status_class,
+    ),
+    'progress' => $task_details['progress'].'%',
+    'author' => $task_details['author'],
+    'created' => $task_details['created'],
+    'assignee' => $task_details['assignee'],
+    'version' => $version,
+    'due' => $due,
+    'finished' => $finished,
+    'description' => $task_details['description'],
+    'labels' => $labels_string,
+);
+$rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "Task.tpl").'}';
+new SimpleTemplate($manager->GetTemplate((string)$theme->name, "basic/Page.tpl"), $rules, true);
 ?>

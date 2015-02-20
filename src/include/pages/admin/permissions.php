@@ -18,81 +18,42 @@ if(isset($_GET['action'])) {
         nodeDelete(cleanInput($_GET['id']));
     }
 }
+$rules['form']['templates']['permission'] = '{include->'.$manager->GetTemplate((string)$theme->name, "forms/NodeAddForm.tpl").'}';
+$rules['table'] = array(
+    'templates' => array(
+        'permissions' => '{include->'.$manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
+    ),
+);
+$rules['table']['th'] = array(
+    'node' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->node)),
+    'description' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->description)),
+    'actions' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)),
+);
+$rules['table']['pages'] = array(
+    'permissions' => ' ',
+);
+$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$languageinstance->site->tables->nonodes));
+$rules['table']['content'] = array(
+    'permissions' => ' ',
+);
+
 global $prefix;
 $pagination = new Pagination($prefix."_nodes", "id, node_name, node_description", $pn, 10, "?t=".$type."&amp;");
+if(hasValues('nodes')) {
+    $rules['table']['templates']['permissions'] = '{include->'.$manager->GetTemplate((string)$theme->name, "tables/Permissions.tpl").'}';
+    $entries = $pagination->paginateReturn();
+    $table_content = "";
+    foreach ($entries as &$entry) {
+        $table_content .= "<tr>";
+        $table_content .= "<td>".$entry['node_name']."</td>";
+        $table_content .= "<td>".$entry['node_description']."</td>";
+        $table_content .= "<td class='actions'>";
+        $table_content .= "<a title='Edit' class='actionEdit' href='?t=permissions&amp;action=edit&amp;id=".$entry['id']."&amp;pn=".$pn."'></a>";
+        $table_content .= "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete node ".$entry['node_name']."?\");' href='?t=permissions&amp;action=delete&amp;id=".$entry['id']."&amp;pn=".$pn."'></a>";
+        $table_content .= "</td>";
+        $table_content .= "</tr>";
+    }
+    $rules['table']['pages']['permissions'] = $pagination->pageString;
+    $rules['table']['content']['permissions'] = $table_content;
+}
 ?>
-<form method="post" action="admin.php?t=permissions">
-    <h3><?php echo ($editing) ? "Edit Node" : "Add Node"; ?></h3>
-    <div id="form-holder">
-        <?php
-        if($editing) {
-            $details = nodeDetails(cleanInput($_GET['id']));
-            ?>
-            <div id="page_1" class="form-page">
-                <fieldset id="inputs">
-                    <input id="id" name="id" type="hidden" value="<?php echo cleanInput($_GET['id']); ?>">
-                    <input id="node" name="node" type="text" value="<?php echo $details['node_name']; ?>" placeholder="Node">
-                    <textarea id="description" name="description" ROWS="3" COLS="40"><?php echo $details['node_description']; ?></textarea>
-                    <?php
-                    $captcha = new Captcha();
-                    $captcha->printImage();
-                    $_SESSION['userspluscaptcha'] = $captcha->code;
-                    ?>
-                    <br />
-                    <input id="captcha" name="captcha" type="text" placeholder="Enter characters above">
-                </fieldset>
-                <fieldset id="links">
-                    <input type="submit" class="submit" name="edit_permission" value="Edit">
-                </fieldset>
-            </div>
-        <?php
-        } else {
-            ?>
-            <div id="page_1" class="form-page">
-                <fieldset id="inputs">
-                    <input id="node" name="node" type="text" placeholder="Node">
-                    <textarea id="description" name="description" ROWS="3" COLS="40"></textarea>
-                    <?php
-                    $captcha = new Captcha();
-                    $captcha->printImage();
-                    $_SESSION['userspluscaptcha'] = $captcha->code;
-                    ?>
-                    <br />
-                    <input id="captcha" name="captcha" type="text" placeholder="Enter characters above">
-                </fieldset>
-                <fieldset id="links">
-                    <input type="submit" class="submit" name="add_permission" value="Add">
-                </fieldset>
-            </div>
-        <?php
-        }
-        ?>
-    </div>
-</form>
-<?php
-echo $pagination->pageString;
-?>
-<table class="taskTable">
-    <thead>
-    <tr>
-        <th class="medium">Node</th>
-        <th class="large">Description</th>
-        <th class="action">Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php
-        $nodes = $pagination->paginateReturn();
-        foreach($nodes as &$n) {
-            echo "<tr>";
-            echo "<td>".$n['node_name']."</td>";
-            echo "<td>".$n['node_description']."</td>";
-            echo "<td class='actions'>";
-            echo "<a title='Edit' class='actionEdit' href='?t=permissions&amp;action=edit&amp;id=".$n['id']."&amp;pn=".$pn."'></a>";
-            echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete node ".$n['node_name']."?\");' href='?t=permissions&amp;action=delete&amp;id=".$n['id']."&amp;pn=".$pn."'></a>";
-            echo "</td>";
-            echo "</tr>";
-        }
-    ?>
-    </tbody>
-</table>

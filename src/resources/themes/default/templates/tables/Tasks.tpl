@@ -1,4 +1,4 @@
-{ table->tasks->pages }
+{ table->pages->tasks }
 <table id="list" class="taskTable">
     <thead>
     <tr>
@@ -12,5 +12,5 @@
         <th id="taskAction" class="action">{ table->th->actions }</th>
     </tr>
     </thead>
-    <tbody>{ table->tasks->content }</tbody>
+    <tbody>{ table->content->tasks }</tbody>
 </table>

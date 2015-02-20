@@ -15,7 +15,7 @@ class ExamplePlugin extends Plugin {
      */
     public function enable()
     {
-        // TODO: Implement enable() method.
+        //echo "Example Plugin enabled";
     }
 
     /**
@@ -28,20 +28,11 @@ class ExamplePlugin extends Plugin {
 
     /**
      * @hook-callback
-     * @hook user_login_hook
-     * @priority 3
-     */
-    public function ExampleHookCallback($hook_arguments) {
-        //TODO: Do something.
-    }
-
-    /**
-     * @hook-callback
-     * @hook task_created_hook
+     * @hook navigation_main_hook
      * @priority 1
      */
-    public function AnotherHookCallback($hook_arguments) {
-        //TODO: Do something.
+    public function ExampleHookCallback(&$hook_arguments) {
+        //array_shift($hook_arguments);
     }
 }
 

@@ -1,1 +1,1 @@
-{ table->activities->template }
+{ table->templates->activities }

@@ -7,7 +7,7 @@
  * Last Modified: 1/15/14 at 1:05 PM
  * Last Modified by Daniel Vidmar.
  */
-require_once("include/function/projectfunc.php");
+require_once("include/function/ProjectFunc.php");
 
 /**
  * Class ListFunc
@@ -294,97 +294,6 @@ class ListFunc {
         $t2 = $prefix."_".$details['project']."_".$list;
         $stmt = $pdo->prepare("RENAME TABLE `".$t."` TO `".$t2."`");
         $stmt->execute();
-    }
-
-    /**
-     * @param $project
-     * @param $projects
-     * @param $username
-     * @return string
-     */
-    public static function printAddForm($project, $projects, $username) {
-        $out = '';
-        $out .= '<h3>Add List</h3>';
-        $out .= '<div id="holder">';
-        $out .= '<div id="page_1">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<input id="name" name="name" type="text" placeholder="Name">';
-        $out .= '<input id="author" name="author" type="hidden" value="'.$username.'">';
-        $out .= '<label for="project">Project:</label>';
-        $out .= '<select name="project" id="project">';
-        $out .= toOptions($projects, $project);
-        $out .= '</select><br />';
-        $out .= '<label for="public">Public:</label>';
-        $out .= '<select name="public" id="public">';
-        $out .= '<option value="0">No</option>';
-        $out .= '<option value="1" selected>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '<div id="page_2">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<label for="minimal">Minimal View:</label>';
-        $out .= '<select name="minimal" id="minimal">';
-        $out .= '<option value="0" selected>No</option>';
-        $out .= '<option value="1">Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="mainlist">Main:</label>';
-        $out .= '<select name="mainlist" id="mainlist">';
-        $out .= '<option value="0" selected>No</option>';
-        $out .= '<option value="1">Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="overseer">Overseer:</label>';
-        $out .= '<select name="overseer" id="overseer">';
-        $out .= '<option value="none" selected>None</option>';
-        $out .= toOptions(values("users", "user_name"));
-        $out .= '</select>';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
-        $out .= '<button class="submit" onclick="switchPage(event, \'page_2\', \'page_3\'); return false;">Next</button>';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '<div id="page_3">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<label for="guestview">Guest View:</label>';
-        $out .= '<select name="guestview" id="guestview">';
-        $out .= '<option value="0">No</option>';
-        $out .= '<option value="1" selected>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="guestedit">Guest Edit:</label>';
-        $out .= '<select name="guestedit" id="guestedit">';
-        $out .= '<option value="0" selected>No</option>';
-        $out .= '<option value="1">Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="viewpermission">View Permission:</label>';
-        $out .= '<select name="viewpermission" id="viewpermission">';
-        $out .= '<option value="none" selected>None</option>';
-		$nodes = values("nodes", "node_name");
-        foreach($nodes as &$node) {
-            $out .= '<option value="'.nodeID($node).'">'.$node.'</option>';
-        }
-        $out .= '</select><br />';
-        $out .= '<label for="editpermission">Edit Permission:</label>';
-        $out .= '<select name="editpermission" id="editpermission">';
-        $out .= '<option value="none" selected>None</option>';
-		$nodes = values("nodes", "node_name");
-        foreach($nodes as &$node) {
-            $out .= '<option value="'.nodeID($node).'">'.$node.'</option>';
-        }
-        $out .= '</select><br />';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_3\', \'page_2\'); return false;">Back</button>';
-        $out .= '<input type="submit" class="submit" name="add-list" value="Add">';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '</div>';
-        $out .= '</form>';
-
-        return $out;
     }
 
     /**

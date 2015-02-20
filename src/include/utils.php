@@ -93,7 +93,7 @@ function values($table, $column, $extra = '') {
     $t = $prefix."_".$table;
     $stmt = $pdo->prepare("SELECT ".$column." FROM `".$t."`".$extra);
     $stmt->execute();
-    $result = $stmt->fetchAll();
+    $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $values = array();
     foreach($result as &$r) {

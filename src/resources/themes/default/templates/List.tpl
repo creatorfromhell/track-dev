@@ -1,9 +1,9 @@
-<div class="switchable tasks-page" { pages->list->tasks->style }>
+<div class="switchable tasks-page" { pages->list->tasks->style } >
+{ table->templates->tasks }
 { form->templates->task }
-{ table->tasks->template }
 </div>
-<div class="switchable labels-page" { pages->list->labels->style }>
+<div class="switchable labels-page" { pages->list->labels->style } >
+{ table->templates->labels }
 { form->templates->label }
-{ table->labels->template }
 <div id="jspalette"></div>
 </div>

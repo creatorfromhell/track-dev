@@ -1,4 +1,4 @@
-{ table->permissions->pages }
+{ table->pages->permissions }
 <table class="taskTable">
     <thead>
     <tr>
@@ -7,5 +7,5 @@
         <th class="action">{ table->th->actions }</th>
     </tr>
     </thead>
-    <tbody>{ table->permissions->content }</tbody>
+    <tbody>{ table->content->permissions }</tbody>
 </table>

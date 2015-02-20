@@ -1,4 +1,4 @@
-{ table->languages->pages }
+{ table->pages->languages }
 <table id="languages" class="taskTable" style="padding-top:0";>
     <thead>
     <tr>
@@ -10,5 +10,5 @@
         <th id="languageAction" class="action">{ table->th->actions }</th>
     </tr>
     </thead>
-    <tbody>{ table->languages->content }</tbody>
+    <tbody>{ table->content->languages }</tbody>
 </table>

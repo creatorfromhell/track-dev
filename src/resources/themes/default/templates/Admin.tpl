@@ -1,6 +1,2 @@
-<nav class="sideNav">
-    <ul>
-    { navigation->admin->template }
-    </ul>
-</nav>
-<div class="admin-content">{ pages->admin->content }</div>
+{ navigation->admin->template }
+<div class="admin-content">{ pages->content->admin }</div>

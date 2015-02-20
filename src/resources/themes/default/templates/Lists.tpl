@@ -1,8 +1,8 @@
-<div class="switchable lists-page" { pages->lists->lists->style }>
+<div class="switchable lists-page" { pages->lists->lists->style } >
+{ table->templates->lists }
 { form->templates->list }
-{ table->lists->template }
 </div>
-<div class="switchable versions-page" { pages->lists->versions->style }>
+<div class="switchable versions-page" { pages->lists->versions->style } >
+{ table->templates->versions }
 { form->templates->version }
-{ table->versions->template }
 </div>

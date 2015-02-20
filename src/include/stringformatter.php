@@ -11,11 +11,6 @@
 class StringFormatter {
 
     /**
-     * @var
-     */
-    public $languageinstance;
-
-    /**
      * @var array
      */
     private static $shortcuts = array("%user", "%project", "%list", "%theme", "%none");
@@ -46,7 +41,6 @@ class StringFormatter {
      * @param $language
      */
     public function __construct($user, $project, $list, $config, $language) {
-        $this->languageinstance = $language;
         $this->replacements = array($user, $project, $list, $config["main"]["theme"], ((string)$language->site->tables->none));
         $blacklist = $config["main"]["blacklist"];
         $this->dateFormat = $config["main"]["dateformat"];

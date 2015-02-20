@@ -7,7 +7,7 @@
  * Last Modified: 8/9/14 at 3:09 AM
  * Last Modified by Daniel Vidmar.
  */
-require_once('group.php');
+require_once('Group.php');
 
 /**
  * Class User

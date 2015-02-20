@@ -1,1 +1,18 @@
-<?php/** * Class Plugin */abstract class Plugin {    /**     * @var string     */    protected $path = "resources/plugins/%name.php";    /**     * @var string     */    protected $directory = "resources/plugins/%name/";    /**     * @return mixed     */    public abstract function enable();    /**     * @return mixed     */    public abstract function disable();}?>
+<?php
+/**
+ * Class Plugin
+ */
+abstract class Plugin {
+
+    /**
+     * @return mixed
+     */
+    public abstract function enable();
+
+    /**
+     * @return mixed
+     */
+    public abstract function disable();
+
+}
+?>

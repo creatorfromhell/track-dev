@@ -1,2 +1,2 @@
-{ form->templates->node }
-{ table->permissions->template }
+{ form->templates->permission }
+{ table->templates->permissions }

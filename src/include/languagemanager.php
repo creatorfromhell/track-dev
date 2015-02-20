@@ -10,6 +10,7 @@
 
 class LanguageManager {
 
+    private $plugin_instance;
     /**
      * @var array
      */
@@ -18,7 +19,10 @@ class LanguageManager {
     /**
      *
      */
-    public function __construct() {
+    public function __construct($plugin_manager) {
+        if($plugin_manager instanceof PluginManager) {
+            $this->plugin_instance = $plugin_manager;
+        }
         //load all languages
         $this->loadAll();
     }
@@ -28,8 +32,8 @@ class LanguageManager {
      */
     public function loadAll() {
         foreach(glob("resources/languages/*.xml") as $theme) {
-            $name = array_pop(explode(".", trim($theme, "resources/languages/")));
-            $this->load($name);
+            $path_info = pathinfo($theme);
+            $this->load($path_info['filename']);
         }
     }
 
@@ -39,6 +43,9 @@ class LanguageManager {
     public function load($name) {
         $file = @simplexml_load_file("resources/languages/".$name.".xml", null, true);
         $this->languages[((string)$file->short)] = $file;
+
+        $language_load_hook = new LanguageLoadedHook($name, (string)$file->version);
+        $this->plugin_instance->trigger($language_load_hook);
     }
 
     /**

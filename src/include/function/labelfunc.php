@@ -119,29 +119,6 @@ class LabelFunc {
     }
 
     /**
-     * @param $project
-     * @param $list
-     * @return string
-     */
-    public static function printAddForm($project, $list) {
-        $out = '';
-        $out .= '<div id="page_1">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<input name="project" type="hidden" value="'.$project.'">';
-        $out .= '<input name="list" type="hidden" value="'.$list.'">';
-        $out .= '<input name="labelname" type="text" placeholder="Label Name">';
-        $out .= '<label for="textcolor">Text Color: </label><label id="labelcolor-text" onclick="linkColorField(event, \'labelcolor-text\', \'textcolor\'); return false;"></label><input type="hidden" name="textcolor" value="#000000"><br />';
-        $out .= '<label for="backgroundcolor">Background Color: </label><label id="labelcolor-background" onclick="linkColorField(event, \'labelcolor-background\', \'backgroundcolor\'); return false;"></label><input type="hidden" name="backgroundcolor" value="#000000"><br />';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<input type="submit" class="submit" name="add-label" value="Add">';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-
-        return $out;
-    }
-
-    /**
      * @param $id
      * @return string
      */

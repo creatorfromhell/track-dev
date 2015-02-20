@@ -28,6 +28,10 @@ if(isset($_POST['register'])) {
                                 User::addUser($user);
                                 $params = "name:".cleanInput($_POST['username']).",email:".$_POST['email'];
                                 ActivityFunc::log(User::getIP(), "none", "none", "user:register", $params, 0, date("Y-m-d H:i:s"));
+
+                                $user_register_hook = new UserRegistrationHook($user->name, $date, $user->getIP());
+                                $plugin_manager->trigger($user_register_hook);
+
                                 destroySession("userspluscaptcha");
                                 global $configurationValues;
                                 if($configurationValues["main"]["email_activation"]) {

@@ -7,7 +7,7 @@
  * Last Modified: 1/15/14 at 1:05 PM
  * Last Modified by Daniel Vidmar.
  */
-require_once("include/function/listfunc.php");
+require_once("include/function/ListFunc.php");
 
 /**
  * Class ProjectFunc
@@ -442,51 +442,6 @@ class ProjectFunc {
         }
         $newTime = mktime(0, 0, 0, $newMonth, $newDay, $newYear);
         return $newTime;
-    }
-
-    /**
-     * @param $username
-     * @return string
-     */
-    public static function printAddForm($username) {
-        $out = '';
-        $out .= '<h3>Add Project</h3>';
-        $out .= '<div id="holder">';
-        $out .= '<div id="page_1">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<input id="name" name="name" type="text" placeholder="Name">';
-        $out .= '<input id="author" name="author" type="hidden" value="'.$username.'">';
-        $out .= '<label for="public">Public:</label>';
-        $out .= '<select name="public" id="public">';
-        $out .= '<option value="0">No</option>';
-        $out .= '<option value="1" selected>Yes</option>';
-        $out .= '</select><br />';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '<div id="page_2">';
-        $out .= '<fieldset id="inputs">';
-        $out .= '<label for="mainproject">Main:</label>';
-        $out .= '<select name="mainproject" id="mainproject">';
-        $out .= '<option value="0" selected>No</option>';
-        $out .= '<option value="1">Yes</option>';
-        $out .= '</select><br />';
-        $out .= '<label for="overseer">Overseer:</label>';
-        $out .= '<select name="overseer" id="overseer">';
-        $out .= '<option value="none" selected>None</option>';
-        $out .= toOptions(values("users", "user_name"));
-        $out .= '</select>';
-        $out .= '</fieldset>';
-        $out .= '<fieldset id="links">';
-        $out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
-        $out .= '<input type="submit" class="submit" name="add-project" value="Add">';
-        $out .= '</fieldset>';
-        $out .= '</div>';
-        $out .= '</div>';
-
-        return $out;
     }
 
     /**

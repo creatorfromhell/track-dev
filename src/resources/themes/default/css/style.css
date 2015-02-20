@@ -278,6 +278,7 @@ body {
     height: 30px;
     padding-top: 10px;
     text-align: center;
+    list-style: none;
     transition: all 0.5s;
     -webkit-transition: all 0.5s;
     -moz-transition: all 0.5s;
@@ -850,7 +851,7 @@ form
     min-height: 180px;
     width: 428px;
     height: auto;
-    margin: 30px auto 0 auto;
+    margin: 30px auto;
     z-index: 0;
     padding: 0 0 10px 0;
     transition: all 0.5s;
@@ -894,6 +895,7 @@ form #page_2 {
     -moz-transition: top 0.8s linear, opacity 0.5s ease-in-out;
     -webkit-transition: top 0.8s linear, opacity 0.5s ease-in-out;
 }
+
 form #page_3 {
      display: none;
      position: relative;
@@ -902,7 +904,7 @@ form #page_3 {
      transition: top 0.8s linear, opacity 0.5s ease-in-out;
      -moz-transition: top 0.8s linear, opacity 0.5s ease-in-out;
      -webkit-transition: top 0.8s linear, opacity 0.5s ease-in-out;
- }
+}
 
 form fieldset {
     border: none;
@@ -962,7 +964,7 @@ form #inputs select {
     width: auto;
     height: 30px;
     margin: 0 0 10px 5px;
-    padding-left: 5px;
+    padding: 0 5px;
 }
 
 form #links {
@@ -1028,7 +1030,7 @@ form #links #other {
 	border: none;
     border-spacing: 0;
 	padding-bottom: 100px;
-	margin: 0 auto;
+    margin: 40px auto 70px auto;
 }
 
 .taskTable tbody tr {

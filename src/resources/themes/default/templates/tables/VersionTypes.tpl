@@ -1,4 +1,4 @@
-{ table->types->pages }
+{ table->pages->types }
 <table id="version-types" class="taskTable">
     <thead>
     <tr>
@@ -8,5 +8,5 @@
         <th id="typeAction" class="action">{ table->th->actions }</th>
     </tr>
     </thead>
-    <tbody>{ table->types->content }</tbody>
+    <tbody>{ table->content->types }</tbody>
 </table>

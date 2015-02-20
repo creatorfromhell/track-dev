@@ -28,42 +28,53 @@ if(isAdmin() && isset($_GET['action']) && isset($_GET['id'])) {
     }
 }
 ActivityFunc::clean();
+$rules['table'] = array(
+    'templates' => array(
+        'activities' => '{include->'.$manager->GetTemplate((string)$theme->name, "basic/AnnounceContent.tpl").'}',
+    ),
+);
+$rules['table']['th'] = array(
+    'activity' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->activity)),
+    'archived' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->archived)),
+    'logged' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->logged)),
+    'actions' => $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)),
+);
+$rules['table']['pages'] = array(
+    'activities' => ' ',
+);
+
+$rules['site']['content']['announce'] = $formatter->replaceShortcuts(((string)$languageinstance->site->tables->noactivities));
+$rules['table']['content'] = array(
+    'activities' => ' ',
+);
 global $prefix;
 $pagination = new Pagination($prefix."_activity", "id, archived, logged", $pn, 10, "?t=".$type."&", "ORDER BY logged DESC");
-echo $pagination->pageString;
-?>
-<table id="activities" class="taskTable">
-    <thead>
-    <tr>
-        <th id="activityDescription" class="large"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->activity)); ?></th>
-        <th id="activityArchived" class="small"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->archived)); ?></th>
-        <th id="activityDate" class="medium"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->logged)); ?></th>
-        <th id="activityAction" class="action"><?php echo $formatter->replaceShortcuts(((string)$languageinstance->site->tables->actions)); ?></th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php
+
+if(hasValues("activity")) {
+    $rules['table']['templates']['activities'] = '{include->'.$manager->GetTemplate((string)$theme->name, "tables/activities.tpl").'}';
     $entries = $pagination->paginateReturn();
-    foreach($entries as &$entry) {
+    $table_content = "";
+    foreach ($entries as &$entry) {
         $id = $entry['id'];
         $description = ActivityFunc::getReadableActivity($id, $formatter->languageinstance);
         $archived = ($entry['archived'] == 1) ? (string)$formatter->languageinstance->site->tables->yes : (string)$formatter->languageinstance->site->tables->no;
         $logged = $entry['logged'];
 
-        echo "<tr>";
-        echo "<td class='description'>".$description."</td>";
-        echo "<td class='archived'>".$archived."</td>";
-        echo "<td class='logged'>".$logged."</td>";
-        echo "<td class='actions'>";
-        if(isAdmin()) {
-            echo "<a title='Archive' class='actionArchive' href='?t=activity&amp;action=archive&amp;id=".$id."&amp;pn=".$pn."'></a>";
-            echo "<a title='UnArchive' class='actionUnArchive' href='?t=activity&amp;action=unarchive&amp;id=".$id."&amp;pn=".$pn."'></a>";
-            echo "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure?\");' href='?t=activity&amp;action=delete&amp;id=".$id."&amp;pn=".$pn."'></a>";
+        $table_content .= "<tr>";
+        $table_content .= "<td class='description'>" . $description . "</td>";
+        $table_content .= "<td class='archived'>" . $archived . "</td>";
+        $table_content .= "<td class='logged'>" . $logged . "</td>";
+        $table_content .= "<td class='actions'>";
+        if (isAdmin()) {
+            $table_content .= "<a title='Archive' class='actionArchive' href='?t=activity&amp;action=archive&amp;id=" . $id . "&amp;pn=" . $pn . "'></a>";
+            $table_content .= "<a title='UnArchive' class='actionUnArchive' href='?t=activity&amp;action=unarchive&amp;id=" . $id . "&amp;pn=" . $pn . "'></a>";
+            $table_content .= "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure?\");' href='?t=activity&amp;action=delete&amp;id=" . $id . "&amp;pn=" . $pn . "'></a>";
         } else {
-            echo $formatter->replace("%none");
+            $table_content .= $formatter->replace("%none");
         }
-        echo  "</td></tr>";
+        $table_content .= "</td></tr>";
     }
-    ?>
-    </tbody>
-</table>
+    $rules['table']['pages']['activities'] = $pagination->pageString;
+    $rules['table']['content']['activities'] = $table_content;
+}
+?>

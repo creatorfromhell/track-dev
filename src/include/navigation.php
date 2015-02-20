@@ -18,11 +18,10 @@ $tabs = array(
 				"location" => "index.php?t=project&amp;p=".$project,
 				"translate" => "lang:"
 			),
-			
 			"calendar" => array(
 				"location" => "index.php?t=calendar&amp;p=".$project,
 				"translate" => "lang:"
-			)
+			),
 		)
 	),
 	"projects" => array(
@@ -33,45 +32,45 @@ $tabs = array(
 		"alias" => array("list"),
 		"location" => "lists.php",
 		"translate" => "lang:",
-	)
+	),
 );
 
 foreach($projects as &$p) {
-	$projectInfo = array(
-		"location" => "lists.php?p=".$p,
-		"translate" => "lang:"
-	);
+    $projectInfo = array(
+        "location" => "lists.php?p=".$p,
+        "translate" => "lang:"
+    );
 
-	$tabs['projects']['sub'][$p] = $projectInfo;
+    $tabs['projects']['sub'][$p] = $projectInfo;
 }
 
 foreach($lists as &$l) {
-	$listInfo = array(
-		"location" => "list.php?p=".$project."&amp;l=".$l,
-		"translate" => "lang:"
-	);
+    $listInfo = array(
+        "location" => "list.php?p=".$project."&amp;l=".$l,
+        "translate" => "lang:"
+    );
 
-	$tabs['lists']['sub'][$l] = $listInfo;
+    $tabs['lists']['sub'][$l] = $listInfo;
 }
 
+$navigation_main_hook = new NavigationMainHook($tabs);
+$plugin_manager->trigger($navigation_main_hook);
+$tabs = $navigation_main_hook->arguments['tabs'];
+
+$navigation_tabs_string = '';
+$keys = array_keys($tabs);
+foreach($keys as &$tab) {
+    $class = ($page == $tab || array_key_exists("sub", $tabs[$tab]) && array_key_exists($page, $tabs[$tab]['sub']) || array_key_exists("alias", $tabs[$tab]) && in_array($page, $tabs[$tab]['alias'])) ? ' class="active"' : '';
+    $navigation_tabs_string .= '<li'.$class.'><a href="'.$tabs[$tab]['location'].'">'.ucfirst($tab).'</a>';
+    if(array_key_exists("sub", $tabs[$tab]) && !empty($tabs[$tab]['sub'])) {
+        $sub_keys = array_keys($tabs[$tab]['sub']);
+        $navigation_tabs_string .= "<ul>";
+        foreach($sub_keys as &$sub_tab) {
+            $navigation_tabs_string .= '<li><a href="'.$tabs[$tab]['sub'][$sub_tab]['location'].'">'.ucfirst($sub_tab).'</a></li>';
+        }
+        $navigation_tabs_string .= "</ul>";
+    }
+    $navigation_tabs_string .= '</li>';
+}
+$rules['navigation']['main']['tabs'] = $navigation_tabs_string;
 ?>
-<nav class="main">
-    <ul>
-	<?php
-		$keys = array_keys($tabs);
-		foreach($keys as &$tab) {
-			$class = ($page == $tab || array_key_exists("sub", $tabs[$tab]) && array_key_exists($page, $tabs[$tab]['sub']) || array_key_exists("alias", $tabs[$tab]) && in_array($page, $tabs[$tab]['alias'])) ? ' class="active"' : '';
-			echo '<li'.$class.'><a href="'.$tabs[$tab]['location'].'">'.ucfirst($tab).'</a>';
-			if(array_key_exists("sub", $tabs[$tab]) && !empty($tabs[$tab]['sub'])) {
-				$subkeys = array_keys($tabs[$tab]['sub']);			
-				echo "<ul>";
-				foreach($subkeys as &$subtab) {
-					echo '<li><a href="'.$tabs[$tab]['sub'][$subtab]['location'].'">'.ucfirst($subtab).'</a></li>';
-				}
-				echo "</ul>";
-			}
-			echo '</li>';
-		}
-	?>
-	</ul>
-</nav>

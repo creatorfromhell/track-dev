@@ -87,6 +87,8 @@
 			<type>type</type>
 			<stable>stable</stable>
 			<size>size</size>
+            <node>node</node>
+            <description>description</description>
 			<downloads>downloads</downloads>
             <registered>registered</registered>
             <yes>yes</yes>

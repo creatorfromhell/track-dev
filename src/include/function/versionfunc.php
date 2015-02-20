@@ -131,54 +131,6 @@ class VersionFunc {
 	}
 
     /**
-     * @param $project
-     * @return string
-     */
-    public static function printAddForm($project) {
-		$out = '';
-		$out .= '<h3>Add Version</h3>';
-		$out .= '<div id="holder">';
-		$out .= '<div id="page_1">';
-		$out .= '<fieldset id="inputs">';
-		$out .= '<input name="project" type="hidden" value="'.$project.'">';
-		$out .= '<input id="version-name" name="version-name" type="text" placeholder="Name">';
-		$out .= '<label for="status">Status:</label>';
-		$out .= '<select name="status" id="status">';
-		$out .= '<option value="0" selected>None</option>';
-		$out .= '<option value="1">Upcoming</option>';
-		$out .= '<option value="2">Released</option>';
-		$out .= '</select><br />';
-		$out .= '<label for="version-type">Version Type:</label>';
-		$out .= '<select name="version-type" id="version-type">';
-		$out .= '<option value="0" selected>None</option>';
-        $out .= toOptions(values("version_types", "version_type"));
-		$out .= '</select><br />';
-		$out .= '</fieldset>';
-		$out .= '<fieldset id="links">';
-		$out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
-		$out .= '</fieldset>';
-		$out .= '</div>';
-		$out .= '<div id="page_2">';
-		$out .= '<fieldset id="inputs">';
-		$out .= '<label for="due-date">Due Date:</label>';
-		$out .= '<input id="due-date" name="due-date" type="text" placeholder="YYYY-MM-DD" readonly>';
-		$out .= '<input type="hidden" name="MAX_FILE_SIZE" value="30000" />';
-		$out .= 'Download: <input name="version_download" type="file" /><br />';
-		$captcha = new Captcha();
-        $out .= $captcha->returnImage();
-        $_SESSION['userspluscaptcha'] = $captcha->code;
-		$out .= '<br /><input id="captcha" name="captcha" type="text" placeholder="Enter characters above">';
-		$out .= '</fieldset>';
-		$out .= '<fieldset id="links">';
-		$out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
-		$out .= '<input type="submit" class="submit" name="add-version" value="Add">';
-		$out .= '</fieldset>';
-		$out .= '</div>';
-		$out .= '</div>';
-		return $out;
-	}
-
-    /**
      * @param $id
      * @return string
      */
@@ -295,43 +247,6 @@ class VersionFunc {
         $return['description'] = $result['description'];
         $return['stability'] = $result['version_stability'];
         return $return;
-	}
-
-    /**
-     * @return string
-     */
-    public static function printTypeAddForm() {
-		$out = '';
-		$out .= '<h3>Add Version Type</h3>';
-		$out .= '<div id="holder">';
-		$out .= '<div id="page_1">';
-		$out .= '<fieldset id="inputs">';
-		$out .= '<input id="type-name" name="type-name" type="text" placeholder="Name">';
-		$out .= '<textarea id="type-description" name="type-description" ROWS="3" COLS="40"></textarea>';
-		$out .= '</fieldset>';
-		$out .= '<fieldset id="links">';
-		$out .= '<button class="submit" onclick="switchPage(event, \'page_1\', \'page_2\'); return false;">Next</button>';
-		$out .= '</fieldset>';
-		$out .= '</div>';
-		$out .= '<div id="page_2">';
-		$out .= '<fieldset id="inputs">';
-		$out .= '<label for="type-stable">Stable:</label>';
-		$out .= '<select name="type-stable" id="type-stable">';
-		$out .= '<option value="0" selected>No</option>';
-		$out .= '<option value="1">Yes</option>';
-		$out .= '</select><br />';
-		$captcha = new Captcha();
-        $out .= $captcha->returnImage();
-        $_SESSION['userspluscaptcha'] = $captcha->code;
-		$out .= '<br /><input id="captcha" name="captcha" type="text" placeholder="Enter characters above">';
-		$out .= '</fieldset>';
-		$out .= '<fieldset id="links">';
-		$out .= '<button class="submit_2" onclick="switchPage(event, \'page_2\', \'page_1\'); return false;">Back</button>';
-		$out .= '<input type="submit" class="submit" name="add-version-type" value="Add">';
-		$out .= '</fieldset>';
-		$out .= '</div>';
-		$out .= '</div>';
-		return $out;
 	}
 
     /**

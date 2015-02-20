@@ -10,26 +10,57 @@
 session_start();
 
 //Required classes & includes
-require_once("config.php");
 require_once("utils.php");
-require_once("thememanager.php");
-require_once("stringformatter.php");
-require_once("languagemanager.php");
-require_once("class/group.php");
-require_once("class/pagination.php");
-require_once("class/captcha.php");
-require_once("class/user.php");
-require_once("function/projectfunc.php");
-require_once("function/listfunc.php");
-require_once("function/taskfunc.php");
-require_once("function/labelfunc.php");
-require_once("function/versionfunc.php");
-require_once("function/activityfunc.php");
+require_once("Configuration.php");
+
+spl_autoload_register("autoload");
+spl_autoload_register("autoload_api");
+
+function autoload($class) {
+    $configuration = new Configuration();
+    $configurationValues = $configuration->config;
+    $root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configurationValues["urls"]["installation_path"], "/");
+    if(file_exists($root."/include/function/".$class.".php")) {
+        require_once($root."/include/function/".$class.".php");
+        return true;
+    } else if(file_exists($root."/include/class/".$class.".php")) {
+        require_once($root."/include/class/".$class.".php");
+        return true;
+    } else if(file_exists($root."/include/".$class.".php")) {
+        require_once($root."/include/".$class.".php");
+        return true;
+    }
+    return false;
+}
+
+function autoload_api($class) {
+    $configuration = new Configuration();
+    $configurationValues = $configuration->config;
+    $root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configurationValues["urls"]["installation_path"], "/");
+    if(file_exists($root."/api/".$class.".php")) {
+        require_once($root."/api/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/".$class.".php")) {
+        require_once($root."/api/hooks/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/user/".$class.".php")) {
+        require_once($root."/api/hooks/user/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/navigation/".$class.".php")) {
+        require_once($root."/api/hooks/navigation/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/addon/".$class.".php")) {
+        require_once($root."/api/hooks/addon/".$class.".php");
+        return true;
+    }
+    return false;
+}
 
 //Instances of Classes
 $configuration = new Configuration();
-$manager = new ThemeManager();
-$langmanager = new LanguageManager();
+$plugin_manager = new PluginManager($root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configuration->config["urls"]["installation_path"], "/"));
+$manager = new ThemeManager($plugin_manager);
+$langmanager = new LanguageManager($plugin_manager);
 
 //Any includes that require other classes to be initiated go here
 require_once('DB.php');

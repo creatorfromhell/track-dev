@@ -1,4 +1,4 @@
-{ table->themes->pages }
+{ table->pages->themes }
 <table id="themes" class="taskTable"style="padding-top:0";>
     <thead>
     <tr>
@@ -8,5 +8,5 @@
         <th id="themeAction" class="action">{ table->th->actions }</th>
     </tr>
     </thead>
-    <tbody>{ table->themes->content }</tbody>
+    <tbody>{ table->content->themes }</tbody>
 </table>

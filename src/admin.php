@@ -14,68 +14,70 @@ if(isset($_GET['t'])) {
     $type = $_GET['t'];
 }
 
-$adminTabs = array(
+$admin_tabs = array(
 	"dashboard" => array(
+        "template" => "pages/admin/Dashboard.tpl",
 		"include" => "include/pages/admin/dashboard.php",
 		"location" => "admin.php?t=dashboard",
 		"translate" => "lang:"
 	),
 	"activity" => array(
+        "template" => "pages/admin/Activity.tpl",
 		"include" => "include/pages/admin/activity.php",
 		"location" => "admin.php?t=activity",
 		"translate" => "lang:"
 	),
 	"groups" => array(
+        "template" => "pages/admin/Groups.tpl",
 		"include" => "include/pages/admin/groups.php",
 		"location" => "admin.php?t=groups",
 		"translate" => "lang:"
 	),
 	"options" => array(
+        "template" => "pages/admin/Options.tpl",
 		"include" => "include/pages/admin/options.php",
 		"location" => "admin.php?t=options",
 		"translate" => "lang:"
 	),
 	"permissions" => array(
+        "template" => "pages/admin/Permissions.tpl",
 		"include" => "include/pages/admin/permissions.php",
 		"location" => "admin.php?t=permissions",
 		"translate" => "lang:"
 	),
 	"addons" => array(
+        "template" => "pages/admin/Addons.tpl",
 		"include" => "include/pages/admin/addons.php",
 		"location" => "admin.php?t=addons",
 		"translate" => "lang:"
 	),
 	"users" => array(
+        "template" => "pages/admin/Users.tpl",
 		"include" => "include/pages/admin/users.php",
 		"location" => "admin.php?t=users",
 		"translate" => "lang:"
 	)
 );
 
-?>
-<div id="main" style="min-height:330px;">
-    <nav class="sideNav">
-        <ul>
-			<?php
-				$keys = array_keys($adminTabs);
-				foreach($keys as &$tab) {
-					$class = ($type == $tab) ? ' class="active"' : '';
-					echo '<li'.$class.'><a href="'.$adminTabs[$tab]['location'].'">'.ucfirst($tab).'</a></li>';
-				}
-			?>
-        </ul>
-    </nav>
-    <div class="admin-content">
-    <?php
-		if(array_key_exists($type, $adminTabs)) {
-			include($adminTabs[$type]['include']);
-		} else {
-			echo '<p class="announce">The page you are looking for could not be found.</p>';
-		}
-    ?>
-    </div>
-</div>
+$navigation_admin_hook = new NavigationAdminHook($admin_tabs);
+$plugin_manager->trigger($navigation_admin_hook);
 
-<?php
-include("include/footer.php");
+$admin_tabs_string = '';
+$keys = array_keys($admin_tabs);
+foreach($keys as &$tab) {
+    $class = ($type == $tab) ? ' class="active"' : '';
+    $admin_tabs_string .= '<li'.$class.'><a href="'.$admin_tabs[$tab]['location'].'">'.ucfirst($tab).'</a></li>';
+}
+
+$rules['site']['page']['content'] = '{include->'.$manager->GetTemplate((string)$theme->name, "Admin.tpl").'}';
+$rules['pages']['content']['admin'] = '{include->'.$manager->GetTemplate((string)$theme->name, "base/AnnounceContent.tpl").'}';
+$rules['site']['content']['announce'] = 'The page you are looking for could not be found.';
+$rules['navigation']['admin']['template'] = '{include->'.$manager->GetTemplate((string)$theme->name, "basic/AdminNavigation.tpl").'}';
+$rules['navigation']['admin']['tabs'] = $admin_tabs_string;
+
+if(array_key_exists($type, $admin_tabs)) {
+    include_once($admin_tabs[$type]['include']);
+    $rules['pages']['content']['admin'] = '{include->'.$manager->GetTemplate((string)$theme->name, $admin_tabs[$type]['template']).'}';
+}
+new SimpleTemplate($manager->GetTemplate((string)$theme->name, "basic/AdminPage.tpl"), $rules, true);
 ?>
