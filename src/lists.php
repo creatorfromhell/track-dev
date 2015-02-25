@@ -13,21 +13,21 @@ include("include/handling/version.php");
 
 $switchable = "lists";
 if(isset($_GET['page'])) {
-	if($_GET['page'] == 'lists' || $_GET['page'] == 'versions') {
-		$switchable = $_GET['page'];
-	}
+    if($_GET['page'] == 'lists' || $_GET['page'] == 'versions') {
+        $switchable = $_GET['page'];
+    }
 }
-$editID = 0;
+$edit_id = 0;
 $editing = false;
 if(isset($_GET['action']) && isset($_GET['id'])) {
     $action = clean_input($_GET['action']);
-    $editID = clean_input($_GET['id']);
+    $edit_id = clean_input($_GET['id']);
     if(is_admin() || ProjectFunc::get_overseer($project) == get_name()) {
         if($switchable == "lists") {
             if($action == "delete") {
-                $name = ListFunc::get_name($editID);
-                ListFunc::remove($editID);
-                $params = "id:".$editID;
+                $name = ListFunc::get_name($edit_id);
+                ListFunc::remove($edit_id);
+                $params = "id:".$edit_id;
                 ActivityFunc::log(get_name(), $project, $name, "list:delete", $params, 0, date("Y-m-d H:i:s"));
                 echo '<script type="text/javascript">';
                 echo 'showMessage("success", "List '.$name.' has been deleted.");';
@@ -55,11 +55,12 @@ $rules['form'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'lists' => '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Lists.tpl").'}',
-        'versions'=> '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Versions.tpl").'}',
+        'lists' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->nolists)).'</p>',
+        'versions' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->noversions)).'</p>',
     ),
 );
 if($switchable == 'lists') {
+    $rules['site']['header']['h1'] = $formatter->replace_shortcuts(((string)$language_instance->site->pages->lists->header));
     $rules['site']['header']['h1'] = $formatter->replace_shortcuts(((string)$language_instance->site->pages->lists->header));
     $rules['pages']['lists']['versions']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-right"><a href="?page=versions">Versions ></a></div>';
@@ -78,6 +79,40 @@ if($switchable == 'lists') {
         );
         if($editing) {
             $rules['form']['templates']['list'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/ListEditForm.tpl").'}';
+            $details = ListFunc::list_details($edit_id);
+            $main = ProjectFunc::get_main_list($details['project']);
+            $public_string = '<option value="0"'.(($details['public'] == 0) ? ' selected' : '').'>No</option>';
+            $public_string .= '<option value="1"'.(($details['public'] == 1) ? ' selected' : '').'>Yes</option>';
+            $minimal_string = '<option value="0"'.((!ListFunc::minimal($edit_id)) ? ' selected' : '').'>No</option>';
+            $minimal_string .= '<option value="1"'.((ListFunc::minimal($edit_id)) ? ' selected' : '').'>Yes</option>';
+            $main_string = '<option value="0"'.(($main != $id) ?' selected' : '').'>No</option>';
+            $main_string .= '<option value="1"'.(($main == $id) ? ' selected' : '').'>Yes</option>';
+            $overseer_string = '<option value="none"'.(($details['overseer'] == 'none') ? ' selected' : '').'>None</option>';
+            $overseer_string .= to_options(values("users", "user_name"), $details['overseer']);
+            $guest_view = '<option value="0"'.((ListFunc::guest_permissions($edit_id)['view'] == 0) ? ' selected' : '').'>No</option>';
+            $guest_view .= '<option value="1"'.((ListFunc::guest_permissions($edit_id)['view'] == 1) ? ' selected' : '').'>Yes</option>';
+            $guest_edit = '<option value="0"'.((ListFunc::guest_permissions($edit_id)['edit'] == 0) ?' selected' : '').'>No</option>';
+            $guest_edit .= '<option value="1"'.((ListFunc::guest_permissions($edit_id)['edit'] == 1) ? ' selected' : '').'>Yes</option>';
+            $view_permission = '<option value="none"'.((ListFunc::view_permission($id) == 'none') ? ' selected' : '').'>None</option>';
+            $edit_permission = '<option value="none"'.((ListFunc::edit_permission($id) == 'none') ? ' selected' : '').'>None</option>';
+            $nodes = values("nodes", "node_name");
+            foreach($nodes as &$node) {
+                $view_permission .= '<option value="'.node_id($node).'"'.((ListFunc::view_permission($id) == $node) ? ' selected' : '').'>'.$node.'</option>';
+                $edit_permission .= '<option value="'.node_id($node).'"'.((ListFunc::edit_permission($id) == $node) ? ' selected' : '').'>'.$node.'</option>';
+            }
+            $rules['form']['value'] = array(
+                'id' => $edit_id,
+                'name' => $details['name'],
+                'project' => to_options(values("projects", "project"), $details['project']),
+                'public' => $public_string,
+                'minimal' => $minimal_string,
+                'main' => $main_string,
+                'overseer' => $overseer_string,
+                'guest_view' => $guest_view,
+                'guest_edit' => $guest_edit,
+                'view_permission' => $view_permission,
+                'edit_permission' => $edit_permission,
+            );
         }
     }
 } else if($switchable == 'versions') {
@@ -92,6 +127,20 @@ if($switchable == 'lists') {
         );
         if($editing) {
             $rules['form']['templates']['version'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/VersionEditForm.tpl").'}';
+            $details = VersionFunc::version_details($edit_id);
+            $status_string = '<option value="0"'.(($details['status'] == '0') ? ' selected' : '').'>None</option>';
+            $status_string .= '<option value="1"'.(($details['status'] == '1') ? ' selected' : '').'>Upcoming</option>';
+            $status_string .= '<option value="2"'.(($details['status'] == '2') ? ' selected' : '').'>Released</option>';
+            $type_string = '<option value="none"'.(($details['type'] == 'none') ? ' selected' : '').'>None</option>';
+            $type_string .= to_options(values("version_types", "version_type"), $details['type']);
+            $rules['form']['value'] = array(
+                'id' => $edit_id,
+                'project' => $details['project'],
+                'name' => $details['name'],
+                'status' => $status_string,
+                'type' => $type_string,
+                'due' => $details['due'],
+            );
         }
     }
 }
@@ -108,14 +157,11 @@ $rules['table']['pages'] = array(
     'lists' => ' ',
     'versions' => ' ',
 );
-$rules['table']['content'] = array(
-    'lists' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->nolists)).'</p>',
-    'versions' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->noversions)).'</p>',
-);
 
 global $prefix;
 $pagination = new Pagination($prefix."_lists", "id, list, created, creator, overseer", $pn, 10, "?p=".$project."&page=lists&", "WHERE `project` = '".$project."'");
 if(has_values("lists", " WHERE project = '".clean_input($project)."'")) {
+    $rules['table']['templates']['lists'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Lists.tpl").'}';
     $table_content = "";
     $entries = $pagination->paginate_return();
     foreach($entries as &$entry) {
@@ -143,6 +189,7 @@ if(has_values("lists", " WHERE project = '".clean_input($project)."'")) {
 }
 
 if(has_values("versions", " WHERE project = '".clean_input($project)."'")) {
+    $rules['table']['templates']['versions'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Versions.tpl").'}';
     $pagination = new Pagination($prefix."_versions", "id, version_name, version_status, version_type", $pn, 10);
     $table_content = "";
     $entries = $pagination->paginate_return();

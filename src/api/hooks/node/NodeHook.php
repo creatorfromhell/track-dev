@@ -15,5 +15,6 @@ abstract class NodeHook extends Hook {
 
     public function __construct($name) {
         parent::__construct($name, array('node' => null));
+        $this->web = true;
     }
 }

@@ -19,48 +19,48 @@ if(isset($_GET['page'])) {
 		$switchable = $_GET['page'];
 	}
 }
-$editID = 0;
+$edit_id = 0;
 $editing = false;
 if(isset($_GET['action']) && isset($_GET['id']) && can_edit_task(ListFunc::get_id($project, $list), clean_input($_GET['id']))) {
     $action = $_GET['action'];
-    $editID = $_GET['id'];
+    $edit_id = $_GET['id'];
 
     if($switchable == 'tasks') {
         if($action == "open") {
-            TaskFunc::change_status($project, $list, $editID, 0);
-            $params = "id:".$editID.",status:".$action;
+            TaskFunc::change_status($project, $list, $edit_id, 0);
+            $params = "id:".$edit_id.",status:".$action;
             ActivityFunc::log(get_name(), $project, $list, "task:status", $params, 0, date("Y-m-d H:i:s"));
             echo '<script type="text/javascript">';
-            echo 'showMessage("success", "The status of task #'.$editID.' has been changed to open.");';
+            echo 'showMessage("success", "The status of task #'.$edit_id.' has been changed to open.");';
             echo '</script>';
         } else if($action == "done") {
-            TaskFunc::change_status($project, $list, $editID, 1);
-            TaskFunc::change_finished($project, $list, $editID, date("Y-m-d H:i:s"));
-            $params = "id:".$editID.",status:".$action;
+            TaskFunc::change_status($project, $list, $edit_id, 1);
+            TaskFunc::change_finished($project, $list, $edit_id, date("Y-m-d H:i:s"));
+            $params = "id:".$edit_id.",status:".$action;
             ActivityFunc::log(get_name(), $project, $list, "task:status", $params, 0, date("Y-m-d H:i:s"));
             echo '<script type="text/javascript">';
-            echo 'showMessage("success", "The status of task #'.$editID.' has been changed to done.");';
+            echo 'showMessage("success", "The status of task #'.$edit_id.' has been changed to done.");';
             echo '</script>';
         } else if($action == "inprogress") {
-            TaskFunc::change_status($project, $list, $editID, 2);
-            $params = "id:".$editID.",status:".$action;
+            TaskFunc::change_status($project, $list, $edit_id, 2);
+            $params = "id:".$edit_id.",status:".$action;
             ActivityFunc::log(get_name(), $project, $list, "task:status", $params, 0, date("Y-m-d H:i:s"));
             echo '<script type="text/javascript">';
-            echo 'showMessage("success", "The status of task #'.$editID.' has been changed to in progress.");';
+            echo 'showMessage("success", "The status of task #'.$edit_id.' has been changed to in progress.");';
             echo '</script>';
         } else if($action == "close") {
-            TaskFunc::change_status($project, $list, $editID, 3);
-            $params = "id:".$editID.",status:".$action;
+            TaskFunc::change_status($project, $list, $edit_id, 3);
+            $params = "id:".$edit_id.",status:".$action;
             ActivityFunc::log(get_name(), $project, $list, "task:status", $params, 0, date("Y-m-d H:i:s"));
             echo '<script type="text/javascript">';
-            echo 'showMessage("success", "The status of task #'.$editID.' has been changed to closed.");';
+            echo 'showMessage("success", "The status of task #'.$edit_id.' has been changed to closed.");';
             echo '</script>';
         } else if($action == "delete") {
-            TaskFunc::delete_task($project, $list, $editID);
-            $params = "id:".$editID;
+            TaskFunc::delete_task($project, $list, $edit_id);
+            $params = "id:".$edit_id;
             ActivityFunc::log(get_name(), $project, $list, "task:delete", $params, 0, date("Y-m-d H:i:s"));
             echo '<script type="text/javascript">';
-            echo 'showMessage("success", "Task #'.$editID.' has been deleted.");';
+            echo 'showMessage("success", "Task #'.$edit_id.' has been deleted.");';
             echo '</script>';
         } else if($action == "edit") {
             $editing = true;
@@ -69,11 +69,11 @@ if(isset($_GET['action']) && isset($_GET['id']) && can_edit_task(ListFunc::get_i
         if($action == "edit") {
             $editing = true;
         } else if($action == "delete") {
-            LabelFunc::delete_label($editID);
-            $params = "id:".$editID;
+            LabelFunc::delete_label($edit_id);
+            $params = "id:".$edit_id;
             ActivityFunc::log(get_name(), $project, $list, "label:delete", $params, 0, date("Y-m-d H:i:s"));
             echo '<script type="text/javascript">';
-            echo 'showMessage("success", "Label #'.$editID.' has been deleted.");';
+            echo 'showMessage("success", "Label #'.$edit_id.' has been deleted.");';
             echo '</script>';
         }
     }
@@ -89,8 +89,8 @@ $rules['form'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'tasks' => '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Tasks.tpl").'}',
-        'labels'=> '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Labels.tpl").'}',
+        'tasks' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->notasks)).'</p>',
+        'labels' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->nolabels)).'</p>',
     ),
 );
 if($switchable == 'tasks') {
@@ -112,6 +112,45 @@ if($switchable == 'tasks') {
         );
         if($editing) {
             $rules['form']['templates']['task'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/TaskEditForm.tpl").'}';
+            $details = TaskFunc::task_details($project, $list, $edit_id);
+            $assignee_string = '<option value="none"'.(($details['assignee'] == 'none') ? ' selected' : '').'>None</option>';
+            $assignee_string .= to_options(values("users", "user_name"), $details['assignee']);
+            $editable_string = '<option value="0"'.(($details['editable'] == 0) ? ' selected' : '').'>No</option>';
+            $editable_string .= '<option value="1"'.(($details['editable'] == 1) ? ' selected' : '').'>Yes</option>';
+            $status_string = '<option value="0"'.(($details['status'] == 0) ? " selected" : "").'>None</option>';
+            $status_string .= '<option value="1"'.(($details['status'] == 1) ? " selected" : "").'>Done</option>';
+            $status_string .= '<option value="2"'.(($details['status'] == 2) ? " selected" : "").'>In Progress</option>';
+            $status_string .= '<option value="3"'.(($details['status'] == 3) ? " selected" : "").'>Closed</option>';
+            $version_string = '<option value="none"'.(($details['version'] == "none") ? " selected" : "").'>None</option>';
+            $version_string .= to_options(values("versions", "version_name", " WHERE project = '".clean_input($project)."'"), $details['version']);
+            $labels_string = '';
+            $labels_used = '';
+            $labels_value = "";
+            $labels = LabelFunc::labels($project, $list);
+            foreach($labels as &$label) {
+                $label_option = '<div id="label-'.$label['id'].'" class="draggable-node" style="background:'.$label['background'].';color:'.$label['text'].';border:1px solid '.$label['text'].';" draggable="true" ondragstart="onDrag(event)">'.$label['label'].'</div>';
+                if(!TaskFunc::has_label($project, $list, $id, $label['id'])) {
+                    $labels_string .= $label_option;
+                } else {
+                    $containedLabels .= $label_option;
+                    $labels_value .= ($labels_value != "") ? ",".$label['id'] : $label['id'];
+                }
+            }
+            $rules['form']['value'] = array(
+                'id' => $edit_id,
+                'title' => $details['title'],
+                'description' => $details['description'],
+                'author' => $details['author'],
+                'assignee' => $assignee_string,
+                'due' => $details['due'],
+                'editable' => $editable_string,
+                'status' => $status_string,
+                'version' => $version_string,
+                'progress' => $details['progress'],
+                'labels' => $labels_string,
+                'label_values' => $label_values,
+                'labels_used' => $labels_used,
+            );
         }
     }
 } else if($switchable == 'labels') {
@@ -126,6 +165,15 @@ if($switchable == 'tasks') {
         );
         if($editing) {
             $rules['form']['templates']['label'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/LabelEditForm.tpl").'}';
+            $details = LabelFunc::label_details($edit_id);
+            $rules['form']['value'] = array(
+                'id' => $edit_id,
+                'project' => $details['project'],
+                'list' => $details['list'],
+                'label' => $details['label'],
+                'text' => $details['text'],
+                'background' => $details['background'],
+            );
         }
     }
 }
@@ -137,17 +185,14 @@ $rules['table']['th'] = array(
     'actions' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->actions)),
 );
 $rules['table']['pages'] = array(
-    'tasks' => '',
-    'labels' => '',
-);
-$rules['table']['content'] = array(
-    'tasks' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->notasks)).'</p>',
-    'labels' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->nolabels)).'</p>',
+    'tasks' => ' ',
+    'labels' => ' ',
 );
 
 global $prefix;
 $pagination = new Pagination($prefix."_".$project."_".$list, "id, title, author, assignee, created, editable, task_status", $pn, 10, "?p=".$project."&l=".$list."&page=tasks&", "ORDER BY task_status, id");
 if(has_values($project."_".$list) && can_view_list(ListFunc::get_id($project, $list))) {
+    $rules['table']['templates']['tasks'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Tasks.tpl").'}';
     $table_content = "";
     $entries = $pagination->paginate_return();
     foreach($entries as &$entry) {
@@ -197,6 +242,7 @@ if(has_values($project."_".$list) && can_view_list(ListFunc::get_id($project, $l
 }
 
 if(has_values("labels", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'")) {
+    $rules['table']['templates']['labels'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Labels.tpl").'}';
     $pagination = new Pagination($prefix."_labels", "id, label_name, text_color, background_color", $pn, 10, "?p=".$project."&l=".$list."&page=labels&", "WHERE project = '".$project."' AND list = '".$list."' ORDER BY id");
     $table_content = "";
     $entries = $pagination->paginate_return();

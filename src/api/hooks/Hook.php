@@ -15,6 +15,8 @@ abstract class Hook {
      */
     public $arguments;
 
+    public $web = false;
+
     public $cancelled = false;
 
     /**

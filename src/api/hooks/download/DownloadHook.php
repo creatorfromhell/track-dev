@@ -15,5 +15,6 @@ abstract class DownloadHook extends Hook {
 
     public function __construct($name) {
         parent::__construct($name, array('download' => null));
+        $this->web = true;
     }
 }

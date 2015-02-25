@@ -18,5 +18,6 @@ abstract class VersionHook extends Hook {
             'project_name' => null,
             'version_name' => null
         ));
+        $this->web = true;
     }
 }

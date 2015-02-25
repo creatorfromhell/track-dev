@@ -37,6 +37,16 @@ $rules['table']['content'] = array(
     'permissions' => ' ',
 );
 
+if($editing) {
+    $rules['form']['templates']['permission'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/NodeEditForm.tpl").'}';
+    $details = node_details(clean_input($_GET['id']));
+    $rules['form']['value'] = array(
+        'id' => clean_input($_GET['id']),
+        'name' => $details['node_name'],
+        'description' => $details['node_description'],
+    );
+}
+
 global $prefix;
 $pagination = new Pagination($prefix."_nodes", "id, node_name, node_description", $pn, 10, "?t=".$type."&amp;");
 if(has_values('nodes')) {

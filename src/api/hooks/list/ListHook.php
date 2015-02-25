@@ -18,5 +18,6 @@ abstract class ListHook extends Hook {
             'project_name' => null,
             'list_name' => null
         ));
+        $this->web = true;
     }
 }

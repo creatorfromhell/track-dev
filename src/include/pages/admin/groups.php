@@ -14,18 +14,18 @@ if(isset($_GET['sub'])) {
     $subPage = $_GET['sub'];
 }
 if(isset($_GET['action']) && isset($_GET['id']) && has_values("groups", " WHERE group_name = '".clean_input(value("groups", "group_name", " WHERE id = '".clean_input($_GET['id'])."'"))."'")) {
-	$editID = clean_input($_GET['id']);
+	$edit_id = clean_input($_GET['id']);
     $action = clean_input($_GET['action']);
 
     if($action == "edit") {
         $editing = true;
     } else if($action == "delete") {
-        $params = "id:".$editID.",status:".$action;
+        $params = "id:".$edit_id.",status:".$action;
         ActivityFunc::log(get_name(), $project, $list, "group:delete", $params, 0, date("Y-m-d H:i:s"));
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "Group '.value("groups", "group_name", " WHERE id = '".$editID."'").' has been delete.");';
+        echo 'showMessage("success", "Group '.value("groups", "group_name", " WHERE id = '".$edit_id."'").' has been delete.");';
         echo '</script>';
-        Group::delete($editID);
+        Group::delete($edit_id);
     }
 }
 $rules['form']['templates']['group'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/GroupAddForm.tpl").'}';
@@ -54,6 +54,35 @@ $rules['site']['content']['announce'] = $formatter->replace_shortcuts(((string)$
 $rules['table']['content'] = array(
     'groups' => ' ',
 );
+
+if($editing) {
+    $rules['form']['templates']['group'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/GroupEditForm.tpl").'}';
+    $group = Group::load(clean_input($_GET['id']));
+    $admin_string = '<option value="0"'.((!$group->is_admin()) ? ' selected' : '').'>No</option>';
+    $admin_string .= '<option value="1"'.(($group->is_admin()) ? ' selected' : '').'>Yes</option>';
+    $preset_string = '<option value="0"'.(($group->preset == 0) ? ' selected' : '').'>No</option>';
+    $preset_string .= '<option value="1"'.(($group->preset == 1) ? ' selected' : '').'>Yes</option>';
+    $permissions = '';
+    $permissions_used = '';
+    $permission_values = implode(",", $group->permissions);
+    foreach($nodes as &$node) {
+        if(in_array(node_id($node), $group->permissions)) {
+            $permissions_used .= '<div id="node-'.node_id($node).'" class="draggable-node" draggable="true" ondragstart="onDrag(event)">'.$node.'</div>';
+        } else {
+            $permissions .= '<div id="node-'.node_id($node).'" class="draggable-node" draggable="true" ondragstart="onDrag(event)">'.$node.'</div>';
+        }
+    }
+    $rules['form']['value'] = array(
+        'id' => $group->id,
+        'name' => $group->name,
+        'admin' => $admin_string,
+        'preset' => $preset_string,
+        'permissions' => $permissions,
+        'permission_values' => $permission_values,
+        'permissions_used' => $permissions_used,
+    );
+}
+
 global $prefix;
 $pagination = new Pagination($prefix."_groups", "id, group_name, group_admin", $pn, 10, "?t=".$type."&amp;");
 if(has_values("groups")) {

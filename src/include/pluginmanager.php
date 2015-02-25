@@ -14,6 +14,8 @@ class PluginManager {
      */
     private $hooks = array();
 
+    private $web_hooks = array();
+
     public function __construct($directory) {
         $this->base_directory = $directory;
         $this->initialize_hooks();
@@ -48,8 +50,12 @@ class PluginManager {
     private function add_hook($class_name) {
         $reflector = new ReflectionClass($class_name);
         if(!$reflector->isAbstract() && $reflector->isSubclassOf("Hook") && $reflector->hasProperty("friendly_name")) {
-            $name = $reflector->getProperty("friendly_name")->getValue($reflector->newInstance());
+            $instance = $reflector->newInstance();
+            $name = $reflector->getProperty("friendly_name")->getValue($instance);
             $this->hooks[$name] = "";
+            if($reflector->hasProperty("web") && $reflector->getProperty("web")->getValue($instance)) {
+                $this->web_hooks[$name] = "";
+            }
         }
     }
 
@@ -59,6 +65,14 @@ class PluginManager {
      */
     private function hook_exists($hook) {
         return isset($this->hooks[$hook]);
+    }
+
+    /**
+     * @param $hook
+     * @return bool
+     */
+    private function web_hook_exists($hook) {
+        return isset($this->web_hooks[$hook]);
     }
 
     /**
@@ -82,15 +96,21 @@ class PluginManager {
         }
 	}
 
+    public function bind_web($hook, $url) {
+        if($this->web_hook_exists($hook)) {
+            $this->web_hooks[$hook][] = $url;
+        }
+    }
+
     /**
      * @param $hook
      * @return array|null
      */
     public function trigger($hook) {
-		if(!$hook instanceof Hook) {
+		if(!($hook instanceof Hook)) {
 			return null;
 		}
-		if(isset($this->hooks[$hook->friendly_name]) && is_array($this->hooks[$hook->friendly_name])) {
+		if($this->hook_exists($hook->friendly_name) && is_array($this->hooks[$hook->friendly_name])) {
             $hook_array = $this->hooks[$hook->friendly_name];
             uksort($hook_array, function($a, $b) {
                 if ($a == $b) return 0;
@@ -102,6 +122,18 @@ class PluginManager {
                 }
             }
 		}
+
+        if($this->web_hook_exists($hook->friendly_name) && is_array($this->web_hooks[$hook->friendly_name])) {
+            foreach($this->web_hooks[$hook->friendly_name] as &$url) {
+                $curl = curl_init($url);
+                curl_setopt_array($curl, array(
+                    CURLOPT_USERAGENT => 'Trackr WebHook Request: '.$hook->friendly_name,
+                    CURLOPT_POSTFIELDS => $hook->arguments,
+                ));
+                curl_exec($curl);
+                curl_close($curl);
+            }
+        }
 	}
 
     /**

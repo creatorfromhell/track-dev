@@ -19,5 +19,6 @@ abstract class TaskHook extends Hook {
             'list_name' => null,
             'task' => null
         ));
+        $this->web = true;
     }
 }

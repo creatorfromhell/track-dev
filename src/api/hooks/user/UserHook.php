@@ -15,5 +15,6 @@ abstract class UserHook extends Hook {
 
     public function __construct($name) {
         parent::__construct($name, array('username' => null));
+        $this->web = true;
     }
 }

@@ -17,17 +17,17 @@ if(isset($_GET['page'])) {
 		$switchable = $_GET['page'];
 	}
 }
-$editID = 0;
+$edit_id = 0;
 $editing = false;
 if(isset($_GET['action']) && isset($_GET['id'])) {
     $action = $_GET['action'];
-    $editID = $_GET['id'];
-    if(is_admin() || ProjectFunc::get_overseer(ProjectFunc::get_name($editID)) == get_name()) {
+    $edit_id = $_GET['id'];
+    if(is_admin() || ProjectFunc::get_overseer(ProjectFunc::get_name($edit_id)) == get_name()) {
         if($switchable == "projects") {
             if($action == "delete") {
-                $name = ProjectFunc::get_name($editID);
-                ProjectFunc::remove($editID);
-                $params = "id:".$editID;
+                $name = ProjectFunc::get_name($edit_id);
+                ProjectFunc::remove($edit_id);
+                $params = "id:".$edit_id;
                 ActivityFunc::log(get_name(), $name, "none", "project:delete", $params, 0, date("Y-m-d H:i:s"));
                 echo '<script type="text/javascript">';
                 echo 'showMessage("success", "Project '.$name.' has been deleted.");';
@@ -54,8 +54,8 @@ $rules['form'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'projects' => '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Projects.tpl").'}',
-        'types'=> '{include->'.$theme_manager->get_template((string)$theme->name, "tables/VersionTypes.tpl").'}',
+        'projects' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->noprojects)).'</p>',
+        'types' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->notypes)).'</p>',
     ),
 );
 if($switchable == 'projects') {
@@ -70,6 +70,27 @@ if($switchable == 'projects') {
         );
         if($editing) {
             $rules['form']['templates']['project'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/ProjectEditForm.tpl").'}';
+            $details = ProjectFunc::project_details($edit_id);
+            $list_string = '';
+            $public_string = '<option value="0"'.(($details['public'] == 0) ? ' selected' : '').'>No</option>';
+            $public_string .= '<option value="1"'.(($details['public'] == 1) ? ' selected' : '').'>Yes</option>';
+            $preset_string = '<option value="0"'.(($details['preset'] == 0) ? ' selected' : '').'>No</option>';
+            $preset_string .= '<option value="1"'.(($details['preset'] == 1) ? ' selected' : '').'>Yes</option>';
+            $overseer_string = '<option value="none"'.(($details['overseer'] == 'none') ? ' selected' : '').'>None</option>';
+            $overseer_string .= to_options(values("users", "user_name"), $details['overseer']);
+            $lists = values("lists", "list", " WHERE project = '".clean_input($details['name'])."'");
+            foreach($lists as &$list) {
+                $list_id = ListFunc::get_id($details['name'], $list);
+                $list_string .= '<option value="'.$list_id.'"'.(($list_id == $details['main']) ? ' selected' : '').'>'.$list.'</option>';
+            }
+            $rules['form']['value'] = array(
+                'id' => $edit_id,
+                'name' => $details['name'],
+                'lists' => $list_string,
+                'public' => $public_string,
+                'preset' => $preset_string,
+                'overseer' => $overseer_string,
+            );
         }
     }
 } else if($switchable == 'types') {
@@ -80,6 +101,15 @@ if($switchable == 'projects') {
         $rules['form']['templates']['type'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/TypeAddForm.tpl").'}';
         if($editing) {
             $rules['form']['templates']['type'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/TypeEditForm.tpl").'}';
+            $details = VersionFunc::type_details($edit_id);
+            $stability_string = '<option value="0"'.(($details['stability'] == 0) ? ' selected' : '').'>No</option>';
+            $stability_string .= '<option value="1"'.(($details['stability'] == 1) ? ' selected' : '').'>Yes</option>';
+            $rules['form']['value'] = array(
+                'id' => $edit_id,
+                'name' => $details['name'],
+                'description' => $details['description'],
+                'stability' => $stability_string,
+            );
         }
     }
 }
@@ -96,14 +126,11 @@ $rules['table']['pages'] = array(
     'projects' => ' ',
     'types' => ' ',
 );
-$rules['table']['content'] = array(
-    'projects' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->noprojects)).'</p>',
-    'types' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->notypes)).'</p>',
-);
 
 global $prefix;
 $pagination = new Pagination($prefix."_projects", "id, project, creator, created, overseer", $pn, 10);
 if(has_values("projects")) {
+    $rules['table']['templates']['projects'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Projects.tpl").'}';
     $table_content = "";
     $entries = $pagination->paginate_return();
     foreach($entries as &$entry) {
@@ -132,6 +159,7 @@ if(has_values("projects")) {
 }
 
 if(has_values("version_types")) {
+    $rules['table']['templates']['types'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/VersionTypes.tpl").'}';
     $pagination = new Pagination($prefix."_version_types", "id, version_type, description, version_stability", $pn, 10);
     $table_content = "";
     $entries = $pagination->paginate_return();

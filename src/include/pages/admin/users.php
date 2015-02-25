@@ -64,6 +64,38 @@ $rules['site']['content']['announce'] = $formatter->replace_shortcuts(((string)$
 $rules['table']['content'] = array(
     'users' => ' ',
 );
+
+if($editing) {
+    $user = User::load(clean_input($_GET['id']), false, true);
+    $group_string = '';
+    global $prefix, $pdo;
+    $t = $prefix."_groups";
+    $stmt = $pdo->prepare("SELECT id, group_name FROM `".$t."`");
+    $stmt->execute();
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $group_string .= "<option value='".$row['id']."'".(($row['id'] == $user->group->id) ? " selected" : "").">".$row['group_name']."</option>";
+    }
+    $permissions = '';
+    $permissions_used = '';
+    $permission_values = implode(",", $user->permissions);
+    foreach($nodes as &$node) {
+        if(in_array(node_id($node), $user->permissions)) {
+            $permissions_used .= '<div id="node-'.node_id($node).'" class="draggable-node" draggable="true" ondragstart="onDrag(event)">'.$node.'</div>';
+        } else {
+            $permissions .= '<div id="node-'.node_id($node).'" class="draggable-node" draggable="true" ondragstart="onDrag(event)">'.$node.'</div>';
+        }
+    }
+    $rules['form']['value'] = array(
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'group' => $group_string,
+        'permissions' => $permissions,
+        'permission_values' => $permission_values,
+        'permissions_used' => $permissions_used,
+    );
+}
+
 global $prefix;
 $pagination = new Pagination($prefix."_users", "id, user_name, user_email, user_group, user_registered", $pn, 10, "?t=".$type."&amp;");
 if(has_values("users")) {

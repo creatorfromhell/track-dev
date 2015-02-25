@@ -9,21 +9,21 @@
  */
 if(is_admin() && isset($_GET['action']) && isset($_GET['id'])) {
     $action = $_GET['action'];
-    $editID = $_GET['id'];
+    $edit_id = $_GET['id'];
     if($action == "archive") {
-		ActivityFunc::archive($editID);
+		ActivityFunc::archive($edit_id);
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "Activity #'.$editID.' has been archived.");';
+        echo 'showMessage("success", "Activity #'.$edit_id.' has been archived.");';
         echo '</script>';
     } else if($action == "unarchive") {
-		ActivityFunc::unarchive($editID);
+		ActivityFunc::unarchive($edit_id);
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "Activity #'.$editID.' has been unarchived.");';
+        echo 'showMessage("success", "Activity #'.$edit_id.' has been unarchived.");';
         echo '</script>';
     } else if($action == "delete") {
-		ActivityFunc::delete($editID);
+		ActivityFunc::delete($edit_id);
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "Activity #'.$editID.' has been deleted.");';
+        echo 'showMessage("success", "Activity #'.$edit_id.' has been deleted.");';
         echo '</script>';
     }
 }

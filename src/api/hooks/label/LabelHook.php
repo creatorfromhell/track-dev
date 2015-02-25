@@ -19,5 +19,6 @@ abstract class LabelHook extends Hook {
             'list_name' => null,
             'label_name' => null
         ));
+        $this->web = true;
     }
 }

@@ -15,5 +15,6 @@ abstract class ProjectHook extends Hook {
 
     public function __construct($name) {
         parent::__construct($name, array('project_name' => null));
+        $this->web = true;
     }
 }

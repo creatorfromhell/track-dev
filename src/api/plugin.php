@@ -13,5 +13,4 @@ abstract class Plugin {
      * @return mixed
      */
     public abstract function disable();
-
 }
