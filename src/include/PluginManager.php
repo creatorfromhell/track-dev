@@ -122,7 +122,10 @@ class PluginManager {
                 }
             }
 		}
+        $this->trigger_web($hook);
+	}
 
+    public function trigger_web($hook) {
         if($this->web_hook_exists($hook->friendly_name) && is_array($this->web_hooks[$hook->friendly_name])) {
             foreach($this->web_hooks[$hook->friendly_name] as &$url) {
                 $curl = curl_init($url);
@@ -134,7 +137,7 @@ class PluginManager {
                 curl_close($curl);
             }
         }
-	}
+    }
 
     /**
      *
