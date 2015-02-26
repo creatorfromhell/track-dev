@@ -1,17 +1,18 @@
 <form enctype="multipart/form-data" id="version-form" class="trackrForm" method="post" action="lists.php?p=Trackr&l=Main&page=versions">
-    <h3>Add Version</h3>
+    <h3>Edit Version</h3>
     <div id="holder">
         <div id="page_1">
             <fieldset id="inputs">
                 <input name="id" type="hidden" value="{ form->value->id }">
-                <input id="version-name" name="version-name" type="text" placeholder="Name" value="{ form->value->version }">
+                <input name="project" type="hidden" value="{ form->value->project }">
+                <input id="version-name" name="version-name" type="text" placeholder="Name" value="{ form->value->name }">
                 <label for="status">Status:</label>
                 <select name="status" id="status">
                     { form->value->status }
                 </select><br />
                 <label for="version-type">Version Type:</label>
                 <select name="version-type" id="version-type">
-                    { form->value->types }
+                    { form->value->type }
                 </select><br />
             </fieldset>
             <fieldset id="links">

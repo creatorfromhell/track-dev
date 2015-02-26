@@ -7,7 +7,7 @@
  * Last Modified: 4/8/14 at 7:30 PM
  * Last Modified by Daniel Vidmar.
  */
-$latest_tasks_values = '';
+$latest_tasks_values = ' ';
 $latest_tasks = ProjectFunc::latest_tasks($project);
 foreach($latest_tasks as &$task) {
     $latest_tasks_values .= '<div class="task"><a href="#">'.$formatter->replace($task).'</a></div>';

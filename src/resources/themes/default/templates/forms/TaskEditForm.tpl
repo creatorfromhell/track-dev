@@ -1,17 +1,18 @@
 <form id="task-form" class="trackrForm" method="post" action="list.php?p=Trackr&l=Main&page=tasks">
-    <h3>Add Task</h3>
+    <h3>Edit Task</h3>
     <div id="holder">
         <div id="page_1">
             <fieldset id="inputs">
-                <input id="title" name="title" type="text" placeholder="Title">
-                <textarea id="description" name="description" ROWS="3" COLS="40"></textarea>
-                <input id="author" name="author" type="hidden" value="{ form->content->user }">
+                <input name="id" type="hidden" value="{ form->value->id }">
+                <input id="title" name="title" type="text" placeholder="Title" value="{ form->value->title }">
+                <textarea id="description" name="description" ROWS="3" COLS="40">{ form->value->description }</textarea>
+                <input id="author" name="author" type="hidden" value="{ form->value->author }">
                 <label for="assignee">Assignee:</label>
                 <select name="assignee" id="assignee">
-                    { form->content->users }
+                    { form->value->assignee }
                 </select><br />
                 <label for="due-date">Due Date:</label>
-                <input id="due-date" name="due-date" type="text" placeholder="0000-00-00" readonly>
+                <input id="due-date" name="due-date" type="text" placeholder="0000-00-00" value="{ form->value->due }" readonly>
             </fieldset>
             <fieldset id="links">
                 <button class="submit" onclick="switchPage(event, 'page_1', 'page_2'); return false;">Next</button>
@@ -21,23 +22,18 @@
             <fieldset id="inputs">
                 <label for="editable">Editable:</label>
                 <select name="editable" id="editable">
-                    <option value="0">No</option>
-                    <option value="1" selected>Yes</option>
+                    { form->value->editable }
                 </select><br />
                 <label for="status">Status:</label>
                 <select name="status" id="status">
-                    <option value="0" selected>None</option>
-                    <option value="1">Done</option>
-                    <option value="2">In Progress</option>
-                    <option value="3">Closed</option>
+                    { form->value->status }
                 </select><br />
                 <label for="version">Version:</label>
                 <select name="version" id="version">
-                    <option value="none" selected>None</option>
-                    { form->content->versions }
+                    { form->value->version }
                 </select><br />
-                <label for="progress">Progress:<label id="progress_value">0</label></label><br />
-                <input type="range" id="progress" name="progress" value="0" min="0" max="100" oninput="showValue('progress_value', this.value);">
+                <label for="progress">Progress:<label id="progress_value">{ form->value->progress }</label></label><br />
+                <input type="range" id="progress" name="progress" value="{ form->value->progress }" min="0" max="100" oninput="showValue('progress_value', this.value);">
             </fieldset>
             <fieldset id="links"><button class="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
                 <button class="submit" onclick="switchPage(event, 'page_2', 'page_3'); return false;">Next</button>
@@ -53,10 +49,12 @@
                         <div class="clear"></div>
                     </div>
                     <div id="labels-available" class="column-left" ondrop="onDrop(event, 'labels', 'remove')" ondragover="onDragOver(event)" style="margin:0;">
-                        { form->content->labels }
+                        { form->value->labels }
                     </div>
-                    <div id="labels-chosen" class="column-right" ondrop="onDrop(event, 'labels', 'add')" ondragover="onDragOver(event)" style="margin:0;height:125px;max-height:125px;overflow-y:scroll;"></div>
-                    <input id="labels-input" name="labels" type="hidden" value="">
+                    <div id="labels-chosen" class="column-right" ondrop="onDrop(event, 'labels', 'add')" ondragover="onDragOver(event)" style="margin:0;height:125px;max-height:125px;overflow-y:scroll;">
+                        { form->value->labels_used }
+                    </div>
+                    <input id="labels-input" name="labels" type="hidden" value="{ form->value->label_values }">
                 </div>
             </fieldset>
             <fieldset id="links">

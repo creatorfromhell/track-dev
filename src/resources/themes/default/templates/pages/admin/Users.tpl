@@ -1,2 +1,2 @@
-{ form->templates->user }
 { table->templates->users }
+{ form->templates->user }

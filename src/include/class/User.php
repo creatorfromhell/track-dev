@@ -105,7 +105,7 @@ class User {
         $t = $prefix."_users";
         $perm = implode(",", $this->permissions);
         $stmt = $pdo->prepare("UPDATE `".$t."` SET user_name = ?, user_password = ?, user_email = ?, user_group = ?, user_permissions = ?, user_avatar = ?, user_ip = ?, user_registered = ?, logged_in = ?, user_banned = ?, user_online = ?, user_activated = ?, activation_key = ? WHERE id = ?");
-        $stmt->execute(array($this->id, $this->name, $this->password, $this->email, $this->group->id, $perm, $this->avatar, $this->ip, $this->registered, $this->logged_in, $this->banned, $this->online, $this->activated, $this->activation_key, $this->id));
+        $stmt->execute(array($this->name, $this->password, $this->email, $this->group->id, $perm, $this->avatar, $this->ip, $this->registered, $this->logged_in, $this->banned, $this->online, $this->activated, $this->activation_key, $this->id));
     }
 
     /**
@@ -127,7 +127,6 @@ class User {
         global $pdo, $prefix;
         $t = $prefix."_users";
         $query = "SELECT id, user_password, user_email, user_group, user_permissions, user_avatar, user_ip, user_registered, logged_in, user_banned, user_online, user_activated, activation_key FROM `".$t."` WHERE user_name = ?";
-        //$query = ($email) ? "SELECT id, user_password, user_name, user_group, user_permissions, user_avatar, user_ip, user_registered, logged_in, user_banned, user_online, user_activated, activation_key FROM `".$t."` WHERE user_email = ?" : "SELECT id, user_password, user_email, user_group, user_permissions, user_avatar, user_ip, user_registered, logged_in, user_banned, user_online, user_activated, activation_key FROM `".$t."` WHERE user_name = ?";
         if($email) {
             $query = "SELECT id, user_password, user_name, user_group, user_permissions, user_avatar, user_ip, user_registered, logged_in, user_banned, user_online, user_activated, activation_key FROM `".$t."` WHERE user_email = ?";
         }

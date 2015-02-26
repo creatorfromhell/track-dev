@@ -1,4 +1,5 @@
 <form id="label-form" class="trackrForm" method="post" action="list.php?p=Trackr&l=Main&page=labels">
+    <h3>Add Label</h3>
     <div id="holder">
         <div id="page_1">
             <fieldset id="inputs">

@@ -1,10 +1,11 @@
 <form method="post" action="admin.php?t=users">
-    <h3>Add User</h3>
+    <h3>Edit User</h3>
     <div id="form-holder">
         <div id="page_1" class="form-page">
             <fieldset id="inputs">
-                <input id="username" name="username" type="text" placeholder="Username">
-                <input id="email" name="email" type="text" placeholder="User Email">
+                <input name="id" type="hidden" value="{ form->value->id }">
+                <input id="username" name="username" type="text" value="{ form->value->name }" placeholder="Username">
+                <input id="email" name="email" type="text" value="{ form->value->email }" placeholder="User Email">
                 <input id="password" name="password" type="password" placeholder="User Password">
                 <input id="c_password" name="c_password" type="password" placeholder="Confirm Password">
             </fieldset>
@@ -16,7 +17,7 @@
             <fieldset id="inputs">
                 <label for="group">Group: </label>
                 <select name="group" id="group">
-                    { form->content->groups }
+                    { form->value->group }
                 </select><br />
                 <div class="pick-field">
                     <div class="title">Permissions</div>
@@ -26,15 +27,17 @@
                         <div class="clear"></div>
                     </div>
                     <div id="permissions-available" class="column-left" ondrop="onDrop(event, 'permissions-value', 'remove')" ondragover="onDragOver(event)">
-                        { form->content->nodes }
+                        { form->value->permissions }
                     </div>
-                    <div id="permissions-added" class="column-right" ondrop="onDrop(event, 'permissions-value', 'add')" ondragover="onDragOver(event)"></div>
-                    <input id="permissions-value" name="permissions-value" type="hidden" value="">
+                    <div id="permissions-added" class="column-right" ondrop="onDrop(event, 'permissions-value', 'add')" ondragover="onDragOver(event)">
+                        { form->value->permissions_used }
+                    </div>
+                    <input id="permissions-value" name="permissions-value" type="hidden" value="{ form->value->permission_values }">
                 </div>
             </fieldset>
             <fieldset id="links">
                 <button class="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
-                <input type="submit" class="submit" name="add_user" value="Add">
+                <input type="submit" class="submit" name="edit_user" value="Edit">
             </fieldset>
         </div>
     </div>

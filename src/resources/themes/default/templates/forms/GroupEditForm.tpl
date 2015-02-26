@@ -1,16 +1,17 @@
 <form class="trackrForm" method="post" action="admin.php?t=groups">
-    <h3>Add Group</h3>
+    <h3>Edit Group</h3>
     <div id="form-holder">
         <div id="page_1" class="form-page">
             <fieldset id="inputs">
-                <input id="name" name="name" type="text" placeholder="Name">
+                <input name="id" type="hidden" value="{ form->value->id }">
+                <input id="name" name="name" type="text" value="{ form->value->name }" placeholder="Name">
                 <label for="admin">Admin: </label>
                 <select name="admin" id="admin">
-                    { form->content->admin }
+                    { form->value->admin }
                 </select><br />
                 <label for="preset">Preset: </label>
                 <select name="preset" id="preset">
-                    { form->content->preset }
+                    { form->value->preset }
                 </select>
             </fieldset>
             <fieldset id="links">
@@ -27,12 +28,12 @@
                         <div class="clear"></div>
                     </div>
                     <div id="permissions-available" class="column-left" ondrop="onDrop(event, 'permissions-value', 'remove')" ondragover="onDragOver(event)">
-                        { form->content->nodes }
+                        { form->value->permissions }
                     </div>
                     <div id="permissions-added" class="column-right" ondrop="onDrop(event, 'permissions-value', 'add')" ondragover="onDragOver(event)">
-                        { form->content->added_nodes }
+                        { form->value->permissions_used }
                     </div>
-                    <input id="permissions-value" name="permissions-value" type="hidden" value="">
+                    <input id="permissions-value" name="permissions-value" type="hidden" value="{ form->value->permission_values }">
                 </div>
             </fieldset>
             <fieldset id="links">

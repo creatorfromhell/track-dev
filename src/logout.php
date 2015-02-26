@@ -17,7 +17,7 @@ $current_user->logged_in = $date;
 $current_user->online = 0;
 $current_user->save();
 
-$user_logout_hook = new UserLogoutHook($current_user->name, $date, $current_user->getIP());
+$user_logout_hook = new UserLogoutHook($current_user->name, $date, $current_user->get_ip());
 $plugin_manager->trigger($user_logout_hook);
 
 destroy_session("usersplusprofile");

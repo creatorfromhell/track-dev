@@ -1,18 +1,17 @@
 <form id="list_form" class="trackrForm" method="post" action="lists.php?p=Trackr&l=Main&page=lists">
-    <h3>Add List</h3>
+    <h3>Edit List</h3>
     <div id="holder">
         <div id="page_1">
             <fieldset id="inputs">
-                <input id="name" name="name" type="text" placeholder="Name">
-                <input id="author" name="author" type="hidden" value="{ form->content->user }">
+                <input name="id" type="hidden" value="{ form->value->id }">
+                <input id="name" name="name" type="text" placeholder="Name" value="{ form->value->name }">
                 <label for="project">Project:</label>
                 <select name="project" id="project">
-                    { form->content->projects }
+                    { form->value->project }
                 </select><br />
                 <label for="public">Public:</label>
                 <select name="public" id="public">
-                    <option value="0">No</option>
-                    <option value="1" selected>Yes</option>
+                    { form->value->public }
                 </select><br />
             </fieldset>
             <fieldset id="links">
@@ -23,18 +22,15 @@
             <fieldset id="inputs">
                 <label for="minimal">Minimal View:</label>
                 <select name="minimal" id="minimal">
-                    <option value="0" selected>No</option>
-                    <option value="1">Yes</option>
+                    { form->value->minimal }
                 </select><br />
                 <label for="mainlist">Main:</label>
                 <select name="mainlist" id="mainlist">
-                    <option value="0" selected>No</option>
-                    <option value="1">Yes</option>
+                    { form->value->main }
                 </select><br />
                 <label for="overseer">Overseer:</label>
                 <select name="overseer" id="overseer">
-                    <option value="none" selected>None</option>
-                    { form->content->users }
+                    { form->value->overseer }
                 </select>
             </fieldset>
             <fieldset id="links">
@@ -46,28 +42,24 @@
             <fieldset id="inputs">
                 <label for="guestview">Guest View:</label>
                 <select name="guestview" id="guestview">
-                    <option value="0">No</option>
-                    <option value="1" selected>Yes</option>
+                    { form->value->guest_view }
                 </select><br />
                 <label for="guestedit">Guest Edit:</label>
                 <select name="guestedit" id="guestedit">
-                    <option value="0" selected>No</option>
-                    <option value="1">Yes</option>
+                    { form->value->guest_edit }
                 </select><br />
                 <label for="viewpermission">View Permission:</label>
                 <select name="viewpermission" id="viewpermission">
-                    <option value="none" selected>None</option>
-                    { form->content->nodes }
+                    { form->value->view_permission }
                 </select><br />
                 <label for="editpermission">Edit Permission:</label>
                 <select name="editpermission" id="editpermission">
-                    <option value="none" selected>None</option>
-                    { form->content->nodes }
+                    { form->value->edit_permission }
                 </select><br />
             </fieldset>
             <fieldset id="links">
                 <button class="submit_2" onclick="switchPage(event, 'page_3', 'page_2'); return false;">Back</button>
-                <input type="submit" class="submit" name="add-list" value="Add">
+                <input type="submit" class="submit" name="edit-list" value="Edit">
             </fieldset>
         </div>
     </div>

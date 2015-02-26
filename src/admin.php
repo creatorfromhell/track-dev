@@ -45,18 +45,24 @@ $admin_tabs = array(
 		"location" => "admin.php?t=permissions",
 		"translate" => "lang:"
 	),
+    "users" => array(
+        "template" => "pages/admin/Users.tpl",
+        "include" => "include/pages/admin/users.php",
+        "location" => "admin.php?t=users",
+        "translate" => "lang:"
+    ),
 	"addons" => array(
         "template" => "pages/admin/Addons.tpl",
 		"include" => "include/pages/admin/addons.php",
 		"location" => "admin.php?t=addons",
 		"translate" => "lang:"
 	),
-	"users" => array(
-        "template" => "pages/admin/Users.tpl",
-		"include" => "include/pages/admin/users.php",
-		"location" => "admin.php?t=users",
-		"translate" => "lang:"
-	)
+    "web hooks" => array(
+        "template" => "pages/admin/WebHooks.tpl",
+        "include" => "include/pages/admin/hooks.php",
+        "location" => "admin.php?t=hooks",
+        "translate" => "lang:"
+    ),
 );
 
 $navigation_admin_hook = new NavigationAdminHook($admin_tabs);

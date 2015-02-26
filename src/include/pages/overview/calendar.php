@@ -28,89 +28,80 @@ if(isset($_GET['year'])) {
 }
 
 $date = mktime(0, 0, 0, $month, 1, $year);
-$firstWeekDay = date('w', $date);
-$lastWeekDay = date('w', mktime(0, 0, 0, date('n', $date), date('t', $date), $year));
-$backYear = "?p=".$project."&t=calendar&year=".($year - 1)."&month=".$month;
-$backMonth = "?p=".$project."&t=calendar&year=".$year."&month=".($month - 1);
-$forwardYear = "?p=".$project."&t=calendar&year=".($year + 1)."&month=".$month;
-$forwardMonth = "?p=".$project."&t=calendar&year=".$year."&month=".($month + 1);
-?>
-<script type="text/javascript">
-    function showDate(day) {
-        window.location = "?back=<?php echo $year.','.$month; ?>&t=calendarview&year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=" + day;
-    }
-</script>
-<?php if($_GET['t'] == "calendar") { ?>
-<div id="calendarHolder">
-    <h3><a title="Previous Year" href="<?php echo $backYear; ?>">&lt;&lt;</a>&nbsp;&nbsp;<a title="Previous Month" href="<?php echo $backMonth; ?>">&lt;</a>&nbsp;&nbsp;<?php echo date('F', $date)." - ".$year; ?>&nbsp;&nbsp;<a title="Next Month" href="<?php echo $forwardMonth; ?>">&gt;</a>&nbsp;&nbsp;<a title="Next Year" href="<?php echo $forwardYear; ?>">&gt;&gt;</a></h3>
-    <table id="calendar">
-        <thead>
-            <tr>
-                <th>Sunday</th>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php
-        $total = 1;
-        for($d = 1; $d <= date('t', $date); $d++){
-            if(($total % 7) - 1 == 0) { echo "<tr>"; }
-            if($d == 1 && $firstWeekDay > 0) {
-                $newYear = ($month - 1 == 0) ? $year-- : $year;
-                $lastDay = date('j', strtotime('last day of previous month', $date));
-                for($o = $lastDay - ($firstWeekDay - 1); $o <= $lastDay; $o++) {
-                    echo '<th class="last"><label class="date">'.$o.'</label></th>';
-                    $total++;
-                }
-            }
-            $class = ($year == date('Y') && $month == date('n')) ? ($d <= date('d')) ? ($d < date('d')) ? 'class="old"' : 'class="today"' : '' : '';
-            if(ProjectFunc::has_event($project, $year, $month, $d)) { $class='class="marked" onclick="showDate('.$d.');"'; }
-            echo '<th '.$class.'><label class="date">'.$d.'</label></th>';
-            if($d == date('t', $date) && $lastWeekDay < 6) {
-                $newYear = ($month + 1 == 13) ? $year++ : $year;
-                $firstDay = date('j', strtotime('first day of next month', $date));
-                for($o = $firstDay; $o <= $firstDay + (6 - ($lastWeekDay + 1)); $o++) {
-                    echo '<th class="last"><label class="date">'.$o.'</label></th>';
-                    $total++;
-                }
-            }
-            if($total % 7 == 0) { echo "</tr>"; }
-            $total++;
-        }
-        ?>
-        </tbody>
-    </table>
-</div>
-<?php } else {
+$first_week_day = date('w', $date);
+$last_week_day = date('w', mktime(0, 0, 0, date('n', $date), date('t', $date), $year));
+$back_year = "?p=".$project."&t=calendar&year=".($year - 1)."&month=".$month;
+$back_month = "?p=".$project."&t=calendar&year=".$year."&month=".($month - 1);
+$forward_year = "?p=".$project."&t=calendar&year=".($year + 1)."&month=".$month;
+$forward_month = "?p=".$project."&t=calendar&year=".$year."&month=".($month + 1);
+$show_date = '"?back='.$year.','.$month.'&t=calendarview&year='.$year.'&month='.$month.'&day="';
+
+if($_GET['t'] == "calendarview") {
     $back = "#";
     if(isset($_GET['back'])) {
         $split = explode(',', $_GET['back']);
         $back = '<a href="?p='.$project.'&t=calendar&year='.$split[0].'&month='.$split[1].'" style="float:left;padding-left:10px;">Back</a>';
     }
-?>
-    <div id="viewdate">
-        <?php
-            $monthDate = mktime(0, 0, 0, $month, 1, $year);
-            $day = (isset($_GET['day'])) ? $_GET['day'] : 1;
-            $viewDate = ProjectFunc::get_correct_date($year, $month, $day);
-            $year = date('Y', $viewDate);
-            $month = date('n', $viewDate);
-            $day = date('j', $viewDate);
 
-            $backYear = "?p=".$project."&t=calendarview&year=".($year - 1)."&month=".$month."&day=".$day;
-            $backMonth = "?p=".$project."&t=calendarview&year=".$year."&month=".($month - 1)."&day=".$day;
-            $backDay = "?p=".$project."&t=calendarview&year=".$year."&month=".$month."&day=".($day - 1);
-            $forwardYear = "?p=".$project."&t=calendarview&year=".($year + 1)."&month=".$month."&day=".$day;
-            $forwardMonth = "?p=".$project."&t=calendarview&year=".$year."&month=".($month + 1)."&day=".$day;
-            $forwardDay = "?p=".$project."&t=calendarview&year=".$year."&month=".$month."&day=".($day + 1);
-        ?>
-        <h3><?php echo $back; ?><?php echo date('l M jS Y', $viewDate); ?></h3>
-        <?php echo ProjectFunc::get_events($project, $year, $month, $day); ?>
-        <h5><a title="Previous Year" href="<?php echo $backYear; ?>">&lt;&lt;&lt;</a>&nbsp;&nbsp;<a title="Previous Month" href="<?php echo $backMonth; ?>">&lt;&lt;</a>&nbsp;&nbsp;<a title="Previous Day" href="<?php echo $backDay; ?>">&lt;</a>&nbsp;&nbsp;<label style="font-weight:bolder;font-size:1.2em;">Navigation</label>&nbsp;&nbsp;<a title="Next Day" href="<?php echo $forwardDay; ?>">&gt;</a>&nbsp;&nbsp;<a title="Next Month" href="<?php echo $forwardMonth; ?>">&gt;&gt;</a>&nbsp;&nbsp;<a title="Next Year" href="<?php echo $forwardYear; ?>">&gt;&gt;&gt;</a></h5>
-    </div>
-<?php } ?>
+    $month_date = mktime(0, 0, 0, $month, 1, $year);
+    $day = (isset($_GET['day'])) ? $_GET['day'] : 1;
+    $view_date = ProjectFunc::get_correct_date($year, $month, $day);
+    $year = date('Y', $view_date);
+    $month = date('n', $view_date);
+    $day = date('j', $view_date);
+
+    $back_year = "?p=".$project."&t=calendarview&year=".($year - 1)."&month=".$month."&day=".$day;
+    $back_month = "?p=".$project."&t=calendarview&year=".$year."&month=".($month - 1)."&day=".$day;
+    $back_day = "?p=".$project."&t=calendarview&year=".$year."&month=".$month."&day=".($day - 1);
+    $forward_year = "?p=".$project."&t=calendarview&year=".($year + 1)."&month=".$month."&day=".$day;
+    $forward_month = "?p=".$project."&t=calendarview&year=".$year."&month=".($month + 1)."&day=".$day;
+    $forward_day = "?p=".$project."&t=calendarview&year=".$year."&month=".$month."&day=".($day + 1);
+    $h3 = $back.date('l M jS Y', $view_date);
+
+    $rules['pages']['overview']['back_year'] = $back_year;
+    $rules['pages']['overview']['back_month'] = $back_month;
+    $rules['pages']['overview']['back_day'] = $back_day;
+    $rules['pages']['overview']['forward_day'] = $forward_day;
+    $rules['pages']['overview']['forward_month'] = $forward_month;
+    $rules['pages']['overview']['forward_year'] = $forward_year;
+    $rules['pages']['overview']['h3'] = $h3;
+    $rules['pages']['overview']['events'] = ProjectFunc::get_events($project, $year, $month, $day);
+    $rules['pages']['overview']['content'] = '{include->'.$theme_manager->get_template((string)$theme->name, "pages/overview/CalendarView.tpl").'}';
+} else {
+    $h3 = date('F', $date)." - ".$year;
+    $dates = '';
+    $total = 1;
+    for($d = 1; $d <= date('t', $date); $d++){
+        if(($total % 7) - 1 == 0) { $dates .= "<tr>"; }
+        if($d == 1 && $first_week_day > 0) {
+            $new_year = ($month - 1 == 0) ? $year-- : $year;
+            $last_day = date('j', strtotime('last day of previous month', $date));
+            for($o = $last_day - ($first_week_day - 1); $o <= $last_day; $o++) {
+                $dates .= '<th class="last"><label class="date">'.$o.'</label></th>';
+                $total++;
+            }
+        }
+        $class = ($year == date('Y') && $month == date('n')) ? ($d <= date('d')) ? ($d < date('d')) ? 'class="old"' : 'class="today"' : '' : '';
+        if(ProjectFunc::has_event($project, $year, $month, $d)) { $class='class="marked" onclick="showDate('.$d.');"'; }
+        $dates .= '<th '.$class.'><label class="date">'.$d.'</label></th>';
+        if($d == date('t', $date) && $last_week_day < 6) {
+            $new_year = ($month + 1 == 13) ? $year++ : $year;
+            $first_day = date('j', strtotime('first day of next month', $date));
+            for($o = $first_day; $o <= $first_day + (6 - ($last_week_day + 1)); $o++) {
+                $dates .= '<th class="last"><label class="date">'.$o.'</label></th>';
+                $total++;
+            }
+        }
+        if($total % 7 == 0) { echo "</tr>"; }
+        $total++;
+    }
+    $rules['pages']['overview']['back_year'] = $back_year;
+    $rules['pages']['overview']['back_month'] = $back_month;
+    $rules['pages']['overview']['forward_month'] = $forward_month;
+    $rules['pages']['overview']['forward_year'] = $forward_year;
+    $rules['pages']['overview']['h3'] = $h3;
+    $rules['pages']['overview']['dates'] = $dates;
+    $rules['pages']['overview']['show_date'] = $show_date;
+    $rules['pages']['overview']['content'] = '{include->'.$theme_manager->get_template((string)$theme->name, "pages/overview/Calendar.tpl").'}';
+}
+?>

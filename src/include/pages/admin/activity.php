@@ -51,7 +51,7 @@ global $prefix;
 $pagination = new Pagination($prefix."_activity", "id, archived, logged", $pn, 10, "?t=".$type."&", "ORDER BY logged DESC");
 
 if(has_values("activity")) {
-    $rules['table']['templates']['activities'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/activities.tpl").'}';
+    $rules['table']['templates']['activities'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Activities.tpl").'}';
     $entries = $pagination->paginate_return();
     $table_content = "";
     foreach ($entries as &$entry) {
