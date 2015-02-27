@@ -19,9 +19,13 @@ if(isset($_POST['add-group'])) {
                         $group->admin = (clean_input($_POST['admin']) == '1') ? true : false;
                         $group->preset = (clean_input($_POST['preset']) == '1') ? true : false;
                         $group->permissions = explode(",", clean_input($_POST['permissions-value']));
-                        Group::add_group($group);
                         $params = "name:".clean_input($_POST['name']).",admin:".clean_input($_POST['admin']).",preset:".clean_input($_POST['preset']);
                         ActivityFunc::log($current_user->name, "none", "none", "group:add", $params, 0, date("Y-m-d H:i:s"));
+
+                        $group_created_hook = new GroupCreatedHook($group->name, $group->admin, $group->preset, $group->permissions);
+                        $plugin_manager->trigger($group_created_hook);
+
+                        Group::add_group($group);
                         destroy_session("userspluscaptcha");
                     } else {
                         echo '<script type="text/javascript">';
@@ -52,25 +56,35 @@ if(isset($_POST['add-group'])) {
 
 if(isset($_POST['edit-group'])) {
     if(isset($_POST['id']) && trim($_POST['id']) != '' && has_values("groups", " WHERE id = '".clean_input($_POST['id'])."'")) {
-        $oldName = value("groups", "group_name", " WHERE id = '".clean_input($_POST['id'])."'");
         if(isset($_POST['name']) && trim($_POST['name']) != '') {
             if(isset($_POST['admin']) && trim($_POST['admin']) != '') {
                 if(isset($_POST['preset']) && trim($_POST['preset']) != '') {
-                    if(clean_input($_POST['name']) != $oldName && !has_values("groups", " WHERE group_name = '".clean_input($_POST['name'])."'") || clean_input($_POST['name']) == $oldName) {
+                    $id = clean_input($_POST['id']);
+                    $group = Group::load($id);
+                    if(clean_input($_POST['name']) != $group->name && !has_values("groups", " WHERE group_name = '".clean_input($_POST['name'])."'") || clean_input($_POST['name']) == $oldName) {
                         if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
-                            if($_POST['preset'] == '1') {
+                            $name = clean_input($_POST['name']);
+                            $admin = clean_input($_POST['admin']);
+                            $preset = clean_input($_POST['preset']);
+                            $permissions = explode(",", clean_input($_POST['permissions-value']));
+
+                            if($preset == '1') {
                                 $old = Group::load(Group::preset());
                                 $old->preset = 0;
                                 $old->save();
                             }
-                            $group = Group::load(clean_input($_POST['id']));
-                            $group->name = clean_input($_POST['name']);
-                            $group->admin = (clean_input($_POST['admin']) == '1') ? true : false;
-                            $group->preset = (clean_input($_POST['preset']) == '1') ? true : false;
-                            $group->permissions = explode(",", clean_input($_POST['permissions-value']));
-                            $group->save();
-                            $params = "prevname:".$oldName.",name:".clean_input($_POST['name']).",admin:".clean_input($_POST['admin']).",preset:".clean_input($_POST['preset']);
+
+                            $params = "prevname:".$group->name.",name:".$name.",admin:".$admin.",preset:".$preset;
                             ActivityFunc::log($current_user->name, "none", "none", "group:edit", $params, 0, date("Y-m-d H:i:s"));
+
+                            $group_modified_hook = new GroupModifiedHook($id, $group->name, $name, $group->admin, $admin, $group->preset, $preset, $group->permissions, $permissions);
+                            $plugin_manager->trigger($group_modified_hook);
+
+                            $group->name = $name;
+                            $group->admin = ($admin == '1') ? true : false;
+                            $group->preset = ($preset == '1') ? true : false;
+                            $group->permissions = $permissions;
+                            $group->save();
                             destroy_session("userspluscaptcha");
                         } else {
                             echo '<script type="text/javascript">';

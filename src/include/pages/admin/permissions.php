@@ -9,13 +9,16 @@
  */
 include_once("include/handling/permission.php");
 $editing = false;
-if(isset($_GET['action'])) {
+if(isset($_GET['action']) && isset($_GET['id']) && has_values("nodes", " WHERE id = '".clean_input($_GET['id'])."'")) {
+    $edit_id = clean_input($_GET['id']);
     $action = clean_input($_GET['action']);
 
-    if($action == "edit" && isset($_GET['id']) && has_values("nodes", " WHERE id = '".clean_input($_GET['id'])."'")) {
+    if($action == "edit") {
         $editing = true;
-    } else if($action == "delete" && isset($_GET['id']) && has_values("nodes", " WHERE id = '".clean_input($_GET['id'])."'")) {
-        node_delete(clean_input($_GET['id']));
+    } else if($action == "delete") {
+        $node_deleted_hook = new NodeDeletedHook($edit_id);
+        $plugin_manager->trigger($node_deleted_hook);
+        node_delete($edit_id);
     }
 }
 $rules['form']['templates']['permission'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/NodeAddForm.tpl").'}';

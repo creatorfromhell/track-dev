@@ -19,6 +19,10 @@ if(isset($_POST['add-version-type'])) {
 						$name = clean_input($_POST['type-name']);
 						$description = clean_input($_POST['type-description']);
 						$stable = clean_input($_POST['type-stable']);
+
+                        $type_created_hook = new TypeCreatedHook($name, $stable, $description);
+                        $plugin_manager->trigger($type_created_hook);
+
 						VersionFunc::add_type($name, $description, $stable);
 						destroy_session("userspluscaptcha");
 
@@ -59,9 +63,14 @@ if(isset($_POST['edit-version-type'])) {
 						if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
 
 							$id = clean_input($_POST['id']);
+                            $details = VersionFunc::type_details($id);
+
 							$name = clean_input($_POST['type-name']);
 							$description = clean_input($_POST['type-description']);
 							$stable = clean_input($_POST['type-stable']);
+
+                            $type_modified_hook = new TypeModifiedHook($id, $details['name'], $name, $details['stability'], $stable, $details['description'], $description);
+                            $plugin_manager->trigger($type_modified_hook);
 
 							VersionFunc::edit_type($id, $name, $description, $stable);
 							destroy_session("userspluscaptcha");

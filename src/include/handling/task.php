@@ -19,6 +19,10 @@ if(isset($_POST['add-task'])) {
                     if(isset($_POST['status']) && trim($_POST['status']) != "") {
                         if(has_values("projects", " WHERE project = '".clean_input($project)."'")) {
                             if(has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'")) {
+                                $title = $_POST['title'];
+                                $description = $_POST['description'];
+                                $author = $_POST['author'];
+                                $assignee = $_POST['assignee'];
                                 $created = date("Y-m-d H:i:s");
 								$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? clean_input($_POST['due-date']) : "0000-00-00";
                                 $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;
@@ -27,9 +31,13 @@ if(isset($_POST['add-task'])) {
                                 if($progress > 0) {
                                     ($progress >= 100) ? $status = 1 : $status = 2;
                                 }
-                                TaskFunc::add_task($project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, $due, "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
                                 $params = "title:".$_POST['title'].",description:".$_POST['description'].",status:".$status;
                                 ActivityFunc::log($current_user->name, $project, $list, "task:add", $params, 0, $created);
+
+                                $task_created_hook = new TaskCreatedHook($project, $list, $title, $description, $author, $assignee, "", $labels, $status, $progress);
+                                $plugin_manager->trigger($task_created_hook);
+
+                                TaskFunc::add_task($project, $list, $title, $description, $author, $assignee, $created, $due, "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
                             } else {
                                 echo '<script type="text/javascript">';
                                 echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->invalidlist")).'");';
@@ -76,6 +84,12 @@ if(isset($_POST['edit-task'])) {
                         if(isset($_POST['status']) && trim($_POST['status']) != "") {
                             if(has_values("projects", " WHERE project = '".clean_input($project)."'")) {
                                 if(has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'")) {
+                                    $id = clean_input($_POST['id']);
+                                    $details = TaskFunc::task_details($project, $list, $id);
+
+                                    $title = $_POST['title'];
+                                    $description = $_POST['description'];
+                                    $assignee = $_POST['assignee'];
                                     $created = date("Y-m-d H:i:s");
 									$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? clean_input($_POST['due-date']) : "0000-0-00";
                                     $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;
@@ -84,9 +98,19 @@ if(isset($_POST['edit-task'])) {
                                     if($progress > 0) {
                                         ($progress >= 100) ? $status = 1 : $status = 2;
                                     }
-                                    TaskFunc::edit_task($_POST['id'], $project, $list, $_POST['title'], $_POST['description'], $_POST['author'], $_POST['assignee'], $created, $due, "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
-                                    $params = "id:".$_POST['id'].",title:".$_POST['title'].",description:".$_POST['description'].",status:".$status;
+
+                                    if($status != $details['status']) {
+                                        $task_status_hook = new TaskStatusHook($project, $list, $id, $status);
+                                        $plugin_manager->trigger($task_status_hook);
+                                    }
+
+                                    $params = "id:".$id.",title:".$title.",description:".$description.",status:".$status;
                                     ActivityFunc::log($current_user->name, $project, $list, "task:edit", "", 0, date("Y-m-d H:i:s"));
+
+                                    $task_modified_hook = new TaskModifiedHook($id, $project, $list, $details['title'], $title, $details['description'], $description, $details['assignee'], $assignee, $details['version'], $version, $details['labels'], $labels, $details['status'], $status, $details['progress'], $progress);
+                                    $plugin_manager->trigger($task_modified_hook);
+
+                                    TaskFunc::edit_task($id, $project, $list, $title, $description, $_POST['author'], $assignee, $created, $due, "0000-0-00", "", $labels, $_POST['editable'], $status, $progress);
                                 } else {
                                     echo '<script type="text/javascript">';
                                     echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->task->invalidlist")).'");';

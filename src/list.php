@@ -27,38 +27,48 @@ if(isset($_GET['action']) && isset($_GET['id']) && can_edit_task(ListFunc::get_i
 
     if($switchable == 'tasks') {
         if($action == "open") {
-            TaskFunc::change_status($project, $list, $edit_id, 0);
             $params = "id:".$edit_id.",status:".$action;
             ActivityFunc::log(get_name(), $project, $list, "task:status", $params, 0, date("Y-m-d H:i:s"));
+            $task_status_hook = new TaskStatusHook($project, $list, $edit_id, 0);
+            $plugin_manager->trigger($task_status_hook);
+            TaskFunc::change_status($project, $list, $edit_id, 0);
             echo '<script type="text/javascript">';
             echo 'showMessage("success", "The status of task #'.$edit_id.' has been changed to open.");';
             echo '</script>';
         } else if($action == "done") {
-            TaskFunc::change_status($project, $list, $edit_id, 1);
-            TaskFunc::change_finished($project, $list, $edit_id, date("Y-m-d H:i:s"));
             $params = "id:".$edit_id.",status:".$action;
             ActivityFunc::log(get_name(), $project, $list, "task:status", $params, 0, date("Y-m-d H:i:s"));
+            $task_status_hook = new TaskStatusHook($project, $list, $edit_id, 1);
+            $plugin_manager->trigger($task_status_hook);
+            TaskFunc::change_status($project, $list, $edit_id, 1);
+            TaskFunc::change_finished($project, $list, $edit_id, date("Y-m-d H:i:s"));
             echo '<script type="text/javascript">';
             echo 'showMessage("success", "The status of task #'.$edit_id.' has been changed to done.");';
             echo '</script>';
         } else if($action == "inprogress") {
-            TaskFunc::change_status($project, $list, $edit_id, 2);
             $params = "id:".$edit_id.",status:".$action;
             ActivityFunc::log(get_name(), $project, $list, "task:status", $params, 0, date("Y-m-d H:i:s"));
+            $task_status_hook = new TaskStatusHook($project, $list, $edit_id, 2);
+            $plugin_manager->trigger($task_status_hook);
+            TaskFunc::change_status($project, $list, $edit_id, 2);
             echo '<script type="text/javascript">';
             echo 'showMessage("success", "The status of task #'.$edit_id.' has been changed to in progress.");';
             echo '</script>';
         } else if($action == "close") {
-            TaskFunc::change_status($project, $list, $edit_id, 3);
             $params = "id:".$edit_id.",status:".$action;
             ActivityFunc::log(get_name(), $project, $list, "task:status", $params, 0, date("Y-m-d H:i:s"));
+            $task_status_hook = new TaskStatusHook($project, $list, $edit_id, 3);
+            $plugin_manager->trigger($task_status_hook);
+            TaskFunc::change_status($project, $list, $edit_id, 3);
             echo '<script type="text/javascript">';
             echo 'showMessage("success", "The status of task #'.$edit_id.' has been changed to closed.");';
             echo '</script>';
         } else if($action == "delete") {
-            TaskFunc::delete_task($project, $list, $edit_id);
             $params = "id:".$edit_id;
             ActivityFunc::log(get_name(), $project, $list, "task:delete", $params, 0, date("Y-m-d H:i:s"));
+            $task_deleted_hook = new TaskDeletedHook($project, $list, $edit_id);
+            $plugin_manager->trigger($task_deleted_hook);
+            TaskFunc::delete_task($project, $list, $edit_id);
             echo '<script type="text/javascript">';
             echo 'showMessage("success", "Task #'.$edit_id.' has been deleted.");';
             echo '</script>';
@@ -69,9 +79,11 @@ if(isset($_GET['action']) && isset($_GET['id']) && can_edit_task(ListFunc::get_i
         if($action == "edit") {
             $editing = true;
         } else if($action == "delete") {
-            LabelFunc::delete_label($edit_id);
             $params = "id:".$edit_id;
-            ActivityFunc::log(get_name(), $project, $list, "label:delete", $params, 0, date("Y-m-d H:i:s"));
+            ActivityFunc::log(get_name(), $project, $list, "label:delete", $params, 0, date("Y-m-d H:i:s"));;
+            $label_deleted_hook = new LabelDeletedHook($project, $list, $edit_id);
+            $plugin_manager->trigger($label_deleted_hook);
+            LabelFunc::delete_label($edit_id);
             echo '<script type="text/javascript">';
             echo 'showMessage("success", "Label #'.$edit_id.' has been deleted.");';
             echo '</script>';

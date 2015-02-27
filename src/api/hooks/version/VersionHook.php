@@ -15,8 +15,8 @@ abstract class VersionHook extends Hook {
 
     public function __construct($name) {
         parent::__construct($name, array(
-            'project_name' => null,
-            'version_name' => null
+            'project' => null,
+            'version' => null
         ));
         $this->web = true;
     }

@@ -18,11 +18,20 @@ if(isset($_POST['add-project'])) {
                 if(isset($_POST['mainproject']) && trim($_POST['mainproject']) != "") {
                     if(isset($_POST['overseer']) && trim($_POST['overseer']) != "") {
                         if(!has_values("projects", " WHERE project = '".clean_input($_POST['name'])."'")) {
+                            $name = $_POST['name'];
+                            $main_project = $_POST['mainproject'];
+                            $author = $_POST['author'];
+                            $overseer = $_POST['overseer'];
+                            $public = $_POST['public'];
                             $created = date("Y-m-d H:i:s");
-                            if($_POST['mainproject'] != 0) {
+                            if($main_project != 0) {
                                 ProjectFunc::remove_preset();
                             }
-                            ProjectFunc::add_project($_POST['name'], $_POST['mainproject'], 0, $_POST['author'], $created, $_POST['overseer'], $_POST['public']);
+
+                            $project_created_hook = new ProjectCreatedHook($name, $main_project, $author, $overseer);
+                            $plugin_manager->trigger($project_created_hook);
+
+                            ProjectFunc::add_project($name, $main_project, 0, $author, $created, $overseer, $public);
                             $params = "public:".$_POST['public'].",overseer:".$_POST['overseer'];
                             ActivityFunc::log($current_user->name, $_POST['name'], "none", "project:add", $params, 0, $created);
                         } else {
@@ -64,18 +73,27 @@ if(isset($_POST['edit-project'])) {
                 if(isset($_POST['mainproject']) && trim($_POST['mainproject']) != "") {
                     if(isset($_POST['mainlist']) && trim($_POST['mainlist']) != "") {
                         if(isset($_POST['overseer']) && trim($_POST['overseer']) != "") {
-                            $details = ProjectFunc::project_details($_POST['id']);
-                            if($_POST['name'] == $details['name'] || $_POST['name'] != $details['name'] && !has_values("projects", " WHERE project = '".clean_input($_POST['name'])."'")) {
+                            $id = $_POST['id'];
+                            $details = ProjectFunc::project_details($id);
+                            $name = $_POST['name'];
+                            if($name == $details['name'] || $name != $details['name'] && !has_values("projects", " WHERE project = '".clean_input($name)."'")) {
+                                $main_project = $_POST['mainproject'];
+                                $overseer = $_POST['overseer'];
+                                $public = $_POST['public'];
                                 $created = date("Y-m-d H:i:s");
-                                if($details['preset'] == 0 && $_POST['mainproject'] == 1) {
+                                if($details['preset'] == 0 && $main_project == 1) {
                                     ProjectFunc::remove_preset();
                                 }
-                                if($details['name'] != $_POST['name']) {
-                                    ProjectFunc::rename_project($_POST['id'], $details['name'], $_POST['name']);
+                                if($details['name'] != $name) {
+                                    ProjectFunc::rename_project($id, $details['name'], $name);
                                 }
-                                ProjectFunc::edit_project($_POST['id'], $_POST['name'], $_POST['mainproject'], $_POST['mainlist'], $_POST['overseer'], $_POST['public']);
-                                $params = "id:".$_POST['id'].",public:".$_POST['public'].",overseer:".$_POST['overseer'];
-                                ActivityFunc::log($current_user->name, $_POST['name'], "none", "project:edit", $params, 0, date("Y-m-d H:i:s"));
+                                $params = "id:".$id.",public:".$public.",overseer:".$overseer;
+                                ActivityFunc::log($current_user->name, $name, "none", "project:edit", $params, 0, date("Y-m-d H:i:s"));
+
+                                $project_modified_hook = new ProjectModifiedHook($id, $details['name'], $name, $details['preset'], $main_project, $details['overseer'], $overseer);
+                                $plugin_manager->trigger($project_modified_hook);
+
+                                ProjectFunc::edit_project($id, $name, $main_project, $_POST['mainlist'], $overseer, $public);
                             } else {
                                 echo '<script type="text/javascript">';
                                 echo 'showMessage("error", "'.$formatter->replace_shortcuts($language_manager->get_value($language, "site->forms->project->taken")).'");';

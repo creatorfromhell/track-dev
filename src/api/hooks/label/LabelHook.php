@@ -15,9 +15,9 @@ abstract class LabelHook extends Hook {
 
     public function __construct($name) {
         parent::__construct($name, array(
-            'project_name' => null,
-            'list_name' => null,
-            'label_name' => null
+            'project' => null,
+            'list' => null,
+            'label' => null
         ));
         $this->web = true;
     }

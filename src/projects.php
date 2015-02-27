@@ -26,9 +26,11 @@ if(isset($_GET['action']) && isset($_GET['id'])) {
         if($switchable == "projects") {
             if($action == "delete") {
                 $name = ProjectFunc::get_name($edit_id);
-                ProjectFunc::remove($edit_id);
                 $params = "id:".$edit_id;
                 ActivityFunc::log(get_name(), $name, "none", "project:delete", $params, 0, date("Y-m-d H:i:s"));
+                $project_deleted_hook = new ProjectDeletedHook($edit_id);
+                $plugin_manager->trigger($project_deleted_hook);
+                ProjectFunc::remove($edit_id);
                 echo '<script type="text/javascript">';
                 echo 'showMessage("success", "Project '.$name.' has been deleted.");';
                 echo '</script>';
@@ -37,6 +39,9 @@ if(isset($_GET['action']) && isset($_GET['id'])) {
             }
         } else if($switchable == "types") {
             if($action == "delete") {
+                $type_deleted_hook = new TypeDeletedHook($edit_id);
+                $plugin_manager->trigger($type_deleted_hook);
+                VersionFunc::delete_type($edit_id);
             } else if($action == "edit") {
                 $editing = true;
             }

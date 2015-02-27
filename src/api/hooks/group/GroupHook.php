@@ -14,7 +14,7 @@
 abstract class GroupHook extends Hook {
 
     public function __construct($name) {
-        parent::__construct($name, array('group_name' => null));
+        parent::__construct($name, array('name' => null));
         $this->web = true;
     }
 }
