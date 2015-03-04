@@ -142,7 +142,7 @@ function to_options($data, $value = null) {
 
 /**
  * @param $file
- * @param $name
+ * @param string $name
  * @param int $maxSize
  */
 function upload_file($file, $name, $maxSize = 1000000) {
@@ -333,7 +333,7 @@ function page_locked_user($user, $name) {
  * Permission Functions
  */
 /**
- * @param $node
+ * @param string $node
  * @return mixed
  */
 function node_id($node) {
