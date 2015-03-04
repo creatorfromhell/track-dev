@@ -102,10 +102,10 @@
                 <downloads>There are currently no downloads for %project.</downloads>
                 <types>There are currently no version types.</types>
                 <labels>There are currently no labels for %list.</labels>
-                <activities></activities>
-                <groups></groups>
-                <nodes></nodes>
-                <users></users>
+                <activities>There are no recent activities.</activities>
+                <groups>There are currently no user groups.</groups>
+                <nodes>There are currently no permission nodes.</nodes>
+                <users>There are currently no registered users,</users>
             </missing>
         </tables>
         <forms>
