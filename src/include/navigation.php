@@ -15,11 +15,11 @@ $tabs = array(
 		"translate" => "lang:",
 		"sub" => array(
 			"project" => array(
-				"location" => "index.php?t=project&amp;p=".$project,
+				"location" => "index.php?".$previous."&amp;t=project&amp;p=".$project,
 				"translate" => "lang:"
 			),
 			"calendar" => array(
-				"location" => "index.php?t=calendar&amp;p=".$project,
+				"location" => "index.php?".$previous."&amp;t=calendar&amp;p=".$project,
 				"translate" => "lang:"
 			),
 		)
@@ -30,14 +30,14 @@ $tabs = array(
 	),
 	"lists" => array(
 		"alias" => array("list"),
-		"location" => "lists.php",
+		"location" => "lists.php?".$previous,
 		"translate" => "lang:",
 	),
 );
 
 foreach($projects as &$p) {
     $projectInfo = array(
-        "location" => "lists.php?p=".$p,
+        "location" => "lists.php?".$previous."&amp;p=".$p,
         "translate" => "lang:"
     );
 
@@ -46,7 +46,7 @@ foreach($projects as &$p) {
 
 foreach($lists as &$l) {
     $listInfo = array(
-        "location" => "list.php?p=".$project."&amp;l=".$l,
+        "location" => "list.php?".$previous."&amp;p=".$project."&amp;l=".$l,
         "translate" => "lang:"
     );
 

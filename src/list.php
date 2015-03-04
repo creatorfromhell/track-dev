@@ -340,7 +340,7 @@ if(has_values($project."_".$list) && can_view_list(ListFunc::get_id($project, $l
         else { $table_content .= "<tr>"; }
 
         $table_content .= "<td class='id'>".$id."</td>";
-        $link = "task.php?p=".$project."&amp;l=".$list."&amp;id=".$id;
+        $link = "task.php?".$previous."&amp;p=".$project."&amp;l=".$list."&amp;id=".$id;
         $table_content .= "<td class='title'><a href='".$link."'>".$formatter->replace($title)."</a></td>";
         if(!$minimal) {
             $table_content .= "<td class='assignee'>".$formatter->replace($assignee)."</td>";

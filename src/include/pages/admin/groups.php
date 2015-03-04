@@ -78,11 +78,14 @@ if(isset($_GET['action']) && isset($_GET['id']) && has_values("groups", " WHERE 
     } else if($action == "delete") {
         $params = "id:".$edit_id.",status:".$action;
         ActivityFunc::log(get_name(), $project, $list, "group:delete", $params, 0, date("Y-m-d H:i:s"));
+
         $group_deleted_hook = new GroupDeletedHook($edit_id);
         $plugin_manager->trigger($group_deleted_hook);
+
         echo '<script type="text/javascript">';
         echo 'showMessage("success", "Group '.value("groups", "group_name", " WHERE id = ?", array($edit_id)).' has been delete.");';
         echo '</script>';
+
         Group::delete($edit_id);
     }
 }

@@ -19,4 +19,4 @@ class UserLogoutHook extends Hook {
         $this->arguments['date_time'] = $date;
         $this->arguments['ip'] = $ip;
     }
-} 
+}

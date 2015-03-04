@@ -32,7 +32,7 @@ if(isset($_POST['login'])) {
         $plugin_manager->trigger($user_login_hook);
 
         $_SESSION['usersplusprofile'] = $user->name;
-        header("Location: index.php");
+        header("Location: index.php?".$previous);
     } catch(Exception $e) {
         $translated = $language_manager->get_value($language, $e->getMessage());
         //TODO: form message handling

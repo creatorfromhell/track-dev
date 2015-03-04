@@ -66,4 +66,20 @@ $rules = array(
     ),
     'year' => date('Y'),
 );
+
+if($page != $previous_page) {
+    $switch_page_hook = new SwitchPageHook($previous_page, $page);
+    $plugin_manager->trigger($switch_page_hook);
+
+    if($page == "admin") {
+        $admin_enter_hook = new AdminEnterHook($current_user->name, $previous_page);
+        $plugin_manager->trigger($admin_enter_hook);
+    }
+
+    if($previous == "admin") {
+        $admin_leave_hook = new AdminLeaveHook($current_user->name, $page);
+        $plugin_manager->trigger($admin_leave_hook);
+    }
+}
+
 include_once('navigation.php');

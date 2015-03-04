@@ -10,6 +10,7 @@
 include("include/header.php");
 if(page_locked_admin($current_user)) { header('LOCATION: index.php'); }
 $type = "dashboard";
+
 if(isset($_GET['t'])) {
     $type = $_GET['t'];
 }
@@ -18,49 +19,49 @@ $admin_tabs = array(
 	"dashboard" => array(
         "template" => "pages/admin/Dashboard.tpl",
 		"include" => "include/pages/admin/dashboard.php",
-		"location" => "admin.php?t=dashboard",
+		"location" => "admin.php?".$previous."&amp;t=dashboard",
 		"translate" => "lang:"
 	),
 	"activity" => array(
         "template" => "pages/admin/Activity.tpl",
 		"include" => "include/pages/admin/activity.php",
-		"location" => "admin.php?t=activity",
+		"location" => "admin.php?".$previous."&amp;t=activity",
 		"translate" => "lang:"
 	),
 	"groups" => array(
         "template" => "pages/admin/Groups.tpl",
 		"include" => "include/pages/admin/groups.php",
-		"location" => "admin.php?t=groups",
+		"location" => "admin.php?".$previous."&amp;t=groups",
 		"translate" => "lang:"
 	),
 	"options" => array(
         "template" => "pages/admin/Options.tpl",
 		"include" => "include/pages/admin/options.php",
-		"location" => "admin.php?t=options",
+		"location" => "admin.php?".$previous."&amp;t=options",
 		"translate" => "lang:"
 	),
 	"permissions" => array(
         "template" => "pages/admin/Permissions.tpl",
 		"include" => "include/pages/admin/permissions.php",
-		"location" => "admin.php?t=permissions",
+		"location" => "admin.php?".$previous."&amp;t=permissions",
 		"translate" => "lang:"
 	),
     "users" => array(
         "template" => "pages/admin/Users.tpl",
         "include" => "include/pages/admin/users.php",
-        "location" => "admin.php?t=users",
+        "location" => "admin.php?".$previous."&amp;t=users",
         "translate" => "lang:"
     ),
 	"addons" => array(
         "template" => "pages/admin/Addons.tpl",
 		"include" => "include/pages/admin/addons.php",
-		"location" => "admin.php?t=addons",
+		"location" => "admin.php?".$previous."&amp;t=addons",
 		"translate" => "lang:"
 	),
     "web hooks" => array(
         "template" => "pages/admin/WebHooks.tpl",
         "include" => "include/pages/admin/hooks.php",
-        "location" => "admin.php?t=hooks",
+        "location" => "admin.php?".$previous."&amp;t=hooks",
         "translate" => "lang:"
     ),
 );

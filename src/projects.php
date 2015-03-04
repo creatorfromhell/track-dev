@@ -230,7 +230,7 @@ if(has_values("projects")) {
         $overseer = $entry['overseer'];
 
         $table_content .= "<tr>";
-        $table_content .= "<td class='name'><a href='lists.php?p=".$name."'>".$formatter->replace($name)."</a></td>";
+        $table_content .= "<td class='name'><a href='lists.php?".$previous."&amp;p=".$name."'>".$formatter->replace($name)."</a></td>";
         $table_content .= "<td class='created'>".$formatter->replace($formatter->format_date($created))."</td>";
         $table_content .= "<td class='creator'>".$formatter->replace($creator)."</td>";
         $table_content .= "<td class='overseer'>".$formatter->replace($overseer)."</td>";
@@ -259,7 +259,7 @@ if(has_values("version_types")) {
         $stable = ($entry['version_stability'] == '0') ? 'No' : 'Yes';
 
         $table_content .= "<tr>";
-        $table_content .= "<td class='name'><a href='lists.php?p=".$project."'>".$formatter->replace($name)."</a></td>";
+        $table_content .= "<td class='name'><a href='lists.php?".$previous."&amp;p=".$project."'>".$formatter->replace($name)."</a></td>";
         $table_content .= "<td class='description'>".$formatter->replace($description)."</td>";
         $table_content .= "<td class='stable'>".$formatter->replace($stable)."</td>";
         $table_content .= "<td class='actions'>";

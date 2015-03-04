@@ -10,7 +10,7 @@
 
 include("include/header.php");
 $current_user = User::load($_SESSION['usersplusprofile']);
-if($current_user === null) { header('LOCATION: index.php'); }
+if($current_user === null) { header('LOCATION: index.php?'.$previous); }
 ActivityFunc::log($current_user->name, "none", "none", "user:logout", "", 0, date("Y-m-d H:i:s"));
 $date = date("Y-m-d H:i:s");
 $current_user->logged_in = $date;

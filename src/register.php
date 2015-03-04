@@ -39,6 +39,8 @@ if(isset($_POST['register'])) {
         }
 
         User::add_user($user);
+
+        header("Location: login.php?".$previous);
     } catch(Exception $e) {
         $translated = $language_manager->get_value($language, $e->getMessage());
         //TODO: form message handling

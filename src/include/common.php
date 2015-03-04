@@ -116,19 +116,6 @@ unset($configuration_values["database"]);
 unset($configuration_values["trackr"]);
 global $pdo, $prefix, $configuration_values;
 
-//Page & Path variables
-$installation_path = rtrim($configuration_values["urls"]["base_url"], "/").rtrim($configuration_values["urls"]["installation_path"], "/")."/";
-$path = $_SERVER["PHP_SELF"];
-$pageFull = basename($path);
-$page = basename($path, ".php");
-$pn = 1;
-
-if(isset($_GET['pn'])) {
-    if($_GET['pn'] > 0) {
-        $pn = $_GET['pn'];
-    }
-}
-
 //Project & List Stuff
 $project = ProjectFunc::get_preset();
 $projects = values("projects", "project");
@@ -146,6 +133,8 @@ if(isset($_GET['p']) && has_values("projects", " WHERE project = ?", array($_GET
     $project = $_COOKIE['p'];
     $list = ProjectFunc::get_main($project);
 }
+
+$lists = values("lists", "list", " WHERE project = ?", array($project));
 
 if(isset($_GET['l']) && has_values("lists", " WHERE project = ? AND list = ?", array($project, $_GET['l']))) {
     $list = $_GET['l'];
@@ -179,10 +168,23 @@ if(isset($_GET['lang']) && $language_manager->exists($_GET['lang'])) {
     $language = $_COOKIE['lang'];
 }
 
-$language_instance = $language_manager->languages[$language];
+//Page & Path variables
+$installation_path = rtrim($configuration_values["urls"]["base_url"], "/").rtrim($configuration_values["urls"]["installation_path"], "/")."/";
+$path = $_SERVER["PHP_SELF"];
+$page_full = basename($path);
+$page = basename($path, ".php");
+$previous_page = (isset($_GET['prev'])) ? StringFormatter::clean_input($_GET['prev']) : "";
+$previous = 'prev='.$page;
+$return = $page_full.'?p='.$project.'&l='.$list;
+$pn = 1;
 
-$return = $pageFull.'?p='.$project.'&l='.$list;
-$lists = values("lists", "list", " WHERE project = ?", array($project));
+if(isset($_GET['pn'])) {
+    if($_GET['pn'] > 0) {
+        $pn = $_GET['pn'];
+    }
+}
+
+//Message variables
 $raw_msg = "";
 $msg = "";
 $msg_type = "general";

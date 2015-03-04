@@ -11,11 +11,11 @@ $id = 0;
 if(isset($_GET['id'])) {
     $id = $_GET['id'];
 } else {
-    header("Location: index.php");
+    header("Location: index.php?".$previous);
 }
 include("include/header.php");
 
-$back = "list.php?p=".$project."&l=".$list;
+$back = "list.php?".$previous."&amp;p=".$project."&l=".$list;
 $task_details = TaskFunc::task_details($project, $list, $id);
 
 $finished = ($task_details['finished'] != "0000-00-00") ? $task_details['finished'] : "None";

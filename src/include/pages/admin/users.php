@@ -28,6 +28,9 @@ if(isset($_POST['add-user'])) {
         $params = "name:".$user->name.",email:".$user->email.",group:".$user->group->id;
         ActivityFunc::log($current_user->name, "none", "none", "user:add", $params, 0, date("Y-m-d H:i:s"));
 
+        $user_created_hook = new UserCreatedHook($user->name, $user->email, $user->group->id);
+        $plugin_manager->trigger($user_created_hook);
+
         User::add_user($user);
     } catch(Exception $e) {
         $translated = $language_manager->get_value($language, $e->getMessage());
@@ -51,6 +54,9 @@ if(isset($_POST['edit-user'])) {
         $params = "oldname:".$user->name.",name:".$name.",oldemail:".$user->email.",email:".$email.",oldgroup:".$user->group->id.",group:".$group;
         ActivityFunc::log($current_user->name, "none", "none", "user:edit", $params, 0, date("Y-m-d H:i:s"));
 
+        $user_modified_hook = new UserModifiedHook($user->id, $user->name, $name, $user->email, $email, $user->group->id, $group->id);
+        $plugin_manager->trigger($user_modified_hook);
+
         $user->name = $name;
         $user->email = $email;
         $user->password = $password;
@@ -67,18 +73,24 @@ $subPage = "all";
 if(isset($_GET['sub'])) {
     $subPage = $_GET['sub'];
 }
-if(isset($_GET['action'])) {
+if(isset($_GET['action']) && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = ?", array($_GET['id'])))) {
     $action = StringFormatter::clean_input($_GET['action']);
+    $edit_id = StringFormatter::clean_input($_GET['id']);
 
-    if($action == "edit" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = ?", array($_GET['id'])))) {
+    if($action == "edit") {
         $editing = true;
-    } else if($action == "delete" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = ?", array($_GET['id'])))) {
-        $params = "id:".$id.",status:".$action;
+    } else if($action == "delete") {
+        $params = "id:".$edit_id.",status:".$action;
         ActivityFunc::log(get_name(), $project, $list, "user:delete", $params, 0, date("Y-m-d H:i:s"));
+
+        $user_deleted_hook = new UserDeletedHook($edit_id);
+        $plugin_manager->trigger($user_deleted_hook);
+
+        User::delete($edit_id);
+
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "User '.value("users", "user_name", " WHERE id = ?", array($_GET['id'])).' has been delete.");';
+        echo 'showMessage("success", "User '.value("users", "user_name", " WHERE id = ?", array($edit_id)).' has been delete.");';
         echo '</script>';
-        User::delete(StringFormatter::clean_input($_GET['id']));
     }
 }
 $rules['form']['templates']['user'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/UserAddForm.tpl").'}';

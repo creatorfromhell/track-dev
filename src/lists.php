@@ -263,7 +263,7 @@ if(has_values("lists", " WHERE project = ?", array($project))) {
         $overseer = $entry['overseer'];
 
         $table_content .= "<tr>";
-        $table_content .= "<td class='name'><a href='list.php?p=".$project."&amp;l=".$name."'>".$formatter->replace($name)."</a></td>";
+        $table_content .= "<td class='name'><a href='list.php?".$previous."&amp;p=".$project."&amp;l=".$name."'>".$formatter->replace($name)."</a></td>";
         $table_content .= "<td class='created'>".$formatter->replace($formatter->format_date($created))."</td>";
         $table_content .= "<td class='creator'>".$formatter->replace($creator)."</td>";
         $table_content .= "<td class='overseer'>".$formatter->replace($overseer)."</td><td>";
