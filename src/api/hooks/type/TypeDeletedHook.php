@@ -9,7 +9,7 @@
 /**
  * Class TypeDeletedHook
  */
-class TypeDeletedHook extends TypeHook {
+class TypeDeletedHook extends Hook {
 
     public function __construct($id = 'not initialized') {
         parent::__construct("type_deleted_hook");

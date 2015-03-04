@@ -9,7 +9,7 @@
 /**
  * Class TaskStatusHook
  */
-class TaskStatusHook extends TaskHook {
+class TaskStatusHook extends Hook {
 
     public function __construct($project = 'not initialized', $list = 'not initialized', $id = 'not initialized', $status = 'not initialized') {
         parent::__construct("task_status_hook");

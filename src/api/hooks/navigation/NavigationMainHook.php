@@ -11,7 +11,7 @@
 /**
  * Class NavigationMainHook
  */
-class NavigationMainHook extends NavigationHook {
+class NavigationMainHook extends Hook {
 
     public function __construct(&$tabs = 'not initialized') {
         parent::__construct("navigation_main_hook");

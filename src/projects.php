@@ -166,7 +166,7 @@ if($switchable == 'projects') {
             $preset_string .= '<option value="1"'.(($details['preset'] == 1) ? ' selected' : '').'>Yes</option>';
             $overseer_string = '<option value="none"'.(($details['overseer'] == 'none') ? ' selected' : '').'>None</option>';
             $overseer_string .= to_options(values("users", "user_name"), $details['overseer']);
-            $lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($details['name'])."'");
+            $lists = values("lists", "list", " WHERE project = ?", array($details['name']));
             foreach($lists as &$list) {
                 $list_id = ListFunc::get_id($details['name'], $list);
                 $list_string .= '<option value="'.$list_id.'"'.(($list_id == $details['main']) ? ' selected' : '').'>'.$list.'</option>';

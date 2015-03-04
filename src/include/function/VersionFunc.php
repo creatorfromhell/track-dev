@@ -63,7 +63,7 @@ class VersionFunc {
      * @param $due
      */
     public static function change_due($id, $due) {
-        set_value("versions", "due", $due, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value("versions", "due", $due, " WHERE id = ?", array($id));
     }
 
     //change project
@@ -72,7 +72,7 @@ class VersionFunc {
      * @param $project
      */
     public static function change_project($id, $project) {
-        set_value("versions", "project", $project, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value("versions", "project", $project, " WHERE id = ?", array($id));
     }
 
     //change release date
@@ -81,7 +81,7 @@ class VersionFunc {
      * @param $release
      */
     public static function change_release($id, $release) {
-        set_value("versions", "release", $release, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value("versions", "release", $release, " WHERE id = ?", array($id));
     }
 
     //change version type
@@ -90,7 +90,7 @@ class VersionFunc {
      * @param $type
      */
     public static function change_type($id, $type) {
-        set_value("versions", "version_type", $type, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value("versions", "version_type", $type, " WHERE id = ?", array($id));
     }
 
     /**
@@ -98,7 +98,7 @@ class VersionFunc {
      * @return mixed
      */
     public static function get_project($id) {
-        return value("versions", "project", " WHERE id = '".StringFormatter::clean_input($id)."'");
+        return value("versions", "project", " WHERE id = ?", array($id));
 	}
 
     //reversion version
@@ -107,7 +107,7 @@ class VersionFunc {
      * @param $version
      */
     public static function rename_version($id, $version) {
-        set_value("versions", "version_name", $version, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value("versions", "version_name", $version, " WHERE id = ?", array($id));
     }
 
     /**
@@ -177,7 +177,7 @@ class VersionFunc {
      * @return bool
      */
     public static function stable($type) {
-        return (value("version_types", "version_stability", " WHERE version_type = '".StringFormatter::clean_input($type)."'") == '1') ? true : false;
+        return (value("version_types", "version_stability", " WHERE version_type = ?", array($type)) == '1') ? true : false;
 	}
 
     /**

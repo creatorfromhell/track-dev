@@ -11,7 +11,7 @@
 /**
  * Class NodeCreatedHook
  */
-class NodeCreatedHook extends NodeHook {
+class NodeCreatedHook extends Hook {
 
     public function __construct($node = 'not initialized', $description = 'not initialized') {
         parent::__construct("node_created_hook");

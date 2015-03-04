@@ -217,7 +217,7 @@ function can_view_list($id) {
     if(is_admin()) { return true; }
     if(ProjectFunc::get_overseer(ListFunc::get_project($id)) == get_name() || ListFunc::get_overseer($id) == get_name()) { return true; }
 	$user = User::load($_SESSION['usersplusprofile']);
-    if($viewPermission != "none" && has_values("nodes", " WHERE id = '".StringFormatter::clean_input($viewPermission)."'") && $user->has_permission($viewPermission)) { return true; }
+    if($viewPermission != "none" && has_values("nodes", " WHERE id = ?", array($viewPermission)) && $user->has_permission($viewPermission)) { return true; }
     return false;
 }
 
@@ -232,7 +232,7 @@ function can_edit_list($id) {
     if(is_admin()) { return true; }
     if(ProjectFunc::get_overseer(ListFunc::get_project($id)) == get_name() || ListFunc::get_overseer($id) == get_name()) { return true; }
     $user = User::load($_SESSION['usersplusprofile']);
-	if($editPermission != "none" && has_values("nodes", " WHERE id = '".StringFormatter::clean_input($editPermission)."'") && $user->has_permission($editPermission)) { return true; }
+	if($editPermission != "none" && has_values("nodes", " WHERE id = ?", array($editPermission)) && $user->has_permission($editPermission)) { return true; }
     return false;
 }
 
@@ -250,7 +250,7 @@ function can_edit_task($listID, $taskID) {
     $details = TaskFunc::task_details(ListFunc::get_project($listID), ListFunc::get_name($listID), $taskID);
     if($details['author'] == get_name()) { return true; }
 	$user = User::load($_SESSION['usersplusprofile']);
-    if($editPermission != "none" && has_values("nodes", " WHERE id = '".StringFormatter::clean_input($editPermission)."'") && $user->has_permission($editPermission) && $details['editable'] == '1') { return true; }
+    if($editPermission != "none" && has_values("nodes", " WHERE id = ?", array($editPermission)) && $user->has_permission($editPermission) && $details['editable'] == '1') { return true; }
     return false;
 }
 
@@ -288,11 +288,11 @@ function page_locked($user, $node = "", $guest = false, $admin = false, $group =
 function page_locked_node($user, $node, $guest = false) {
     if($guest) { return false; }
     if($user === null) { return true; }
-    if(!is_a($user, "User")) { return true; }
+    if(!($user instanceof User)) { return true; }
     if($user->is_admin()) { return false; }
-    if(!has_values("nodes", " WHERE node_name = '".StringFormatter::clean_input($node)."'")) { return true; }
-    if($user->hasPermission(node_id($node))) { return false; }
-    if($user->group->hasPermission(node_id($node))) { return false; }
+    if(!has_values("nodes", " WHERE node_name = ?", array($node))) { return true; }
+    if($user->has_permission(node_id($node))) { return false; }
+    if($user->group->has_permission(node_id($node))) { return false; }
     return true;
 }
 
@@ -302,7 +302,7 @@ function page_locked_node($user, $node, $guest = false) {
  */
 function page_locked_admin($user) {
     if($user === null) { return true; }
-    if(!is_a($user, "User")) { return true; }
+    if(!($user instanceof User)) { return true; }
     if($user->is_admin()) { return false; }
     return true;
 }
@@ -312,7 +312,7 @@ function page_locked_admin($user) {
  */
 function page_locked_group($user, $group) {
     if($user === null) { return true; }
-    if(!is_a($user, "User")) { return true; }
+    if(!($user instanceof User)) { return true; }
     if($user->is_admin()) { return false; }
     if($user->group->id == $group) { return false; }
     return true;
@@ -323,7 +323,7 @@ function page_locked_group($user, $group) {
  */
 function page_locked_user($user, $name) {
     if($user === null) { return true; }
-    if(!is_a($user, "User")) { return true; }
+    if(!($user instanceof User)) { return true; }
     if($user->is_admin()) { return false; }
     if($user->name == $name) { return false; }
     return true;
@@ -337,7 +337,7 @@ function page_locked_user($user, $name) {
  * @return mixed
  */
 function node_id($node) {
-    return value("nodes", "id", " WHERE node_name = '".StringFormatter::clean_input($node)."'");
+    return value("nodes", "id", " WHERE node_name = ?", array($node));
 }
 
 /**
@@ -345,7 +345,7 @@ function node_id($node) {
  * @return mixed
  */
 function node_name($id) {
-    return value("nodes", "node_name", " WHERE id = '".StringFormatter::clean_input($id)."'");
+    return value("nodes", "node_name", " WHERE id = ?", array($id));
 }
 
 /**

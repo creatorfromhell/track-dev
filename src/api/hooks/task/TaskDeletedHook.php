@@ -9,7 +9,7 @@
 /**
  * Class TaskDeletedHook
  */
-class TaskDeletedHook extends TaskHook {
+class TaskDeletedHook extends Hook {
 
     public function __construct($project = 'not initialized', $list = 'not initialized', $id = 'not initialized') {
         parent::__construct("task_deleted_hook");

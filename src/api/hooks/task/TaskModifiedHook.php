@@ -9,7 +9,7 @@
 /**
  * Class TaskModifiedHook
  */
-class TaskModifiedHook extends TaskHook {
+class TaskModifiedHook extends Hook {
 
     public function __construct($id = 'not initialized', $project = 'not initialized', $list = 'not initialized', $old_title = 'not initialized', $title = 'not initialized', $old_description = 'not initialized', $description = 'not initialized', $old_assignee = 'not initialized', $assignee = 'not initialized', $old_version = 'not initialized', $version = 'not initialized', $old_labels = 'not initialized', $labels = 'not initialized', $old_status = 'not initialized', $status = 'not initialized', $old_progress = 'not initialized', $progress = 'not initialized') {
         parent::__construct("task_modified_hook");

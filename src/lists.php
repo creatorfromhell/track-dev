@@ -251,7 +251,7 @@ $rules['table']['pages'] = array(
 
 global $prefix;
 $pagination = new Pagination($prefix."_lists", "id, list, created, creator, overseer", $pn, 10, "?p=".$project."&page=lists&", "WHERE `project` = '".$project."'");
-if(has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."'")) {
+if(has_values("lists", " WHERE project = ?", array($project))) {
     $rules['table']['templates']['lists'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Lists.tpl").'}';
     $table_content = "";
     $entries = $pagination->paginate_return();
@@ -279,7 +279,7 @@ if(has_values("lists", " WHERE project = '".StringFormatter::clean_input($projec
     $rules['table']['content']['lists'] = $table_content;
 }
 
-if(has_values("versions", " WHERE project = '".StringFormatter::clean_input($project)."'")) {
+if(has_values("versions", " WHERE project = ?", array($project))) {
     $rules['table']['templates']['versions'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Versions.tpl").'}';
     $pagination = new Pagination($prefix."_versions", "id, version_name, version_status, version_type", $pn, 10);
     $table_content = "";

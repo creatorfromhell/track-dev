@@ -107,7 +107,7 @@ class TaskFunc {
      * @param $assignee
      */
     public static function change_assignee($project, $list, $id, $assignee) {
-        set_value($project."_".$list, "assignee", $assignee, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value($project."_".$list, "assignee", $assignee, " WHERE id = ?", array($id));
     }
 
     //change task labels
@@ -118,7 +118,7 @@ class TaskFunc {
      * @param $labels
      */
     public static function change_labels($project, $list, $id, $labels) {
-        set_value($project."_".$list, "labels", $labels, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value($project."_".$list, "labels", $labels, " WHERE id = ?", array($id));
     }
 
     //change task progress
@@ -129,7 +129,7 @@ class TaskFunc {
      * @param $progress
      */
     public static function change_progress($project, $list, $id, $progress) {
-        set_value($project."_".$list, "progress", $progress, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value($project."_".$list, "progress", $progress, " WHERE id = ?", array($id));
     }
 
     /**
@@ -139,7 +139,7 @@ class TaskFunc {
      * @param $finished
      */
     public static function change_finished($project, $list, $id, $finished) {
-        set_value($project."_".$list, "finished", $finished, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value($project."_".$list, "finished", $finished, " WHERE id = ?", array($id));
     }
 
     //change task status
@@ -150,7 +150,7 @@ class TaskFunc {
      * @param $status
      */
     public static function change_status($project, $list, $id, $status) {
-        set_value($project."_".$list, "task_status", $status, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value($project."_".$list, "task_status", $status, " WHERE id = ?", array($id));
     }
 
     //change task title
@@ -161,7 +161,7 @@ class TaskFunc {
      * @param $title
      */
     public static function change_title($project, $list, $id, $title) {
-        set_value($project."_".$list, "title", $title, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value($project."_".$list, "title", $title, " WHERE id = ?", array($id));
     }
 
     //change task version
@@ -172,7 +172,7 @@ class TaskFunc {
      * @param $version
      */
     public static function change_version($project, $list, $id, $version) {
-        set_value($project."_".$list, "version_name", $version, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value($project."_".$list, "version_name", $version, " WHERE id = ?", array($id));
     }
 
     /**

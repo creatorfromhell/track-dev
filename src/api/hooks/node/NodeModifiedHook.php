@@ -11,7 +11,7 @@
 /**
  * Class NodeModifiedHook
  */
-class NodeModifiedHook extends NodeHook {
+class NodeModifiedHook extends Hook {
 
     public function __construct($id = 'not initialized', $old_node = 'not initialized', $node = 'not initialized', $old_description = 'not initialized', $description = 'not initialized') {
         parent::__construct("node_modified_hook");

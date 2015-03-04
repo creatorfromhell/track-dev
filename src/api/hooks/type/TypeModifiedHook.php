@@ -9,7 +9,7 @@
 /**
  * Class TypeModifiedHook
  */
-class TypeModifiedHook extends TypeHook {
+class TypeModifiedHook extends Hook {
 
     public function __construct($id = 'not initialized', $old_name = 'not initialized', $name = 'not initialized', $old_stability = 'not initialized', $stability = 'not initialized', $old_description = 'not initialized', $description = 'not initialized') {
         parent::__construct("type_modified_hook");

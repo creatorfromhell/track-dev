@@ -11,7 +11,7 @@
 /**
  * Class NodeDeletedHook
  */
-class NodeDeletedHook extends NodeHook {
+class NodeDeletedHook extends Hook {
 
     public function __construct($id = 'not initialized') {
         parent::__construct("node_deleted_hook");

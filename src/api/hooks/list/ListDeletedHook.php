@@ -11,7 +11,7 @@
 /**
  * Class LabelDeletedHook
  */
-class ListDeletedHook extends ListHook {
+class ListDeletedHook extends Hook {
 
     public function __construct($project, $id) {
         parent::__construct("list_deleted_hook");

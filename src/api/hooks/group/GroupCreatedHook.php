@@ -9,7 +9,7 @@
 /**
  * Class GroupCreatedHook
  */
-class GroupCreatedHook extends GroupHook {
+class GroupCreatedHook extends Hook {
 
     public function __construct($name = 'not initialized', $admin = 'not initialized', $preset = 'not initialized', $permissions = 'not initialized') {
         parent::__construct("group_created_hook");

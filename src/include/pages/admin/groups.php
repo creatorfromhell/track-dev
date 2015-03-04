@@ -69,7 +69,7 @@ $subPage = "all";
 if(isset($_GET['sub'])) {
     $subPage = $_GET['sub'];
 }
-if(isset($_GET['action']) && isset($_GET['id']) && has_values("groups", " WHERE group_name = '".StringFormatter::clean_input(value("groups", "group_name", " WHERE id = '".StringFormatter::clean_input($_GET['id'])."'"))."'")) {
+if(isset($_GET['action']) && isset($_GET['id']) && has_values("groups", " WHERE group_name = ?", array(value("groups", "group_name", " WHERE id = ?", array($_GET['id']))))) {
 	$edit_id = StringFormatter::clean_input($_GET['id']);
     $action = StringFormatter::clean_input($_GET['action']);
 
@@ -81,7 +81,7 @@ if(isset($_GET['action']) && isset($_GET['id']) && has_values("groups", " WHERE 
         $group_deleted_hook = new GroupDeletedHook($edit_id);
         $plugin_manager->trigger($group_deleted_hook);
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "Group '.value("groups", "group_name", " WHERE id = '".$edit_id."'").' has been delete.");';
+        echo 'showMessage("success", "Group '.value("groups", "group_name", " WHERE id = ?", array($edit_id)).' has been delete.");';
         echo '</script>';
         Group::delete($edit_id);
     }

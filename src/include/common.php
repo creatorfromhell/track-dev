@@ -28,6 +28,18 @@ function auto_load($class) {
     } else if(file_exists($root."/include/".$class.".php")) {
         require_once($root."/include/".$class.".php");
         return true;
+    } else if(file_exists($root."/include/handling/".$class.".php")) {
+        require_once($root."/include/handling/".$class.".php");
+        return true;
+    } else if(file_exists($root."/include/handling/add/".$class.".php")) {
+        require_once($root."/include/handling/add/".$class.".php");
+        return true;
+    } else if(file_exists($root."/include/handling/edit/".$class.".php")) {
+        require_once($root."/include/handling/edit/".$class.".php");
+        return true;
+    } else if(file_exists($root."/resources/plugins/".$class.".php")) {
+        require_once($root."/resources/plugins/".$class.".php");
+        return true;
     }
     return false;
 }
@@ -41,14 +53,41 @@ function auto_load_api($class) {
     } else if(file_exists($root."/api/hooks/".$class.".php")) {
         require_once($root."/api/hooks/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/user/".$class.".php")) {
-        require_once($root."/api/hooks/user/".$class.".php");
+    } else if(file_exists($root."/api/hooks/addon/".$class.".php")) {
+        require_once($root."/api/hooks/addon/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/download/".$class.".php")) {
+        require_once($root."/api/hooks/download/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/group/".$class.".php")) {
+        require_once($root."/api/hooks/group/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/label/".$class.".php")) {
+        require_once($root."/api/hooks/label/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/list/".$class.".php")) {
+        require_once($root."/api/hooks/list/".$class.".php");
         return true;
     } else if(file_exists($root."/api/hooks/navigation/".$class.".php")) {
         require_once($root."/api/hooks/navigation/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/addon/".$class.".php")) {
-        require_once($root."/api/hooks/addon/".$class.".php");
+    } else if(file_exists($root."/api/hooks/node/".$class.".php")) {
+        require_once($root."/api/hooks/node/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/project/".$class.".php")) {
+        require_once($root."/api/hooks/project/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/task/".$class.".php")) {
+        require_once($root."/api/hooks/task/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/type/".$class.".php")) {
+        require_once($root."/api/hooks/type/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/user/".$class.".php")) {
+        require_once($root."/api/hooks/user/".$class.".php");
+        return true;
+    } else if(file_exists($root."/api/hooks/version/".$class.".php")) {
+        require_once($root."/api/hooks/version/".$class.".php");
         return true;
     }
     return false;
@@ -95,26 +134,26 @@ $project = ProjectFunc::get_preset();
 $projects = values("projects", "project");
 $list = ProjectFunc::get_main(ProjectFunc::get_id($project));
 
-if(isset($_GET['p']) && has_values("projects", " WHERE project = '".StringFormatter::clean_input($_GET['p'])."'")) {
+if(isset($_GET['p']) && has_values("projects", " WHERE project = ?", array($_GET['p']))) {
     $project = $_GET['p'];
     $_SESSION['p'] = $project;
     setcookie('p', $project, time() + (3600 * 24 * 30));
     $list = ProjectFunc::get_main($project);
-} else if(isset($_SESSION['p']) && has_values("projects", " WHERE project = '".StringFormatter::clean_input($_SESSION['p'])."'")) {
+} else if(isset($_SESSION['p']) && has_values("projects", " WHERE project = ?", array($_SESSION['p']))) {
     $project = $_SESSION['p'];
     $list = ProjectFunc::get_main($project);
-} else if(isset($_COOKIE['p']) && has_values("projects", " WHERE project = '".StringFormatter::clean_input($_COOKIE['p'])."'")) {
+} else if(isset($_COOKIE['p']) && has_values("projects", " WHERE project = ?", array($_COOKIE['p']))) {
     $project = $_COOKIE['p'];
     $list = ProjectFunc::get_main($project);
 }
 
-if(isset($_GET['l']) && has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($_GET['l'])."'")) {
+if(isset($_GET['l']) && has_values("lists", " WHERE project = ? AND list = ?", array($project, $_GET['l']))) {
     $list = $_GET['l'];
     $_SESSION['l'] = $list;
     setcookie('l', $list, time() + (3600 * 24 * 30));
-} else if(isset($_SESSION['l']) && has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($_SESSION['l'])."'")) {
+} else if(isset($_SESSION['l']) && has_values("lists", " WHERE project = ? AND list = ?", array($project, $_SESSION['l']))) {
     $list = $_SESSION['l'];
-} else if(isset($_COOKIE['l']) && has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($_COOKIE['l'])."'")) {
+} else if(isset($_COOKIE['l']) && has_values("lists", " WHERE project = ? AND list = ?", array($project, $_COOKIE['l']))) {
     $list = $_COOKIE['l'];
 }
 
@@ -143,7 +182,7 @@ if(isset($_GET['lang']) && $language_manager->exists($_GET['lang'])) {
 $language_instance = $language_manager->languages[$language];
 
 $return = $pageFull.'?p='.$project.'&l='.$list;
-$lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($project)."'");
+$lists = values("lists", "list", " WHERE project = ?", array($project));
 $raw_msg = "";
 $msg = "";
 $msg_type = "general";

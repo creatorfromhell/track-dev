@@ -237,7 +237,7 @@ if($switchable == 'tasks') {
         $rules['form']['content'] = array(
             'user' => $current_user->name,
             'users' => to_options(values("users", "user_name")),
-            'versions' => to_options(values("versions", "version_name", " WHERE project = '".StringFormatter::clean_input($project)."'")),
+            'versions' => to_options(values("versions", "version_name", " WHERE project = ?", array($project))),
             'labels' => $label_values,
         );
         if($editing) {
@@ -252,7 +252,7 @@ if($switchable == 'tasks') {
             $status_string .= '<option value="2"'.(($details['status'] == 2) ? " selected" : "").'>In Progress</option>';
             $status_string .= '<option value="3"'.(($details['status'] == 3) ? " selected" : "").'>Closed</option>';
             $version_string = '<option value="none"'.(($details['version'] == "none") ? " selected" : "").'>None</option>';
-            $version_string .= to_options(values("versions", "version_name", " WHERE project = '".StringFormatter::clean_input($project)."'"), $details['version']);
+            $version_string .= to_options(values("versions", "version_name", " WHERE project = ?", array($project)), $details['version']);
             $labels_string = '';
             $labels_used = '';
             $labels_value = "";
@@ -371,7 +371,7 @@ if(has_values($project."_".$list) && can_view_list(ListFunc::get_id($project, $l
     $rules['table']['content']['tasks'] = $table_content;
 }
 
-if(has_values("labels", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($list)."'")) {
+if(has_values("labels", " WHERE project = ? AND list = ?", array($project, $list))) {
     $rules['table']['templates']['labels'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Labels.tpl").'}';
     $pagination = new Pagination($prefix."_labels", "id, label_name, text_color, background_color", $pn, 10, "?p=".$project."&l=".$list."&page=labels&", "WHERE project = '".$project."' AND list = '".$list."' ORDER BY id");
     $table_content = "";

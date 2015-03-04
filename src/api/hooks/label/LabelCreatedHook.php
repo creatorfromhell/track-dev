@@ -11,7 +11,7 @@
 /**
  * Class LabelCreatedHook
  */
-class LabelCreatedHook extends LabelHook {
+class LabelCreatedHook extends Hook {
 
     public function __construct($project = 'not initialized', $list = 'not initialized', $label = 'not initialized', $color = 'not initialized', $background = 'not initialized') {
         parent::__construct("label_created_hook");

@@ -9,7 +9,7 @@
 /**
  * Class ProjectModifiedHook
  */
-class ProjectModifiedHook extends ProjectHook {
+class ProjectModifiedHook extends Hook {
 
     public function __construct($id = 'not initialized', $old_name = 'not initialized', $name = 'not initialized', $old_preset = 'not initialized', $preset = 'not initialized', $old_overseer = 'not initialized', $overseer = 'not initialized') {
         parent::__construct("project_modified_hook");

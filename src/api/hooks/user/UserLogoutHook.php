@@ -11,7 +11,7 @@
 /**
  * Class UserLogoutHook
  */
-class UserLogoutHook extends UserHook {
+class UserLogoutHook extends Hook {
 
     public function __construct($username = 'not initialized', $date = 'not initialized', $ip = 'not initialized') {
         parent::__construct("user_logout_hook");

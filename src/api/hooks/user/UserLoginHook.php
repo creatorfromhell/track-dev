@@ -11,7 +11,7 @@
 /**
  * Class UserLoginHook
  */
-class UserLoginHook extends UserHook {
+class UserLoginHook extends Hook {
 
     public function __construct($username = 'not initialized', $date = 'not initialized', $ip = 'not initialized') {
         parent::__construct("user_login_hook");

@@ -70,7 +70,7 @@ class LabelFunc {
      * @param $name
      */
     public static function rename_label($id, $name) {
-        set_value("labels", "label_name", $name, " WHERE id = '".StringFormatter::clean_input($id)."'");
+        set_value("labels", "label_name", $name, " WHERE id = ?", array($id));
     }
 
     /**

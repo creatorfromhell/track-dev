@@ -9,7 +9,7 @@
 /**
  * Class VersionReleasedHook
  */
-class VersionReleasedHook extends VersionHook {
+class VersionReleasedHook extends Hook {
 
     public function __construct($id = 'not initialized') {
         parent::__construct("version_released_hook");

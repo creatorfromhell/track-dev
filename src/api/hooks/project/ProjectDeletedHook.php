@@ -9,7 +9,7 @@
 /**
  * Class ProjectDeletedHook
  */
-class ProjectDeletedHook extends ProjectHook {
+class ProjectDeletedHook extends Hook {
 
     public function __construct($id) {
         parent::__construct("project_deleted_hook");

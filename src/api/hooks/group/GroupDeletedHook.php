@@ -9,7 +9,7 @@
 /**
  * Class GroupDeletedHook
  */
-class GroupDeletedHook extends GroupHook {
+class GroupDeletedHook extends Hook {
 
     public function __construct($id = 'not initialized') {
         parent::__construct("group_deleted_hook");

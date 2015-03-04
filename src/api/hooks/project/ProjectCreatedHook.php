@@ -11,7 +11,7 @@
 /**
  * Class ProjectCreatedHook
  */
-class ProjectCreatedHook extends ProjectHook {
+class ProjectCreatedHook extends Hook {
 
     public function __construct($name = 'not initialized', $preset = 'not initialized', $creator = 'not initialized', $overseer = 'not initialized') {
         parent::__construct("project_created_hook");

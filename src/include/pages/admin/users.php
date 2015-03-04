@@ -70,13 +70,13 @@ if(isset($_GET['sub'])) {
 if(isset($_GET['action'])) {
     $action = StringFormatter::clean_input($_GET['action']);
 
-    if($action == "edit" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".StringFormatter::clean_input($_GET['id'])."'"))) {
+    if($action == "edit" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = ?", array($_GET['id'])))) {
         $editing = true;
-    } else if($action == "delete" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".StringFormatter::clean_input($_GET['id'])."'"))) {
+    } else if($action == "delete" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = ?", array($_GET['id'])))) {
         $params = "id:".$id.",status:".$action;
         ActivityFunc::log(get_name(), $project, $list, "user:delete", $params, 0, date("Y-m-d H:i:s"));
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "User '.value("users", "user_name", " WHERE id = '".StringFormatter::clean_input($_GET['id'])."'").' has been delete.");';
+        echo 'showMessage("success", "User '.value("users", "user_name", " WHERE id = ?", array($_GET['id'])).' has been delete.");';
         echo '</script>';
         User::delete(StringFormatter::clean_input($_GET['id']));
     }
