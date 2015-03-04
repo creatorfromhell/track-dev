@@ -13,7 +13,7 @@ class LabelAddHandler extends FormHandler {
 
     public function __construct($vars) {
         parent::__construct($vars);
-        $this->required_variables = array('project', 'list', 'labelname', 'textcolor', 'backgroundcolor');
+        $this->required_variables = array('project', 'list', 'name', 'color', 'background');
     }
 
     public function handle() {

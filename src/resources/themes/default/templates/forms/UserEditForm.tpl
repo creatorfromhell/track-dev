@@ -37,7 +37,7 @@
             </fieldset>
             <fieldset id="links">
                 <button class="submit_2" onclick="switchPage(event, 'page_2', 'page_1'); return false;">Back</button>
-                <input type="submit" class="submit" name="edit_user" value="Edit">
+                <input type="submit" class="submit" name="edit-user" value="Edit">
             </fieldset>
         </div>
     </div>

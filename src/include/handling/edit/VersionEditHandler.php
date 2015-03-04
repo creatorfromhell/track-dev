@@ -13,7 +13,7 @@ class VersionEditHandler extends FormHandler {
 
     public function __construct($vars) {
         parent::__construct($vars);
-        $this->required_variables = array('id', 'project', 'version-name', 'status', 'version-type');
+        $this->required_variables = array('id', 'project', 'name', 'status', 'type');
     }
 
     public function handle() {
@@ -22,12 +22,12 @@ class VersionEditHandler extends FormHandler {
         $id = $this->post_vars['id'];
         $details = VersionFunc::version_details($id);
 
-        if($details['name'] != $this->post_vars['version-name'] && has_values("versions", " WHERE version_name = ?", array($this->post_vars['version-name']))) {
+        if($details['name'] != $this->post_vars['name'] && has_values("versions", " WHERE version_name = ?", array($this->post_vars['name']))) {
             throw new Exception("site->forms->exists->version");
         }
 
-        if(isset($_POST['version_download'])) {
-            upload_file($_FILES['version_download'], $this->post_vars['project']."-".$this->post_vars['version-name']);
+        if(isset($_POST['download'])) {
+            upload_file($_FILES['download'], $this->post_vars['project']."-".$this->post_vars['name']);
         }
     }
 }

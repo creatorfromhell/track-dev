@@ -13,7 +13,7 @@ class ProjectAddHandler extends FormHandler {
 
     public function __construct($vars) {
         parent::__construct($vars);
-        $this->required_variables = array('name', 'author', 'public', 'mainproject', 'overseer');
+        $this->required_variables = array('name', 'author', 'public', 'preset', 'overseer');
     }
 
     public function handle() {
@@ -23,7 +23,7 @@ class ProjectAddHandler extends FormHandler {
             throw new Exception("site->forms->exists->project");
         }
 
-        if($this->post_vars['mainproject'] == 1) {
+        if($this->post_vars['preset'] == 1) {
             ProjectFunc::remove_preset();
         }
     }

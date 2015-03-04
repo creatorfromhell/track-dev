@@ -13,13 +13,13 @@ class TypeAddHandler extends FormHandler {
 
     public function __construct($vars) {
         parent::__construct($vars);
-        $this->required_variables = array('type-name', 'type-description', 'type-stable');
+        $this->required_variables = array('name', 'description', 'stable');
     }
 
     public function handle() {
         parent::basic_handle();
 
-        if(has_values("version_types", " WHERE version_type = ?", array($this->post_vars['type-name']))) {
+        if(has_values("version_types", " WHERE version_type = ?", array($this->post_vars['name']))) {
             throw new Exception("site->forms->exists->type");
         }
     }

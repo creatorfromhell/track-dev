@@ -1,4 +1,4 @@
-<form id="task-form" class="trackrForm" method="post" action="list.php?p=Trackr&l=Main&page=tasks">
+<form id="task-form" class="trackrForm" method="post" action="list.php?p=Trackr&amp;l=Main&amp;page=tasks">
     <h3>Edit Task</h3>
     <div id="holder">
         <div id="page_1">

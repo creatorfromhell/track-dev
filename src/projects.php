@@ -13,19 +13,19 @@ if(isset($_POST['add-project'])) {
     $handler = new ProjectAddHandler($_POST);
     try {
         $name = $handler->post_vars['name'];
-        $main_project = $handler->post_vars['mainproject'];
+        $preset = $handler->post_vars['preset'];
         $author = $handler->post_vars['author'];
         $overseer = $handler->post_vars['overseer'];
         $public = $handler->post_vars['public'];
         $created = date("Y-m-d H:i:s");
 
-        $project_created_hook = new ProjectCreatedHook($name, $main_project, $author, $overseer);
+        $project_created_hook = new ProjectCreatedHook($name, $preset, $author, $overseer);
         $plugin_manager->trigger($project_created_hook);
 
         $params = "public:".$public.",overseer:".$overseer;
         ActivityFunc::log($current_user->name, $name, "none", "project:add", $params, 0, $created);
 
-        ProjectFunc::add_project($name, $main_project, 0, $author, $created, $overseer, $public);
+        ProjectFunc::add_project($name, $preset, 0, $author, $created, $overseer, $public);
     } catch(Exception $e) {
         $translated = $language_manager->get_value($language, $e->getMessage());
         //TODO: form message handling
@@ -39,7 +39,8 @@ if(isset($_POST['edit-project'])) {
         $details = ProjectFunc::project_details($id);
 
         $name = $handler->post_vars['name'];
-        $main_project = $handler->post_vars['mainproject'];
+        $preset = $handler->post_vars['preset'];
+        $main = $handler->post_vars['main'];
         $overseer = $handler->post_vars['overseer'];
         $public = $handler->post_vars['public'];
         $created = date("Y-m-d H:i:s");
@@ -47,10 +48,10 @@ if(isset($_POST['edit-project'])) {
         $params = "id:".$id.",public:".$public.",overseer:".$overseer;
         ActivityFunc::log($current_user->name, $name, "none", "project:edit", $params, 0, date("Y-m-d H:i:s"));
 
-        $project_modified_hook = new ProjectModifiedHook($id, $details['name'], $name, $details['preset'], $main_project, $details['overseer'], $overseer);
+        $project_modified_hook = new ProjectModifiedHook($id, $details['name'], $name, $details['preset'], $preset, $details['overseer'], $overseer);
         $plugin_manager->trigger($project_modified_hook);
 
-        ProjectFunc::edit_project($id, $name, $main_project, $handler->post_vars['mainlist'], $overseer, $public);
+        ProjectFunc::edit_project($id, $name, $preset, $main, $overseer, $public);
     } catch(Exception $e) {
         $translated = $language_manager->get_value($language, $e->getMessage());
         //TODO: form message handling
@@ -60,9 +61,9 @@ if(isset($_POST['edit-project'])) {
 if(isset($_POST['add-type'])) {
     $handler = new TypeAddHandler($_POST);
     try {
-        $name = $handler->post_vars['type-name'];
-        $description = $handler->post_vars['type-description'];
-        $stable = $handler->post_vars['type-stable'];
+        $name = $handler->post_vars['name'];
+        $description = $handler->post_vars['description'];
+        $stable = $handler->post_vars['stable'];
 
         $type_created_hook = new TypeCreatedHook($name, $stable, $description);
         $plugin_manager->trigger($type_created_hook);
@@ -80,9 +81,9 @@ if(isset($_POST['edit-type'])) {
         $id = $handler->post_vars['id'];
         $details = VersionFunc::type_details($id);
 
-        $name = $handler->post_vars['type-name'];
-        $description = $handler->post_vars['type-description'];
-        $stable = $handler->post_vars['type-stable'];
+        $name = $handler->post_vars['name'];
+        $description = $handler->post_vars['description'];
+        $stable = $handler->post_vars['stable'];
 
         $type_modified_hook = new TypeModifiedHook($id, $details['name'], $name, $details['stability'], $stable, $details['description'], $description);
         $plugin_manager->trigger($type_modified_hook);
@@ -174,7 +175,7 @@ if($switchable == 'projects') {
             $rules['form']['value'] = array(
                 'id' => $edit_id,
                 'name' => $details['name'],
-                'lists' => $list_string,
+                'main' => $list_string,
                 'public' => $public_string,
                 'preset' => $preset_string,
                 'overseer' => $overseer_string,

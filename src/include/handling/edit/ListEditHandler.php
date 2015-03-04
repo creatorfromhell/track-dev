@@ -13,7 +13,7 @@ class ListEditHandler extends FormHandler {
 
     public function __construct($vars) {
         parent::__construct($vars);
-        $this->required_variables = array('id', 'name', 'author', 'project', 'public', 'minimal', 'mainlist', 'overseer', 'guestview', 'guestedit', 'viewpermission', 'editpermission');
+        $this->required_variables = array('id', 'name', 'author', 'project', 'public', 'minimal', 'main', 'overseer', 'guest-view', 'guest-edit', 'view-permission', 'edit-permission');
     }
 
     public function handle() {
@@ -38,7 +38,7 @@ class ListEditHandler extends FormHandler {
             ListFunc::rename_list($id, $this->post_vars['name']);
         }
 
-        if(ProjectFunc::get_main(ProjectFunc::get_id($details['project'])) != $id && $this->post_vars['mainlist'] == 1) {
+        if(ProjectFunc::get_main(ProjectFunc::get_id($details['project'])) != $id && $this->post_vars['main'] == 1) {
             ProjectFunc::change_main(ProjectFunc::get_id($this->post_vars['project']), ListFunc::get_id($this->post_vars['project'], $this->post_vars['name']));
         }
     }

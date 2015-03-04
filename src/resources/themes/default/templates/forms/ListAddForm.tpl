@@ -1,4 +1,4 @@
-<form id="list_form" class="trackrForm" method="post" action="lists.php?p=Trackr&l=Main&page=lists">
+<form id="list_form" class="trackrForm" method="post" action="lists.php?p=Trackr&amp;l=Main&amp;page=lists">
     <h3>Add List</h3>
     <div id="holder">
         <div id="page_1">
@@ -26,8 +26,8 @@
                     <option value="0" selected>No</option>
                     <option value="1">Yes</option>
                 </select><br />
-                <label for="mainlist">Main:</label>
-                <select name="mainlist" id="mainlist">
+                <label for="main">Main:</label>
+                <select name="main" id="main">
                     <option value="0" selected>No</option>
                     <option value="1">Yes</option>
                 </select><br />
@@ -44,23 +44,23 @@
         </div>
         <div id="page_3">
             <fieldset id="inputs">
-                <label for="guestview">Guest View:</label>
-                <select name="guestview" id="guestview">
+                <label for="guest-view">Guest View:</label>
+                <select name="guest-view" id="guest-view">
                     <option value="0">No</option>
                     <option value="1" selected>Yes</option>
                 </select><br />
-                <label for="guestedit">Guest Edit:</label>
-                <select name="guestedit" id="guestedit">
+                <label for="guest-edit">Guest Edit:</label>
+                <select name="guest-edit" id="guest-edit">
                     <option value="0" selected>No</option>
                     <option value="1">Yes</option>
                 </select><br />
-                <label for="viewpermission">View Permission:</label>
-                <select name="viewpermission" id="viewpermission">
+                <label for="view-permission">View Permission:</label>
+                <select name="view-permission" id="view-permission">
                     <option value="none" selected>None</option>
                     { form->content->nodes }
                 </select><br />
-                <label for="editpermission">Edit Permission:</label>
-                <select name="editpermission" id="editpermission">
+                <label for="edit-permission">Edit Permission:</label>
+                <select name="edit-permission" id="edit-permission">
                     <option value="none" selected>None</option>
                     { form->content->nodes }
                 </select><br />

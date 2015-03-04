@@ -4,17 +4,17 @@
         <div id="page_1">
             <fieldset id="inputs">
                 <input name="id" type="hidden" value="{ form->value->id }">
-                <input id="type-name" name="type-name" type="text" placeholder="Name" value="{ form->value->name }">
-                <textarea id="type-description" name="type-description" ROWS="3" COLS="40">
+                <input id="name" name="name" type="text" placeholder="Name" value="{ form->value->name }">
+                <textarea id="description" name="description" ROWS="3" COLS="40">
                     { form->value->description }
                 </textarea>
-                <label for="type-stable">Stable:</label>
-                <select name="type-stable" id="type-stable">
+                <label for="stable">Stable:</label>
+                <select name="stable" id="stable">
                     { form->value->stability }
                 </select><br />
             </fieldset>
             <fieldset id="links">
-                <input type="submit" class="submit" name="edit-version-type" value="Edit">
+                <input type="submit" class="submit" name="edit-type" value="Edit">
             </fieldset>
         </div>
     </div>

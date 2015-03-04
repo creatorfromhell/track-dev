@@ -5,12 +5,13 @@
             <fieldset id="inputs">
                 <input name="project" type="hidden" value="{ form->content->project }">
                 <input name="list" type="hidden" value="{ form->content->list }">
-                <input name="labelname" type="text" placeholder="Label Name">
-                <label for="textcolor">Text Color: </label>
-                <label id="labelcolor-text" onclick="linkColorField(event, 'labelcolor-text', 'textcolor'); return false;"></label>
-                <input type="hidden" name="textcolor" value="#000000"><br /><label for="backgroundcolor">Background Color: </label>
-                <label id="labelcolor-background" onclick="linkColorField(event, 'labelcolor-background', 'backgroundcolor'); return false;"></label>
-                <input type="hidden" name="backgroundcolor" value="#000000"><br />
+                <input name="name" type="text" placeholder="Label Name">
+                <label for="color">Text Color: </label>
+                <label id="color-text" onclick="linkColorField(event, 'color-text', 'color'); return false;"></label>
+                <input type="hidden" name="color" value="#000000"><br />
+                <label for="background">Background Color: </label>
+                <label id="color-background" onclick="linkColorField(event, 'color-background', 'background'); return false;"></label>
+                <input type="hidden" name="background" value="#000000"><br />
             </fieldset>
             <fieldset id="links">
                 <input type="submit" class="submit" name="add-label" value="Add">

@@ -16,8 +16,8 @@
         </div>
         <div id="page_2">
             <fieldset id="inputs">
-                <label for="mainproject">Main:</label>
-                <select name="mainproject" id="mainproject">
+                <label for="preset">Preset:</label>
+                <select name="preset" id="preset">
                     <option value="0" selected>No</option>
                     <option value="1">Yes</option>
                 </select><br />

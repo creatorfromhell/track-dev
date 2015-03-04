@@ -13,7 +13,7 @@ class ListAddHandler extends FormHandler {
 
     public function __construct($vars) {
         parent::__construct($vars);
-        $this->required_variables = array('name', 'author', 'project', 'public', 'minimal', 'mainlist', 'overseer', 'guestview', 'guestedit', 'viewpermission', 'editpermission');
+        $this->required_variables = array('name', 'author', 'project', 'public', 'minimal', 'main', 'overseer', 'guest-view', 'guest-edit', 'view-permission', 'edit-permission');
     }
 
     public function handle() {
@@ -27,7 +27,7 @@ class ListAddHandler extends FormHandler {
             throw new Exception("site->forms->exists->list");
         }
 
-        if($this->post_vars['mainlist'] == 1) {
+        if($this->post_vars['main'] == 1) {
             ProjectFunc::change_main(ProjectFunc::get_id($this->post_vars['project']), ListFunc::get_id($this->post_vars['project'], $this->post_vars['name']));
         }
     }

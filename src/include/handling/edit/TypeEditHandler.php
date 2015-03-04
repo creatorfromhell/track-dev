@@ -13,14 +13,14 @@ class TypeEditHandler extends FormHandler {
 
     public function __construct($vars) {
         parent::__construct($vars);
-        $this->required_variables = array('id', 'type-name', 'type-description', 'type-stable');
+        $this->required_variables = array('id', 'name', 'description', 'stable');
     }
 
     public function handle() {
         parent::basic_handle();
 
         $details = VersionFunc::type_details($this->post_vars['id']);
-        if($details['name'] != $this->post_vars['type-name'] && has_values("version_types", " WHERE version_type = ?", array($this->post_vars['type-name']))) {
+        if($details['name'] != $this->post_vars['name'] && has_values("version_types", " WHERE version_type = ?", array($this->post_vars['name']))) {
             throw new Exception("site->forms->exists->type");
         }
     }

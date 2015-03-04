@@ -8,7 +8,7 @@
                 <textarea id="description" name="description" ROWS="3" COLS="40">{ form->value->description }</textarea>
             </fieldset>
             <fieldset id="links">
-                <input type="submit" class="submit" name="edit_permission" value="Edit">
+                <input type="submit" class="submit" name="edit-permission" value="Edit">
             </fieldset>
         </div>
     </div>

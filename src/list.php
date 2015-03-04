@@ -84,11 +84,11 @@ if(isset($_POST['add-label'])) {
 
         $project = $handler->post_vars['project'];
         $list = $handler->post_vars['list'];
-        $label = $handler->post_vars['labelname'];
-        $color = $handler->post_vars['textcolor'];
-        $background = $handler->post_vars['backgroundcolor'];
+        $label = $handler->post_vars['name'];
+        $color = $handler->post_vars['color'];
+        $background = $handler->post_vars['background'];
 
-        $params = "name:".$label.",textcolor:".$color.",backgroundcolor:".$background;
+        $params = "name:".$label.",color:".$color.",background:".$background;
         ActivityFunc::log($current_user->name, $project, $list, "label:add", $params, 0, date("Y-m-d H:i:s"));
 
         $label_created_hook = new LabelCreatedHook($project, $list, $label, $color, $background);
@@ -111,11 +111,11 @@ if(isset($_POST['edit-label'])) {
 
         $project = $handler->post_vars['project'];
         $list = $handler->post_vars['list'];
-        $label = $handler->post_vars['labelname'];
-        $color = $handler->post_vars['textcolor'];
-        $background = $handler->post_vars['backgroundcolor'];
+        $label = $handler->post_vars['name'];
+        $color = $handler->post_vars['color'];
+        $background = $handler->post_vars['background'];
 
-        $params = "id:".$id.",name:".$label.",textcolor:".$color.",backgroundcolor:".$background;
+        $params = "id:".$id.",name:".$label.",color:".$color.",background:".$background;
         ActivityFunc::log($current_user->name, $project, $list, "label:edit", $params, 0, date("Y-m-d H:i:s"));
 
         $label_modified_hook = new LabelModifiedHook($id, $details['project'], $project, $details['list'], $list, $details['label'], $label, $details['text'], $color, $details['background'], $background);

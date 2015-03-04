@@ -15,9 +15,13 @@
         </div>
         <div id="page_2">
             <fieldset id="inputs">
-                <label for="mainproject">Main:</label>
-                <select name="mainproject" id="mainproject">
+                <label for="preset">Preset:</label>
+                <select name="preset" id="preset">
                     { form->value->preset }
+                </select><br />
+                <label for="main">Main List:</label>
+                <select name="main" id="main">
+                    { form->value->main }
                 </select><br />
                 <label for="overseer">Overseer:</label>
                 <select name="overseer" id="overseer">

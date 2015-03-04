@@ -60,10 +60,10 @@ if(isset($_POST['edit-list'])) {
 if(isset($_POST['add-version'])) {
     $handler = new VersionAddHandler($_POST);
     try {
-        $version = $handler->post_vars['version-name'];
+        $version = $handler->post_vars['name'];
         $project = $handler->post_vars['project'];
         $status = $handler->post_vars['status'];
-        $type = $handler->post_vars['version-type'];
+        $type = $handler->post_vars['type'];
         $due = (isset($handler->post_vars['due-date']) && trim($handler->post_vars['due-date']) != "") ? $handler->post_vars['due-date'] : "0000-00-00";
 
         $version_created_hook = new VersionCreatedHook($project, $version, $status, $type);
