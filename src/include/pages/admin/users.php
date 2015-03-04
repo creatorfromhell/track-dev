@@ -7,7 +7,61 @@
  * Last Modified: 8/7/14 at 6:53 PM
  * Last Modified by Daniel Vidmar.
  */
-include_once("include/handling/user.php");
+if(isset($_POST['add-user'])) {
+    $handler = new UserAddHandler($_POST);
+    try {
+        $handler->handle();
+
+        $user = new User();
+
+        $date = date("Y-m-d H:i:s");
+        $user->ip = User::get_ip();
+        $user->name = $handler->post_vars['username'];
+        $user->email = $handler->post_vars['email'];
+        $user->registered = $date;
+        $user->logged_in = $date;
+        $user->activated = 1;
+        $user->password = generate_hash($handler->post_vars['password']);
+        $user->group = Group::load($handler->post_vars['group']);
+        $user->permissions = explode(",", $handler->post_vars['permissions-value']);
+
+        $params = "name:".$user->name.",email:".$user->email.",group:".$user->group->id;
+        ActivityFunc::log($current_user->name, "none", "none", "user:add", $params, 0, date("Y-m-d H:i:s"));
+
+        User::add_user($user);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['edit-user'])) {
+    $handler = new UserEditHandler($_POST);
+    try {
+        $handler->handle();
+
+        $user = User::load($handler->post_vars['id'], false, true);
+
+        $name = $handler->post_vars['username'];
+        $email = $handler->post_vars['email'];
+        $password = generate_hash($handler->post_vars['password']);
+        $group = Group::load($handler->post_vars['group']);
+        $permissions = explode(",", $handler->post_vars['permissions-value']);
+
+        $params = "oldname:".$user->name.",name:".$name.",oldemail:".$user->email.",email:".$email.",oldgroup:".$user->group->id.",group:".$group;
+        ActivityFunc::log($current_user->name, "none", "none", "user:edit", $params, 0, date("Y-m-d H:i:s"));
+
+        $user->name = $name;
+        $user->email = $email;
+        $user->password = $password;
+        $user->group = $group;
+        $user->permissions = $permissions;
+        $user->save();
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
 $editing = false;
 $subPage = "all";
 if(isset($_GET['sub'])) {

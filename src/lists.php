@@ -8,8 +8,95 @@
  * Last Modified by Daniel Vidmar.
  */
 include("include/header.php");
-include("include/handling/list.php");
-include("include/handling/version.php");
+
+if(isset($_POST['add-list'])) {
+    $handler = new ListAddHandler($_POST);
+    try {
+        $list = $handler->post_vars['name'];
+        $project = $handler->post_vars['project'];
+        $public = $handler->post_vars['public'];
+        $author = $handler->post_vars['author'];
+        $overseer = $handler->post_vars['overseer'];
+        $created = date("Y-m-d H:i:s");
+
+        $params = "public:".$public.",overseer:".$overseer;
+        ActivityFunc::log($current_user->name, $project, $list, "list:add", $params, 0, $created);
+
+        $list_created_hook = new ListCreatedHook($project, $list, $author, $overseer);
+        $plugin_manager->trigger($list_created_hook);
+
+        ListFunc::add_list($list, $project, $public, $author, $created, $overseer, $handler->post_vars['minimal'], $handler->post_vars['guestview'], $handler->post_vars['guestedit'], $handler->post_vars['viewpermission'], $handler->post_vars['editpermission']);
+        ListFunc::create($project, $list);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['edit-list'])) {
+    $handler = new ListEditHandler($_POST);
+    try {
+        $id = $handler->post_vars['id'];
+        $details = ListFunc::list_details($id);
+
+        $list = $handler->post_vars['name'];
+        $project = $handler->post_vars['project'];
+        $public = $handler->post_vars['public'];
+        $overseer = $handler->post_vars['overseer'];
+
+        $params = "id:".$id.",public:".$public.",overseer:".$overseer;
+        ActivityFunc::log($current_user->name, $project, $list, "list:edit", $params, 0, date("Y-m-d H:i:s"));
+
+        $list_modified_hook = new ListModifiedHook($id, $details['project'], $project, $details['list'], $list, $details['overseer'], $overseer);
+        $plugin_manager->trigger($list_modified_hook);
+
+        ListFunc::edit_list($id, $list, $project, $public, $overseer, $handler->post_vars['minimal'], $handler->post_vars['guestview'], $handler->post_vars['guestedit'], $handler->post_vars['viewpermission'], $handler->post_vars['editpermission']);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['add-version'])) {
+    $handler = new VersionAddHandler($_POST);
+    try {
+        $version = $handler->post_vars['version-name'];
+        $project = $handler->post_vars['project'];
+        $status = $handler->post_vars['status'];
+        $type = $handler->post_vars['version-type'];
+        $due = (isset($handler->post_vars['due-date']) && trim($handler->post_vars['due-date']) != "") ? $handler->post_vars['due-date'] : "0000-00-00";
+
+        $version_created_hook = new VersionCreatedHook($project, $version, $status, $type);
+        $plugin_manager->trigger($version_created_hook);
+
+        VersionFunc::add_version($version, $project, $status, $due, '0000-00-00', $type);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['edit-version'])) {
+    $handler = new VersionEditHandler($_POST);
+    try {
+        $id = $handler->post_vars['id'];
+        $details = VersionFunc::version_details($id);
+
+        $version = $handler->post_vars['version-name'];
+        $project = $handler->post_vars['project'];
+        $status = $handler->post_vars['status'];
+        $type = $handler->post_vars['version-type'];
+        $due = (isset($handler->post_vars['due-date']) && trim($handler->post_vars['due-date']) != "") ? $handler->post_vars['due-date'] : "0000-00-00";
+
+        $version_modified_hook = new VersionModifiedHook($id, $details['project'], $project, $details['name'], $version, $details['status'], $status, $details['type'], $type);
+        $plugin_manager->trigger($version_modified_hook);
+
+        VersionFunc::edit_version($id, $version, $project, $status, $due, '0000-00-00', $type);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
 
 $switchable = "lists";
 if(isset($_GET['page'])) {

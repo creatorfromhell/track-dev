@@ -7,7 +7,63 @@
  * Last Modified: 8/7/14 at 6:53 PM
  * Last Modified by Daniel Vidmar.
  */
-include_once("include/handling/group.php");
+if(isset($_POST['add-group'])) {
+    $handler = new GroupAddHandler($_POST);
+    try {
+        $handler->handle();
+
+        $group = new Group();
+        $group->name = $handler->post_vars['name'];
+        $group->admin = ($handler->post_vars['admin'] == '1') ? true : false;
+        $group->preset = ($handler->post_vars['preset'] == '1') ? true : false;
+        $group->permissions = explode(",", $handler->post_vars['permissions-value']);
+
+        $params = "name:".$group->name.",admin:".$group->admin.",preset:".$group->preset;
+        ActivityFunc::log($current_user->name, "none", "none", "group:add", $params, 0, date("Y-m-d H:i:s"));
+
+        $group_created_hook = new GroupCreatedHook($group->name, $group->admin, $group->preset, $group->permissions);
+        $plugin_manager->trigger($group_created_hook);
+
+        Group::add_group($group);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['edit-group'])) {
+    $handler = new GroupEditHandler($_POST);
+    try {
+        $handler->handle();
+
+        $name = $handler->post_vars['name'];
+        $admin = ($handler->post_vars['admin'] == '1') ? true : false;
+        $preset = ($handler->post_vars['preset'] == '1') ? true : false;
+        $permissions = explode(",", $handler->post_vars['permissions-value']);
+
+        if($preset) {
+            $old = Group::load(Group::preset());
+            $old->preset = 0;
+            $old->save();
+        }
+
+        $params = "prevname:".$group->name.",name:".$name.",admin:".$admin.",preset:".$preset;
+        ActivityFunc::log($current_user->name, "none", "none", "group:edit", $params, 0, date("Y-m-d H:i:s"));
+
+        $group_modified_hook = new GroupModifiedHook($id, $group->name, $name, $group->admin, $admin, $group->preset, $preset, $group->permissions, $permissions);
+        $plugin_manager->trigger($group_modified_hook);
+
+        $group->name = $name;
+        $group->admin = $admin;
+        $group->preset = $preset;
+        $group->permissions = $permissions;
+        $group->save();
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
 $editing = false;
 $subPage = "all";
 if(isset($_GET['sub'])) {

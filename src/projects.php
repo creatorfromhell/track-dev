@@ -8,8 +8,91 @@
  * Last Modified by Daniel Vidmar.
  */
 include("include/header.php");
-include("include/handling/project.php");
-include("include/handling/versiontype.php");
+
+if(isset($_POST['add-project'])) {
+    $handler = new ProjectAddHandler($_POST);
+    try {
+        $name = $handler->post_vars['name'];
+        $main_project = $handler->post_vars['mainproject'];
+        $author = $handler->post_vars['author'];
+        $overseer = $handler->post_vars['overseer'];
+        $public = $handler->post_vars['public'];
+        $created = date("Y-m-d H:i:s");
+
+        $project_created_hook = new ProjectCreatedHook($name, $main_project, $author, $overseer);
+        $plugin_manager->trigger($project_created_hook);
+
+        $params = "public:".$public.",overseer:".$overseer;
+        ActivityFunc::log($current_user->name, $name, "none", "project:add", $params, 0, $created);
+
+        ProjectFunc::add_project($name, $main_project, 0, $author, $created, $overseer, $public);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['edit-project'])) {
+    $handler = new ProjectEditHandler($_POST);
+    try {
+        $id = $handler->post_vars['id'];
+        $details = ProjectFunc::project_details($id);
+
+        $name = $handler->post_vars['name'];
+        $main_project = $handler->post_vars['mainproject'];
+        $overseer = $handler->post_vars['overseer'];
+        $public = $handler->post_vars['public'];
+        $created = date("Y-m-d H:i:s");
+
+        $params = "id:".$id.",public:".$public.",overseer:".$overseer;
+        ActivityFunc::log($current_user->name, $name, "none", "project:edit", $params, 0, date("Y-m-d H:i:s"));
+
+        $project_modified_hook = new ProjectModifiedHook($id, $details['name'], $name, $details['preset'], $main_project, $details['overseer'], $overseer);
+        $plugin_manager->trigger($project_modified_hook);
+
+        ProjectFunc::edit_project($id, $name, $main_project, $handler->post_vars['mainlist'], $overseer, $public);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['add-type'])) {
+    $handler = new TypeAddHandler($_POST);
+    try {
+        $name = $handler->post_vars['type-name'];
+        $description = $handler->post_vars['type-description'];
+        $stable = $handler->post_vars['type-stable'];
+
+        $type_created_hook = new TypeCreatedHook($name, $stable, $description);
+        $plugin_manager->trigger($type_created_hook);
+
+        VersionFunc::add_type($name, $description, $stable);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['edit-type'])) {
+    $handler = new TypeEditHandler($_POST);
+    try {
+        $id = $handler->post_vars['id'];
+        $details = VersionFunc::type_details($id);
+
+        $name = $handler->post_vars['type-name'];
+        $description = $handler->post_vars['type-description'];
+        $stable = $handler->post_vars['type-stable'];
+
+        $type_modified_hook = new TypeModifiedHook($id, $details['name'], $name, $details['stability'], $stable, $details['description'], $description);
+        $plugin_manager->trigger($type_modified_hook);
+
+        VersionFunc::edit_type($id, $name, $description, $stable);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
 
 $switchable = "projects";
 if(isset($_GET['page'])) {

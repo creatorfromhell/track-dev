@@ -9,10 +9,128 @@
  */
 include("include/header.php");
 
+if(isset($_POST['add-task'])) {
+    $handler = new TaskAddHandler($_POST);
+    try {
+        $handler->handle();
+
+        $title = $handler->post_vars['title'];
+        $description = $handler->post_vars['description'];
+        $author = $handler->post_vars['author'];
+        $assignee = $handler->post_vars['assignee'];
+        $created = date("Y-m-d H:i:s");
+        $due = (isset($handler->post_vars['due-date']) && trim($handler->post_vars['due-date']) != "") ? $handler->post_vars['due-date'] : "0000-00-00";
+        $progress = (isset($handler->post_vars['progress'])) ? $handler->post_vars['progress'] : 0;
+        $labels = (isset($handler->post_vars['labels']) && $handler->post_vars['labels'] != "") ? $handler->post_vars['labels'] : "";
+        $status = $handler->post_vars['status'];
+        if($progress > 0) {
+            ($progress >= 100) ? $status = 1 : $status = 2;
+        }
+        $params = "title:".$title.",description:".$description.",status:".$status;
+        ActivityFunc::log($current_user->name, $project, $list, "task:add", $params, 0, $created);
+
+        $task_created_hook = new TaskCreatedHook($project, $list, $title, $description, $author, $assignee, "", $labels, $status, $progress);
+        $plugin_manager->trigger($task_created_hook);
+
+        TaskFunc::add_task($project, $list, $title, $description, $author, $assignee, $created, $due, "0000-0-00", "", $labels, $handler->post_vars['editable'], $status, $progress);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['edit-task'])) {
+    $handler = new TaskEditHandler($_POST);
+    try {
+        $handler->handle();
+
+        $id = $handler->post_vars['id'];
+        $details = TaskFunc::task_details($project, $list, $id);
+
+        $title = $handler->post_vars['title'];
+        $description = $handler->post_vars['description'];
+        $assignee = $handler->post_vars['assignee'];
+        $created = date("Y-m-d H:i:s");
+        $due = (isset($handler->post_vars['due-date']) && trim($handler->post_vars['due-date']) != "") ? StringFormatter::clean_input($handler->post_vars['due-date']) : "0000-0-00";
+        $progress = (isset($handler->post_vars['progress'])) ? $handler->post_vars['progress'] : 0;
+        $labels = (isset($handler->post_vars['labels-edit']) && $handler->post_vars['labels-edit'] != "") ? $handler->post_vars['labels-edit'] : "";
+        $status = $handler->post_vars['status'];
+        if($progress > 0) {
+            ($progress >= 100) ? $status = 1 : $status = 2;
+        }
+
+        if($status != $details['status']) {
+            $task_status_hook = new TaskStatusHook($project, $list, $id, $status);
+            $plugin_manager->trigger($task_status_hook);
+        }
+
+        $params = "id:".$id.",title:".$title.",description:".$description.",status:".$status;
+        ActivityFunc::log($current_user->name, $project, $list, "task:edit", "", 0, date("Y-m-d H:i:s"));
+
+        $task_modified_hook = new TaskModifiedHook($id, $project, $list, $details['title'], $title, $details['description'], $description, $details['assignee'], $assignee, $details['version'], $version, $details['labels'], $labels, $details['status'], $status, $details['progress'], $progress);
+        $plugin_manager->trigger($task_modified_hook);
+
+        TaskFunc::edit_task($id, $project, $list, $title, $description, $handler->post_vars['author'], $assignee, $created, $due, "0000-0-00", "", $labels, $handler->post_vars['editable'], $status, $progress);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['add-label'])) {
+    $handler = new LabelAddHandler($_POST);
+    try {
+        $handler->handle();
+
+        $project = $handler->post_vars['project'];
+        $list = $handler->post_vars['list'];
+        $label = $handler->post_vars['labelname'];
+        $color = $handler->post_vars['textcolor'];
+        $background = $handler->post_vars['backgroundcolor'];
+
+        $params = "name:".$label.",textcolor:".$color.",backgroundcolor:".$background;
+        ActivityFunc::log($current_user->name, $project, $list, "label:add", $params, 0, date("Y-m-d H:i:s"));
+
+        $label_created_hook = new LabelCreatedHook($project, $list, $label, $color, $background);
+        $plugin_manager->trigger($label_created_hook);
+
+        LabelFunc::add_label($project, $list, $label, $color, $background);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['edit-label'])) {
+    $handler = new LabelEditHandler($_POST);
+    try {
+        $handler->handle();
+
+        $id = $handler->post_vars['id'];
+        $details = LabelFunc::label_details($id);
+
+        $project = $handler->post_vars['project'];
+        $list = $handler->post_vars['list'];
+        $label = $handler->post_vars['labelname'];
+        $color = $handler->post_vars['textcolor'];
+        $background = $handler->post_vars['backgroundcolor'];
+
+        $params = "id:".$id.",name:".$label.",textcolor:".$color.",backgroundcolor:".$background;
+        ActivityFunc::log($current_user->name, $project, $list, "label:edit", $params, 0, date("Y-m-d H:i:s"));
+
+        $label_modified_hook = new LabelModifiedHook($id, $details['project'], $project, $details['list'], $list, $details['label'], $label, $details['text'], $color, $details['background'], $background);
+        $plugin_manager->trigger($label_modified_hook);
+
+        LabelFunc::edit_label($id, $project, $list, $label, $color, $background);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
 $configs = ListFunc::configurations(ListFunc::get_id($project, $list));
 $minimal = ListFunc::minimal(ListFunc::get_id($project, $list));
-include("include/handling/task.php");
-include("include/handling/label.php");
+
 $switchable = "tasks";
 if(isset($_GET['page'])) {
 	if($_GET['page'] == 'tasks' || $_GET['page'] == 'labels') {

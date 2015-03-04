@@ -4,15 +4,15 @@ The Trackr Code Quality Standards were created to establish code format rules fo
 
 ## Function & Variables names:
 *  Must have an underscore(_) between each word
-  * Correct Examples: $example_variable, $another_variable, example_function(), another_example()
-  * Incorrect Examples: $exampleVariable,  $examplevariable, ExampleFunction(), exampleFunction()
+  * Correct Example(s): $example_variable, $another_variable, example_function(), another_example()
+  * Incorrect Example(s): $exampleVariable,  $examplevariable, ExampleFunction(), exampleFunction()
 * Must be all lower-case characters unless using an abbreviation
-  * Correct Examples: $example_variable, $another_variable, correct_example(), correct_PHP()
-  * Incorrect Examples: $Example_Variable,  $EXAMPLE_VARIABLE, incorrect_Example()
+  * Correct Example(s): $example_variable, $another_variable, correct_example(), correct_PHP()
+  * Incorrect Example(s): $Example_Variable,  $EXAMPLE_VARIABLE, incorrect_Example()
 
 ## Arrays:
 * When initializing/insert values of arrays that use a Key => Value pair, and you're initialize it with/inserting multiple values you must put each Key => Value pair on a separate line. If you're only inserting/initializing one value then the Key => Value pair may be placed on the same line you create the array or set the value.
-  * Correct Examples:
+  * Correct Example(s):
   ```php
   $example_array = array(
       'Key' => 'Value',
@@ -34,17 +34,29 @@ The Trackr Code Quality Standards were created to establish code format rules fo
 
 ## Class & Class File names:
 * Class files must use the same name as the class they contain
-  * Correct Examples: ExampleClass in ExampleClass.php, Group in Group.php, AnotherExampleClass in AnotherExampleClass.php
-  * Incorrect Examples: exampleClass in Example.php, group in Group.php, AnotherexampleClass in anotherexampleclass.php
+  * Correct Example(s): ExampleClass in ExampleClass.php, Group in Group.php, AnotherExampleClass in AnotherExampleClass.php
+  * Incorrect Example(s): exampleClass in Example.php, group in Group.php, AnotherexampleClass in anotherexampleclass.php
 * Class names must be in upper camel case.
-  * Correct Examples: ExampleClass, Group, AnotherExampleClass
-  * Incorrect Examples: exampleClass, group, AnotherexampleClass
+  * Correct Example(s): ExampleClass, Group, AnotherExampleClass
+  * Incorrect Example(s): exampleClass, group, AnotherexampleClass
   
 ## Methods/Operators to use
 * When trying to obtain a value from a language file you should ALWAYS use the ```get_value``` method in the LanguageManager class.
+  * Correct Example:
+* Only use array_push when adding more than one value to an array.
+  * Correct Example(s):
+  ```php
+  $example = array('test');
+  array_push($example, 'test1', 'test2', 'test3');
+  ```
+  * Incorrect Example(s):
+  ```php
+  $example = array('test');
+  array_push($example, 'test1');
+  ```
 * Do NOT use deprecated methods
-* Use instanceof instead of is_a()
-  * Correct Examples:
+* Always use instanceof instead of is_a()
+  * Correct Example(s):
   ```php
   if($variable instanceof Class) {
       //Do something
@@ -53,7 +65,7 @@ The Trackr Code Quality Standards were created to establish code format rules fo
       //Do something
   }
   ```
-  * Incorrect Examples:
+  * Incorrect Example(s):
   ```php
   if(is_a($variable, 'Class')) {
       //Do something
@@ -80,4 +92,4 @@ The Trackr Code Quality Standards were created to establish code format rules fo
 * Never assume a variable is an instance of a class. Always check using instanceof before using variables/methods.
 
 ##Last Modified
-The Trackr Code Quality Standards were last modified on February 25th, 2015.
+The Trackr Code Quality Standards were last modified on March 3rd, 2015.

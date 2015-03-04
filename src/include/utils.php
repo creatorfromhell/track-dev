@@ -11,6 +11,13 @@
 /*
  * Miscellaneous Functions
  */
+/**
+ * @param $input
+ * @return string
+ */
+function clean_input($input) {
+    return strip_tags(trim($input));
+}
 
 /**
  * @param $value
@@ -56,11 +63,11 @@ function str_contains($string, $word) {
  * @param string $table
  * @param string $column
  */
-function value($table, $column, $extra = '') {
+function value($table, $column, $extra = '', $params = array()) {
     global $prefix, $pdo;
     $t = $prefix."_".$table;
     $stmt = $pdo->prepare("SELECT ".$column." FROM `".$t."`".$extra);
-    $stmt->execute();
+    $stmt->execute($params);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return $result[$column];
@@ -70,22 +77,24 @@ function value($table, $column, $extra = '') {
  * @param string $table
  * @param string $column
  */
-function set_value($table, $column, $value, $extra = '') {
+function set_value($table, $column, $value, $extra = '', $params = array()) {
+    $values = array($value);
+    array_push($values, $params);
     global $prefix, $pdo;
     $t = $prefix."_".$table;
     $stmt = $pdo->prepare("UPDATE `".$t."` SET ".$column." = ?".$extra);
-    $stmt->execute(array($value));
+    $stmt->execute($values);
 }
 
 /**
  * @param string $table
  * @param string $column
  */
-function values($table, $column, $extra = '') {
+function values($table, $column, $extra = '', $params = array()) {
     global $prefix, $pdo;
     $t = $prefix."_".$table;
     $stmt = $pdo->prepare("SELECT ".$column." FROM `".$t."`".$extra);
-    $stmt->execute();
+    $stmt->execute($params);
     $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $values = array();
@@ -98,8 +107,8 @@ function values($table, $column, $extra = '') {
 /**
  * @param string $table
  */
-function has_values($table, $extra = '') {
-    if(count_columns($table, $extra) > 0) {
+function has_values($table, $extra = '', $params = array()) {
+    if(count_columns($table, $extra, $params) > 0) {
         return true;
     }
     return false;
@@ -108,11 +117,11 @@ function has_values($table, $extra = '') {
 /**
  * @param string $table
  */
-function count_columns($table, $extra = '') {
+function count_columns($table, $extra = '', $params = array()) {
     global $prefix, $pdo;
     $t = $prefix."_".$table;
     $stmt = $pdo->prepare("SELECT * FROM `".$t."`".$extra);
-    $stmt->execute();
+    $stmt->execute($params);
 
     return $stmt->fetch(PDO::FETCH_NUM);
 }
@@ -140,15 +149,15 @@ function upload_file($file, $name, $maxSize = 1000000) {
 	$type = pathinfo(basename($file['name']), PATHINFO_EXTENSION);
 	$move = $name.".".$type;
 	$bannedTypes = array("php", "js", "cs");
-	
+
 	if(in_array($type, $bannedTypes)) {
 		return;
 	}
-	
+
 	if($file['size'] > $maxSize) {
 		return;
 	}
-	
+
 	if(move_uploaded_file($file['tmp_name'], $move)) {
 		return;
 	}

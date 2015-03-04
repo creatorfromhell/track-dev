@@ -7,7 +7,44 @@
  * Last Modified: 8/7/14 at 6:53 PM
  * Last Modified by Daniel Vidmar.
  */
-include_once("include/handling/permission.php");
+if(isset($_POST['add-permission'])) {
+    $handler = new NodeAddHandler($_POST);
+    try {
+        $handler->handle();
+
+        $node = $handler->post_vars['node'];
+        $description = $handler->post_vars['description'];
+
+        $node_created_hook = new NodeCreatedHook($node, $description);
+        $plugin_manager->trigger($node_created_hook);
+
+        node_add($node, $description);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
+
+if(isset($_POST['edit-permission'])) {
+    $handler = new NodeEditHandler($_POST);
+    try {
+        $handler->handle();
+
+        $id = $handler->post_vars['id'];
+        $details = node_details($id);
+
+        $node = $handler->post_vars['node'];
+        $description = $handler->post_vars['description'];
+
+        $node_modified_hook = new NodeModifiedHook($id, $details['node_name'], $node, $details['node_description'], $description);
+        $plugin_manager->trigger($node_modified_hook);
+
+        node_edit($id, $node, $description);
+    } catch(Exception $e) {
+        $translated = $language_manager->get_value($language, $e->getMessage());
+        //TODO: form message handling
+    }
+}
 $editing = false;
 if(isset($_GET['action']) && isset($_GET['id']) && has_values("nodes", " WHERE id = '".StringFormatter::clean_input($_GET['id'])."'")) {
     $edit_id = StringFormatter::clean_input($_GET['id']);

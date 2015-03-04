@@ -115,6 +115,8 @@
                 <group>A group with that name already exists!</group>
                 <project>A project with that name already exists!</project>
                 <list>A list with that name already exists!</list>
+                <type>A version type with that name already exists!</type>
+                <version>A version with that name already exists!</version>
             </exists>
             <invalid>
                 <id>You must enter a valid id!</id>
