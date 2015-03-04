@@ -10,17 +10,17 @@
 if(isset($_POST['login'])) {
     if(isset($_POST['username']) && trim($_POST['username']) != '') {
         if(isset($_POST['password']) && trim($_POST['password']) != '') {
-            if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
-                $name = clean_input($_POST['username']);
+            if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(StringFormatter::clean_input($_POST['captcha']))) {
+                $name = StringFormatter::clean_input($_POST['username']);
                 $email = (!valid_email($name)) ? false : true;
-                if(User::exists($name, $email) && check_hash(User::get_hashed_password($name, $email), clean_input($_POST['password']))) {
+                if(User::exists($name, $email) && check_hash(User::get_hashed_password($name, $email), StringFormatter::clean_input($_POST['password']))) {
                     $user = User::load($name, $email);
 					global $configuration_values;
                     if($configuration_values["main"]["email_activation"] && $user->activated == 1 || !$configuration_values["main"]["email_activation"]) {
                         $user->logged_in = date("Y-m-d H:i:s");
                         $user->online = 1;
                         $user->save();
-                        ActivityFunc::log(clean_input($_POST['username']), "none", "none", "user:login", "", 0, date("Y-m-d H:i:s"));
+                        ActivityFunc::log(StringFormatter::clean_input($_POST['username']), "none", "none", "user:login", "", 0, date("Y-m-d H:i:s"));
 
                         $user_login_hook = new UserLoginHook($user->name, $user->logged_in, $user->get_ip());
                         $plugin_manager->trigger($user_login_hook);

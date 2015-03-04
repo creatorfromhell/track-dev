@@ -24,8 +24,8 @@ if(isset($_POST['add-list'])) {
                                     if(isset($_POST['guestedit']) && trim($_POST['guestedit']) != "") {
                                         if(isset($_POST['viewpermission']) && trim($_POST['viewpermission']) != "") {
                                             if(isset($_POST['editpermission']) && trim($_POST['editpermission']) != "") {
-                                                if(has_values("projects", " WHERE project = '".clean_input($_POST['project'])."'")) {
-                                                    if(!has_values("lists", " WHERE project = '".clean_input($_POST['project'])."' AND list = '".clean_input($_POST['name'])."'")) {
+                                                if(has_values("projects", " WHERE project = '".StringFormatter::clean_input($_POST['project'])."'")) {
+                                                    if(!has_values("lists", " WHERE project = '".StringFormatter::clean_input($_POST['project'])."' AND list = '".StringFormatter::clean_input($_POST['name'])."'")) {
                                                         $list = $_POST['name'];
                                                         $project = $_POST['project'];
                                                         $public = $_POST['public'];
@@ -125,7 +125,7 @@ if(isset($_POST['edit-list'])) {
                                     if(isset($_POST['guestedit']) && trim($_POST['guestedit']) != "") {
                                         if(isset($_POST['viewpermission']) && trim($_POST['viewpermission']) != "") {
                                             if(isset($_POST['editpermission']) && trim($_POST['editpermission']) != "") {
-                                                if(has_values("projects", " WHERE project = '".clean_input($_POST['project'])."'")) {
+                                                if(has_values("projects", " WHERE project = '".StringFormatter::clean_input($_POST['project'])."'")) {
                                                     $id = $_POST['id'];
                                                     $details = ListFunc::list_details($id);
 
@@ -133,7 +133,7 @@ if(isset($_POST['edit-list'])) {
                                                     $project = $_POST['project'];
                                                     $public = $_POST['public'];
                                                     $overseer = $_POST['overseer'];
-                                                    if($list == $details['name'] || $list != $details['name'] && !has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'")) {
+                                                    if($list == $details['name'] || $list != $details['name'] && !has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($list)."'")) {
                                                         $created = date("Y-m-d H:i:s");
                                                         if($project != $details['project']) {
                                                             ListFunc::change_project($id, $project);

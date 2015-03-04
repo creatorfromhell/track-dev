@@ -14,19 +14,19 @@ if(isset($_POST['register'])) {
                 if(isset($_POST['c_password']) && trim($_POST['c_password']) != '') {
                     if(!User::exists($_POST['username'], false) && !User::exists($_POST['email'], true)) {
                         if($_POST['password'] == $_POST['c_password']) {
-                            if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
+                            if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(StringFormatter::clean_input($_POST['captcha']))) {
                                 $date = date("Y-m-d H:i:s");
                                 $user = new User();
                                 $user->ip = User::get_ip();
-                                $user->name = clean_input($_POST['username']);
-                                $user->email = clean_input($_POST['email']);
+                                $user->name = StringFormatter::clean_input($_POST['username']);
+                                $user->email = StringFormatter::clean_input($_POST['email']);
                                 $user->registered = $date;
                                 $user->logged_in = $date;
-                                $user->password = generate_hash(clean_input($_POST['password']));
+                                $user->password = generate_hash(StringFormatter::clean_input($_POST['password']));
                                 $user->group = Group::load(Group::preset());
                                 $user->activation_key = generate_session_id(40);
                                 User::add_user($user);
-                                $params = "name:".clean_input($_POST['username']).",email:".$_POST['email'];
+                                $params = "name:".StringFormatter::clean_input($_POST['username']).",email:".$_POST['email'];
                                 ActivityFunc::log(User::get_ip(), "none", "none", "user:register", $params, 0, date("Y-m-d H:i:s"));
 
                                 $user_register_hook = new UserRegistrationHook($user->name, $date, $user->getIP());

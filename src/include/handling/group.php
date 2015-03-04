@@ -12,14 +12,14 @@ if(isset($_POST['add-group'])) {
     if(isset($_POST['name']) && trim($_POST['name']) != '') {
         if(isset($_POST['admin']) && trim($_POST['admin']) != '') {
             if(isset($_POST['preset']) && trim($_POST['preset']) != '') {
-                if(!has_values("groups", " WHERE group_name = '".clean_input($_POST['name'])."'")) {
-                    if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
+                if(!has_values("groups", " WHERE group_name = '".StringFormatter::clean_input($_POST['name'])."'")) {
+                    if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(StringFormatter::clean_input($_POST['captcha']))) {
                         $group = new Group();
-                        $group->name = clean_input($_POST['name']);
-                        $group->admin = (clean_input($_POST['admin']) == '1') ? true : false;
-                        $group->preset = (clean_input($_POST['preset']) == '1') ? true : false;
-                        $group->permissions = explode(",", clean_input($_POST['permissions-value']));
-                        $params = "name:".clean_input($_POST['name']).",admin:".clean_input($_POST['admin']).",preset:".clean_input($_POST['preset']);
+                        $group->name = StringFormatter::clean_input($_POST['name']);
+                        $group->admin = (StringFormatter::clean_input($_POST['admin']) == '1') ? true : false;
+                        $group->preset = (StringFormatter::clean_input($_POST['preset']) == '1') ? true : false;
+                        $group->permissions = explode(",", StringFormatter::clean_input($_POST['permissions-value']));
+                        $params = "name:".StringFormatter::clean_input($_POST['name']).",admin:".StringFormatter::clean_input($_POST['admin']).",preset:".StringFormatter::clean_input($_POST['preset']);
                         ActivityFunc::log($current_user->name, "none", "none", "group:add", $params, 0, date("Y-m-d H:i:s"));
 
                         $group_created_hook = new GroupCreatedHook($group->name, $group->admin, $group->preset, $group->permissions);
@@ -55,18 +55,18 @@ if(isset($_POST['add-group'])) {
 }
 
 if(isset($_POST['edit-group'])) {
-    if(isset($_POST['id']) && trim($_POST['id']) != '' && has_values("groups", " WHERE id = '".clean_input($_POST['id'])."'")) {
+    if(isset($_POST['id']) && trim($_POST['id']) != '' && has_values("groups", " WHERE id = '".StringFormatter::clean_input($_POST['id'])."'")) {
         if(isset($_POST['name']) && trim($_POST['name']) != '') {
             if(isset($_POST['admin']) && trim($_POST['admin']) != '') {
                 if(isset($_POST['preset']) && trim($_POST['preset']) != '') {
-                    $id = clean_input($_POST['id']);
+                    $id = StringFormatter::clean_input($_POST['id']);
                     $group = Group::load($id);
-                    if(clean_input($_POST['name']) != $group->name && !has_values("groups", " WHERE group_name = '".clean_input($_POST['name'])."'") || clean_input($_POST['name']) == $oldName) {
-                        if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
-                            $name = clean_input($_POST['name']);
-                            $admin = clean_input($_POST['admin']);
-                            $preset = clean_input($_POST['preset']);
-                            $permissions = explode(",", clean_input($_POST['permissions-value']));
+                    if(StringFormatter::clean_input($_POST['name']) != $group->name && !has_values("groups", " WHERE group_name = '".StringFormatter::clean_input($_POST['name'])."'") || StringFormatter::clean_input($_POST['name']) == $oldName) {
+                        if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(StringFormatter::clean_input($_POST['captcha']))) {
+                            $name = StringFormatter::clean_input($_POST['name']);
+                            $admin = StringFormatter::clean_input($_POST['admin']);
+                            $preset = StringFormatter::clean_input($_POST['preset']);
+                            $permissions = explode(",", StringFormatter::clean_input($_POST['permissions-value']));
 
                             if($preset == '1') {
                                 $old = Group::load(Group::preset());

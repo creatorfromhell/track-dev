@@ -60,7 +60,7 @@ if(isset($_POST['edit-label'])) {
                 if(isset($_POST['labelname']) && trim($_POST['labelname']) != "") {
                     if(isset($_POST['textcolor']) && trim($_POST['textcolor']) != "") {
                         if(isset($_POST['backgroundcolor']) && trim($_POST['backgroundcolor']) != "") {
-                            $id = clean_input($_POST['id']);
+                            $id = StringFormatter::clean_input($_POST['id']);
                             $details = LabelFunc::label_details($id);
 
                             $project = $_POST['project'];

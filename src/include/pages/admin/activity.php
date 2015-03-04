@@ -34,16 +34,16 @@ $rules['table'] = array(
     ),
 );
 $rules['table']['th'] = array(
-    'activity' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->activity)),
-    'archived' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->archived)),
-    'logged' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->logged)),
-    'actions' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->actions)),
+    'activity' => $language_manager->get_value($language, "site->tables->head->activity"),
+    'archived' => $language_manager->get_value($language, "site->tables->head->archived"),
+    'logged' => $language_manager->get_value($language, "site->tables->head->logged"),
+    'actions' => $language_manager->get_value($language, "site->tables->head->actions"),
 );
 $rules['table']['pages'] = array(
     'activities' => ' ',
 );
 
-$rules['site']['content']['announce'] = $formatter->replace_shortcuts(((string)$language_instance->site->tables->noactivities));
+$rules['site']['content']['announce'] = $language_manager->get_value($language, "site->tables->missing->activities");
 $rules['table']['content'] = array(
     'activities' => ' ',
 );
@@ -56,8 +56,8 @@ if(has_values("activity")) {
     $table_content = "";
     foreach ($entries as &$entry) {
         $id = $entry['id'];
-        $description = ActivityFunc::get_readable_activity($id, $language_instance);
-        $archived = ($entry['archived'] == 1) ? (string)$language_instance->site->tables->yes : (string)$language_instance->site->tables->no;
+        $description = ActivityFunc::get_readable_activity($id, $language_manager, $language);
+        $archived = ($entry['archived'] == 1) ? $language_manager->get_value($language, "site->actions->general->yes") : $language_manager->get_value($language, "site->actions->general->no");
         $logged = $entry['logged'];
 
         $table_content .= "<tr>";
@@ -70,7 +70,7 @@ if(has_values("activity")) {
             $table_content .= "<a title='UnArchive' class='actionUnArchive' href='?t=activity&amp;action=unarchive&amp;id=" . $id . "&amp;pn=" . $pn . "'></a>";
             $table_content .= "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure?\");' href='?t=activity&amp;action=delete&amp;id=" . $id . "&amp;pn=" . $pn . "'></a>";
         } else {
-            $table_content .= $formatter->replace("%none");
+            $table_content .= $language_manager->get_value($language, "site->actions->general->none");
         }
         $table_content .= "</td></tr>";
     }

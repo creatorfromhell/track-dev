@@ -21,7 +21,7 @@ if(isset($_GET['page'])) {
 }
 $edit_id = 0;
 $editing = false;
-if(isset($_GET['action']) && isset($_GET['id']) && can_edit_task(ListFunc::get_id($project, $list), clean_input($_GET['id']))) {
+if(isset($_GET['action']) && isset($_GET['id']) && can_edit_task(ListFunc::get_id($project, $list), StringFormatter::clean_input($_GET['id']))) {
     $action = $_GET['action'];
     $edit_id = $_GET['id'];
 
@@ -101,12 +101,12 @@ $rules['form'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'tasks' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->notasks)).'</p>',
-        'labels' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->nolabels)).'</p>',
+        'tasks' => '<p class="announce">'.$language_manager->get_value($language, "site->tables->missing->tasks").'</p>',
+        'labels' => '<p class="announce">'.$language_manager->get_value($language, "site->tables->missing->labels").'</p>',
     ),
 );
 if($switchable == 'tasks') {
-    $rules['site']['header']['h1'] = $formatter->replace_shortcuts(((string)$language_instance->site->header));
+    $rules['site']['header']['h1'] = $language_manager->get_value($language, "site->header");
     $rules['pages']['list']['labels']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-right"><a href="?page=labels">Labels ></a></div>';
     if(is_admin()) {
@@ -119,7 +119,7 @@ if($switchable == 'tasks') {
         $rules['form']['content'] = array(
             'user' => $current_user->name,
             'users' => to_options(values("users", "user_name")),
-            'versions' => to_options(values("versions", "version_name", " WHERE project = '".clean_input($project)."'")),
+            'versions' => to_options(values("versions", "version_name", " WHERE project = '".StringFormatter::clean_input($project)."'")),
             'labels' => $label_values,
         );
         if($editing) {
@@ -134,7 +134,7 @@ if($switchable == 'tasks') {
             $status_string .= '<option value="2"'.(($details['status'] == 2) ? " selected" : "").'>In Progress</option>';
             $status_string .= '<option value="3"'.(($details['status'] == 3) ? " selected" : "").'>Closed</option>';
             $version_string = '<option value="none"'.(($details['version'] == "none") ? " selected" : "").'>None</option>';
-            $version_string .= to_options(values("versions", "version_name", " WHERE project = '".clean_input($project)."'"), $details['version']);
+            $version_string .= to_options(values("versions", "version_name", " WHERE project = '".StringFormatter::clean_input($project)."'"), $details['version']);
             $labels_string = '';
             $labels_used = '';
             $labels_value = "";
@@ -166,7 +166,7 @@ if($switchable == 'tasks') {
         }
     }
 } else if($switchable == 'labels') {
-    $rules['site']['header']['h1'] = $formatter->replace_shortcuts(((string)$language_instance->site->pages->projects->versiontypeheader));
+    $rules['site']['header']['h1'] = $language_manager->get_value($language, "site->pages->projects->versiontypeheader");
     $rules['pages']['list']['tasks']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-left"><a href="?page=tasks">< Tasks</a></div>';
     if(is_admin()) {
@@ -190,11 +190,11 @@ if($switchable == 'tasks') {
     }
 }
 $rules['table']['th'] = array(
-    'name' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->name)),
-    'assignee' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->assignee)),
-    'created' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->created)),
-    'author' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->author)),
-    'actions' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->actions)),
+    'name' => $language_manager->get_value($language, "site->tables->head->name"),
+    'assignee' => $language_manager->get_value($language, "site->tables->head->assignee"),
+    'created' => $language_manager->get_value($language, "site->tables->head->created"),
+    'author' => $language_manager->get_value($language, "site->tables->head->author"),
+    'actions' => $language_manager->get_value($language, "site->tables->head->actions"),
 );
 $rules['table']['pages'] = array(
     'tasks' => ' ',
@@ -245,7 +245,7 @@ if(has_values($project."_".$list) && can_view_list(ListFunc::get_id($project, $l
             $table_content .= "<a title='Edit' class='actionEdit' href='?".$basic."&amp;action=edit&amp;id=".$id."'></a>";
             $table_content .= "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete task #".$id."?\");' href='?".$basic."&amp;action=delete&amp;id=".$id."'></a>";
         } else {
-            $table_content .= $formatter->replace("%none");
+            $table_content .= $language_manager->get_value($language, "site->actions->general->none");
         }
         $table_content .= "</td></tr>";
     }
@@ -253,7 +253,7 @@ if(has_values($project."_".$list) && can_view_list(ListFunc::get_id($project, $l
     $rules['table']['content']['tasks'] = $table_content;
 }
 
-if(has_values("labels", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'")) {
+if(has_values("labels", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($list)."'")) {
     $rules['table']['templates']['labels'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Labels.tpl").'}';
     $pagination = new Pagination($prefix."_labels", "id, label_name, text_color, background_color", $pn, 10, "?p=".$project."&l=".$list."&page=labels&", "WHERE project = '".$project."' AND list = '".$list."' ORDER BY id");
     $table_content = "";
@@ -274,7 +274,7 @@ if(has_values("labels", " WHERE project = '".clean_input($project)."' AND list =
             $table_content .= "<a title='Edit' class='actionEdit' href='?".$basic."&amp;action=edit&amp;id=".$id."'></a>";
             $table_content .= "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete label #".$id."?\");' href='?".$basic."&amp;action=delete&amp;id=".$id."'></a>";
         } else {
-            $table_content .= $formatter->replace("%none");
+            $table_content .= $language_manager->get_value($language, "site->actions->general->none");
         }
         $table_content .= "</td></tr>";
     }

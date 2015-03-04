@@ -9,9 +9,9 @@
  */
 include_once("include/handling/permission.php");
 $editing = false;
-if(isset($_GET['action']) && isset($_GET['id']) && has_values("nodes", " WHERE id = '".clean_input($_GET['id'])."'")) {
-    $edit_id = clean_input($_GET['id']);
-    $action = clean_input($_GET['action']);
+if(isset($_GET['action']) && isset($_GET['id']) && has_values("nodes", " WHERE id = '".StringFormatter::clean_input($_GET['id'])."'")) {
+    $edit_id = StringFormatter::clean_input($_GET['id']);
+    $action = StringFormatter::clean_input($_GET['action']);
 
     if($action == "edit") {
         $editing = true;
@@ -28,23 +28,23 @@ $rules['table'] = array(
     ),
 );
 $rules['table']['th'] = array(
-    'node' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->node)),
-    'description' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->description)),
-    'actions' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->actions)),
+    'node' => $language_manager->get_value($language, "site->tables->head->node"),
+    'description' => $language_manager->get_value($language, "site->tables->head->description"),
+    'actions' => $language_manager->get_value($language, "site->tables->head->actions"),
 );
 $rules['table']['pages'] = array(
     'permissions' => ' ',
 );
-$rules['site']['content']['announce'] = $formatter->replace_shortcuts(((string)$language_instance->site->tables->nonodes));
+$rules['site']['content']['announce'] = $language_manager->get_value($language, "site->tables->missing->nodes");
 $rules['table']['content'] = array(
     'permissions' => ' ',
 );
 
 if($editing) {
     $rules['form']['templates']['permission'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/NodeEditForm.tpl").'}';
-    $details = node_details(clean_input($_GET['id']));
+    $details = node_details(StringFormatter::clean_input($_GET['id']));
     $rules['form']['value'] = array(
-        'id' => clean_input($_GET['id']),
+        'id' => StringFormatter::clean_input($_GET['id']),
         'name' => $details['node_name'],
         'description' => $details['node_description'],
     );

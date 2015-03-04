@@ -17,14 +17,14 @@ if(isset($_POST['add-task'])) {
             if(isset($_POST['author']) && trim($_POST['author']) != "") {
                 if(isset($_POST['editable']) && trim($_POST['editable']) != "") {
                     if(isset($_POST['status']) && trim($_POST['status']) != "") {
-                        if(has_values("projects", " WHERE project = '".clean_input($project)."'")) {
-                            if(has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'")) {
+                        if(has_values("projects", " WHERE project = '".StringFormatter::clean_input($project)."'")) {
+                            if(has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($list)."'")) {
                                 $title = $_POST['title'];
                                 $description = $_POST['description'];
                                 $author = $_POST['author'];
                                 $assignee = $_POST['assignee'];
                                 $created = date("Y-m-d H:i:s");
-								$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? clean_input($_POST['due-date']) : "0000-00-00";
+								$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? StringFormatter::clean_input($_POST['due-date']) : "0000-00-00";
                                 $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;
                                 $labels = (isset($_POST['labels']) && $_POST['labels'] != "") ? $_POST['labels'] : "";
                                 $status = $_POST['status'];
@@ -82,16 +82,16 @@ if(isset($_POST['edit-task'])) {
                 if(isset($_POST['author']) && trim($_POST['author']) != "") {
                     if(isset($_POST['editable']) && trim($_POST['editable']) != "") {
                         if(isset($_POST['status']) && trim($_POST['status']) != "") {
-                            if(has_values("projects", " WHERE project = '".clean_input($project)."'")) {
-                                if(has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'")) {
-                                    $id = clean_input($_POST['id']);
+                            if(has_values("projects", " WHERE project = '".StringFormatter::clean_input($project)."'")) {
+                                if(has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($list)."'")) {
+                                    $id = StringFormatter::clean_input($_POST['id']);
                                     $details = TaskFunc::task_details($project, $list, $id);
 
                                     $title = $_POST['title'];
                                     $description = $_POST['description'];
                                     $assignee = $_POST['assignee'];
                                     $created = date("Y-m-d H:i:s");
-									$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? clean_input($_POST['due-date']) : "0000-0-00";
+									$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? StringFormatter::clean_input($_POST['due-date']) : "0000-0-00";
                                     $progress = (isset($_POST['progress'])) ? $_POST['progress'] : 0;
                                     $labels = (isset($_POST['labels-edit']) && $_POST['labels-edit'] != "") ? $_POST['labels-edit'] : "";
                                     $status = $_POST['status'];

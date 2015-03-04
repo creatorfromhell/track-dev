@@ -11,6 +11,8 @@
 class LanguageManager {
 
     private $plugin_instance;
+
+    private $string_formatter;
     /**
      * @var array
      */
@@ -19,10 +21,15 @@ class LanguageManager {
     /**
      *
      */
-    public function __construct($plugin_manager) {
-        if($plugin_manager instanceof PluginManager) {
-            $this->plugin_instance = $plugin_manager;
+    public function __construct($plugin_manager, $string_formatter) {
+        if(!($plugin_manager instanceof PluginManager)) {
+            throw new InvalidParameterTypeException($this, "plugin_manager", "PluginManager");
         }
+        if(!($string_formatter instanceof StringFormatter)) {
+            throw new InvalidParameterTypeException($this, "string_formatter", "StringFormatter");
+        }
+        $this->plugin_instance = $plugin_manager;
+        $this->string_formatter = $string_formatter;
         //load all languages
         $this->load_all();
     }
@@ -42,9 +49,9 @@ class LanguageManager {
      */
     public function load($name) {
         $file = @simplexml_load_file("resources/languages/".$name.".xml", null, true);
-        $this->languages[((string)$file->short)] = $file;
+        $this->languages[(string)$file->xpath("short")] = $file;
 
-        $language_load_hook = new LanguageLoadedHook($name, (string)$file->version);
+        $language_load_hook = new LanguageLoadedHook($name, (string)$file->xpath("version"));
         $this->plugin_instance->trigger($language_load_hook);
     }
 
@@ -52,7 +59,10 @@ class LanguageManager {
      * @param $name
      */
     public function save($name) {
-        $this->languages[$name]->asXML("resources/languages/".$name.".xml");
+        $language = $this->languages[$name];
+        if($language instanceof SimpleXMLElement) {
+            $language->asXML("resources/languages/" . $name . ".xml");
+        }
     }
 
     /**
@@ -77,9 +87,18 @@ class LanguageManager {
     /**
      * @param $name
      * @param $path
+     * @param $replace_shortcuts
      * @return string
      */
-    public function get_value($name, $path) {
-        return (string)$this->languages[$name]->xpath(str_ireplace("->", "/", $path))[0];
+    public function get_value($name, $path, $replace_shortcuts = true) {
+        $language = $this->languages[$name];
+        if($language instanceof SimpleXMLElement) {
+            $value = (string)$language->xpath(str_ireplace("->", "/", $path))[0];
+            if(!$replace_shortcuts) {
+                return $value;
+            }
+            return $this->string_formatter->replace_shortcuts($value);
+        }
+        return $path;
     }
 }

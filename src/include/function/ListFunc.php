@@ -172,7 +172,7 @@ class ListFunc {
      * @return mixed
      */
     public static function get_id($project, $list) {
-        return value("lists", "id", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($list)."'");
+        return value("lists", "id", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($list)."'");
     }
 
     /**
@@ -201,7 +201,7 @@ class ListFunc {
      * @return bool
      */
     public static function minimal($id) {
-        return (value("lists", "minimal_view", " WHERE id = '".clean_input($id)."'") == '1') ? true : false;
+        return (value("lists", "minimal_view", " WHERE id = '".StringFormatter::clean_input($id)."'") == '1') ? true : false;
     }
 
     /**
@@ -209,7 +209,7 @@ class ListFunc {
      * @return mixed
      */
     public static function get_overseer($id) {
-        return value("lists", "overseer", " WHERE id = '".clean_input($id)."'");
+        return value("lists", "overseer", " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     /**
@@ -217,7 +217,7 @@ class ListFunc {
      * @return mixed
      */
     public static function get_project($id) {
-        return value("lists", "project", " WHERE id = '".clean_input($id)."'");
+        return value("lists", "project", " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     //change list project
@@ -228,7 +228,7 @@ class ListFunc {
     public static function change_project($id, $project) {
         $details = self::list_details($id);
         global $prefix, $pdo;
-        set_value("lists", "project", $project, " WHERE id = '".clean_input($id)."'");
+        set_value("lists", "project", $project, " WHERE id = '".StringFormatter::clean_input($id)."'");
         $t = $prefix."_".$details['project']."_".$details['name'];
         $t2 = $prefix."_".$project."_".$details['name'];
         $stmt = $pdo->prepare("RENAME TABLE `".$t."` TO `".$t2."`");
@@ -251,7 +251,7 @@ class ListFunc {
      * @return mixed
      */
     public static function get_name($id) {
-        return value("lists", "list", " WHERE id = '".clean_input($id)."'");
+        return value("lists", "list", " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     //make list public
@@ -259,7 +259,7 @@ class ListFunc {
      * @param $id
      */
     public static function make_public($id) {
-        set_value("lists", "public", "1", " WHERE id = '".clean_input($id)."'");
+        set_value("lists", "public", "1", " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     //rename list
@@ -270,7 +270,7 @@ class ListFunc {
     public static function rename_list($id, $list) {
         $details = self::list_details($id);
         global $prefix, $pdo;
-        set_value("lists", "list", $list, " WHERE id = '".clean_input($id)."'");
+        set_value("lists", "list", $list, " WHERE id = '".StringFormatter::clean_input($id)."'");
         $t = $prefix."_".$details['project']."_".$details['name'];
         $t2 = $prefix."_".$details['project']."_".$list;
         $stmt = $pdo->prepare("RENAME TABLE `".$t."` TO `".$t2."`");

@@ -68,7 +68,7 @@ class Group {
      * @param $group
      */
     public static function add_group($group) {
-        if(!is_a($group, "Group")) { return; }
+        if(!($group instanceof Group)) { return; }
         global $pdo, $prefix;
         $t = $prefix."_groups";
         $perm = implode(",", $group->permissions);

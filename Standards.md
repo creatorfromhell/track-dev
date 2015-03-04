@@ -41,6 +41,7 @@ The Trackr Code Quality Standards were created to establish code format rules fo
   * Incorrect Examples: exampleClass, group, AnotherexampleClass
   
 ## Methods/Operators to use
+* When trying to obtain a value from a language file you should ALWAYS use the ```get_value``` method in the LanguageManager class.
 * Do NOT use deprecated methods
 * Use instanceof instead of is_a()
   * Correct Examples:
@@ -76,6 +77,7 @@ The Trackr Code Quality Standards were created to establish code format rules fo
 * Place a space before and after the concatenating assignment operator(".=")
 * Always use the clean_input() method on user provided values
 * Always use PHP_EOL instead of specifying a line separator
+* Never assume a variable is an instance of a class. Always check using instanceof before using variables/methods.
 
 ##Last Modified
 The Trackr Code Quality Standards were last modified on February 25th, 2015.

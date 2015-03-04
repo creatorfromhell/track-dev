@@ -37,7 +37,7 @@ class ProjectFunc {
      */
     public static function remove($id) {
         $project = self::get_name($id);
-        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($project)."'");
         foreach($lists as &$list) {
             $list_id = ListFunc::get_id($project, $list);
             ListFunc::remove($list_id);
@@ -78,7 +78,7 @@ class ProjectFunc {
      * @return mixed
      */
     public static function get_id($project) {
-        return value("projects", "id", " WHERE project = '".clean_input($project)."'");
+        return value("projects", "id", " WHERE project = '".StringFormatter::clean_input($project)."'");
     }
 
     //change main list id
@@ -87,7 +87,7 @@ class ProjectFunc {
      * @param $main
      */
     public static function change_main($id, $main) {
-        set_value("projects", "main", $main, " WHERE id = '".clean_input($id)."'");
+        set_value("projects", "main", $main, " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     //get main list id
@@ -96,7 +96,7 @@ class ProjectFunc {
      * @return mixed
      */
     public static function get_main($id) {
-        return value("projects", "main", " WHERE id = '".clean_input($id)."'");
+        return value("projects", "main", " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     /**
@@ -106,7 +106,7 @@ class ProjectFunc {
     public static function get_main_list($project) {
         $id = self::get_id($project);
         $listID = self::get_main($id);
-        return value("lists", "lists", " WHERE id = '".clean_input($listID)."'");
+        return value("lists", "lists", " WHERE id = '".StringFormatter::clean_input($listID)."'");
     }
 
     //get overseer
@@ -115,7 +115,7 @@ class ProjectFunc {
      * @return mixed
      */
     public static function get_overseer($project) {
-        return value("projects", "overseer", " WHERE project = '".clean_input($project)."'");
+        return value("projects", "overseer", " WHERE project = '".StringFormatter::clean_input($project)."'");
     }
 
     //change overseer
@@ -124,7 +124,7 @@ class ProjectFunc {
      * @param $overseer
      */
     public static function change_overseer($id, $overseer) {
-        set_value("projects", "overseer", $overseer, " WHERE id = '".clean_input($id)."'");
+        set_value("projects", "overseer", $overseer, " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     /**
@@ -132,7 +132,7 @@ class ProjectFunc {
      * @return mixed
      */
     public static function get_name($id) {
-        return value("projects", "project", " WHERE id = '".clean_input($id)."'");
+        return value("projects", "project", " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     //get preset project
@@ -149,7 +149,7 @@ class ProjectFunc {
      */
     public static function make_preset($id) {
         self::remove_preset();
-        set_value("projects", "preset", "1", " WHERE id = '".clean_input($id)."'");
+        set_value("projects", "preset", "1", " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     /**
@@ -157,7 +157,7 @@ class ProjectFunc {
      */
     public static function remove_preset() {
         $id = self::get_id(self::get_preset());
-        set_value("projects", "preset", "0", " WHERE id = '".clean_input($id)."'");
+        set_value("projects", "preset", "0", " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     //make project private
@@ -165,7 +165,7 @@ class ProjectFunc {
      * @param $id
      */
     public static function make_private($id) {
-        set_value("projects", "public", "0", " WHERE id = '".clean_input($id)."'");
+        set_value("projects", "public", "0", " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     //make project public
@@ -173,7 +173,7 @@ class ProjectFunc {
      * @param $id
      */
     public static function make_public($id) {
-        set_value("projects", "public", "1", " WHERE id = '".clean_input($id)."'");
+        set_value("projects", "public", "1", " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     /**
@@ -206,11 +206,11 @@ class ProjectFunc {
      * @param $project
      */
     public static function rename_project($id, $oldname, $project) {
-        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($project)."'");
         foreach($lists as &$list) {
             ListFunc::change_project(ListFunc::get_id($oldname, $list), $project);
         }
-        set_value("projects", "project", $project, " WHERE id = '".clean_input($id)."'");
+        set_value("projects", "project", $project, " WHERE id = '".StringFormatter::clean_input($id)."'");
     }
 
     /**
@@ -219,7 +219,7 @@ class ProjectFunc {
      */
     public static function latest_tasks($project) {
         global $prefix, $pdo;
-        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($project)."'");
         $from = "";
 
         $list_count = count($lists);
@@ -268,7 +268,7 @@ class ProjectFunc {
      */
     public static function get_task_count_by_month($project, $month, $completed) {
         global $prefix, $pdo;
-        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($project)."'");
 
         $from = "";
         $date = ($completed) ? "finished" : "created";
@@ -313,7 +313,7 @@ class ProjectFunc {
      */
     public static function get_top_assigned_users($project) {
         global $prefix, $pdo;
-        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($project)."'");
         $users = array();
         $totals = array();
         $completed = array();
@@ -358,7 +358,7 @@ class ProjectFunc {
      */
     public static function has_event($project, $year, $month, $day) {
         global $prefix, $pdo;
-        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($project)."'");
 
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM (SELECT id, project, EXTRACT(YEAR FROM created) AS year, EXTRACT(MONTH FROM created) AS month, EXTRACT(DAY FROM created) AS day FROM `".$prefix."_lists`) AS a WHERE project = ".$project." AND year = ".$year." AND month = ".$month." AND day = ".$day);
         $stmt->execute();
@@ -389,7 +389,7 @@ class ProjectFunc {
      */
     public static function get_events($project, $year, $month, $day) {
         global $prefix, $pdo;
-        $lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
+        $lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($project)."'");
         $toReturn = "";
         if(self::has_event($project, $year, $month, $day)) {
             $toReturn .= "<ul>";

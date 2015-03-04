@@ -11,14 +11,14 @@
 
 if(isset($_POST['add-version-type'])) {
 	if(isset($_POST['type-name']) && trim($_POST['type-name']) != '') {
-		if(!has_values("version_types", " WHERE version_type = '".clean_input($_POST['type-name'])."'")) {
+		if(!has_values("version_types", " WHERE version_type = '".StringFormatter::clean_input($_POST['type-name'])."'")) {
 			if(isset($_POST['type-description']) && trim($_POST['type-description']) != '') {
 				if(isset($_POST['type-stable']) && trim($_POST['type-stable']) != '') {
-					if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
+					if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(StringFormatter::clean_input($_POST['captcha']))) {
 
-						$name = clean_input($_POST['type-name']);
-						$description = clean_input($_POST['type-description']);
-						$stable = clean_input($_POST['type-stable']);
+						$name = StringFormatter::clean_input($_POST['type-name']);
+						$description = StringFormatter::clean_input($_POST['type-description']);
+						$stable = StringFormatter::clean_input($_POST['type-stable']);
 
                         $type_created_hook = new TypeCreatedHook($name, $stable, $description);
                         $plugin_manager->trigger($type_created_hook);
@@ -55,19 +55,19 @@ if(isset($_POST['add-version-type'])) {
 
 if(isset($_POST['edit-version-type'])) {
 	if(isset($_POST['id']) && trim($_POST['id']) != "") {
-		$details = VersionFunc::type_details(clean_input($_POST['id']));
+		$details = VersionFunc::type_details(StringFormatter::clean_input($_POST['id']));
 		if(isset($_POST['type-name']) && trim($_POST['type-name']) != '') {
-			if($details['name'] == clean_input($_POST['type-name']) || $details['name'] != clean_input($_POST['type-name']) && !has_values("version_types", " WHERE version_type = '".clean_input($_POST['type-name'])."'")) {
+			if($details['name'] == StringFormatter::clean_input($_POST['type-name']) || $details['name'] != StringFormatter::clean_input($_POST['type-name']) && !has_values("version_types", " WHERE version_type = '".StringFormatter::clean_input($_POST['type-name'])."'")) {
 				if(isset($_POST['type-description']) && trim($_POST['type-description']) != '') {
 					if(isset($_POST['type-stable']) && trim($_POST['type-stable']) != '') {
-						if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
+						if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(StringFormatter::clean_input($_POST['captcha']))) {
 
-							$id = clean_input($_POST['id']);
+							$id = StringFormatter::clean_input($_POST['id']);
                             $details = VersionFunc::type_details($id);
 
-							$name = clean_input($_POST['type-name']);
-							$description = clean_input($_POST['type-description']);
-							$stable = clean_input($_POST['type-stable']);
+							$name = StringFormatter::clean_input($_POST['type-name']);
+							$description = StringFormatter::clean_input($_POST['type-description']);
+							$stable = StringFormatter::clean_input($_POST['type-stable']);
 
                             $type_modified_hook = new TypeModifiedHook($id, $details['name'], $name, $details['stability'], $stable, $details['description'], $description);
                             $plugin_manager->trigger($type_modified_hook);

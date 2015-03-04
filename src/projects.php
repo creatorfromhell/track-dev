@@ -59,12 +59,12 @@ $rules['form'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'projects' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->noprojects)).'</p>',
-        'types' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->notypes)).'</p>',
+        'projects' => '<p class="announce">'.$language_manager->get_value($language, "site->tables->missing->projects").'</p>',
+        'types' => '<p class="announce">'.$language_manager->get_value($language, "site->tables->missing->types").'</p>',
     ),
 );
 if($switchable == 'projects') {
-    $rules['site']['header']['h1'] = $formatter->replace_shortcuts(((string)$language_instance->site->header));
+    $rules['site']['header']['h1'] = $language_manager->get_value($language, "site->pages->projects->header");
     $rules['pages']['projects']['types']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-right"><a href="?page=types">Version Types ></a></div>';
     if(is_admin()) {
@@ -83,7 +83,7 @@ if($switchable == 'projects') {
             $preset_string .= '<option value="1"'.(($details['preset'] == 1) ? ' selected' : '').'>Yes</option>';
             $overseer_string = '<option value="none"'.(($details['overseer'] == 'none') ? ' selected' : '').'>None</option>';
             $overseer_string .= to_options(values("users", "user_name"), $details['overseer']);
-            $lists = values("lists", "list", " WHERE project = '".clean_input($details['name'])."'");
+            $lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($details['name'])."'");
             foreach($lists as &$list) {
                 $list_id = ListFunc::get_id($details['name'], $list);
                 $list_string .= '<option value="'.$list_id.'"'.(($list_id == $details['main']) ? ' selected' : '').'>'.$list.'</option>';
@@ -99,7 +99,7 @@ if($switchable == 'projects') {
         }
     }
 } else if($switchable == 'types') {
-    $rules['site']['header']['h1'] = $formatter->replace_shortcuts(((string)$language_instance->site->pages->projects->versiontypeheader));
+    $rules['site']['header']['h1'] = $language_manager->get_value($language, "site->pages->projects->versiontypeheader");
     $rules['pages']['projects']['projects']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-left"><a href="?page=projects">< Projects</a></div>';
     if(is_admin()) {
@@ -119,13 +119,13 @@ if($switchable == 'projects') {
     }
 }
 $rules['table']['th'] = array(
-    'name' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->name)),
-    'created' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->created)),
-    'creator' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->creator)),
-    'overseer' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->overseer)),
-    'actions' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->actions)),
-    'stable' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->stable)),
-    'description' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->description)),
+    'name' => $language_manager->get_value($language, "site->tables->head->name"),
+    'created' => $language_manager->get_value($language, "site->tables->head->created"),
+    'creator' => $language_manager->get_value($language, "site->tables->head->creator"),
+    'overseer' => $language_manager->get_value($language, "site->tables->head->overseer"),
+    'actions' => $language_manager->get_value($language, "site->tables->head->actions"),
+    'stable' => $language_manager->get_value($language, "site->tables->head->stable"),
+    'description' => $language_manager->get_value($language, "site->tables->head->description"),
 );
 $rules['table']['pages'] = array(
     'projects' => ' ',
@@ -155,7 +155,7 @@ if(has_values("projects")) {
             $table_content .= "<a title='Edit' class='actionEdit' href='?action=edit&amp;id=".$id."&amp;page=projects'></a>";
             $table_content .= "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete project ".$name."?\");' href='?action=delete&amp;id=".$id."&amp;page=projects'></a>";
         } else {
-            $table_content .= $formatter->replace("%none");
+            $table_content .= $language_manager->get_value($language, "site->actions->general->none");
         }
         $table_content .= "</td></tr>";
     }
@@ -183,7 +183,7 @@ if(has_values("version_types")) {
             $table_content .= "<a title='Edit' class='actionEdit' href='?action=edit&amp;id=".$id."&amp;page=types'></a>";
             $table_content .= "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete version type ".$name."?\");' href='?action=delete&amp;id=".$id."&amp;page=types'></a>";
         } else {
-            $table_content .= $formatter->replace("%none");
+            $table_content .= $language_manager->get_value($language, "site->actions->general->none");
         }
         $table_content .= "</td></tr>";
     }

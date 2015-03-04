@@ -17,7 +17,7 @@ if(isset($_POST['add-project'])) {
             if(isset($_POST['public']) && trim($_POST['public']) != "") {
                 if(isset($_POST['mainproject']) && trim($_POST['mainproject']) != "") {
                     if(isset($_POST['overseer']) && trim($_POST['overseer']) != "") {
-                        if(!has_values("projects", " WHERE project = '".clean_input($_POST['name'])."'")) {
+                        if(!has_values("projects", " WHERE project = '".StringFormatter::clean_input($_POST['name'])."'")) {
                             $name = $_POST['name'];
                             $main_project = $_POST['mainproject'];
                             $author = $_POST['author'];
@@ -76,7 +76,7 @@ if(isset($_POST['edit-project'])) {
                             $id = $_POST['id'];
                             $details = ProjectFunc::project_details($id);
                             $name = $_POST['name'];
-                            if($name == $details['name'] || $name != $details['name'] && !has_values("projects", " WHERE project = '".clean_input($name)."'")) {
+                            if($name == $details['name'] || $name != $details['name'] && !has_values("projects", " WHERE project = '".StringFormatter::clean_input($name)."'")) {
                                 $main_project = $_POST['mainproject'];
                                 $overseer = $_POST['overseer'];
                                 $public = $_POST['public'];

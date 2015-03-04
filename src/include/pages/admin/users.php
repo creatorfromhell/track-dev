@@ -14,17 +14,17 @@ if(isset($_GET['sub'])) {
     $subPage = $_GET['sub'];
 }
 if(isset($_GET['action'])) {
-    $action = clean_input($_GET['action']);
+    $action = StringFormatter::clean_input($_GET['action']);
 
-    if($action == "edit" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".clean_input($_GET['id'])."'"))) {
+    if($action == "edit" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".StringFormatter::clean_input($_GET['id'])."'"))) {
         $editing = true;
-    } else if($action == "delete" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".clean_input($_GET['id'])."'"))) {
+    } else if($action == "delete" && isset($_GET['id']) && User::exists(value("users", "user_name", " WHERE id = '".StringFormatter::clean_input($_GET['id'])."'"))) {
         $params = "id:".$id.",status:".$action;
         ActivityFunc::log(get_name(), $project, $list, "user:delete", $params, 0, date("Y-m-d H:i:s"));
         echo '<script type="text/javascript">';
-        echo 'showMessage("success", "User '.value("users", "user_name", " WHERE id = '".clean_input($_GET['id'])."'").' has been delete.");';
+        echo 'showMessage("success", "User '.value("users", "user_name", " WHERE id = '".StringFormatter::clean_input($_GET['id'])."'").' has been delete.");';
         echo '</script>';
-        User::delete(clean_input($_GET['id']));
+        User::delete(StringFormatter::clean_input($_GET['id']));
     }
 }
 $rules['form']['templates']['user'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/UserAddForm.tpl").'}';
@@ -51,22 +51,22 @@ $rules['table'] = array(
     ),
 );
 $rules['table']['th'] = array(
-    'name' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->name)),
-    'email' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->email)),
-    'group' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->group)),
-    'registered' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->registered)),
-    'actions' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->actions)),
+    'name' => $language_manager->get_value($language, "site->tables->head->name"),
+    'email' => $language_manager->get_value($language, "site->tables->head->email"),
+    'group' => $language_manager->get_value($language, "site->tables->head->group"),
+    'registered' => $language_manager->get_value($language, "site->tables->head->registered"),
+    'actions' => $language_manager->get_value($language, "site->tables->head->actions"),
 );
 $rules['table']['pages'] = array(
     'users' => ' ',
 );
-$rules['site']['content']['announce'] = $formatter->replace_shortcuts(((string)$language_instance->site->tables->nogroups));
+$rules['site']['content']['announce'] = $language_manager->get_value($language, "site->tables->missing->users");
 $rules['table']['content'] = array(
     'users' => ' ',
 );
 
 if($editing) {
-    $user = User::load(clean_input($_GET['id']), false, true);
+    $user = User::load(StringFormatter::clean_input($_GET['id']), false, true);
     $group_string = '';
     global $prefix, $pdo;
     $t = $prefix."_groups";

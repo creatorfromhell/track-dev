@@ -54,41 +54,81 @@ function auto_load_api($class) {
     return false;
 }
 
-//Instances of Classes
+//Configuration stuff
 $configuration = new Configuration();
-$plugin_manager = new PluginManager($root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configuration->config["urls"]["installation_path"], "/"));
-$theme_manager = new ThemeManager($plugin_manager);
-$language_manager = new LanguageManager($plugin_manager);
-
-//Any includes that require other classes to be initiated go here
-require_once('DB.php');
-
-//Global variables
-$prefix = $configuration->config["database"]["db_prefix"];
-$trackr_version = $configuration->config["trackr"]["version"];
 $configuration_values = $configuration->config;
-unset($configuration_values["database"]);
-unset($configuration_values["trackr"]);
-global $prefix, $configuration_values;
 
-//Main Variables
-$theme = $theme_manager->themes[$configuration_values["main"]["theme"]];
-$installation_path = rtrim($configuration_values["urls"]["base_url"], "/").rtrim($configuration_values["urls"]["installation_path"], "/")."/";
-$path = $_SERVER["PHP_SELF"];
-$pageFull = basename($path);
-$page = basename($path, ".php");
-$pn = 1;
+//MySQl stuff
+$pdo = new PDO("mysql:host=".$configuration_values["database"]["db_host"].";dbname=".$configuration_values["database"]["db_name"], $configuration_values["database"]["db_username"], $configuration_values["database"]["db_password"]);
+
+
+//User Stuff
 $current_user = null;
-$language = $configuration_values["main"]["language"];
-$project = ProjectFunc::get_preset();
-$projects = values("projects", "project");
-$list = ProjectFunc::get_main(ProjectFunc::get_id($project));
-
 if(isset($_SESSION['usersplusprofile'])) {
     if(User::exists($_SESSION['usersplusprofile'])) {
         $current_user = User::load($_SESSION['usersplusprofile']);
     }
 }
+
+//Global variables
+$prefix = $configuration->config["database"]["db_prefix"];
+$trackr_version = $configuration->config["trackr"]["version"];
+unset($configuration_values["database"]);
+unset($configuration_values["trackr"]);
+global $pdo, $prefix, $configuration_values;
+
+//Page & Path variables
+$installation_path = rtrim($configuration_values["urls"]["base_url"], "/").rtrim($configuration_values["urls"]["installation_path"], "/")."/";
+$path = $_SERVER["PHP_SELF"];
+$pageFull = basename($path);
+$page = basename($path, ".php");
+$pn = 1;
+
+if(isset($_GET['pn'])) {
+    if($_GET['pn'] > 0) {
+        $pn = $_GET['pn'];
+    }
+}
+
+//Project & List Stuff
+$project = ProjectFunc::get_preset();
+$projects = values("projects", "project");
+$list = ProjectFunc::get_main(ProjectFunc::get_id($project));
+
+if(isset($_GET['p']) && has_values("projects", " WHERE project = '".StringFormatter::clean_input($_GET['p'])."'")) {
+    $project = $_GET['p'];
+    $_SESSION['p'] = $project;
+    setcookie('p', $project, time() + (3600 * 24 * 30));
+    $list = ProjectFunc::get_main($project);
+} else if(isset($_SESSION['p']) && has_values("projects", " WHERE project = '".StringFormatter::clean_input($_SESSION['p'])."'")) {
+    $project = $_SESSION['p'];
+    $list = ProjectFunc::get_main($project);
+} else if(isset($_COOKIE['p']) && has_values("projects", " WHERE project = '".StringFormatter::clean_input($_COOKIE['p'])."'")) {
+    $project = $_COOKIE['p'];
+    $list = ProjectFunc::get_main($project);
+}
+
+if(isset($_GET['l']) && has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($_GET['l'])."'")) {
+    $list = $_GET['l'];
+    $_SESSION['l'] = $list;
+    setcookie('l', $list, time() + (3600 * 24 * 30));
+} else if(isset($_SESSION['l']) && has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($_SESSION['l'])."'")) {
+    $list = $_SESSION['l'];
+} else if(isset($_COOKIE['l']) && has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."' AND list = '".StringFormatter::clean_input($_COOKIE['l'])."'")) {
+    $list = $_COOKIE['l'];
+}
+
+//String Formatter
+$formatter = new StringFormatter(get_name(), $project, $list, $configuration_values);
+
+//Addon stuff
+$plugin_manager = new PluginManager($root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configuration_values["urls"]["installation_path"], "/"));
+$theme_manager = new ThemeManager($plugin_manager);
+$language_manager = new LanguageManager($plugin_manager, $formatter);
+
+$language = $configuration_values["main"]["language"];
+$theme = $theme_manager->themes[$configuration_values["main"]["theme"]];
+
 
 if(isset($_GET['lang']) && $language_manager->exists($_GET['lang'])) {
     $language = $_GET['lang'];
@@ -100,39 +140,10 @@ if(isset($_GET['lang']) && $language_manager->exists($_GET['lang'])) {
     $language = $_COOKIE['lang'];
 }
 
-if(isset($_GET['p']) && has_values("projects", " WHERE project = '".clean_input($_GET['p'])."'")) {
-    $project = $_GET['p'];
-    $_SESSION['p'] = $project;
-    setcookie('p', $project, time() + (3600 * 24 * 30));
-    $list = ProjectFunc::get_main($project);
-} else if(isset($_SESSION['p']) && has_values("projects", " WHERE project = '".clean_input($_SESSION['p'])."'")) {
-    $project = $_SESSION['p'];
-    $list = ProjectFunc::get_main($project);
-} else if(isset($_COOKIE['p']) && has_values("projects", " WHERE project = '".clean_input($_COOKIE['p'])."'")) {
-    $project = $_COOKIE['p'];
-    $list = ProjectFunc::get_main($project);
-}
-
-if(isset($_GET['l']) && has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($_GET['l'])."'")) {
-    $list = $_GET['l'];
-    $_SESSION['l'] = $list;
-    setcookie('l', $list, time() + (3600 * 24 * 30));
-} else if(isset($_SESSION['l']) && has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($_SESSION['l'])."'")) {
-    $list = $_SESSION['l'];
-} else if(isset($_COOKIE['l']) && has_values("lists", " WHERE project = '".clean_input($project)."' AND list = '".clean_input($_COOKIE['l'])."'")) {
-    $list = $_COOKIE['l'];
-}
-
-if(isset($_GET['pn'])) {
-    if($_GET['pn'] > 0) {
-        $pn = $_GET['pn'];
-    }
-}
-
 $language_instance = $language_manager->languages[$language];
+
 $return = $pageFull.'?p='.$project.'&l='.$list;
-$lists = values("lists", "list", " WHERE project = '".clean_input($project)."'");
-$formatter = new StringFormatter(get_name(), $project, $list, $configuration->config, $language_instance);
+$lists = values("lists", "list", " WHERE project = '".StringFormatter::clean_input($project)."'");
 $raw_msg = "";
 $msg = "";
 $msg_type = "general";

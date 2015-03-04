@@ -9,17 +9,17 @@
  */
 include_once('common.php');
 
-$title = $formatter->replace_shortcuts(((string)$language_instance->site->title));
-$h1 = $formatter->replace_shortcuts(((string)$language_instance->site->header));
+$title = $language_manager->get_value($language, "site->title");
+$h1 = $language_manager->get_value($language, "site->header");
 $includes = "";
 $theme_copyright = $theme_manager->replace_shortcuts((string)$theme->name, (string)$theme->copyright);
 $language_select = "";
 $user_bar = (logged_in()) ? "<p>Welcome, </p>".user_nav()."<p>.</p>" : "<a href=\"login.php?return=".$return."\">Login</a> or <a href=\"register.php\">Register</a>";
 
-if($page == "index") { $h1 = $formatter->replace_shortcuts(((string)$language_instance->site->pages->overview->header)); }
-else if($page == "projects") { $h1 = $formatter->replace_shortcuts(((string)$language_instance->site->pages->projects->header)); }
-else if($page == "lists") { $h1 = $formatter->replace_shortcuts(((string)$language_instance->site->pages->lists->header)); }
-else if($page == "admin") { $h1 = $formatter->replace_shortcuts(((string)$language_instance->site->pages->admin->header)); }
+if($page == "index") { $h1 = $language_manager->get_value($language, "site->pages->overview->header"); }
+else if($page == "projects") { $h1 = $language_manager->get_value($language, "site->pages->projects->header"); }
+else if($page == "lists") { $h1 = $language_manager->get_value($language, "site->pages->lists->header"); }
+else if($page == "admin") { $h1 = $language_manager->get_value($language, "site->pages->admin->header"); }
 
 foreach($theme_manager->get_includes((string)$theme->name) as $include) {
     $includes .= $include;

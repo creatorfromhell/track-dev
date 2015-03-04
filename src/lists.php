@@ -20,8 +20,8 @@ if(isset($_GET['page'])) {
 $edit_id = 0;
 $editing = false;
 if(isset($_GET['action']) && isset($_GET['id'])) {
-    $action = clean_input($_GET['action']);
-    $edit_id = clean_input($_GET['id']);
+    $action = StringFormatter::clean_input($_GET['action']);
+    $edit_id = StringFormatter::clean_input($_GET['id']);
     if(is_admin() || ProjectFunc::get_overseer($project) == get_name()) {
         if($switchable == "lists") {
             if($action == "delete") {
@@ -59,13 +59,13 @@ $rules['form'] = array(
 );
 $rules['table'] = array(
     'templates' => array(
-        'lists' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->nolists)).'</p>',
-        'versions' => '<p class="announce">'.$formatter->replace_shortcuts(((string)$language_instance->site->tables->noversions)).'</p>',
+        'lists' => '<p class="announce">'.$language_manager->get_value($language, "site->tables->missing->lists").'</p>',
+        'versions' => '<p class="announce">'.$language_manager->get_value($language, "site->tables->missing->versions").'</p>',
     ),
 );
 if($switchable == 'lists') {
-    $rules['site']['header']['h1'] = $formatter->replace_shortcuts(((string)$language_instance->site->pages->lists->header));
-    $rules['site']['header']['h1'] = $formatter->replace_shortcuts(((string)$language_instance->site->pages->lists->header));
+    $rules['site']['header']['h1'] = $language_manager->get_value($language, "site->pages->lists->header");
+    $rules['site']['header']['h1'] = $language_manager->get_value($language, "site->pages->lists->header");
     $rules['pages']['lists']['versions']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-right"><a href="?page=versions">Versions ></a></div>';
     if(is_admin()) {
@@ -120,7 +120,7 @@ if($switchable == 'lists') {
         }
     }
 } else if($switchable == 'versions') {
-    $rules['site']['header']['h1'] = $formatter->replace_shortcuts(((string)$language_instance->site->pages->lists->versionsheader));
+    $rules['site']['header']['h1'] = $language_manager->get_value($language, "site->pages->lists->versionsheader");
     $rules['pages']['lists']['lists']['style'] = 'style="display:none;"';
     $rules['pages']['switch'] = '<div class="switch switch-left"><a href="?page=lists">< Lists</a></div>';
     if(is_admin()) {
@@ -149,13 +149,13 @@ if($switchable == 'lists') {
     }
 }
 $rules['table']['th'] = array(
-    'name' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->name)),
-    'created' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->created)),
-    'creator' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->creator)),
-    'overseer' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->overseer)),
-    'actions' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->actions)),
-    'stable' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->stable)),
-    'type' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->type)),
+    'name' => $language_manager->get_value($language, "site->tables->head->name"),
+    'created' => $language_manager->get_value($language, "site->tables->head->created"),
+    'creator' => $language_manager->get_value($language, "site->tables->head->creator"),
+    'overseer' => $language_manager->get_value($language, "site->tables->head->overseer"),
+    'actions' => $language_manager->get_value($language, "site->tables->head->actions"),
+    'stable' => $language_manager->get_value($language, "site->tables->head->stable"),
+    'type' => $language_manager->get_value($language, "site->tables->head->type"),
 );
 $rules['table']['pages'] = array(
     'lists' => ' ',
@@ -164,7 +164,7 @@ $rules['table']['pages'] = array(
 
 global $prefix;
 $pagination = new Pagination($prefix."_lists", "id, list, created, creator, overseer", $pn, 10, "?p=".$project."&page=lists&", "WHERE `project` = '".$project."'");
-if(has_values("lists", " WHERE project = '".clean_input($project)."'")) {
+if(has_values("lists", " WHERE project = '".StringFormatter::clean_input($project)."'")) {
     $rules['table']['templates']['lists'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Lists.tpl").'}';
     $table_content = "";
     $entries = $pagination->paginate_return();
@@ -184,7 +184,7 @@ if(has_values("lists", " WHERE project = '".clean_input($project)."'")) {
             $table_content .= "<a title='Edit' class='actionEdit' href='?p=".$project."&amp;page=lists&amp;action=edit&amp;id=".$id."'></a>";
             $table_content .= "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete list ".$name."?\");' href='?p=".$project."&amp;action=delete&amp;id=".$id."'></a>";
         } else {
-            $table_content .= $formatter->replace("%none");
+            $table_content .= $language_manager->get_value($language, "site->actions->general->none");
         }
         $table_content .= "</td></tr>";
     }
@@ -192,7 +192,7 @@ if(has_values("lists", " WHERE project = '".clean_input($project)."'")) {
     $rules['table']['content']['lists'] = $table_content;
 }
 
-if(has_values("versions", " WHERE project = '".clean_input($project)."'")) {
+if(has_values("versions", " WHERE project = '".StringFormatter::clean_input($project)."'")) {
     $rules['table']['templates']['versions'] = '{include->'.$theme_manager->get_template((string)$theme->name, "tables/Versions.tpl").'}';
     $pagination = new Pagination($prefix."_versions", "id, version_name, version_status, version_type", $pn, 10);
     $table_content = "";
@@ -212,7 +212,7 @@ if(has_values("versions", " WHERE project = '".clean_input($project)."'")) {
             $table_content .= "<a title='Edit' class='actionEdit' href='?action=edit&amp;id=".$id."&amp;page=versions'></a>";
             $table_content .= "<a title='Delete' class='actionDelete' onclick='return confirm(\"Are you sure you want to delete version ".$name."?\");' href='?action=delete&amp;id=".$id."&amp;page=versions'></a>";
         } else {
-            $table_content .= $formatter->replace("%none");
+            $table_content .= $language_manager->get_value($language, "site->actions->general->none");
         }
         $table_content .= "</td></tr>";
     }

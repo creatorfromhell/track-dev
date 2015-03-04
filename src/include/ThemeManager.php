@@ -56,7 +56,10 @@ class ThemeManager {
      * @param $name
      */
     public function save($name) {
-        $this->themes[$name]->asXML("resources/themes/".$name.".xml");
+        $theme = $this->themes[$name];
+        if($theme instanceof SimpleXMLElement) {
+            $theme->asXML("resources/themes/" . $name . ".xml");
+        }
     }
 
     /**

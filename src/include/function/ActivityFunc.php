@@ -28,10 +28,13 @@ class ActivityFunc {
 
     /**
      * @param $id
-     * @param $language
+     * @param $language_manager
      * @return string
      */
-    public static function parse_type($id, $language) {
+    public static function parse_type($id, $language_manager, $language) {
+        if(!($language_manager instanceof LanguageManager)) {
+            return "Unable to parse activity type.";
+        }
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("SELECT activity_type FROM `".$t."` WHERE id = ?");
@@ -39,18 +42,17 @@ class ActivityFunc {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         //Example Type: user:login
         $type = explode(":", $result['activity_type']);
-
-        $value = $language->xpath("site/activities/".$type[0]."/".$type[1])[0];
+        $value = $language_manager->get_value($language, "site/activities/".$type[0]."/".$type[1]);
         return (string)($value);
     }
 
     //get readable activity
     /**
      * @param $id
-     * @param $language
+     * @param $language_manager
      * @return mixed
      */
-    public static function get_readable_activity($id, $language) {
+    public static function get_readable_activity($id, $language_manager, $language) {
         global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("SELECT username, project, list, activity_parameters, archived, logged FROM `".$t."` WHERE id = ?");
@@ -59,7 +61,7 @@ class ActivityFunc {
 
         $replace = array("%user", "%project", "%list", "%logged");
         $replacements = array($result['username'], $result['project'], $result['list'], $result['logged']);
-        $description = self::parse_type($id, $language);
+        $description = self::parse_type($id, $language_manager, $language);
 
         if(trim($result['activity_parameters']) != '') {
             $parameters = explode(',', $result['activity_parameters']);

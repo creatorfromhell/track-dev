@@ -13,9 +13,9 @@ $subPage = "all";
 if(isset($_GET['sub'])) {
     $subPage = $_GET['sub'];
 }
-if(isset($_GET['action']) && isset($_GET['id']) && has_values("groups", " WHERE group_name = '".clean_input(value("groups", "group_name", " WHERE id = '".clean_input($_GET['id'])."'"))."'")) {
-	$edit_id = clean_input($_GET['id']);
-    $action = clean_input($_GET['action']);
+if(isset($_GET['action']) && isset($_GET['id']) && has_values("groups", " WHERE group_name = '".StringFormatter::clean_input(value("groups", "group_name", " WHERE id = '".StringFormatter::clean_input($_GET['id'])."'"))."'")) {
+	$edit_id = StringFormatter::clean_input($_GET['id']);
+    $action = StringFormatter::clean_input($_GET['action']);
 
     if($action == "edit") {
         $editing = true;
@@ -45,21 +45,21 @@ $rules['table'] = array(
     ),
 );
 $rules['table']['th'] = array(
-    'name' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->name)),
-    'admin' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->admin)),
-    'actions' => $formatter->replace_shortcuts(((string)$language_instance->site->tables->actions)),
+    'name' => $language_manager->get_value($language, "site->tables->head->name"),
+    'admin' => $language_manager->get_value($language, "site->tables->head->admin"),
+    'actions' => $language_manager->get_value($language, "site->tables->head->actions"),
 );
 $rules['table']['pages'] = array(
     'groups' => ' ',
 );
-$rules['site']['content']['announce'] = $formatter->replace_shortcuts(((string)$language_instance->site->tables->nogroups));
+$rules['site']['content']['announce'] = $language_manager->get_value($language, "site->tables->missing->groups");
 $rules['table']['content'] = array(
     'groups' => ' ',
 );
 
 if($editing) {
     $rules['form']['templates']['group'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/GroupEditForm.tpl").'}';
-    $group = Group::load(clean_input($_GET['id']));
+    $group = Group::load(StringFormatter::clean_input($_GET['id']));
     $admin_string = '<option value="0"'.((!$group->is_admin()) ? ' selected' : '').'>No</option>';
     $admin_string .= '<option value="1"'.(($group->is_admin()) ? ' selected' : '').'>Yes</option>';
     $preset_string = '<option value="0"'.(($group->preset == 0) ? ' selected' : '').'>No</option>';

@@ -15,20 +15,20 @@ if(isset($_POST['add-user'])) {
                     if(!User::exists($_POST['username'], false) && !User::exists($_POST['email'], true)) {
                         if($_POST['password'] == $_POST['c_password']) {
                             if(isset($_POST['group']) && trim($_POST['group']) != '') {
-                                if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
+                                if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(StringFormatter::clean_input($_POST['captcha']))) {
                                     $date = date("Y-m-d H:i:s");
                                     $user = new User();
                                     $user->ip = User::get_ip();
-                                    $user->name = clean_input($_POST['username']);
-                                    $user->email = clean_input($_POST['email']);
+                                    $user->name = StringFormatter::clean_input($_POST['username']);
+                                    $user->email = StringFormatter::clean_input($_POST['email']);
                                     $user->registered = $date;
                                     $user->logged_in = $date;
                                     $user->activated = 1;
-                                    $user->password = generate_hash(clean_input($_POST['password']));
-                                    $user->group = Group::load(clean_input($_POST['group']));
-                                    $user->permissions = explode(",", clean_input($_POST['permissions-value']));
+                                    $user->password = generate_hash(StringFormatter::clean_input($_POST['password']));
+                                    $user->group = Group::load(StringFormatter::clean_input($_POST['group']));
+                                    $user->permissions = explode(",", StringFormatter::clean_input($_POST['permissions-value']));
                                     User::add_user($user);
-                                    $params = "name:".clean_input($_POST['username']).",email:".clean_input($_POST['email']).",group:".clean_input($_POST['group']);
+                                    $params = "name:".StringFormatter::clean_input($_POST['username']).",email:".StringFormatter::clean_input($_POST['email']).",group:".StringFormatter::clean_input($_POST['group']);
                                     ActivityFunc::log($current_user->name, "none", "none", "user:add", $params, 0, date("Y-m-d H:i:s"));
                                     destroy_session("userspluscaptcha");
                                 } else {
@@ -60,28 +60,28 @@ if(isset($_POST['add-user'])) {
 }
 
 if(isset($_POST['edit-user'])) {
-    if(isset($_POST['id']) && trim($_POST['id']) != '' && has_values("users", " WHERE id = '".clean_input($_POST['id'])."'")) {
+    if(isset($_POST['id']) && trim($_POST['id']) != '' && has_values("users", " WHERE id = '".StringFormatter::clean_input($_POST['id'])."'")) {
         $user = User::load($_POST['id'], false, true);
         if(isset($_POST['username']) && trim($_POST['username']) != '') {
             if(isset($_POST['email']) && trim($_POST['email']) != '' && valid_email($_POST['email'])) {
                 if(isset($_POST['password']) && trim($_POST['password']) != '') {
                     if(isset($_POST['c_password']) && trim($_POST['c_password']) != '') {
-                        if(!User::exists(clean_input($_POST['username']), false) || User::exists(clean_input($_POST['username']), false) && $user->name == clean_input($_POST['username'])) {
-                            if(!User::exists(clean_input($_POST['email']), true) || User::exists(clean_input($_POST['email']), true) && $user->email == clean_input($_POST['email'])) {
+                        if(!User::exists(StringFormatter::clean_input($_POST['username']), false) || User::exists(StringFormatter::clean_input($_POST['username']), false) && $user->name == StringFormatter::clean_input($_POST['username'])) {
+                            if(!User::exists(StringFormatter::clean_input($_POST['email']), true) || User::exists(StringFormatter::clean_input($_POST['email']), true) && $user->email == StringFormatter::clean_input($_POST['email'])) {
                                 if($_POST['password'] == $_POST['c_password']) {
                                     if(isset($_POST['group']) && trim($_POST['group']) != '') {
-                                        if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
+                                        if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(StringFormatter::clean_input($_POST['captcha']))) {
                                             $oldName = $user->name;
                                             $oldEmail = $user->email;
                                             $oldGroup = $user->group->id;
                                             $date = date("Y-m-d H:i:s");
-                                            $user->name = clean_input($_POST['username']);
-                                            $user->email = clean_input($_POST['email']);
-                                            $user->password = generate_hash(clean_input($_POST['password']));
-                                            $user->group = Group::load(clean_input($_POST['group']));
-                                            $user->permissions = explode(",", clean_input($_POST['permissions-value']));
+                                            $user->name = StringFormatter::clean_input($_POST['username']);
+                                            $user->email = StringFormatter::clean_input($_POST['email']);
+                                            $user->password = generate_hash(StringFormatter::clean_input($_POST['password']));
+                                            $user->group = Group::load(StringFormatter::clean_input($_POST['group']));
+                                            $user->permissions = explode(",", StringFormatter::clean_input($_POST['permissions-value']));
                                             $user->save();
-                                            $params = "oldname:".$oldName.",name:".clean_input($_POST['username']).",oldemail:".$oldEmail.",email:".clean_input($_POST['email']).",oldgroup:".$oldGroup.",group:".clean_input($_POST['group']);
+                                            $params = "oldname:".$oldName.",name:".StringFormatter::clean_input($_POST['username']).",oldemail:".$oldEmail.",email:".StringFormatter::clean_input($_POST['email']).",oldgroup:".$oldGroup.",group:".StringFormatter::clean_input($_POST['group']);
                                             ActivityFunc::log($current_user->name, "none", "none", "user:edit", $params, 0, date("Y-m-d H:i:s"));
                                             destroy_session("userspluscaptcha");
                                         } else {

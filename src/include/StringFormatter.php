@@ -13,11 +13,11 @@ class StringFormatter {
     /**
      * @var array
      */
-    private static $shortcuts = array("%user", "%project", "%list", "%theme", "%none");
+    private static $shortcuts = array("%user", "%project", "%list", "%theme");
     /**
      * @var array
      */
-    private $replacements;
+    public $replacements;
 
     /**
      * @var
@@ -40,8 +40,8 @@ class StringFormatter {
      * @param $config
      * @param $language
      */
-    public function __construct($user, $project, $list, $config, $language) {
-        $this->replacements = array($user, $project, $list, $config["main"]["theme"], ((string)$language->site->tables->none));
+    public function __construct($user, $project, $list, $config) {
+        $this->replacements = array($user, $project, $list, $config["main"]["theme"]);
         $blacklist = $config["main"]["blacklist"];
         $this->date_format = $config["main"]["dateformat"];
         if($blacklist != null && trim($blacklist) != "") {
@@ -51,6 +51,10 @@ class StringFormatter {
         }
         $this->blacklist_replacements = array();
         $this->generate_replacements();
+    }
+
+    public static function clean_input($input) {
+        return strip_tags(trim($input));
     }
 
     /**

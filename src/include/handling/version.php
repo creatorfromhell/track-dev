@@ -19,20 +19,20 @@
 if(isset($_POST['add-version'])) {
 	if(isset($_POST['project']) && trim($_POST['project']) != "") {
 		if(isset($_POST['version-name']) && trim($_POST['version-name']) != "") {
-			if(!has_values("versions", " WHERE version_name = '".clean_input($_POST['version-name'])."'")) {
+			if(!has_values("versions", " WHERE version_name = '".StringFormatter::clean_input($_POST['version-name'])."'")) {
 				if(isset($_POST['status']) && trim($_POST['status']) != "") {
 					if(isset($_POST['version-type']) && trim($_POST['version-type']) != "") {
-						if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
+						if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(StringFormatter::clean_input($_POST['captcha']))) {
 
-							$version = clean_input($_POST['version-name']);
-							$project = clean_input($_POST['project']);
-							$status = clean_input($_POST['status']);
-							$type = clean_input($_POST['version-type']);
+							$version = StringFormatter::clean_input($_POST['version-name']);
+							$project = StringFormatter::clean_input($_POST['project']);
+							$status = StringFormatter::clean_input($_POST['status']);
+							$type = StringFormatter::clean_input($_POST['version-type']);
 
 							if(isset($_POST['version_download'])) {
 								upload_file($_FILES['version_download'], $project."-".$version);
 							}
-							$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? clean_input($_POST['due-date']) : "0000-00-00";
+							$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? StringFormatter::clean_input($_POST['due-date']) : "0000-00-00";
 
                             $version_created_hook = new VersionCreatedHook($project, $version, $status, $type);
                             $plugin_manager->trigger($version_created_hook);
@@ -76,22 +76,22 @@ if(isset($_POST['add-version'])) {
 
 if(isset($_POST['edit-version'])) {
 	if(isset($_POST['id']) && trim($_POST['id']) != "") {
-		$details = VersionFunc::version_details(clean_input($_POST['id']));
+		$details = VersionFunc::version_details(StringFormatter::clean_input($_POST['id']));
 		if(isset($_POST['project']) && trim($_POST['project']) != "") {
 			if(isset($_POST['version-name']) && trim($_POST['version-name']) != "") {
-				if($details['name'] == clean_input($_POST['version-name']) || $details['name'] != clean_input($_POST['version-name']) && !has_values("versions", " WHERE version_name = '".clean_input($_POST['version-name'])."'")) {
+				if($details['name'] == StringFormatter::clean_input($_POST['version-name']) || $details['name'] != StringFormatter::clean_input($_POST['version-name']) && !has_values("versions", " WHERE version_name = '".StringFormatter::clean_input($_POST['version-name'])."'")) {
 					if(isset($_POST['status']) && trim($_POST['status']) != "") {
 						if(isset($_POST['version-type']) && trim($_POST['version-type']) != "") {
-							if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(clean_input($_POST['captcha']))) {
+							if(isset($_POST['captcha']) && trim($_POST['captcha']) != '' && check_captcha(StringFormatter::clean_input($_POST['captcha']))) {
 
-								$id = clean_input($_POST['id']);
+								$id = StringFormatter::clean_input($_POST['id']);
                                 $previous_details = VersionFunc::version_details($id);
 
-								$version = clean_input($_POST['version-name']);
-								$project = clean_input($_POST['project']);
-								$status = clean_input($_POST['status']);
-								$type = clean_input($_POST['version-type']);
-								$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? clean_input($_POST['due-date']) : "0000-00-00";
+								$version = StringFormatter::clean_input($_POST['version-name']);
+								$project = StringFormatter::clean_input($_POST['project']);
+								$status = StringFormatter::clean_input($_POST['status']);
+								$type = StringFormatter::clean_input($_POST['version-type']);
+								$due = (isset($_POST['due-date']) && trim($_POST['due-date']) != "") ? StringFormatter::clean_input($_POST['due-date']) : "0000-00-00";
 
                                 $version_modified_hook = new VersionModifiedHook($id, $previous_details['project'], $project, $previous_details['name'], $version, $previous_details['status'], $status, $previous_details['type'], $type);
                                 $plugin_manager->trigger($version_modified_hook);
