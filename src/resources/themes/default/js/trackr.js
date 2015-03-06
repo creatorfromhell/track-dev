@@ -8,14 +8,14 @@
  */
 
 function linkColorField(event, div, field) {
-	var picker = document.getElementById("jspalette");
-	var scrollLeft = (window.pageXOffset !== undefined) ? window.pageXOffset : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
-	var scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-	var mouseX = event.clientX + scrollLeft;
-	var mouseY = event.clientY + scrollTop;
-	
-	picker.style.left = mouseX + 'px';
-	picker.style.top = mouseY + 'px';
+    var picker = document.getElementById("jspalette");
+    var scrollLeft = (window.pageXOffset !== undefined) ? window.pageXOffset : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
+    var scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    var mouseX = event.clientX + scrollLeft;
+    var mouseY = event.clientY + scrollTop;
+
+    picker.style.left = mouseX + 'px';
+    picker.style.top = mouseY + 'px';
     picker.style.display = 'block';
     document.getElementById("jspalette-choose").onclick = function() {
         document.getElementById(div).style.background = document.getElementById("picked-color").value;
@@ -24,7 +24,7 @@ function linkColorField(event, div, field) {
     }
     document.getElementById("jspalette-close").onclick = function() {
         document.getElementById("jspalette").style.display = 'none';
-	}
+    }
 }
 
 function removeData(div, id) {
@@ -172,11 +172,11 @@ function slideIn(id) {
 }
 
 function switchable(current, element) {
-	var current = document.querySelector("." + current);
-	var element = document.querySelector("." + element);
-	
-	hideDiv(current, false);
-	showDiv(element, false);
+    var current = document.querySelector("." + current);
+    var element = document.querySelector("." + element);
+
+    hideDiv(current, false);
+    showDiv(element, false);
 }
 
 //AJAX function

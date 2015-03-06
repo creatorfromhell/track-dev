@@ -74,10 +74,10 @@ class Pagination {
         $this->return_value = $r;
         $this->extra_query = $extra;
         $this->prepare_values();
-		if($this->page > $this->total_pages) {
-			$this->page = $this->total_pages;
-			$this->prepare_values();
-		}
+        if($this->page > $this->total_pages) {
+            $this->page = $this->total_pages;
+            $this->prepare_values();
+        }
         $this->build_page_string();
     }
 

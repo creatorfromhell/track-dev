@@ -146,22 +146,22 @@ function to_options($data, $value = null) {
  * @param int $maxSize
  */
 function upload_file($file, $name, $maxSize = 1000000) {
-	$type = pathinfo(basename($file['name']), PATHINFO_EXTENSION);
-	$move = $name.".".$type;
-	$bannedTypes = array("php", "js", "cs");
+    $type = pathinfo(basename($file['name']), PATHINFO_EXTENSION);
+    $move = $name.".".$type;
+    $bannedTypes = array("php", "js", "cs");
 
-	if(in_array($type, $bannedTypes)) {
-		return;
-	}
+    if(in_array($type, $bannedTypes)) {
+        return;
+    }
 
-	if($file['size'] > $maxSize) {
-		return;
-	}
+    if($file['size'] > $maxSize) {
+        return;
+    }
 
-	if(move_uploaded_file($file['tmp_name'], $move)) {
-		return;
-	}
-	return;
+    if(move_uploaded_file($file['tmp_name'], $move)) {
+        return;
+    }
+    return;
 }
 
 /*
@@ -216,7 +216,7 @@ function can_view_list($id) {
     if(!isset($_SESSION['usersplusprofile']) || !User::exists($_SESSION['usersplusprofile'])) { return false; }
     if(is_admin()) { return true; }
     if(ProjectFunc::get_overseer(ListFunc::get_project($id)) == get_name() || ListFunc::get_overseer($id) == get_name()) { return true; }
-	$user = User::load($_SESSION['usersplusprofile']);
+    $user = User::load($_SESSION['usersplusprofile']);
     if($viewPermission != "none" && has_values("nodes", " WHERE id = ?", array($viewPermission)) && $user->has_permission($viewPermission)) { return true; }
     return false;
 }
@@ -232,7 +232,7 @@ function can_edit_list($id) {
     if(is_admin()) { return true; }
     if(ProjectFunc::get_overseer(ListFunc::get_project($id)) == get_name() || ListFunc::get_overseer($id) == get_name()) { return true; }
     $user = User::load($_SESSION['usersplusprofile']);
-	if($editPermission != "none" && has_values("nodes", " WHERE id = ?", array($editPermission)) && $user->has_permission($editPermission)) { return true; }
+    if($editPermission != "none" && has_values("nodes", " WHERE id = ?", array($editPermission)) && $user->has_permission($editPermission)) { return true; }
     return false;
 }
 
@@ -249,7 +249,7 @@ function can_edit_task($listID, $taskID) {
     if(ProjectFunc::get_overseer(ListFunc::get_project($listID)) == get_name() || ListFunc::get_overseer($listID) == get_name()) { return true; }
     $details = TaskFunc::task_details(ListFunc::get_project($listID), ListFunc::get_name($listID), $taskID);
     if($details['author'] == get_name()) { return true; }
-	$user = User::load($_SESSION['usersplusprofile']);
+    $user = User::load($_SESSION['usersplusprofile']);
     if($editPermission != "none" && has_values("nodes", " WHERE id = ?", array($editPermission)) && $user->has_permission($editPermission) && $details['editable'] == '1') { return true; }
     return false;
 }

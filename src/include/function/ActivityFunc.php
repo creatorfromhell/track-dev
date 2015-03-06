@@ -20,7 +20,7 @@ class ActivityFunc {
      * @param $logged
      */
     public static function log($username, $project, $list, $type, $parameters, $archived, $logged) {
-		global $prefix, $pdo;
+        global $prefix, $pdo;
         $t = $prefix."_activity";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, username, project, list, activity_type, activity_parameters, archived, logged) VALUES ('', ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute(array($username, $project, $list, $type, $parameters, $archived, $logged));

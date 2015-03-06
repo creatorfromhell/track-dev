@@ -80,5 +80,5 @@ class Captcha {
      */
     public function return_image() {
         return "<img id='captcha_image' src='data:image/jpeg;base64,".$this->get_base64()."' />";
-	}
+    }
 }

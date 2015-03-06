@@ -29,7 +29,7 @@ class ListFunc {
      * @param $editpermission
      */
     public static function add_list($list, $project, $public, $creator, $created, $overseer, $minimal, $guest_view, $guest_edit, $view_permission, $edit_permission) {
-		$guest_permissions = "view:".$guest_view.",edit:".$guest_edit;
+        $guest_permissions = "view:".$guest_view.",edit:".$guest_edit;
         $list_permissions = "view:".$view_permission.",edit:".$edit_permission;
         global $prefix, $pdo;
         $t = $prefix."_lists";

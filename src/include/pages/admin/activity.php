@@ -11,17 +11,17 @@ if(is_admin() && isset($_GET['action']) && isset($_GET['id'])) {
     $action = $_GET['action'];
     $edit_id = $_GET['id'];
     if($action == "archive") {
-		ActivityFunc::archive($edit_id);
+        ActivityFunc::archive($edit_id);
         echo '<script type="text/javascript">';
         echo 'showMessage("success", "Activity #'.$edit_id.' has been archived.");';
         echo '</script>';
     } else if($action == "unarchive") {
-		ActivityFunc::unarchive($edit_id);
+        ActivityFunc::unarchive($edit_id);
         echo '<script type="text/javascript">';
         echo 'showMessage("success", "Activity #'.$edit_id.' has been unarchived.");';
         echo '</script>';
     } else if($action == "delete") {
-		ActivityFunc::delete($edit_id);
+        ActivityFunc::delete($edit_id);
         echo '<script type="text/javascript">';
         echo 'showMessage("success", "Activity #'.$edit_id.' has been deleted.");';
         echo '</script>';

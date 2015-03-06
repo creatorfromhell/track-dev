@@ -97,9 +97,9 @@ if(isset($_POST['edit-type'])) {
 
 $switchable = "projects";
 if(isset($_GET['page'])) {
-	if($_GET['page'] == 'projects' || $_GET['page'] == 'types') {
-		$switchable = $_GET['page'];
-	}
+    if($_GET['page'] == 'projects' || $_GET['page'] == 'types') {
+        $switchable = $_GET['page'];
+    }
 }
 $edit_id = 0;
 $editing = false;

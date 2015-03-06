@@ -70,7 +70,7 @@ if(isset($_GET['sub'])) {
     $subPage = $_GET['sub'];
 }
 if(isset($_GET['action']) && isset($_GET['id']) && has_values("groups", " WHERE group_name = ?", array(value("groups", "group_name", " WHERE id = ?", array($_GET['id']))))) {
-	$edit_id = StringFormatter::clean_input($_GET['id']);
+    $edit_id = StringFormatter::clean_input($_GET['id']);
     $action = StringFormatter::clean_input($_GET['action']);
 
     if($action == "edit") {

@@ -25,8 +25,8 @@ class ProjectFunc {
      * @param $public
      */
     public static function add_project($project, $preset, $main, $creator, $created, $overseer, $public) {
-		global $prefix, $pdo;
-		$permissions = 'view:none,edit:none';
+        global $prefix, $pdo;
+        $permissions = 'view:none,edit:none';
         $t = $prefix."_projects";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, project, preset, main, creator, created, overseer, project_permissions, public) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute(array($project, $preset, $main, $creator, $created, $overseer, $permissions, $public));
@@ -193,7 +193,7 @@ class ProjectFunc {
         $return['creator'] = $result['creator'];
         $return['created'] = $result['created'];
         $return['overseer'] = $result['overseer'];
-		$return['permissions'] = $result['project_permissions'];
+        $return['permissions'] = $result['project_permissions'];
         $return['public'] = $result['public'];
 
         return $return;

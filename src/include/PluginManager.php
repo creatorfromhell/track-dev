@@ -90,11 +90,11 @@ class PluginManager {
          * 5 = Low
          * 6 = Observe
          */
-		if($priority > 6 || $priority < 1) { $priority = 5; }
+        if($priority > 6 || $priority < 1) { $priority = 5; }
         if($this->hook_exists($hook)) {
             $this->hooks[$hook][$priority][] = $callback;
         }
-	}
+    }
 
     public function bind_web($hook, $url) {
         if($this->web_hook_exists($hook)) {
@@ -107,10 +107,10 @@ class PluginManager {
      * @return array|null
      */
     public function trigger($hook) {
-		if(!($hook instanceof Hook)) {
-			return null;
-		}
-		if($this->hook_exists($hook->friendly_name) && is_array($this->hooks[$hook->friendly_name])) {
+        if(!($hook instanceof Hook)) {
+            return null;
+        }
+        if($this->hook_exists($hook->friendly_name) && is_array($this->hooks[$hook->friendly_name])) {
             $hook_array = $this->hooks[$hook->friendly_name];
             uksort($hook_array, function($a, $b) {
                 if ($a == $b) return 0;
@@ -121,9 +121,9 @@ class PluginManager {
                     call_user_func_array(array($callback['class'], $callback['method']), array(&$hook->arguments));
                 }
             }
-		}
+        }
         $this->trigger_web($hook);
-	}
+    }
 
     public function trigger_web($hook) {
         if($this->web_hook_exists($hook->friendly_name) && is_array($this->web_hooks[$hook->friendly_name])) {
@@ -166,7 +166,7 @@ class PluginManager {
                 $this->load_callbacks($reflector);
             }
         }
-	}
+    }
 
     private function load_callbacks($reflector)
     {

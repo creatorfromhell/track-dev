@@ -133,9 +133,9 @@ $minimal = ListFunc::minimal(ListFunc::get_id($project, $list));
 
 $switchable = "tasks";
 if(isset($_GET['page'])) {
-	if($_GET['page'] == 'tasks' || $_GET['page'] == 'labels') {
-		$switchable = $_GET['page'];
-	}
+    if($_GET['page'] == 'tasks' || $_GET['page'] == 'labels') {
+        $switchable = $_GET['page'];
+    }
 }
 $edit_id = 0;
 $editing = false;

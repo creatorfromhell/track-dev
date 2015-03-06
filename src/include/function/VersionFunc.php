@@ -23,7 +23,7 @@ class VersionFunc {
      * @param $type
      */
     public static function add_version($version, $project, $status, $due, $released, $type) {
-		global $prefix, $pdo;
+        global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, version_name, project, version_status, due, released, version_type) VALUES ('', ?, ?, ?, ?, ?, ?)");
         $stmt->execute(array($version, $project, $status, $due, $released, $type));
@@ -99,7 +99,7 @@ class VersionFunc {
      */
     public static function get_project($id) {
         return value("versions", "project", " WHERE id = ?", array($id));
-	}
+    }
 
     //reversion version
     /**
@@ -118,7 +118,7 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_versions";
         $stmt = $pdo->prepare("SELECT version_name, project, version_status, due, released, version_type FROM `".$t."` WHERE id = ?");
-		$stmt->execute(array($id));
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $return = array();
         $return['name'] = $result['version_name'];
@@ -128,7 +128,7 @@ class VersionFunc {
         $return['released'] = $result['released'];
         $return['type'] = $result['version_type'];
         return $return;
-	}
+    }
 
     /*
      * Version Type Functions
@@ -178,7 +178,7 @@ class VersionFunc {
      */
     public static function stable($type) {
         return (value("version_types", "version_stability", " WHERE version_type = ?", array($type)) == '1') ? true : false;
-	}
+    }
 
     /**
      * @param $id
@@ -188,12 +188,12 @@ class VersionFunc {
         global $prefix, $pdo;
         $t = $prefix."_version_types";
         $stmt = $pdo->prepare("SELECT version_type, description, version_stability FROM `".$t."` WHERE id = ?");
-		$stmt->execute(array($id));
+        $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $return = array();
         $return['name'] = $result['version_type'];
         $return['description'] = $result['description'];
         $return['stability'] = $result['version_stability'];
         return $return;
-	}
+    }
 }

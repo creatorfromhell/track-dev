@@ -13,10 +13,10 @@ class BackupFunc {
      * @var string
      */
     public static $directory = "resources/backup/";
-	
-	/*
-	 * Backup all logged activities
-	 */
+
+    /*
+     * Backup all logged activities
+     */
     /**
      * @param $format
      */
@@ -28,9 +28,9 @@ class BackupFunc {
         } else {
             self::backup_activities_PT();
         }
-	}
-	
-	/*
+    }
+
+    /*
      * Create an XML backup of all activities
      */
     /**

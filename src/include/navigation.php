@@ -9,30 +9,30 @@
  */
 
 $tabs = array(
-	"overview" => array(
-		"alias" => array("index"),
-		"location" => "index.php",
-		"translate" => "lang:",
-		"sub" => array(
-			"project" => array(
-				"location" => "index.php?".$previous."&amp;t=project&amp;p=".$project,
-				"translate" => "lang:"
-			),
-			"calendar" => array(
-				"location" => "index.php?".$previous."&amp;t=calendar&amp;p=".$project,
-				"translate" => "lang:"
-			),
-		)
-	),
-	"projects" => array(
-		"location" => "projects.php",
-		"translate" => "lang:",
-	),
-	"lists" => array(
-		"alias" => array("list"),
-		"location" => "lists.php?".$previous,
-		"translate" => "lang:",
-	),
+    "overview" => array(
+        "alias" => array("index"),
+        "location" => "index.php",
+        "translate" => "lang:",
+        "sub" => array(
+            "project" => array(
+                "location" => "index.php?".$previous."&amp;t=project&amp;p=".$project,
+                "translate" => "lang:"
+            ),
+            "calendar" => array(
+                "location" => "index.php?".$previous."&amp;t=calendar&amp;p=".$project,
+                "translate" => "lang:"
+            ),
+        )
+    ),
+    "projects" => array(
+        "location" => "projects.php",
+        "translate" => "lang:",
+    ),
+    "lists" => array(
+        "alias" => array("list"),
+        "location" => "lists.php?".$previous,
+        "translate" => "lang:",
+    ),
 );
 
 foreach($projects as &$p) {

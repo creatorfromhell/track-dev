@@ -18,7 +18,7 @@ class LabelFunc {
      * @param $background_color
      */
     public static function add_label($project, $list, $name, $text_color, $background_color) {
-		global $prefix, $pdo;
+        global $prefix, $pdo;
         $t = $prefix."_labels";
         $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, project, list, label_name, text_color, background_color) VALUES ('', ?, ?, ?, ?, ?)");
         $stmt->execute(array($project, $list, $name, $text_color, $background_color));
