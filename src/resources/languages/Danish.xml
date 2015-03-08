@@ -1,13 +1,13 @@
-<?xml version="1.0" ?>
+﻿<?xml version="1.0" ?>
 <language>
     <!-- The name of this language -->
     <name>Dansk</name>
     <!-- The abbreviation for this language -->
     <short>dk</short>
     <!-- The author of this language file. -->
-    <author>quaisaq</author>
+    <author>Quaisaq</author>
     <!-- The version of this language file. -->
-    <version>1.0</version>
+    <version>2.0</version>
     <!-- The symbol for this language. Located in the theme's image folder. -->
     <symbol>dk.gif</symbol>
 
@@ -32,13 +32,13 @@
             </overview>
             <admin>
                 <navlink>Admin</navlink>
-                <header>Administrations Panel</header>
-                <dashboard>Dashboard</dashboard>
-                <activity>Activity</activity>
-                <groups>Groups</groups>
-                <options>Options</options>
-                <themes>Themes</themes>
-                <users>Users</users>
+                <header>Administrationspanel</header>
+                <dashboard>Betjeningspanel</dashboard>
+                <activity>Aktivitet</activity>
+                <groups>Grupper</groups>
+                <options>Indstillinger</options>
+                <themes>Temaer</themes>
+                <users>Brugere</users>
             </admin>
             <projects>
                 <navlink>Projekter</navlink>
@@ -57,161 +57,161 @@
             <assignee>Erhverver</assignee>
             <created>Skabt</created>
             <creator>Skaber</creator>
-            <author>Author</author>
+            <author>Ophaver</author>
             <actions>Handlinger</actions>
-            <overseer>Overseer</overseer>
-            <permission>Permission</permission>
-            <short>Short</short>
-            <icon>Icon</icon>
-            <admin>Admin</admin>
+            <overseer>Tilsynsførende</overseer>
+            <permission>Tilladelse</permission>
+            <short>Kort</short>
+            <icon>Ikon</icon>
+            <admin>Administrator</admin>
             <version>Version</version>
             <email>Email</email>
-            <group>Group</group>
-            <registered>Registered</registered>
-            <yes>Yes</yes>
-            <no>No</no>
-            <none>ingen</none>
+            <group>Gruppe</group>
+            <registered>Registeret</registered>
+            <yes>Ja</yes>
+            <no>Nej</no>
+            <none>Ingen</none>
             <notask>Der er intet på listen.</notask>
             <nolist>Der er ingen lister for dette projekt.</nolist>
             <noproject>Der er ingen projekter på nuværende tidspunkt.</noproject>
         </tables>
         <forms>
             <login>
-                <invalidlogin>Invalid login credentials!</invalidlogin>
-                <nopassword>No password entered!</nopassword>
-                <nousername>No username entered!</nousername>
-                <noemail>No email address entered!</noemail>
-                <confirm>You must confirm your password!</confirm>
-                <invalidpasswords>Passwords do not match!</invalidpasswords>
-                <taken>Username already in use!</taken>
+                <invalidlogin>Ugyldige loginoplysninger!</invalidlogin>
+                <nopassword>Mangler adgangskode!</nopassword>
+                <nousername>Mangler brugernavn!</nousername>
+                <noemail>Mangler Emailadresse!</noemail>
+                <confirm>Du skal bekræfte din adgangskode!</confirm>
+                <invalidpasswords>Adgangskoder er ikke ens!</invalidpasswords>
+                <taken>Brugernavnet er allerede i brug!</taken>
             </login>
             <project>
-                <noname>No name entered!</noname>
-                <taken>A project with that name already exists!</taken>
-                <noauthor>Invalid author entered!</noauthor>
-                <nooverseer>Invalid overseer entered!</nooverseer>
-                <nopublic>You must fill out the public field!</nopublic>
-                <nomain>You must fill out the main field!</nomain>
+                <noname>Intet navn indskrevet!</noname>
+                <taken>Et projekt med det navn findes allerede!</taken>
+                <noauthor>Ugyldig ophaver indskrevet!</noauthor>
+                <nooverseer>Ugyndlig tilsførende indskrevet!</nooverseer>
+                <nopublic>Du skal udfylde "public" feltet!</nopublic>
+                <nomain>Du skal udfylde "main" feltet!</nomain>
             </project>
             <list>
-                <created>The list %list has been created!</created>
-                <taken>A list with that name already exists!</taken>
-                <invalidproject>The project specified does not exist!</invalidproject>
-                <noproject>You must enter a project for this list!</noproject>
-                <nominimal>You must fill out the minimal field!</nominimal>
-                <noguestview>You must fill out the guest view field!</noguestview>
-                <noguestedit>You must fill out the guest edit field!</noguestedit>
-                <noviewperm>You must fill out the view permission field!</noviewperm>
-                <noeditperm>You must fill out the edit permission field!</noeditperm>
+                <created>Listen %list er blevet oprettet!</created>
+                <taken>En liste med det navn findes allerede!</taken>
+                <invalidproject>Projektet der er valgt findes ikke!</invalidproject>
+                <noproject>Du skal vælge et projekt til denne liste!</noproject>
+                <nominimal>Du skal udfylde "minimal" feltet!</nominimal>
+                <noguestview>Du skal udfylde "guest view" feltet!</noguestview>
+                <noguestedit>Du skal udfylde "guest edit" feltet!</noguestedit>
+                <noviewperm>Du skal udfylde "view permission" feltet!</noviewperm>
+                <noeditperm>Du skal udfylde "edit permission" feltet!</noeditperm>
             </list>
             <task>
-                <invalidlist>The list specified does not exist!</invalidlist>
-                <invalidstatus>Invalid status entered!</invalidstatus>
-                <notitle>You must fill out the title field!</notitle>
-                <nodescription>You must fill out the description field!</nodescription>
-                <noeditable>You must fill out the editable field!</noeditable>
+                <invalidlist>Den indskrevne liste findes ikke!</invalidlist>
+                <invalidstatus>Ugyldig status indskrevet!</invalidstatus>
+                <notitle>Du skal udfylde "title" feltet!</notitle>
+                <nodescription>Du skal udfylde "description" feltet!</nodescription>
+                <noeditable>Du skal udfylde "editable" feltet!</noeditable>
             </task>
             <label>
-                <nolabel>You must fill out the label field!</nolabel>
-                <notextcolor>You must choose a text color!</notextcolor>
-                <nobackgroundcolor>You must choose a background color!</nobackgroundcolor>
+                <nolabel>Du skal udfylde "label" feltet!</nolabel>
+                <notextcolor>Du skal vælge en tekst farve!</notextcolor>
+                <nobackgroundcolor>Du skal vælge en baggrundsfarve!</nobackgroundcolor>
             </label>
         </forms>
         <actions>
             <!-- TODO: make actions language-based -->
             <general>
-                <edit>edit</edit>
-                <delete>delete</delete>
-                <open>open</open>
-                <done>done</done>
-                <progress>in progress</progress>
-                <close>close</close>
-                <delconfirm>Do you really want to delete this forever?</delconfirm>
+                <edit>rediger</edit>
+                <delete>slet</delete>
+                <open>åben</open>
+                <done>færdig</done>
+                <progress>undervejs</progress>
+                <close>luk</close>
+                <delconfirm>Er du sikker på at du vil slette dette permanent?</delconfirm>
             </general>
             <project>
-                <created>The project %name has been created!</created>
-                <created>Edit successful!</created>
-                <deleted>The project %name has been deleted!</deleted>
+                <created>Projektet %name er blevet oprettet!</created>
+                <created>Redigering udført!</created>
+                <deleted>Projektet %name er blevet slettet!</deleted>
             </project>
             <list>
-                <created>The list %name has been created!</created>
-                <deleted>The list %name has been deleted!</deleted>
+                <created>Listen %name er blevet oprettet!</created>
+                <deleted>Listen %name er blevet slettet!</deleted>
             </list>
             <label>
-                <created>The label %name has been created!</created>
-                <deleted>The label %name has been deleted!</deleted>
+                <created>Mærkatet %name er blevet oprettet!</created>
+                <deleted>Mærkatet %name er blevet slettet!</deleted>
             </label>
             <task>
-                <created>Task #%id has been created!</created>
-                <deleted>Task #%id has been deleted!</deleted>
-                <status>The status of task #%id has been changed to %status.</status>
+                <created>Opgave #%id er blevet oprettet!</created>
+                <deleted>Opgave #%id er blevet slettet!</deleted>
+                <status>Statusen på opgave #%id er blevet ændret til %status.</status>
             </task>
             <user>
-                <register>Thanks for registering! You may now login.</register>
-                <noregister>I'm sorry, but registration has been disabled.</noregister>
-                <logout>You have been logged out successfully!</logout>
+                <register>Tak for at registrere! Du kan nu logge ind.</register>
+                <noregister>Beklager, men registrering er blevet slået fra.</noregister>
+                <logout>Du er nu blevet logget af!</logout>
             </user>
         </actions>
         <activities>
             <activity>
-                <backup>%user backed up the activity logs.</backup>
-                <delete>%user deleted an activity.</delete>
-                <archive>%user archived an activity.</archive>
-                <unarchive>%user unarchived an activity.</unarchive>
+                <backup>%user sikkerhedskopierede aktivitets logsne.</backup>
+                <delete>%user slettede en aktivitet.</delete>
+                <archive>%user arkiverede en aktivitet.</archive>
+                <unarchive>%user afarkiverede en aktivitet.</unarchive>
             </activity>
             <general>
-                <options>%user modified the site options.</options>
+                <options>%user ændrede sideindstillingerne.</options>
             </general>
             <group>
-                <add>%user added a new group.</add>
-                <edit>%user edited a group.</edit>
-                <delete>%user deleted a group.</delete>
+                <add>%user tilføjede en ny gruppe.</add>
+                <edit>%user redigerede en gruppe.</edit>
+                <delete>%user slettede en gruppe.</delete>
             </group>
             <label>
-                <add>%user added a new label.</add>
-                <edit>%user edited a label.</edit>
-                <delete>%user deleted a label.</delete>
+                <add>%user tilføjede et nyt mærkat.</add>
+                <edit>%user redigerede et mærkat.</edit>
+                <delete>%user slettede et mærkat.</delete>
             </label>
             <language>
-                <upload>%user uploaded a language.</upload>
-                <edit>%user edited a language.</edit>
-                <delete>%user deleted a language.</delete>
-                <default>%user changed the default language to %name.</default>
+                <upload>%user uploadede et sprog.</upload>
+                <edit>%user redigerede et sprog.</edit>
+                <delete>%user slettede et sprog.</delete>
+                <default>%user ændrede standardsproget til %name.</default>
             </language>
             <list>
-                <add>%user added a new list.</add>
-                <edit>%user edited a list.</edit>
-                <delete>%user deleted a list.</delete>
+                <add>%user tilføjede en ny liste.</add>
+                <edit>%user redigerede en liste.</edit>
+                <delete>%user slettede en liste.</delete>
             </list>
             <project>
-                <add>%user added a new project.</add>
-                <edit>%user edited a project.</edit>
-                <delete>%user deleted a project.</delete>
+                <add>%user tilføjede et nyt projekt.</add>
+                <edit>%user redigerede et projekt.</edit>
+                <delete>%user slettede et projekt.</delete>
             </project>
             <task>
-                <add>%user created a new task.</add>
-                <edit>%user edited a task.</edit>
-                <status>%user changed the status of a task to %status.</status>
-                <delete>%user deleted a task.</delete>
+                <add>%user oprettede en ny opgave.</add>
+                <edit>%user redigerede en opgave.</edit>
+                <status>%user ændrede statusen på en opgave til %status.</status>
+                <delete>%user slettede en opgave.</delete>
             </task>
             <theme>
-                <upload>%user uploaded a theme.</upload>
-                <edit>%user edited a theme.</edit>
-                <delete>%user deleted a theme.</delete>
-                <default>%user changed the default theme to %name.</default>
+                <upload>%user uploadede et tema.</upload>
+                <edit>%user redigerede et tema.</edit>
+                <delete>%user slettede et tema.</delete>
+                <default>%user ændrede standardtemaet til %name.</default>
             </theme>
             <user>
-                <login>%user logged in.</login>
-                <logout>%user logged out.</logout>
-                <register>%user just registered.</register>
-                <add>%user added a new user.</add>
-                <edit>%user edit a user.</edit>
-                <delete>%user deleted a user.</delete>
+                <login>%user loggede ind.</login>
+                <logout>%user loggede ud.</logout>
+                <register>%user registerede.</register>
+                <add>%user tilføjede en ny bruger.</add>
+                <edit>%user redigerede en bruger.</edit>
+                <delete>%user slettede en bruger.</delete>
             </user>
         </activities>
     </site>
     <email>
-        <subject>Trackr Verification</subject>
-        <verification>Velkommen %user,\r\rDu, eller en anden som bruger din email addresse, har fuldf�rt registreringen for %url. Du kan fuldf�re din registrering ved at klikke p� f�lgende link: %activation\r\rHvis du mener dette er en fejl, kan du ignorere denne mail.\r\rMed venlig hilsen, Website Administrator</verification>
+        <subject>Trackr Verifikation</subject>
+        <verification>Velkommen %user,\r\rDu, eller en anden som bruger din email addresse, har fuldført registreringen for %url. Du kan fuldføre din registrering ved at klikke på følgende link: %activation\r\rHvis du mener at dette er en fejl, kan du ignorere denne mail.\r\rMed venlig hilsen, Website Administrator</verification>
     </email>
 </language>
