@@ -40,7 +40,7 @@
             </overview>
             <admin>
                 <navlink>admin</navlink>
-                <header>administration Panel</header>
+                <header>Administration Panel</header>
                 <dashboard>dashboard</dashboard>
                 <activity>activity</activity>
                 <groups>groups</groups>

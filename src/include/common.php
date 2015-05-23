@@ -8,6 +8,7 @@
  * Last Modified by Daniel Vidmar.
  */
 session_start();
+define('base_directory', rtrim(realpath(__DIR__), '/').'/');
 
 //Required classes & includes
 require_once("utils.php");

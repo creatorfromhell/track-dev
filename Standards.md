@@ -3,7 +3,7 @@
 The Trackr Code Quality Standards were created to establish code format rules for contributors to follow when making changes and/or additions to Trackr. These rules are in place to prevent the individual contributors from using their own development style and ultimately making the Trackr source a mess of different styles thrown together.
 
 ## Function & Variables names:
-*  Must have an underscore(_) between each word
+* Must have an underscore(_) between each word
   * Correct Example(s): $example_variable, $another_variable, example_function(), another_example()
   * Incorrect Example(s): $exampleVariable,  $examplevariable, ExampleFunction(), exampleFunction()
 * Must be all lower-case characters unless using an abbreviation
@@ -39,7 +39,7 @@ The Trackr Code Quality Standards were created to establish code format rules fo
 * Class names must be in upper camel case.
   * Correct Example(s): ExampleClass, Group, AnotherExampleClass
   * Incorrect Example(s): exampleClass, group, AnotherexampleClass
-  
+
 ## Methods/Operators to use
 * When trying to obtain a value from a language file you should ALWAYS use the ```get_value``` method in the LanguageManager class.
   * Correct Example:
@@ -75,7 +75,12 @@ The Trackr Code Quality Standards were created to establish code format rules fo
   }
   ```
 
-##Trackr Unused & Deprecated Functions
+## Database
+* When storing user inputted information into SQL, you must escape the information before storing it.
+* Always use prepared statements when possible.
+* NEVER use non-secure practices when dealing with databases
+
+## Trackr Unused & Deprecated Functions
 * Any unused functions should be marked as deprecated using a PHPDoc Comment with the @deprecated tag.
 * Deprecated methods shall be removed after being deprecated for a no more and no less than one Trackr release.
 * In the event that majority of the Trackr users would like a deprecated method to stay;
@@ -83,7 +88,7 @@ The Trackr Code Quality Standards were created to establish code format rules fo
   * or it may stay in the Trackr source longer than one release.
   * *The choice is entirely up to the discretion of the core Trackr developers.*
 
-##General Style
+## General Style
 * Indentation should be done with four spaces, not tabs.
 * Do not  place spaces before or after the concatenation operator(".")
 * Place a space before and after the concatenating assignment operator(".=")
@@ -91,5 +96,8 @@ The Trackr Code Quality Standards were created to establish code format rules fo
 * Always use PHP_EOL instead of specifying a line separator
 * Never assume a variable is an instance of a class. Always check using instanceof before using variables/methods.
 
-##Last Modified
+## Modification
+The Trackr Code Quality Standards may change from time to time, because of this, it is the sole responsibility of each contributor to stay up-to-date on these standards when making modifications to the Trackr Source Code.
+
+## Last Modified
 The Trackr Code Quality Standards were last modified on March 3rd, 2015.

@@ -146,11 +146,11 @@ function to_options($data, $value = null) {
  * @param int $maxSize
  */
 function upload_file($file, $name, $maxSize = 1000000) {
+    global $configuration_values;
     $type = pathinfo(basename($file['name']), PATHINFO_EXTENSION);
     $move = $name.".".$type;
-    $bannedTypes = array("php", "js", "cs");
 
-    if(in_array($type, $bannedTypes)) {
+    if(!in_array($type, $configuration_values['file']['allowed_types'])) {
         return;
     }
 
@@ -158,7 +158,7 @@ function upload_file($file, $name, $maxSize = 1000000) {
         return;
     }
 
-    if(move_uploaded_file($file['tmp_name'], $move)) {
+    if(move_uploaded_file($file['tmp_name'], base_directory.$configuration_values['file']['upload_directory'].$move)) {
         return;
     }
     return;

@@ -12,6 +12,8 @@ include("include/header.php");
 if(isset($_POST['add-project'])) {
     $handler = new ProjectAddHandler($_POST);
     try {
+        $handler->handle();
+
         $name = $handler->post_vars['name'];
         $preset = $handler->post_vars['preset'];
         $author = $handler->post_vars['author'];
@@ -35,6 +37,8 @@ if(isset($_POST['add-project'])) {
 if(isset($_POST['edit-project'])) {
     $handler = new ProjectEditHandler($_POST);
     try {
+        $handler->handle();
+
         $id = $handler->post_vars['id'];
         $details = ProjectFunc::project_details($id);
 
@@ -61,6 +65,8 @@ if(isset($_POST['edit-project'])) {
 if(isset($_POST['add-type'])) {
     $handler = new TypeAddHandler($_POST);
     try {
+        $handler->handle();
+
         $name = $handler->post_vars['name'];
         $description = $handler->post_vars['description'];
         $stable = $handler->post_vars['stable'];
@@ -78,6 +84,8 @@ if(isset($_POST['add-type'])) {
 if(isset($_POST['edit-type'])) {
     $handler = new TypeEditHandler($_POST);
     try {
+        $handler->handle();
+
         $id = $handler->post_vars['id'];
         $details = VersionFunc::type_details($id);
 

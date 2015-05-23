@@ -93,6 +93,10 @@ class VersionFunc {
         set_value("versions", "version_type", $type, " WHERE id = ?", array($id));
     }
 
+    public static function change_file($id, $file) {
+        set_value("versions", "version_download", $file, " WHERE id = ?", array($id));
+    }
+
     /**
      * @param $id
      * @return mixed

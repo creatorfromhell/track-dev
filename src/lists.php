@@ -12,6 +12,8 @@ include("include/header.php");
 if(isset($_POST['add-list'])) {
     $handler = new ListAddHandler($_POST);
     try {
+        $handler->handle();
+
         $list = $handler->post_vars['name'];
         $project = $handler->post_vars['project'];
         $public = $handler->post_vars['public'];
@@ -36,6 +38,8 @@ if(isset($_POST['add-list'])) {
 if(isset($_POST['edit-list'])) {
     $handler = new ListEditHandler($_POST);
     try {
+        $handler->handle();
+
         $id = $handler->post_vars['id'];
         $details = ListFunc::list_details($id);
 
@@ -60,6 +64,8 @@ if(isset($_POST['edit-list'])) {
 if(isset($_POST['add-version'])) {
     $handler = new VersionAddHandler($_POST);
     try {
+        $handler->handle();
+
         $version = $handler->post_vars['name'];
         $project = $handler->post_vars['project'];
         $status = $handler->post_vars['status'];
@@ -79,6 +85,8 @@ if(isset($_POST['add-version'])) {
 if(isset($_POST['edit-version'])) {
     $handler = new VersionEditHandler($_POST);
     try {
+        $handler->handle();
+
         $id = $handler->post_vars['id'];
         $details = VersionFunc::version_details($id);
 
