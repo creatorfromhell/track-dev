@@ -7,7 +7,7 @@
 
 abstract class FileHook extends Hook {
 
-    public function __construct($name) {
+    public function __construct($name = 'not initialized') {
         parent::__construct($name, array('file' => null));
         $this->web = true;
     }

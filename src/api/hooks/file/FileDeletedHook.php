@@ -10,7 +10,7 @@
 
 class FileDeletedHook extends FileHook {
 
-    public function __construct($project) {
+    public function __construct($project = 'not initialized') {
         parent::__construct("file_deleted_hook");
         $this->web = true;
         $this->arguments = array(

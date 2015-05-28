@@ -13,7 +13,7 @@
  */
 class ListDeletedHook extends Hook {
 
-    public function __construct($project, $id) {
+    public function __construct($project = 'not initialized', $id = 'not initialized') {
         parent::__construct("list_deleted_hook");
         $this->arguments = array(
             'project' => $project,

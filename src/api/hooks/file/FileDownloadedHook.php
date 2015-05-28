@@ -10,7 +10,7 @@
 
 class FileDownloadedHook extends FileHook {
 
-    public function __construct($project, $downloads) {
+    public function __construct($project = 'not initialized', $downloads = 'not initialized') {
         parent::__construct("file_downloaded_hook");
         $this->web = true;
         $this->arguments = array(

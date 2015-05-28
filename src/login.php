@@ -20,7 +20,7 @@ if(isset($_POST['login'])) {
     try {
         $handler->handle();
 
-        $name = $this->post_vars['username'];
+        $name = $handler->post_vars['username'];
         $email = (!valid_email($name)) ? false : true;
         $user = User::load($name, $email);
         $user->logged_in = date("Y-m-d H:i:s");
@@ -35,7 +35,8 @@ if(isset($_POST['login'])) {
         header("Location: index.php?".$previous);
     } catch(Exception $e) {
         $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        $msg = $translated;
+        $msg_type = "error";
     }
 }
 

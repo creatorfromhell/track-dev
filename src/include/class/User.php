@@ -70,6 +70,11 @@ class User {
      */
     public $online = 0;
 
+
+    public function __construct() {
+        $this->ip = self::get_ip();
+    }
+
     /**
      * @param $id
      * @return bool

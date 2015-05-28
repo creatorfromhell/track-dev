@@ -101,21 +101,21 @@ $configuration_values = $configuration->config;
 //MySQl stuff
 $pdo = new PDO("mysql:host=".$configuration_values["database"]["db_host"].";dbname=".$configuration_values["database"]["db_name"], $configuration_values["database"]["db_username"], $configuration_values["database"]["db_password"]);
 
-
-//User Stuff
-$current_user = null;
-if(isset($_SESSION['usersplusprofile'])) {
-    if(User::exists($_SESSION['usersplusprofile'])) {
-        $current_user = User::load($_SESSION['usersplusprofile']);
-    }
-}
-
 //Global variables
 $prefix = $configuration->config["database"]["db_prefix"];
 $trackr_version = $configuration->config["trackr"]["version"];
 unset($configuration_values["database"]);
 unset($configuration_values["trackr"]);
-global $pdo, $prefix, $configuration_values;
+global $prefix, $configuration_values;
+
+//User Stuff
+$current_user = new User();
+$current_user->name = "Guest(".User::get_ip().")";
+if(isset($_SESSION['usersplusprofile'])) {
+    if(User::exists($_SESSION['usersplusprofile'])) {
+        $current_user = User::load($_SESSION['usersplusprofile']);
+    }
+}
 
 //Project & List Stuff
 $project = ProjectFunc::get_preset();

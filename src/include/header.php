@@ -81,5 +81,4 @@ if($page != $previous_page) {
         $plugin_manager->trigger($admin_leave_hook);
     }
 }
-
 include_once('navigation.php');

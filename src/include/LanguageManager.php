@@ -49,9 +49,9 @@ class LanguageManager {
      */
     public function load($name) {
         $file = @simplexml_load_file("resources/languages/".$name.".xml", null, true);
-        $this->languages[(string)$file->xpath("short")] = $file;
+        $this->languages[(string)$file->xpath("short")[0]] = $file;
 
-        $language_load_hook = new LanguageLoadedHook($name, (string)$file->xpath("version"));
+        $language_load_hook = new LanguageLoadedHook($name, (string)$file->xpath("version")[0]);
         $this->plugin_instance->trigger($language_load_hook);
     }
 
