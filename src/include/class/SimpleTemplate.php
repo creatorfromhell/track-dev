@@ -57,6 +57,10 @@ class SimpleTemplate {
     /*
      * Reads every line in a .tpl file.
      */
+
+     /**
+      * @param string $name
+      */
      private function read_template($name) {
         $lines = array();
         $file = fopen($name, 'r');
@@ -91,6 +95,9 @@ class SimpleTemplate {
         return $string;
     }
 
+     /**
+      * @param string $rule
+      */
      private function parse_rule($rule) {
         $special_rules = array("include", "function");
         $rule_check = explode("->", $rule);
@@ -147,6 +154,11 @@ class SimpleTemplate {
         return "{ ".$rule." }";
     }
 
+     /**
+      * @param string $rule
+      *
+      * @return string
+      */
      private function get_rule($rule) {
         $value = $this->array_path($this->rules, $rule);
         if($value != null) {
