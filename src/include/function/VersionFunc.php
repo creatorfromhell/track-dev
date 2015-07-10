@@ -29,6 +29,13 @@ class VersionFunc {
         $stmt->execute(array($version, $project, $status, $due, $released, $type));
     }
 
+    public static function version_id($project, $version_name) {
+        global $prefix;
+        $t = $prefix."_versions";
+        $id = value($t, "id", "WHERE project = ? AND version_name = ?", array($project, $version_name));
+        return $id;
+    }
+
     //delete version
     /**
      * @param $id

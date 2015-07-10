@@ -160,6 +160,12 @@ class User {
         return $user;
     }
 
+    public static function get_name($id) {
+        global $prefix;
+        $t = $prefix."_users";
+        return value($t, 'user_name', "WHERE id = ?", array($id));
+    }
+
     /**
      * @param $name
      * @param bool $email
@@ -202,7 +208,7 @@ class User {
         global $pdo, $prefix;
         $t = $prefix."_users";
         $perm = implode(",", $user->permissions);
-        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, user_name, user_password, user_email, user_group, user_permissions, user_avatar, user_ip, user_registered, logged_in, user_banned, user_online, user_activated, activation_key) VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, user_name, user_password, user_email, user_group, user_permissions, user_avatar, user_ip, user_registered, logged_in, user_banned, user_online, user_activated, activation_key) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute(array($user->id, $user->name, $user->password, $user->email, $user->group->id, $perm, $user->avatar, $user->ip, $user->registered, $user->loggedIn, $user->banned, $user->online, $user->activated, $user->activationKey));
     }
 

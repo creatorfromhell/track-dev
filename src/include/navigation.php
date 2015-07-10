@@ -34,22 +34,18 @@ $tabs = array(
         "translate" => "lang:",
     ),
 );
-
 foreach($projects as &$p) {
     $projectInfo = array(
         "location" => "lists.php?".$previous."&amp;p=".$p,
         "translate" => "lang:"
     );
-
     $tabs['projects']['sub'][$p] = $projectInfo;
 }
-
 foreach($lists as &$l) {
     $listInfo = array(
         "location" => "list.php?".$previous."&amp;p=".$project."&amp;l=".$l,
         "translate" => "lang:"
     );
-
     $tabs['lists']['sub'][$l] = $listInfo;
 }
 

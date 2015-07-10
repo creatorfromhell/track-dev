@@ -82,7 +82,7 @@ The Trackr Code Quality Standards were created to establish code format rules fo
 
 ## Trackr Unused & Deprecated Functions
 * Any unused functions should be marked as deprecated using a PHPDoc Comment with the @deprecated tag.
-* Deprecated methods shall be removed after being deprecated for a no more and no less than one Trackr release.
+* Deprecated methods shall be removed after being deprecated for no more and no less than one Trackr release.
 * In the event that majority of the Trackr users would like a deprecated method to stay;
   * It may be unmarked as deprecated,
   * or it may stay in the Trackr source longer than one release.
@@ -94,7 +94,14 @@ The Trackr Code Quality Standards were created to establish code format rules fo
 * Place a space before and after the concatenating assignment operator(".=")
 * Always use the clean_input() method on user provided values
 * Always use PHP_EOL instead of specifying a line separator
+* Always use DIRECTORY_SEPARATOR instead of specifying a separator
 * Never assume a variable is an instance of a class. Always check using instanceof before using variables/methods.
+
+## Upcoming Standard Changes
+*The following rules are not in effect yet, but appear here to provide ample time to update current code to follow each of them.*
+* PHP 7 Specific
+  * Use coalescing operator(??) where possible
+*General
 
 ## Modification
 The Trackr Code Quality Standards may change from time to time, because of this, it is the sole responsibility of each contributor to stay up-to-date on these standards when making modifications to the Trackr Source Code.

@@ -76,6 +76,15 @@ if(isset($_POST['add-version'])) {
         $plugin_manager->trigger($version_created_hook);
 
         VersionFunc::add_version($version, $project, $status, $due, '0000-00-00', $type);
+
+        if(isset($this->post_vars['download'])) {
+            $version_id = VersionFunc::version_id($project, $version);
+
+            $file_added_hook = new FileAddHook($project, $version_id, $this->post_vars['download']);
+            $plugin_manager->trigger($file_added_hook);
+
+            DownloadFunc::add_download($project, $version_id, $this->post_vars['download']);
+        }
     } catch(Exception $e) {
         $translated = $language_manager->get_value($language, $e->getMessage());
         //TODO: form message handling
@@ -100,6 +109,11 @@ if(isset($_POST['edit-version'])) {
         $plugin_manager->trigger($version_modified_hook);
 
         VersionFunc::edit_version($id, $version, $project, $status, $due, '0000-00-00', $type);
+
+        if(isset($this->post_vars['download'])) {
+            $file_id = VersionFunc::version_id($project, $version);
+            DownloadFunc::edit_download($file_id, $project, VersionFunc::version_id($project, $version), $this->post_vars['download']);
+        }
     } catch(Exception $e) {
         $translated = $language_manager->get_value($language, $e->getMessage());
         //TODO: form message handling

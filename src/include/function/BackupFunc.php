@@ -33,9 +33,6 @@ class BackupFunc {
     /*
      * Create an XML backup of all activities
      */
-    /**
-     *
-     */
     private static function backup_activities_XML() {
         global $prefix, $pdo;
         $t = $prefix."_activity";
@@ -65,9 +62,6 @@ class BackupFunc {
     /*
      * Create a CSV backup of all activities
      */
-    /**
-     *
-     */
     private static function backup_activities_CSV() {
         global $prefix, $pdo;
         $t = $prefix."_activity";
@@ -85,9 +79,6 @@ class BackupFunc {
 
     /*
      * Create a plain text backup of all activities
-     */
-    /**
-     *
      */
     private static function backup_activities_PT() {
         global $prefix, $pdo;

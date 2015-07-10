@@ -8,8 +8,7 @@
  * Last Modified by Daniel Vidmar.
  */
 include("include/header.php");
-$current_user = $_SESSION['usersplusprofile'];
-if($current_user !== null) { header('LOCATION: index.php'); }
+if(isset($_SESSION['usersplusprofile'])) { header('LOCATION: index.php'); }
 
 if(isset($_POST['register'])) {
     $handler = new RegisterHandler($_POST);
@@ -50,6 +49,7 @@ if(isset($_POST['register'])) {
 $captcha = new Captcha();
 $_SESSION['userspluscaptcha'] = $captcha->code;
 $rules['site']['page']['content'] = '{include->'.$theme_manager->get_template((string)$theme->name, "basic/AnnounceContent.tpl").'}';
+$rules['site']['content']['announce'] = "Registration has been disabled on this site.";
 if($configuration->config["main"]["registration"]) {
     $rules['site']['page']['content'] = '{include->'.$theme_manager->get_template((string)$theme->name, "Register.tpl").'}';
     $rules['form']['templates']['register'] = '{include->'.$theme_manager->get_template((string)$theme->name, "forms/RegistrationForm.tpl").'}';

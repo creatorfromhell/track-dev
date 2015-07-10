@@ -10,11 +10,13 @@
 
 class FileAddHook extends FileHook {
 
-    public function __construct($project = 'not initialized') {
+    public function __construct($project = 'not initialized', $version = 'not initialized', $file_name = 'not initialized') {
         parent::__construct("file_add_hook");
         $this->web = true;
         $this->arguments = array(
-            'project' => $project
+            'project' => $project,
+            'version' => $version,
+            'file_name' => $file_name
         );
     }
 }
