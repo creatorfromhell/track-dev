@@ -149,7 +149,7 @@ class SimpleTemplate {
 
      private function get_rule($rule) {
         $value = $this->array_path($this->rules, $rule);
-        if($value != null) {
+        if(!is_null($value)) {
             return $value;
         }
         return "{ ".$rule." }";
@@ -160,7 +160,7 @@ class SimpleTemplate {
         $tmp = $array;
 
         foreach($path_array as $p) {
-            if(empty($tmp[$p])) {
+            if(!isset($tmp[$p])) {
                 return null;
             }
             $tmp = $tmp[$p];

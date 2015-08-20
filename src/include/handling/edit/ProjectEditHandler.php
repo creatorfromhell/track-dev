@@ -13,7 +13,7 @@ class ProjectEditHandler extends FormHandler {
 
     public function __construct($vars) {
         parent::__construct($vars);
-        $this->required_variables = array('id', 'name', 'author', 'public', 'preset', 'overseer');
+        $this->required_variables = array('id', 'name', 'public', 'preset', 'overseer');
     }
 
     public function handle() {

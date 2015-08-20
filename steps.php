@@ -23,7 +23,7 @@ $steps = array(
             array(
                 'type' => 'download',
                 'order' => 'after',
-                'location' => 'http://creatorfromhell.com/projects/trackr/beta2.zip',
+                'location' => 'https://creatorfromhell.com/uploads/trackr-beta2.zip',
                 'save' => 'temp.zip'
             ),
         ),
@@ -314,6 +314,24 @@ $steps = array(
                         'required' => true,
                     )
                 ),
+                array(
+                    'name' => 'url_base',
+                    'rules' => array(
+                        'required' => true,
+                    )
+                ),
+                array(
+                    'name' => 'url_path',
+                    'rules' => array(
+                        'required' => true,
+                    )
+                ),
+                array(
+                    'name' => 'email_reply',
+                    'rules' => array(
+                        'required' => true,
+                    )
+                ),
             )
         ),
         'step_parts' => array(
@@ -329,6 +347,24 @@ $steps = array(
                 'type' => 'text',
                 'newline' => 'input',
             ),
+            array(
+                'label' => 'Base URL: ',
+                'name' => 'url_base',
+                'type' => 'text',
+                'newline' => 'input'
+            ),
+            array(
+                'label' => 'Installation Path: ',
+                'name' => 'url_path',
+                'type' => 'text',
+                'newline' => 'input',
+            ),
+            array(
+                'label' => 'Reply Email: ',
+                'name' => 'email_reply',
+                'type' => 'text',
+                'newline' => 'input',
+            ),
         ),
         'executions' => array(
             array(
@@ -336,10 +372,28 @@ $steps = array(
                 'order' => 'after',
                 'queries' => array(
                     array(
-                        'query' => 'INSERT INTO %sql_prefix%_projects (project, preset, main, creator, overseer, public) VALUES(%default_project%, 1, 1, noone, noone, 1);'
+                        'query' => "INSERT INTO `%sql_prefix%_projects` (`project`, `preset`, `main`, `creator`, `overseer`, `public`) VALUES('%default_project%', 1, 1, 'noone', 'noone', 1);"
                     ),
                     array(
-                        'query' => 'INSERT INTO %sql_prefix%_lists (list, project, public, creator, overseer, minimal_view) VALUES(%default_list%, %default_project%, 1, noone, noone, 1);'
+                        'query' => "INSERT INTO `%sql_prefix%_lists` (`list`, `project`, `public`, `creator`, `overseer`, `minimal_view`) VALUES('%default_list%', '%default_project%', 1, 'noone', 'noone', 1);"
+                    ),
+                    array(
+                        'query' => "CREATE TABLE IF NOT EXISTS `%sql_prefix%_%default_project%_%default_list%` (
+                                      `id` int(11) NOT NULL AUTO_INCREMENT,
+                                      `title` varchar(40) NOT NULL,
+                                      `description` text NOT NULL,
+                                      `author` varchar(40) NOT NULL,
+                                      `assignee` varchar(40) NOT NULL,
+                                      `due` date NOT NULL DEFAULT '0000-00-00',
+                                      `created` date NOT NULL DEFAULT '0000-00-00',
+                                      `finished` date NOT NULL DEFAULT '0000-00-00',
+                                      `task_version` int(11) DEFAULT NULL,
+                                      `labels` text NOT NULL,
+                                      `editable` tinyint(1) NOT NULL DEFAULT '1',
+                                      `task_status` tinyint(3) DEFAULT NULL,
+                                      `progress` tinyint(3) NOT NULL DEFAULT '0',
+                                      PRIMARY KEY (`id`)
+                                    ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;",
                     )
                 )
             ),
@@ -377,12 +431,6 @@ $steps = array(
                         'required' => true,
                     )
                 ),
-                array(
-                    'name' => 'default_password_confirm',
-                    'rules' => array(
-                        'required' => true,
-                    )
-                ),
             )
         ),
         'step_parts' => array(
@@ -411,8 +459,8 @@ $steps = array(
                 'order' => 'after',
                 'queries' => array(
                     array(
-                        'query' => 'INSERT INTO %sql_prefix%_users (user_name, user_password, user_email, user_group, user_registered, user_activated) VALUES(?, ?, ?, ?, ?, ?)',
-                        'parameters' => array($_SESSION['values']['default_user_name'], hash('sha256', $_SESSION['values']['default_user_password']), $_SESSION['values']['default_user_email'], '2', date("Y-m-d H:i:s"),'1')
+                        'query' => "INSERT INTO `%sql_prefix%_users` (`user_name`, `user_password`, `user_email`, `user_group`, `user_registered`, `user_activated`) VALUES('%default_user_name%', ?, '%default_user_email%', 2, ?, 1)",
+                        'parameters' => array(hash('sha256', (isset($_SESSION['values']['default_user_password'])?$_SESSION['values']['default_user_password']:"")), date("Y-m-d H:i:s"))
                     )
                 )
             )

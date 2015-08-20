@@ -19,11 +19,12 @@ class TaskEditHandler extends FormHandler {
     public function handle() {
         parent::basic_handle();
 
-        if(!has_values("projects", " WHERE project = ?", array($this->post_vars['project']))) {
+        global $project, $list;
+        if(!has_values("projects", " WHERE project = ?", array($project))) {
             throw new Exception("site->forms->invalid->project");
         }
 
-        if(!has_values("lists", " WHERE project = ? AND list = ?", array($this->post_vars['project'], $this->post_vars['list']))) {
+        if(!has_values("lists", " WHERE project = ? AND list = ?", array($project, $list))) {
             throw new Exception("site->forms->invalid->list");
         }
     }

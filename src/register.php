@@ -41,8 +41,7 @@ if(isset($_POST['register'])) {
 
         header("Location: login.php?".$previous);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 

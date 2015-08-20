@@ -34,9 +34,7 @@ if(isset($_POST['login'])) {
         $_SESSION['usersplusprofile'] = $user->name;
         header("Location: index.php?".$previous);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        $msg = $translated;
-        $msg_type = "error";
+        form_message($e);
     }
 }
 

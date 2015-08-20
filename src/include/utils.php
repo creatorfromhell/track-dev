@@ -79,7 +79,7 @@ function value($table, $column, $extra = '', $params = array()) {
  */
 function set_value($table, $column, $value, $extra = '', $params = array()) {
     $values = array($value);
-    array_push($values, $params);
+    $values = array_merge($values, $params);
     global $prefix, $pdo;
     $t = $prefix."_".$table;
     $stmt = $pdo->prepare("UPDATE `".$t."` SET ".$column." = ?".$extra);
@@ -188,6 +188,20 @@ function get_name() {
  */
 function latest_users() {
     //new method values("users", "user_name", " ORDER BY user_registered DESC LIMIT 7");
+}
+
+function form_message($exception) {
+    if($exception instanceof Exception) {
+        global $language_manager, $language;
+        $translated = $language_manager->get_value($language, $exception->getMessage());
+        $msg = $translated;
+        $msg_type = "error";
+        $rules['message'] = array(
+            'type' => $msg_type,
+            'style' => ' ',
+            'text' => $msg,
+        );
+    }
 }
 
 /**
@@ -455,7 +469,7 @@ function generate_hash($value, $useSalt = false, $salt = "") {
  * @return bool
  */
 function check_hash($hash, $value) {
-    return $hash == hash('sha256', $value);
+    return $hash === hash('sha256', $value);
 }
 
 //Thanks to this comment: http://php.net/manual/en/function.uniqid.php#94959

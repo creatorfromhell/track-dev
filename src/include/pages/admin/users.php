@@ -33,8 +33,7 @@ if(isset($_POST['add-user'])) {
 
         User::add_user($user);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -64,8 +63,7 @@ if(isset($_POST['edit-user'])) {
         $user->permissions = $permissions;
         $user->save();
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 $editing = false;

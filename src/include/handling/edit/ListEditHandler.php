@@ -13,7 +13,7 @@ class ListEditHandler extends FormHandler {
 
     public function __construct($vars) {
         parent::__construct($vars);
-        $this->required_variables = array('id', 'name', 'author', 'project', 'public', 'minimal', 'main', 'overseer', 'guest-view', 'guest-edit', 'view-permission', 'edit-permission');
+        $this->required_variables = array('id', 'name', 'project', 'public', 'minimal', 'main', 'overseer', 'guest-view', 'guest-edit', 'view-permission', 'edit-permission');
     }
 
     public function handle() {

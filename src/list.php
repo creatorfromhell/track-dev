@@ -34,8 +34,7 @@ if(isset($_POST['add-task'])) {
 
         TaskFunc::add_task($project, $list, $title, $description, $author, $assignee, $created, $due, "0000-0-00", "", $labels, $handler->post_vars['editable'], $status, $progress);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -72,8 +71,7 @@ if(isset($_POST['edit-task'])) {
 
         TaskFunc::edit_task($id, $project, $list, $title, $description, $handler->post_vars['author'], $assignee, $created, $due, "0000-0-00", "", $labels, $handler->post_vars['editable'], $status, $progress);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -96,8 +94,7 @@ if(isset($_POST['add-label'])) {
 
         LabelFunc::add_label($project, $list, $label, $color, $background);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -123,8 +120,7 @@ if(isset($_POST['edit-label'])) {
 
         LabelFunc::edit_label($id, $project, $list, $label, $color, $background);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -338,6 +334,9 @@ if(has_values($project."_".$list) && can_view_list(ListFunc::get_id($project, $l
         else if($status == "2") { $table_content .= "<tr class='inprogress'>"; }
         else if($status == "3") { $table_content .= "<tr class='closed'>"; }
         else { $table_content .= "<tr>"; }
+
+        $table_extra = ($minimal) ? ' ' : "<th id=\"taskAssignee\" class=\"medium\">".$rules['table']['th']['assignee']."</th><th id=\"taskCreated\" class=\"medium\">".$rules['table']['th']['created']."</th><th id=\"taskAuthor\" class=\"medium\">".$rules['table']['th']['author']."</th>";
+        $rules['table']['extra'] = $table_extra;
 
         $table_content .= "<td class='id'>".$id."</td>";
         $link = "task.php?".$previous."&amp;p=".$project."&amp;l=".$list."&amp;id=".$id;

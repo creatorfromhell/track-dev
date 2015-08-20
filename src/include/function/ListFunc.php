@@ -53,7 +53,7 @@ class ListFunc {
                               `due` date NOT NULL DEFAULT '0000-00-00',
                               `created` date NOT NULL DEFAULT '0000-00-00',
                               `finished` date NOT NULL DEFAULT '0000-00-00',
-                              `version_name` varchar(40) NOT NULL,
+                              `task_version` int(11) NOT NULL,
                               `labels` text NOT NULL,
                               `editable` tinyint(1) NOT NULL DEFAULT '1',
                               `task_status` tinyint(3) NOT NULL DEFAULT '0',

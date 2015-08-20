@@ -36,6 +36,34 @@ class VersionFunc {
         return $id;
     }
 
+    public static function version_name($id) {
+        global $prefix;
+        $t = $prefix."_versions";
+        return value($t, "version_name", "WHERE id = ?", array($id));
+    }
+
+    public static function version_progress($id) {
+        $project = self::get_project($id);
+        $total = 0;
+        $finished = 0;
+        $lists = values("lists", "list", " WHERE project = ?", array($project));
+        foreach($lists as &$list) {
+            $total += self::get_count($id, $project, $list);
+            $finished += self::get_count($id, $project, $list, false);
+        }
+        return (($total > 0) ? ($finished/$total) * 100 : 0);
+    }
+
+    public static function get_count($id, $project, $list, $total = true) {
+        $query = ($total) ? "WHERE task_version = ?" : "WHERE task_version = ? AND status = ?";
+        $parameters = ($total) ? array($id) : array($id, '1');
+        return count_columns($project."_".$list, $query, $parameters);
+    }
+
+    public static function released($id) {
+        return has_values("downloads", "WHERE project_id = ? AND version_id = ?", array(ProjectFunc::get_id(self::get_project($id)), $id));
+    }
+
     //delete version
     /**
      * @param $id

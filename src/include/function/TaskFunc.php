@@ -29,7 +29,7 @@ class TaskFunc {
     public static function add_task($project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
-        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, title, description, author, assignee, due, created, finished, version_name, labels, editable, task_status, progress) VALUES('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO `".$t."` (id, title, description, author, assignee, due, created, finished, task_version, labels, editable, task_status, progress) VALUES('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute(array($title, $description, $author, $assignee, $due, $created, $finish, $version, $labels, $editable, $status, $progress));
     }
 
@@ -67,8 +67,8 @@ class TaskFunc {
     public static function edit_task($id, $project, $list, $title, $description, $author, $assignee, $created, $due, $finish, $version, $labels, $editable, $status, $progress) {
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
-        $stmt = $pdo->prepare("UPDATE `".$t."` SET title = ?, description = ?, author = ?, assignee = ?, due = ?, created = ?, finished = ?, version_name = ?, labels = ?, editable = ?, task_status = ?, progress = ? WHERE id = ?");
-        $stmt->execute($title, $description, $author, $assignee, $due, $created, $finish, $version, $labels, $editable, $status, $progress, $id);
+        $stmt = $pdo->prepare("UPDATE `".$t."` SET title = ?, description = ?, author = ?, assignee = ?, due = ?, created = ?, finished = ?, task_version = ?, labels = ?, editable = ?, task_status = ?, progress = ? WHERE id = ?");
+        $stmt->execute(array($title, $description, $author, $assignee, $due, $created, $finish, $version, $labels, $editable, $status, $progress, $id));
     }
 
     /**
@@ -81,7 +81,7 @@ class TaskFunc {
         $return = array();
         global $prefix, $pdo;
         $t = $prefix."_".$project."_".$list;
-        $stmt = $pdo->prepare("SELECT title, description, author, assignee, due, created, finished, version_name, labels, editable, task_status, progress FROM `".$t."` WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT title, description, author, assignee, due, created, finished, task_version, labels, editable, task_status, progress FROM `".$t."` WHERE id = ?");
         $stmt->execute(array($id));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $return['title'] = $result['title'];
@@ -91,7 +91,7 @@ class TaskFunc {
         $return['due'] = $result['due'];
         $return['created'] = $result['created'];
         $return['finished'] = $result['finished'];
-        $return['version'] = $result['version_name'];
+        $return['version'] = ($result['task_version'] > 0) ? VersionFunc::version_name($result['task_version']) : 'None';
         $return['labels'] = $result['labels'];
         $return['editable'] = $result['editable'];
         $return['status'] = $result['task_status'];
@@ -172,7 +172,7 @@ class TaskFunc {
      * @param $version
      */
     public static function change_version($project, $list, $id, $version) {
-        set_value($project."_".$list, "version_name", $version, " WHERE id = ?", array($id));
+        set_value($project."_".$list, "task_version", $version, " WHERE id = ?", array($id));
     }
 
     /**

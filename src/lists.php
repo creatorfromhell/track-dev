@@ -27,11 +27,10 @@ if(isset($_POST['add-list'])) {
         $list_created_hook = new ListCreatedHook($project, $list, $author, $overseer);
         $plugin_manager->trigger($list_created_hook);
 
-        ListFunc::add_list($list, $project, $public, $author, $created, $overseer, $handler->post_vars['minimal'], $handler->post_vars['guestview'], $handler->post_vars['guestedit'], $handler->post_vars['viewpermission'], $handler->post_vars['editpermission']);
+        ListFunc::add_list($list, $project, $public, $author, $created, $overseer, $handler->post_vars['minimal'], $handler->post_vars['guest-view'], $handler->post_vars['guest-edit'], $handler->post_vars['view-permission'], $handler->post_vars['edit-permission']);
         ListFunc::create($project, $list);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -51,13 +50,12 @@ if(isset($_POST['edit-list'])) {
         $params = "id:".$id.",public:".$public.",overseer:".$overseer;
         ActivityFunc::log($current_user->name, $project, $list, "list:edit", $params, 0, date("Y-m-d H:i:s"));
 
-        $list_modified_hook = new ListModifiedHook($id, $details['project'], $project, $details['list'], $list, $details['overseer'], $overseer);
+        $list_modified_hook = new ListModifiedHook($id, $details['project'], $project, $details['name'], $list, $details['overseer'], $overseer);
         $plugin_manager->trigger($list_modified_hook);
 
-        ListFunc::edit_list($id, $list, $project, $public, $overseer, $handler->post_vars['minimal'], $handler->post_vars['guestview'], $handler->post_vars['guestedit'], $handler->post_vars['viewpermission'], $handler->post_vars['editpermission']);
+        ListFunc::edit_list($id, $list, $project, $public, $overseer, $handler->post_vars['minimal'], $handler->post_vars['guest-view'], $handler->post_vars['guest-edit'], $handler->post_vars['view-permission'], $handler->post_vars['edit-permission']);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -77,17 +75,16 @@ if(isset($_POST['add-version'])) {
 
         VersionFunc::add_version($version, $project, $status, $due, '0000-00-00', $type);
 
-        if(isset($this->post_vars['download'])) {
+        if(isset($handler->post_vars['version_download'])) {
             $version_id = VersionFunc::version_id($project, $version);
 
-            $file_added_hook = new FileAddHook($project, $version_id, $this->post_vars['download']);
+            $file_added_hook = new FileAddHook($project, $version_id, $this->post_vars['version_download']);
             $plugin_manager->trigger($file_added_hook);
 
-            DownloadFunc::add_download($project, $version_id, $this->post_vars['download']);
+            DownloadFunc::add_download($project, $version_id, $this->post_vars['version_download']);
         }
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -99,10 +96,10 @@ if(isset($_POST['edit-version'])) {
         $id = $handler->post_vars['id'];
         $details = VersionFunc::version_details($id);
 
-        $version = $handler->post_vars['version-name'];
+        $version = $handler->post_vars['name'];
         $project = $handler->post_vars['project'];
         $status = $handler->post_vars['status'];
-        $type = $handler->post_vars['version-type'];
+        $type = $handler->post_vars['type'];
         $due = (isset($handler->post_vars['due-date']) && trim($handler->post_vars['due-date']) != "") ? $handler->post_vars['due-date'] : "0000-00-00";
 
         $version_modified_hook = new VersionModifiedHook($id, $details['project'], $project, $details['name'], $version, $details['status'], $status, $details['type'], $type);
@@ -110,13 +107,12 @@ if(isset($_POST['edit-version'])) {
 
         VersionFunc::edit_version($id, $version, $project, $status, $due, '0000-00-00', $type);
 
-        if(isset($this->post_vars['download'])) {
+        if(isset($handler->post_vars['version_download'])) {
             $file_id = VersionFunc::version_id($project, $version);
-            DownloadFunc::edit_download($file_id, $project, VersionFunc::version_id($project, $version), $this->post_vars['download']);
+            DownloadFunc::edit_download($file_id, $project, VersionFunc::version_id($project, $version), $this->post_vars['version_download']);
         }
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -198,20 +194,20 @@ if($switchable == 'lists') {
             $public_string .= '<option value="1"'.(($details['public'] == 1) ? ' selected' : '').'>Yes</option>';
             $minimal_string = '<option value="0"'.((!ListFunc::minimal($edit_id)) ? ' selected' : '').'>No</option>';
             $minimal_string .= '<option value="1"'.((ListFunc::minimal($edit_id)) ? ' selected' : '').'>Yes</option>';
-            $main_string = '<option value="0"'.(($main != $id) ?' selected' : '').'>No</option>';
-            $main_string .= '<option value="1"'.(($main == $id) ? ' selected' : '').'>Yes</option>';
+            $main_string = '<option value="0"'.(($main != $edit_id) ?' selected' : '').'>No</option>';
+            $main_string .= '<option value="1"'.(($main == $edit_id) ? ' selected' : '').'>Yes</option>';
             $overseer_string = '<option value="none"'.(($details['overseer'] == 'none') ? ' selected' : '').'>None</option>';
             $overseer_string .= to_options(values("users", "user_name"), $details['overseer']);
             $guest_view = '<option value="0"'.((ListFunc::guest_permissions($edit_id)['view'] == 0) ? ' selected' : '').'>No</option>';
             $guest_view .= '<option value="1"'.((ListFunc::guest_permissions($edit_id)['view'] == 1) ? ' selected' : '').'>Yes</option>';
             $guest_edit = '<option value="0"'.((ListFunc::guest_permissions($edit_id)['edit'] == 0) ?' selected' : '').'>No</option>';
             $guest_edit .= '<option value="1"'.((ListFunc::guest_permissions($edit_id)['edit'] == 1) ? ' selected' : '').'>Yes</option>';
-            $view_permission = '<option value="none"'.((ListFunc::view_permission($id) == 'none') ? ' selected' : '').'>None</option>';
-            $edit_permission = '<option value="none"'.((ListFunc::edit_permission($id) == 'none') ? ' selected' : '').'>None</option>';
+            $view_permission = '<option value="none"'.((ListFunc::view_permission($edit_id) == 'none') ? ' selected' : '').'>None</option>';
+            $edit_permission = '<option value="none"'.((ListFunc::edit_permission($edit_id) == 'none') ? ' selected' : '').'>None</option>';
             $nodes = values("nodes", "node_name");
             foreach($nodes as &$node) {
-                $view_permission .= '<option value="'.node_id($node).'"'.((ListFunc::view_permission($id) == $node) ? ' selected' : '').'>'.$node.'</option>';
-                $edit_permission .= '<option value="'.node_id($node).'"'.((ListFunc::edit_permission($id) == $node) ? ' selected' : '').'>'.$node.'</option>';
+                $view_permission .= '<option value="'.node_id($node).'"'.((ListFunc::view_permission($edit_id) == $node) ? ' selected' : '').'>'.$node.'</option>';
+                $edit_permission .= '<option value="'.node_id($node).'"'.((ListFunc::edit_permission($edit_id) == $node) ? ' selected' : '').'>'.$node.'</option>';
             }
             $rules['form']['value'] = array(
                 'id' => $edit_id,
@@ -313,7 +309,7 @@ if(has_values("versions", " WHERE project = ?", array($project))) {
         $stable = (VersionFunc::stable($entry['version_type'])) ? 'Yes' : 'No';
 
         $table_content .= "<tr>";
-        $table_content .= "<td class='name'><a href='#'>".$formatter->replace($name)."</a></td>";
+        $table_content .= "<td class='name'><a href='version.php?id=".$id."'>".$formatter->replace($name)."</a></td>";
         $table_content .= "<td class='type'>".$formatter->replace($type)."</td>";
         $table_content .= "<td class='stable'>".$formatter->replace($stable)."</td>";
         $table_content .= "<td class='actions'>";

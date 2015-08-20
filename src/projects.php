@@ -29,8 +29,7 @@ if(isset($_POST['add-project'])) {
 
         ProjectFunc::add_project($name, $preset, 0, $author, $created, $overseer, $public);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -57,8 +56,7 @@ if(isset($_POST['edit-project'])) {
 
         ProjectFunc::edit_project($id, $name, $preset, $main, $overseer, $public);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -76,8 +74,7 @@ if(isset($_POST['add-type'])) {
 
         VersionFunc::add_type($name, $description, $stable);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -98,8 +95,7 @@ if(isset($_POST['edit-type'])) {
 
         VersionFunc::edit_type($id, $name, $description, $stable);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 

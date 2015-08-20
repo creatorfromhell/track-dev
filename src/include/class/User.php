@@ -172,17 +172,8 @@ class User {
      * @return bool
      */
     public static function exists($name, $email = false) {
-        global $pdo, $prefix;
-        $t = $prefix."_users";
-        $query = ($email) ? "SELECT id FROM `".$t."` WHERE user_email = ?" : "SELECT id FROM `".$t."` WHERE user_name = ?";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array($name));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if($result) {
-            return true;
-        }
-        return false;
+        $extra = ($email) ? "WHERE user_email = ?" : "WHERE user_name = ?";
+        return has_values('users', $extra, array($name));
     }
 
     /**
@@ -191,13 +182,8 @@ class User {
      * @return mixed
      */
     public static function get_hashed_password($name, $email = false) {
-        global $pdo, $prefix;
-        $t = $prefix."_users";
-        $query = ($email) ? "SELECT user_password FROM `".$t."` WHERE user_email = ?" : "SELECT user_password FROM `".$t."` WHERE user_name = ?";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array($name));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['user_password'];
+        $extra = ($email) ? "WHERE user_email = ?" : "WHERE user_name = ?";
+        return value('users', 'user_password', $extra, array($name));
     }
 
     /**

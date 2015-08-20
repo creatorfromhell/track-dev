@@ -32,6 +32,12 @@ class DownloadFunc {
         $stmt->execute(array($id));
     }
 
+    public static function get_downloads($id) {
+        global $prefix;
+        $t = $prefix."_downloads";
+        return value($t, "file_downloads", "WHERE id = ?", array($id));
+    }
+
     public static function get_id($project_id, $version_id) {
         global $prefix;
         $t = $prefix."_downloads";

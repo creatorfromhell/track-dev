@@ -11,88 +11,91 @@ session_start();
 define('base_directory', rtrim(realpath(__DIR__), '/').'/');
 
 //Required classes & includes
-require_once("utils.php");
-require_once("Configuration.php");
-
-spl_autoload_register("auto_load");
-spl_autoload_register("auto_load_api");
+require_once(base_directory."utils.php");
 
 function auto_load($class) {
-    $configuration = new Configuration();
-    $root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configuration->config["urls"]["installation_path"], "/");
-    if(file_exists($root."/include/function/".$class.".php")) {
-        require_once($root."/include/function/".$class.".php");
+    $root = rtrim(realpath(__DIR__), '/').'/';
+    if(file_exists($root."function/".$class.".php")) {
+        require_once($root."function/".$class.".php");
         return true;
-    } else if(file_exists($root."/include/class/".$class.".php")) {
-        require_once($root."/include/class/".$class.".php");
+    } else if(file_exists($root."class/".$class.".php")) {
+        require_once($root."class/".$class.".php");
         return true;
-    } else if(file_exists($root."/include/".$class.".php")) {
-        require_once($root."/include/".$class.".php");
+    } else if(file_exists($root.$class.".php")) {
+        require_once($root.$class.".php");
         return true;
-    } else if(file_exists($root."/include/handling/".$class.".php")) {
-        require_once($root."/include/handling/".$class.".php");
+    } else if(file_exists($root."handling/".$class.".php")) {
+        require_once($root."handling/".$class.".php");
         return true;
-    } else if(file_exists($root."/include/handling/add/".$class.".php")) {
-        require_once($root."/include/handling/add/".$class.".php");
+    } else if(file_exists($root."handling/add/".$class.".php")) {
+        require_once($root."handling/add/".$class.".php");
         return true;
-    } else if(file_exists($root."/include/handling/edit/".$class.".php")) {
-        require_once($root."/include/handling/edit/".$class.".php");
+    } else if(file_exists($root."handling/edit/".$class.".php")) {
+        require_once($root."handling/edit/".$class.".php");
         return true;
-    } else if(file_exists($root."/resources/plugins/".$class.".php")) {
-        require_once($root."/resources/plugins/".$class.".php");
+    } else if(file_exists($root."../resources/plugins/".$class.".php")) {
+        require_once($root."../resources/plugins/".$class.".php");
         return true;
     }
     return false;
 }
 
 function auto_load_api($class) {
-    $configuration = new Configuration();
-    $root = realpath($_SERVER["DOCUMENT_ROOT"])."/".trim($configuration->config["urls"]["installation_path"], "/");
-    if(file_exists($root."/api/".$class.".php")) {
-        require_once($root."/api/".$class.".php");
+    $root = rtrim(realpath(__DIR__), '/').'/';
+    if(file_exists($root."../api/".$class.".php")) {
+        require_once($root."../api/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/".$class.".php")) {
-        require_once($root."/api/hooks/".$class.".php");
+    } else if(file_exists($root."../api/hooks/".$class.".php")) {
+        require_once($root."../api/hooks/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/addon/".$class.".php")) {
-        require_once($root."/api/hooks/addon/".$class.".php");
+    } else if(file_exists($root."../api/hooks/addon/".$class.".php")) {
+        require_once($root."../api/hooks/addon/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/download/".$class.".php")) {
-        require_once($root."/api/hooks/download/".$class.".php");
+    } else if(file_exists($root."../api/hooks/download/".$class.".php")) {
+        require_once($root."../api/hooks/download/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/group/".$class.".php")) {
-        require_once($root."/api/hooks/group/".$class.".php");
+    } else if(file_exists($root."../api/hooks/file/".$class.".php")) {
+        require_once($root."../api/hooks/file/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/label/".$class.".php")) {
-        require_once($root."/api/hooks/label/".$class.".php");
+    } else if(file_exists($root."../api/hooks/group/".$class.".php")) {
+        require_once($root."../api/hooks/group/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/list/".$class.".php")) {
-        require_once($root."/api/hooks/list/".$class.".php");
+    } else if(file_exists($root."../api/hooks/label/".$class.".php")) {
+        require_once($root."../api/hooks/label/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/navigation/".$class.".php")) {
-        require_once($root."/api/hooks/navigation/".$class.".php");
+    } else if(file_exists($root."../api/hooks/list/".$class.".php")) {
+        require_once($root."../api/hooks/list/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/node/".$class.".php")) {
-        require_once($root."/api/hooks/node/".$class.".php");
+    } else if(file_exists($root."../api/hooks/navigation/".$class.".php")) {
+        require_once($root."../api/hooks/navigation/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/project/".$class.".php")) {
-        require_once($root."/api/hooks/project/".$class.".php");
+    } else if(file_exists($root."../api/hooks/node/".$class.".php")) {
+        require_once($root."../api/hooks/node/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/task/".$class.".php")) {
-        require_once($root."/api/hooks/task/".$class.".php");
+    } else if(file_exists($root."../api/hooks/page/".$class.".php")) {
+        require_once($root."../api/hooks/page/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/type/".$class.".php")) {
-        require_once($root."/api/hooks/type/".$class.".php");
+    } else if(file_exists($root."../api/hooks/project/".$class.".php")) {
+        require_once($root."../api/hooks/project/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/user/".$class.".php")) {
-        require_once($root."/api/hooks/user/".$class.".php");
+    } else if(file_exists($root."../api/hooks/task/".$class.".php")) {
+        require_once($root."../api/hooks/task/".$class.".php");
         return true;
-    } else if(file_exists($root."/api/hooks/version/".$class.".php")) {
-        require_once($root."/api/hooks/version/".$class.".php");
+    } else if(file_exists($root."../api/hooks/type/".$class.".php")) {
+        require_once($root."../api/hooks/type/".$class.".php");
+        return true;
+    } else if(file_exists($root."../api/hooks/user/".$class.".php")) {
+        require_once($root."../api/hooks/user/".$class.".php");
+        return true;
+    } else if(file_exists($root."../api/hooks/version/".$class.".php")) {
+        require_once($root."../api/hooks/version/".$class.".php");
         return true;
     }
     return false;
 }
+
+spl_autoload_register("auto_load");
+spl_autoload_register("auto_load_api");
 
 //Configuration stuff
 $configuration = new Configuration();
@@ -104,6 +107,7 @@ $pdo = new PDO("mysql:host=".$configuration_values["database"]["db_host"].";dbna
 //Global variables
 $prefix = $configuration->config["database"]["db_prefix"];
 $trackr_version = $configuration->config["trackr"]["version"];
+$configuration_values['file']['allowed_types'] = ($configuration_values['file']['allowed_types'] !== '') ? explode(',', $configuration_values['file']['allowed_types']) : array();
 unset($configuration_values["database"]);
 unset($configuration_values["trackr"]);
 global $prefix, $configuration_values;
@@ -157,6 +161,8 @@ $language_manager = new LanguageManager($plugin_manager, $formatter);
 
 $language = $configuration_values["main"]["language"];
 $theme = $theme_manager->themes[$configuration_values["main"]["theme"]];
+
+global $language_manager, $language, $project, $list;
 
 
 if(isset($_GET['lang']) && $language_manager->exists($_GET['lang'])) {

@@ -29,7 +29,7 @@ abstract class FormHandler {
 
     public function check_fields() {
         foreach($this->required_variables as &$field) {
-            if(empty($this->post_vars[$field]) && $this->post_vars[$field] != "0") {
+            if(!isset($this->post_vars[$field]) && $this->post_vars[$field] != "0") {
                 throw new Exception("site->forms->missing->".$field);
             }
         }

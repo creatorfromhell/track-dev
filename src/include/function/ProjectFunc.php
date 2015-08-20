@@ -250,7 +250,6 @@ class ProjectFunc {
         $data = "";
         for ($i = -6; $i <= 0; $i++){
             if( $i > -6) { $data .= ','; }
-            $data .= '"'.date('M', strtotime("$i month")).'"';
             if($months) {
                 $data .= '"'.date('M', strtotime("$i month")).'"';
             } else {

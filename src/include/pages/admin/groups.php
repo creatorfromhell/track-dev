@@ -26,8 +26,7 @@ if(isset($_POST['add-group'])) {
 
         Group::add_group($group);
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 
@@ -59,8 +58,7 @@ if(isset($_POST['edit-group'])) {
         $group->permissions = $permissions;
         $group->save();
     } catch(Exception $e) {
-        $translated = $language_manager->get_value($language, $e->getMessage());
-        //TODO: form message handling
+        form_message($e);
     }
 }
 

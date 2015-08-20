@@ -20,8 +20,8 @@ $task_details = TaskFunc::task_details($project, $list, $id);
 
 $finished = ($task_details['finished'] != "0000-00-00") ? $task_details['finished'] : "None";
 $due = ($task_details['due'] != "0000-00-00") ? $task_details['due'] : "None";
-$version = ($task_details['version'] != "") ? $task_details['version'] : "None";
-$progress = $task_details['progress']."%";
+$version = $task_details['version'];
+$progress = $task_details['progress'];
 $status = $task_details['status'];
 $status_name = "Open";
 $status_class = "general";
@@ -30,8 +30,12 @@ if($status == "1") { $status_name = "Done"; $status_class = "success"; }
 if($status == "2") { $status_name = "In Progress"; $status_class = "ip"; }
 if($status == "3") { $status_name = "Closed"; $status_class = "error"; }
 $labels_string = '';
-$labels_array = explode(",", $task_details['labels']);
+$labels_array = (isset($task_details['labels'])) ? explode(",", $task_details['labels']) : array();
+
 foreach($labels_array as &$label) {
+    if(empty($label)) {
+        continue;
+    }
     $label_details = LabelFunc::label_details($label);
     $labels_string .= '<label class="task-label" style="background:'.$label_details['background'].';color:'.$label_details['text'].';border:1px solid '.$label_details['text'].';">'.$label_details['label'].'</label>';
 }
