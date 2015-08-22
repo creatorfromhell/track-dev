@@ -1,6 +1,6 @@
-# Trackr Code Quality Standards
+# CFH PHP Code Quality Standards
 ## Why?
-The Trackr Code Quality Standards were created to establish code format rules for contributors to follow when making changes and/or additions to Trackr. These rules are in place to prevent the individual contributors from using their own development style and ultimately making the Trackr source a mess of different styles thrown together.
+The creatorfromhell PHP, aka CFH PHP,  Code Quality Standards were created to establish code format rules for contributors to follow when making changes and/or additions to projects managed by Daniel "creatorfromhell" Vidmar. These rules are in place to prevent the individual contributors from using their own development style and ultimately making the project's source a mess of different styles thrown together.
 
 ## Function & Variables names:
 * Must have an underscore(_) between each word
@@ -104,7 +104,7 @@ The Trackr Code Quality Standards were created to establish code format rules fo
 *General
 
 ## Modification
-The Trackr Code Quality Standards may change from time to time, because of this, it is the sole responsibility of each contributor to stay up-to-date on these standards when making modifications to the Trackr Source Code.
+The CFH PHP Code Quality Standards may change from time to time, because of this, it is the sole responsibility of each contributor to stay up-to-date on these standards when making modifications to the project's source code.
 
 ## Last Modified
-The Trackr Code Quality Standards were last modified on March 3rd, 2015.
+The CFH PHP Code Quality Standards were last modified on March 3rd, 2015.
