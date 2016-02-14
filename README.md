@@ -3,7 +3,7 @@
 </p>
 =============
 ##About
-Coming soon...
+Trackr is a task management suite that focuses strongly on collaboration, and a strong multi-project enabled featureset. Trackr allows developers and project managers to neatly, and precisely organize tasks by labels, categories, and more. With Trackr you can even manage, and plan future versions for each project with a few clicks.
 
 ##Info
 License: [Found Here](License.txt)
